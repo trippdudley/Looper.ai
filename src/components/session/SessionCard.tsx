@@ -23,7 +23,7 @@ export default function SessionCard({
   return (
     <button
       onClick={onClick}
-      className="w-full text-left bg-white rounded-xl p-4 border-b-2 border-gray-100 hover:border-accent/30 transition-all hover:shadow-md cursor-pointer"
+      className="w-full text-left bg-white rounded-xl p-4 shadow-[0_1px_3px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.06)] hover:-translate-y-[1px] hover:shadow-[0_4px_12px_rgba(0,0,0,0.12),0_2px_4px_rgba(0,0,0,0.08)] active:scale-[0.99] transition-all duration-150 ease-in-out cursor-pointer"
       aria-label={`Session on ${date} with ${coachName}`}
     >
       <div className="flex items-start justify-between mb-2">

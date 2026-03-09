@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, Link } from 'react-router-dom';
 import { House, BookOpen, TrendingUp, Target, Bell } from 'lucide-react';
 import MobileShell from '../../components/layout/MobileShell';
 import BottomTabBar from '../../components/layout/BottomTabBar';
@@ -15,7 +15,7 @@ export default function GolferLayout() {
     <MobileShell>
       {/* Top bar */}
       <div className="flex items-center justify-between px-5 py-3">
-        <span className="font-serif text-xl font-bold text-accent-light">Looper</span>
+        <Link to="/" className="font-serif text-xl font-bold text-accent-light">Looper</Link>
         <Bell className="w-5 h-5 text-gray-500" />
       </div>
       {/* Content */}

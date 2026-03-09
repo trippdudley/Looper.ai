@@ -16,8 +16,8 @@ export default function BottomTabBar({ tabs }: BottomTabBarProps) {
   const location = useLocation();
 
   return (
-    <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-2 pb-5 pt-2">
-      <div className="flex items-center justify-around">
+    <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-[80px] px-2 pb-5 pt-2">
+      <div className="flex items-center justify-around h-full">
         {tabs.map((tab) => {
           const isActive =
             tab.path === '/golfer'

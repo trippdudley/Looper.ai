@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
   Sparkles,
@@ -49,6 +50,16 @@ const difficultyColors: Record<string, string> = {
 };
 
 export default function SessionReview() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') navigate('/coach');
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [navigate]);
+
   const session = sessions.find((s) => s.id === 'session-6')!;
   const golfer = golfers.find((g) => g.id === session.golferId)!;
   const sessionDrills = session.drillIds
@@ -71,13 +82,10 @@ export default function SessionReview() {
     <div className="pb-8 space-y-6">
       {/* Top Banner */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Link
-            to="/coach"
-            className="flex items-center gap-2 text-sm text-gray-500 hover:text-navy transition-colors"
-          >
+        <div className="flex items-center gap-2">
+          <Link to="/coach" className="flex items-center gap-2 text-sm text-gray-500 hover:text-navy transition-colors">
             <ArrowLeft className="w-4 h-4" />
-            Back to Today
+            <span>Today</span>
           </Link>
         </div>
         <div className="flex items-center gap-3">
@@ -85,7 +93,10 @@ export default function SessionReview() {
             <Sparkles className="w-3.5 h-3.5 text-accent" />
             <span className="text-xs font-medium text-accent">AI Processing Complete</span>
           </div>
-          <button className="px-4 py-2 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent/90 transition-colors flex items-center gap-2">
+          <button
+            onClick={() => navigate('/coach')}
+            className="px-4 py-2 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent/90 transition-colors flex items-center gap-2"
+          >
             <CheckCircle2 className="w-4 h-4" />
             Approve & Send to Student
           </button>

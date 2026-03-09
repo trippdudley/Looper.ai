@@ -28,27 +28,32 @@ export default function Sidebar({ brandLabel, navItems, integrationStatus, dark 
     <div className={`${bgClass} h-full flex flex-col text-white`}>
       {/* Brand */}
       <div className="px-5 pt-6 pb-4">
-        <div className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2">
           <span className="font-serif text-xl font-bold text-accent-light">Looper</span>
           <span className="text-[10px] font-semibold uppercase tracking-wider bg-accent/20 text-accent-light px-2 py-0.5 rounded-full">
             {brandLabel}
           </span>
-        </div>
+        </Link>
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 px-3 space-y-1">
         {navItems.map((item) => {
-          const isActive = location.pathname === item.path || location.pathname.startsWith(item.path + '/');
+          // Index routes (e.g. /fitter, /coach, /spine) match only on exact path
+          // Sub-routes (e.g. /fitter/session) match on exact or prefix
+          const isIndex = item.path === navItems[0]?.path;
+          const isActive = isIndex
+            ? location.pathname === item.path || location.pathname === item.path + '/'
+            : location.pathname === item.path || location.pathname.startsWith(item.path + '/');
 
           return (
             <Link
               key={item.path}
               to={item.path}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+              className={`flex items-center gap-3 h-[44px] rounded-lg text-sm font-medium transition-colors ${
                 isActive
-                  ? 'border-l-2 border-accent-light text-white bg-white/10'
-                  : 'text-gray-400 hover:text-white hover:bg-white/5'
+                  ? 'border-l-[3px] border-accent-light text-white bg-white/10 pl-[13px]'
+                  : 'text-gray-400 hover:text-white hover:bg-white/5 pl-4'
               }`}
             >
               {item.icon}

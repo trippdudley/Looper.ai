@@ -1,4 +1,5 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Sparkles, Mic } from 'lucide-react';
 import Card from '../../../components/ui/Card';
 import Badge from '../../../components/ui/Badge';
@@ -40,6 +41,14 @@ export default function LessonDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') navigate('/golfer/lessons');
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [navigate]);
+
   const session = sessions.find((s) => s.id === id);
 
   if (!session) {
@@ -68,16 +77,13 @@ export default function LessonDetail() {
   return (
     <div className="pb-8 space-y-6">
       {/* 1. Back nav + header */}
-      <div className="flex items-center gap-3">
-        <button
-          onClick={() => navigate(-1)}
-          className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-          aria-label="Go back"
-        >
-          <ArrowLeft className="w-5 h-5 text-navy" />
-        </button>
-        <h1 className="font-serif text-lg font-bold text-navy">Lesson Detail</h1>
+      <div className="flex items-center gap-2 mb-6">
+        <Link to="/golfer/lessons" className="flex items-center gap-2 text-sm text-gray-500 hover:text-navy transition-colors">
+          <ArrowLeft className="w-4 h-4" />
+          <span>Lessons</span>
+        </Link>
       </div>
+      <h1 className="font-serif text-lg font-bold text-navy">Lesson Detail</h1>
 
       {/* 2. Session header card */}
       <Card>

@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { TrackmanShot } from '../../../data/trackmanData';
 import {
   Mic,
@@ -39,6 +40,8 @@ function sign(n: number) {
 
 // ─── component ────────────────────────────────────────────
 export default function SessionCapture() {
+  const navigate = useNavigate();
+
   // data
   const session = sessions.find((s) => s.id === 'session-6')!;
   const previousSession = sessions.find((s) => s.id === 'session-5')!;
@@ -60,6 +63,15 @@ export default function SessionCapture() {
     }, 1000);
     return () => clearInterval(interval);
   }, []);
+
+  // Escape key handler
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') navigate('/coach');
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [navigate]);
 
   const selectedShot = sessionShots[selectedShotIndex];
 
@@ -539,7 +551,10 @@ export default function SessionCapture() {
 
       {/* ── BOTTOM BAR ─────────────────────────────────────────── */}
       <div className="bg-white border-t border-gray-200 py-3 px-6 flex items-center gap-3 flex-shrink-0">
-        <button className="flex items-center gap-2 bg-coral text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-coral/90 transition-colors">
+        <button
+          onClick={() => navigate('/coach/review')}
+          className="flex items-center gap-2 bg-coral text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-coral/90 transition-colors"
+        >
           <Square className="w-4 h-4" />
           End Session
         </button>

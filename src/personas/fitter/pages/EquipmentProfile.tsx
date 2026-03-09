@@ -1,5 +1,7 @@
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
+  ArrowLeft,
   Crosshair,
   Disc3,
   Target,
@@ -48,8 +50,26 @@ const fittingLabel = `Fitted at Club Champion \u2014 ${fittingDate}`;
 const ageLabel = `${fittingMonths} months since fitting`;
 
 export default function EquipmentProfile() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') navigate('/fitter/session');
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [navigate]);
+
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
+      {/* ── Back nav ── */}
+      <div className="flex items-center gap-2 mb-6">
+        <Link to="/fitter/session" className="flex items-center gap-2 text-sm text-gray-500 hover:text-navy transition-colors">
+          <ArrowLeft className="w-4 h-4" />
+          <span>Fitting</span>
+        </Link>
+      </div>
+
       {/* ── Top Bar ── */}
       <div className="flex items-center justify-between">
         <h1 className="font-serif text-2xl text-navy font-bold">

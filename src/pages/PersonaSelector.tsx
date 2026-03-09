@@ -73,6 +73,12 @@ export default function PersonaSelector() {
         })}
       </div>
 
+      <div className="text-center mt-8">
+        <Link to="/thesis" className="text-navy font-medium text-sm hover:underline inline-block">
+          Read the Thesis &rarr;
+        </Link>
+      </div>
+
       <p className="text-gray-400 text-sm mt-12">
         Clickable Prototype — March 2026
       </p>

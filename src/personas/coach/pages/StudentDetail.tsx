@@ -1,4 +1,5 @@
-import { useParams, Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
   ArrowDown,
@@ -88,6 +89,15 @@ function isFittingOld(lastFittingDate: string): boolean {
 
 export default function StudentDetail() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') navigate('/coach/students');
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [navigate]);
 
   const golfer: Golfer = golfers.find((g) => g.id === id) || golfers.find((g) => g.id === 'golfer-mike')!;
   const golferSessions: Session[] = sessions
@@ -126,13 +136,12 @@ export default function StudentDetail() {
     <div className="pb-8 space-y-6">
       {/* Top */}
       <div className="flex items-center justify-between">
-        <Link
-          to="/coach/students"
-          className="flex items-center gap-2 text-sm text-gray-500 hover:text-navy transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Students
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link to="/coach/students" className="flex items-center gap-2 text-sm text-gray-500 hover:text-navy transition-colors">
+            <ArrowLeft className="w-4 h-4" />
+            <span>Students</span>
+          </Link>
+        </div>
         <Link
           to="/coach/capture"
           className="px-4 py-2 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent/90 transition-colors"

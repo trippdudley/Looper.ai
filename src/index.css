@@ -41,3 +41,22 @@ body {
 .animate-dash-flow {
   animation: dash-flow 1s linear infinite;
 }
+
+/* Page fade-in transition */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fade-in 200ms ease;
+}
+
+/* Button hover/active micro-interactions */
+button:not(:disabled):hover, a.btn:hover {
+  filter: brightness(1.05);
+}
+
+button:not(:disabled):active, a.btn:active {
+  transform: scale(0.98);
+}

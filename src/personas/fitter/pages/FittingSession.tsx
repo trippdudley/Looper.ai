@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useMemo } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   LineChart,
   Line,
@@ -10,6 +10,7 @@ import {
   CartesianGrid,
 } from 'recharts';
 import {
+  ArrowLeft,
   Wifi,
   ArrowUpRight,
   ArrowDownRight,
@@ -93,6 +94,16 @@ function avg(arr: number[]): number {
 }
 
 export default function FittingSession() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') navigate('/fitter');
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [navigate]);
+
   const golfer = golfers.find((g) => g.id === 'golfer-mike')!;
 
   const mikeSessions = useMemo(
@@ -151,6 +162,14 @@ export default function FittingSession() {
 
   return (
     <div className="space-y-5">
+      {/* ── Back nav ── */}
+      <div className="flex items-center gap-2 mb-6">
+        <Link to="/fitter" className="flex items-center gap-2 text-sm text-gray-500 hover:text-navy transition-colors">
+          <ArrowLeft className="w-4 h-4" />
+          <span>Lookup</span>
+        </Link>
+      </div>
+
       {/* ── Top Bar ── */}
       <div className="flex items-center justify-between">
         <h1 className="font-serif text-2xl text-navy font-bold">

@@ -10,11 +10,11 @@ export default function TrendLine({ data, height = 200, color = '#2E8B57' }: Tre
   return (
     <ResponsiveContainer width="100%" height={height}>
       <LineChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-        <XAxis dataKey="label" tick={{ fontSize: 12, fill: '#9CA3AF' }} axisLine={false} tickLine={false} />
-        <YAxis tick={{ fontSize: 12, fill: '#9CA3AF' }} axisLine={false} tickLine={false} />
+        <CartesianGrid horizontal={true} vertical={false} stroke="#F3F4F6" strokeDasharray="" />
+        <XAxis dataKey="label" tick={{ fontSize: 11, fill: '#9CA3AF' }} axisLine={false} tickLine={false} />
+        <YAxis tick={{ fontSize: 11, fill: '#9CA3AF' }} axisLine={false} tickLine={false} />
         <Tooltip contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }} />
-        <Line type="monotone" dataKey="value" stroke={color} strokeWidth={2} dot={{ fill: color, r: 3 }} activeDot={{ r: 5 }} />
+        <Line type="monotone" dataKey="value" stroke={color} strokeWidth={2} dot={{ fill: color, r: 4 }} activeDot={{ r: 6 }} />
       </LineChart>
     </ResponsiveContainer>
   );
