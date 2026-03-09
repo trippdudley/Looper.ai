@@ -19,7 +19,6 @@ export default function SpineLayout() {
           <Sidebar
             brandLabel="Platform"
             navItems={navItems}
-            dark
           />
         }
         topBar={

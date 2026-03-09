@@ -16,10 +16,9 @@ interface SidebarProps {
   brandLabel: string;
   navItems: NavItem[];
   integrationStatus?: IntegrationStatus[];
-  dark?: boolean;
 }
 
-export default function Sidebar({ brandLabel, navItems, integrationStatus, dark }: SidebarProps) {
+export default function Sidebar({ brandLabel, navItems, integrationStatus }: SidebarProps) {
   const location = useLocation();
 
   return (
