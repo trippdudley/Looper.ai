@@ -172,7 +172,7 @@ export default function SessionCapture() {
   return (
     <div className="-m-6 flex flex-col h-[calc(100vh-49px)] overflow-hidden">
       {/* ── TOP BANNER ─────────────────────────────────────────── */}
-      <div className="bg-navy text-white py-3 px-6 flex items-center justify-between flex-shrink-0">
+      <div className="bg-navy/80 backdrop-blur-xl text-white py-3 px-6 flex items-center justify-between flex-shrink-0">
         {/* left */}
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-full bg-accent flex items-center justify-center text-xs font-bold">
@@ -218,10 +218,10 @@ export default function SessionCapture() {
       {/* ── 3-COLUMN BODY ──────────────────────────────────────── */}
       <div className="flex flex-1 min-h-0 overflow-hidden">
         {/* ─ LEFT COLUMN ───────────────────────────────────────── */}
-        <div className="w-[280px] flex-shrink-0 border-r border-gray-200 bg-white flex flex-col overflow-y-auto">
+        <div className="w-[280px] flex-shrink-0 border-r border-white/[0.06] bg-white/[0.03] backdrop-blur-xl flex flex-col overflow-y-auto">
           {/* Shot History */}
           <div className="px-4 pt-4 pb-2">
-            <h3 className="text-xs font-bold text-navy uppercase tracking-wider mb-3 flex items-center gap-2">
+            <h3 className="text-xs font-bold text-white/70 uppercase tracking-wider mb-3 flex items-center gap-2">
               <Target className="w-3.5 h-3.5" />
               Shot History
             </h3>
@@ -235,21 +235,21 @@ export default function SessionCapture() {
                     onClick={() => setSelectedShotIndex(idx)}
                     className={`w-full text-left rounded-lg p-2.5 transition-colors ${
                       isSelected
-                        ? 'bg-accent/5 border-l-2 border-accent'
-                        : 'hover:bg-gray-50 border-l-2 border-transparent'
+                        ? 'bg-accent/[0.08] border border-accent/20'
+                        : 'bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.06]'
                     }`}
                   >
                     <div className="flex items-center justify-between mb-1">
                       <div className="flex items-center gap-2">
                         <span className="text-[10px] font-mono text-gray-400">#{shot.shotNumber}</span>
-                        <span className="text-xs font-medium text-navy">{shot.club}</span>
+                        <span className="text-xs font-medium text-white">{shot.club}</span>
                       </div>
                       <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${qc.bg} ${qc.text}`}>
                         {shot.quality}
                       </span>
                     </div>
                     <div className="flex items-end justify-between">
-                      <span className="text-lg font-mono font-bold text-navy">{shot.carry}</span>
+                      <span className="text-lg font-mono font-bold text-white">{shot.carry}</span>
                       <span className="text-[10px] text-gray-400 mb-0.5">yds carry</span>
                     </div>
                     <div className="flex gap-3 mt-1 text-[10px] text-gray-400 font-mono">
@@ -264,13 +264,13 @@ export default function SessionCapture() {
           </div>
 
           {/* Divider */}
-          <div className="border-t border-gray-100 mx-4" />
+          <div className="border-t border-white/[0.06] mx-4" />
 
           {/* Previous Session Context */}
-          <div className="px-4 py-3">
+          <div className="px-4 py-3 mx-3 my-2 rounded-xl bg-white/[0.03] border border-white/[0.06]">
             <button
               onClick={() => setIsPreviousSessionExpanded((p) => !p)}
-              className="w-full flex items-center justify-between text-xs font-bold text-navy uppercase tracking-wider hover:text-accent transition-colors"
+              className="w-full flex items-center justify-between text-xs font-bold text-white/70 uppercase tracking-wider hover:text-accent transition-colors"
             >
               <span>Previous Session</span>
               {isPreviousSessionExpanded ? (
@@ -281,22 +281,22 @@ export default function SessionCapture() {
             </button>
             {isPreviousSessionExpanded && (
               <div className="mt-3 space-y-2">
-                <div className="text-xs text-gray-600">
-                  <span className="font-semibold text-navy">Focus:</span> {previousSession.focus}
+                <div className="text-xs text-gray-400">
+                  <span className="font-semibold text-white/70">Focus:</span> {previousSession.focus}
                 </div>
-                <div className="text-xs text-gray-600">
-                  <span className="font-semibold text-navy">Improvement:</span>{' '}
+                <div className="text-xs text-gray-400">
+                  <span className="font-semibold text-white/70">Improvement:</span>{' '}
                   <span className="font-mono font-bold text-accent">{previousSession.improvementScore}%</span>
                 </div>
                 <div className="text-[10px] uppercase font-bold text-gray-400 mt-2 mb-1">Top Faults</div>
                 {previousSession.faults.slice(0, 2).map((fault, i) => (
-                  <div key={i} className="flex gap-2 text-xs text-gray-600">
+                  <div key={i} className="flex gap-2 text-xs text-gray-400">
                     <Circle className="w-2.5 h-2.5 text-coral mt-0.5 flex-shrink-0" />
                     <span>{fault}</span>
                   </div>
                 ))}
                 <div className="text-[10px] uppercase font-bold text-gray-400 mt-2 mb-1">What to Watch For</div>
-                <p className="text-xs text-gray-600 leading-relaxed">
+                <p className="text-xs text-gray-400 leading-relaxed">
                   Old fade pattern may return under fatigue. Use step drill feel as reset when needed. Trust the new swing.
                 </p>
               </div>
@@ -304,11 +304,11 @@ export default function SessionCapture() {
           </div>
 
           {/* Divider */}
-          <div className="border-t border-gray-100 mx-4" />
+          <div className="border-t border-white/[0.06] mx-4" />
 
           {/* Coaching Cues Bank */}
-          <div className="px-4 py-3">
-            <h3 className="text-xs font-bold text-navy uppercase tracking-wider mb-3 flex items-center gap-2">
+          <div className="px-4 py-3 mx-3 my-2 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+            <h3 className="text-xs font-bold text-white/70 uppercase tracking-wider mb-3 flex items-center gap-2">
               <MessageCircle className="w-3.5 h-3.5" />
               Coaching Cues
             </h3>
@@ -322,7 +322,7 @@ export default function SessionCapture() {
                     className={`text-[11px] leading-tight px-2.5 py-1.5 rounded-full border transition-all ${
                       isUsed
                         ? 'bg-accent/10 border-accent text-accent'
-                        : 'bg-gray-50 border-gray-200 text-gray-600 hover:border-accent hover:text-accent'
+                        : 'bg-white/[0.03] border-white/[0.06] text-gray-400 hover:border-accent hover:text-accent'
                     }`}
                   >
                     {isUsed && <CheckCircle2 className="w-3 h-3 inline mr-1 -mt-0.5" />}
@@ -456,10 +456,10 @@ export default function SessionCapture() {
         </div>
 
         {/* ─ RIGHT COLUMN ──────────────────────────────────────── */}
-        <div className="w-[320px] flex-shrink-0 border-l border-gray-200 bg-white flex flex-col overflow-y-auto">
+        <div className="w-[320px] flex-shrink-0 border-l border-white/[0.06] bg-white/[0.03] backdrop-blur-xl rounded-2xl flex flex-col overflow-y-auto">
           {/* Audio Capture Section */}
           <div className="px-4 pt-4 pb-3">
-            <h3 className="text-xs font-bold text-navy uppercase tracking-wider mb-3 flex items-center gap-2">
+            <h3 className="text-xs font-bold text-white/70 uppercase tracking-wider mb-3 flex items-center gap-2">
               <Mic className="w-3.5 h-3.5" />
               Audio Capture
             </h3>
@@ -472,7 +472,7 @@ export default function SessionCapture() {
                     <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
                   </span>
                 )}
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-gray-400">
                   {isMicOn ? `Recording: ${formatTime(elapsedSeconds)}` : 'Paused'}
                 </span>
               </div>
@@ -481,14 +481,14 @@ export default function SessionCapture() {
                 className={`p-2 rounded-lg transition-colors ${
                   isMicOn
                     ? 'bg-accent/10 text-accent hover:bg-accent/20'
-                    : 'bg-gray-100 text-gray-400 hover:bg-gray-200'
+                    : 'bg-white/[0.06] text-gray-400 hover:bg-white/[0.1]'
                 }`}
               >
                 {isMicOn ? <Mic className="w-4 h-4" /> : <MicOff className="w-4 h-4" />}
               </button>
             </div>
             {/* Waveform */}
-            <div className="flex items-center gap-[2px] h-12 bg-gray-50 rounded-lg px-2 overflow-hidden">
+            <div className="flex items-center gap-[2px] h-12 bg-white/[0.03] rounded-lg px-2 overflow-hidden">
               {waveformBars.map((h, i) => (
                 <div
                   key={i}
@@ -511,11 +511,11 @@ export default function SessionCapture() {
           </div>
 
           {/* Divider */}
-          <div className="border-t border-gray-100 mx-4" />
+          <div className="border-t border-white/[0.06] mx-4" />
 
           {/* Live Transcription */}
           <div className="px-4 py-3 flex-1 min-h-0 overflow-y-auto">
-            <h3 className="text-xs font-bold text-navy uppercase tracking-wider mb-3">Live Transcription</h3>
+            <h3 className="text-xs font-bold text-white/70 uppercase tracking-wider mb-3">Live Transcription</h3>
             <div className="space-y-3">
               {transcript.map((entry, i) => (
                 <div key={i} className="flex gap-2">
@@ -528,7 +528,7 @@ export default function SessionCapture() {
                     >
                       {entry.speaker}
                     </span>
-                    <p className="text-xs text-gray-700 leading-relaxed mt-0.5">{entry.text}</p>
+                    <p className="text-xs text-gray-300 leading-relaxed mt-0.5">{entry.text}</p>
                   </div>
                 </div>
               ))}
@@ -536,13 +536,13 @@ export default function SessionCapture() {
           </div>
 
           {/* Divider */}
-          <div className="border-t border-gray-100 mx-4" />
+          <div className="border-t border-white/[0.06] mx-4" />
 
           {/* Coach Notes */}
           <div className="px-4 py-3">
-            <h3 className="text-xs font-bold text-navy uppercase tracking-wider mb-2">Coach Notes</h3>
+            <h3 className="text-xs font-bold text-white/70 uppercase tracking-wider mb-2">Coach Notes</h3>
             <textarea
-              className="w-full h-24 text-xs text-gray-700 bg-gray-50 border border-gray-200 rounded-lg p-3 resize-none focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent leading-relaxed"
+              className="w-full h-24 text-xs text-gray-300 bg-white/[0.03] border border-white/[0.06] rounded-lg p-3 resize-none focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent leading-relaxed placeholder:text-gray-500"
               defaultValue="Iron contact is crisp today. Weight transfer automatic on irons — doesn't even think about it anymore. Moving to driver work."
             />
           </div>
@@ -550,7 +550,7 @@ export default function SessionCapture() {
       </div>
 
       {/* ── BOTTOM BAR ─────────────────────────────────────────── */}
-      <div className="bg-white border-t border-gray-200 py-3 px-6 flex items-center gap-3 flex-shrink-0">
+      <div className="bg-navy/80 backdrop-blur-xl border-t border-white/[0.08] py-3 px-6 flex items-center gap-3 flex-shrink-0">
         <button
           onClick={() => navigate('/coach/review')}
           className="flex items-center gap-2 bg-coral text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-coral/90 transition-colors"
@@ -562,11 +562,11 @@ export default function SessionCapture() {
           <Plus className="w-4 h-4" />
           Save Shot
         </button>
-        <button className="flex items-center gap-2 border border-navy text-navy px-4 py-2 rounded-lg text-sm font-semibold hover:bg-navy/5 transition-colors">
+        <button className="flex items-center gap-2 border border-white/20 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-white/[0.06] transition-colors">
           <MessageCircle className="w-4 h-4" />
           Add Cue
         </button>
-        <button className="flex items-center gap-2 border border-navy text-navy px-4 py-2 rounded-lg text-sm font-semibold hover:bg-navy/5 transition-colors">
+        <button className="flex items-center gap-2 border border-white/20 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-white/[0.06] transition-colors">
           <BarChart3 className="w-4 h-4" />
           View Stats
         </button>

@@ -7,7 +7,9 @@ interface MobileShellProps {
 export default function MobileShell({ children }: MobileShellProps) {
   return (
     <div className="min-h-screen bg-bg-dark flex items-start justify-center py-8">
-      <div className="w-[390px] h-[844px] bg-white rounded-[44px] border-[4px] border-bg-dark shadow-2xl overflow-hidden flex flex-col relative">
+      <div className="ambient-bg" />
+      <div className="phone-gradient-border">
+      <div className="w-[390px] h-[844px] bg-white rounded-[44px] overflow-hidden flex flex-col relative">
         {/* iOS Status bar - 44px tall */}
         <div className="flex items-center justify-between px-8 h-[44px] flex-shrink-0 bg-white">
           <span className="text-sm font-semibold text-black">9:41</span>
@@ -37,6 +39,7 @@ export default function MobileShell({ children }: MobileShellProps) {
         <div className="flex-1 overflow-y-auto mobile-scroll">
           {children}
         </div>
+      </div>
       </div>
     </div>
   );

@@ -12,24 +12,27 @@ const navItems = [
 
 export default function SpineLayout() {
   return (
-    <DesktopShell
-      sidebar={
-        <Sidebar
-          brandLabel="Platform"
-          navItems={navItems}
-          dark
-        />
-      }
-      topBar={
-        <TopBar
-          title="Platform Intelligence — Internal View"
-          dark
-        />
-      }
-    >
-      <div className="bg-bg-dark p-6 min-h-full">
-        <Outlet />
-      </div>
-    </DesktopShell>
+    <div className="relative min-h-screen">
+      <div className="ambient-bg" />
+      <DesktopShell
+        sidebar={
+          <Sidebar
+            brandLabel="Platform"
+            navItems={navItems}
+            dark
+          />
+        }
+        topBar={
+          <TopBar
+            title="Platform Intelligence — Internal View"
+            dark
+          />
+        }
+      >
+        <div className="bg-transparent p-6 min-h-full">
+          <Outlet />
+        </div>
+      </DesktopShell>
+    </div>
   );
 }

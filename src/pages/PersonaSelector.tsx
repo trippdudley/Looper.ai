@@ -1,5 +1,6 @@
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { User, GraduationCap, Wrench, Database } from 'lucide-react';
+import { User, GraduationCap, Wrench } from 'lucide-react';
 
 const personas = [
   {
@@ -7,81 +8,124 @@ const personas = [
     icon: User,
     description: "Track your improvement, review lessons, practice with purpose",
     path: "/golfer",
-    dark: false,
   },
   {
     label: "I'm a Coach",
     icon: GraduationCap,
     description: "Capture sessions, manage students, see what works",
     path: "/coach",
-    dark: false,
   },
   {
     label: "I'm a Fitter",
     icon: Wrench,
     description: "Access coaching history, fit with context, see swing evolution",
     path: "/fitter",
-    dark: false,
-  },
-  {
-    label: "Platform Spine",
-    icon: Database,
-    description: "The data architecture, audience engine, and monetization layer",
-    path: "/spine",
-    dark: true,
   },
 ];
 
 export default function PersonaSelector() {
+  const heroRef = useRef<HTMLDivElement>(null);
+  const featureRef = useRef<HTMLDivElement>(null);
+  const personaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const sections = [heroRef.current, featureRef.current, personaRef.current];
+    sections.forEach((el) => {
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="min-h-screen bg-bg-light flex flex-col items-center justify-center px-4 py-12">
-      <div className="text-center mb-12">
-        <h1 className="font-serif text-5xl font-bold text-navy tracking-tight mb-3">
-          LOOPER
-        </h1>
-        <p className="text-gray-500 text-lg">
-          The Platform to Power Golf in the Age of AI
+    <div className="min-h-screen relative overflow-hidden">
+      <div className="ambient-bg" />
+
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 py-16 max-w-4xl mx-auto">
+        {/* Hero */}
+        <div ref={heroRef} className="fade-in-up text-center mb-12">
+          <h1 className="font-serif text-5xl font-bold text-white tracking-tight mb-3">
+            LOOPER
+          </h1>
+          <p className="text-lg text-gray-400 font-serif italic">
+            The Platform to Power Golf in the Age of AI
+          </p>
+          <div className="w-20 h-px bg-accent mx-auto my-6" />
+        </div>
+
+        {/* Feature links — Thesis + Spine */}
+        <div ref={featureRef} className="fade-in-up grid grid-cols-2 gap-4 max-w-2xl mx-auto mb-12 w-full">
+          <Link to="/thesis" className="glass-card p-6 block">
+            <p className="text-[11px] uppercase tracking-wider text-accent-light font-semibold mb-2">
+              THE THESIS
+            </p>
+            <p className="text-white font-medium text-[15px]">
+              Read the Business Case
+            </p>
+            <p className="text-sm text-gray-400 mt-1">
+              Five-year model, moat analysis, and market sizing
+            </p>
+          </Link>
+
+          <Link to="/spine" className="glass-card p-6 block">
+            <p className="text-[11px] uppercase tracking-wider text-data-blue font-semibold mb-2">
+              PLATFORM ENGINE
+            </p>
+            <p className="text-white font-medium text-[15px]">
+              Explore the Data Spine
+            </p>
+            <p className="text-sm text-gray-400 mt-1">
+              30 attributes, 21 integrations, 6 audience segments
+            </p>
+          </Link>
+        </div>
+
+        {/* Persona cards */}
+        <div ref={personaRef} className="fade-in-up w-full">
+          <p className="text-xs uppercase tracking-wider text-gray-500 font-semibold text-center mb-4">
+            Enter the Prototype
+          </p>
+
+          <div className="grid grid-cols-3 gap-4 max-w-3xl mx-auto">
+            {personas.map((p) => {
+              const Icon = p.icon;
+              return (
+                <Link
+                  key={p.path}
+                  to={p.path}
+                  className="glass-card p-6 text-center block"
+                >
+                  <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-3">
+                    <Icon className="w-6 h-6 text-accent-light" />
+                  </div>
+                  <h2 className="text-white font-semibold text-[15px] mb-1">
+                    {p.label}
+                  </h2>
+                  <p className="text-sm text-gray-400">
+                    {p.description}
+                  </p>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Footer */}
+        <p className="text-xs text-gray-600 text-center mt-16">
+          Confidential &mdash; Clickable Prototype &mdash; March 2026
         </p>
       </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl w-full">
-        {personas.map((p) => {
-          const Icon = p.icon;
-          return (
-            <Link
-              key={p.path}
-              to={p.path}
-              className={`group rounded-xl p-8 text-center transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg ${
-                p.dark
-                  ? 'bg-navy text-white shadow-md'
-                  : 'bg-white text-navy shadow-sm'
-              }`}
-            >
-              <div
-                className={`w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 ${
-                  p.dark ? 'bg-accent/20' : 'bg-bg-light'
-                }`}
-              >
-                <Icon className={`w-7 h-7 ${p.dark ? 'text-accent-light' : 'text-accent'}`} />
-              </div>
-              <h2 className="text-lg font-semibold mb-2">{p.label}</h2>
-              <p className={`text-sm leading-relaxed ${p.dark ? 'text-gray-300' : 'text-gray-500'}`}>
-                {p.description}
-              </p>
-            </Link>
-          );
-        })}
-      </div>
-
-      <div className="text-center mt-8">
-        <Link to="/thesis" className="text-navy font-medium text-sm hover:underline inline-block">
-          Read the Thesis &rarr;
-        </Link>
-      </div>
-
-      <p className="text-gray-400 text-sm mt-12">
-        Clickable Prototype — March 2026
-      </p>
     </div>
   );
 }

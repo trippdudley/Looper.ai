@@ -22,10 +22,8 @@ interface SidebarProps {
 export default function Sidebar({ brandLabel, navItems, integrationStatus, dark }: SidebarProps) {
   const location = useLocation();
 
-  const bgClass = dark ? 'bg-bg-dark' : 'bg-navy';
-
   return (
-    <div className={`${bgClass} h-full flex flex-col text-white`}>
+    <div className="glass-sidebar h-full flex flex-col text-white">
       {/* Brand */}
       <div className="px-5 pt-6 pb-4">
         <Link to="/" className="flex items-center gap-2">
@@ -52,8 +50,8 @@ export default function Sidebar({ brandLabel, navItems, integrationStatus, dark 
               to={item.path}
               className={`flex items-center gap-3 h-[44px] rounded-lg text-sm font-medium transition-colors ${
                 isActive
-                  ? 'border-l-[3px] border-accent-light text-white bg-white/10 pl-[13px]'
-                  : 'text-gray-400 hover:text-white hover:bg-white/5 pl-4'
+                  ? 'border-l-[2px] border-accent-light text-white bg-accent/[0.08] pl-[13px]'
+                  : 'text-gray-400 hover:text-white hover:bg-white/[0.06] pl-4'
               }`}
             >
               {item.icon}
