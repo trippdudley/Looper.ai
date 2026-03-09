@@ -16,7 +16,9 @@ import SessionReview from './personas/coach/pages/SessionReview';
 import Analytics from './personas/coach/pages/Analytics';
 import FitterLayout from './personas/fitter/FitterLayout';
 import GolferLookup from './personas/fitter/pages/GolferLookup';
+import PreFittingBrief from './personas/fitter/pages/PreFittingBrief';
 import FittingSession from './personas/fitter/pages/FittingSession';
+import FittingReport from './personas/fitter/pages/FittingReport';
 import EquipmentProfile from './personas/fitter/pages/EquipmentProfile';
 import SpineLayout from './personas/spine/SpineLayout';
 import DataSpine from './personas/spine/pages/DataSpine';
@@ -49,7 +51,9 @@ export default function App() {
 
         <Route path="/fitter" element={<FitterLayout />}>
           <Route index element={<GolferLookup />} />
+          <Route path="brief" element={<PreFittingBrief />} />
           <Route path="session" element={<FittingSession />} />
+          <Route path="report" element={<FittingReport />} />
           <Route path="equipment" element={<EquipmentProfile />} />
         </Route>
 

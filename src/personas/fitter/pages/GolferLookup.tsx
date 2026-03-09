@@ -455,10 +455,10 @@ export default function GolferLookup() {
           {/* CTA Button */}
           <div className="flex justify-end">
             <Link
-              to="/fitter/session"
+              to="/fitter/brief"
               className="inline-flex items-center gap-2 bg-accent text-white rounded-lg px-6 py-3 font-semibold text-sm hover:bg-accent/90 transition-colors"
             >
-              Start Fitting Session
+              View AI Brief
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
