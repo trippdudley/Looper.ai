@@ -103,8 +103,6 @@ export default function FittingSession() {
     []
   );
 
-  const latestSession = mikeSessions[mikeSessions.length - 1];
-
   // ── Session averages by club ──
   const driverShots = fittingShots.filter((s) => s.club === 'Driver');
   const ironShots = fittingShots.filter((s) => s.club === '7-Iron');

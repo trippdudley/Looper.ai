@@ -309,8 +309,8 @@ function DataFlowDiagram() {
               fill="#64748B"
               fontSize={8}
               fontFamily="Inter, sans-serif"
-              textTransform="uppercase"
               letterSpacing="0.05em"
+              style={{ textTransform: 'uppercase' }}
             >
               {group.group.toUpperCase()}
             </text>
