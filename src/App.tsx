@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import PersonaSelector from './pages/PersonaSelector';
 import ThesisPage from './pages/ThesisPage';
+import LooperNarrative from './components/looper-narrative';
 import GolferLayout from './personas/golfer/GolferLayout';
 import GolferHome from './personas/golfer/pages/GolferHome';
 import LessonHistory from './personas/golfer/pages/LessonHistory';
@@ -31,6 +32,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<PersonaSelector />} />
         <Route path="/thesis" element={<ThesisPage />} />
+        <Route path="/narrative" element={<LooperNarrative />} />
 
         <Route path="/golfer" element={<GolferLayout />}>
           <Route index element={<GolferHome />} />

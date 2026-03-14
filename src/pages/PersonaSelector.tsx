@@ -55,7 +55,7 @@ export default function PersonaSelector() {
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 py-16 max-w-4xl mx-auto">
         {/* Hero */}
         <div ref={heroRef} className="fade-in-up text-center mb-12">
-          <h1 className="font-serif text-5xl font-bold text-white tracking-tight mb-3">
+          <h1 className="font-serif text-3xl sm:text-5xl font-bold text-white tracking-tight mb-3">
             LOOPER
           </h1>
           <p className="text-lg text-gray-400 font-serif italic">
@@ -64,8 +64,20 @@ export default function PersonaSelector() {
           <div className="w-20 h-px bg-accent mx-auto my-6" />
         </div>
 
-        {/* Feature links — Thesis + Spine */}
-        <div ref={featureRef} className="fade-in-up grid grid-cols-2 gap-4 max-w-2xl mx-auto mb-12 w-full">
+        {/* Feature links — Narrative + Thesis */}
+        <div ref={featureRef} className="fade-in-up grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-3xl mx-auto mb-12 w-full">
+          <Link to="/narrative" className="glass-card p-6 block">
+            <p className="text-[11px] uppercase tracking-wider text-accent-light font-semibold mb-2">
+              THE NARRATIVE
+            </p>
+            <p className="text-white font-medium text-[15px]">
+              Read the Full Story
+            </p>
+            <p className="text-sm text-gray-400 mt-1">
+              Thesis, problem, solution, flywheel, roadmap, and business model
+            </p>
+          </Link>
+
           <Link to="/thesis" className="glass-card p-6 block">
             <p className="text-[11px] uppercase tracking-wider text-accent-light font-semibold mb-2">
               THE THESIS
@@ -77,18 +89,6 @@ export default function PersonaSelector() {
               Five-year model, moat analysis, and market sizing
             </p>
           </Link>
-
-          <Link to="/spine" className="glass-card p-6 block">
-            <p className="text-[11px] uppercase tracking-wider text-data-blue font-semibold mb-2">
-              PLATFORM ENGINE
-            </p>
-            <p className="text-white font-medium text-[15px]">
-              Explore the Data Spine
-            </p>
-            <p className="text-sm text-gray-400 mt-1">
-              30 attributes, 21 integrations, 6 audience segments
-            </p>
-          </Link>
         </div>
 
         {/* Persona cards */}
@@ -97,7 +97,7 @@ export default function PersonaSelector() {
             Enter the Prototype
           </p>
 
-          <div className="grid grid-cols-3 gap-4 max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
             {personas.map((p) => {
               const Icon = p.icon;
               return (
@@ -118,6 +118,21 @@ export default function PersonaSelector() {
                 </Link>
               );
             })}
+          </div>
+
+          {/* Platform Engine — below prototype cards */}
+          <div className="max-w-3xl mx-auto mt-6">
+            <Link to="/spine" className="glass-card p-6 block text-center">
+              <p className="text-[11px] uppercase tracking-wider text-data-blue font-semibold mb-2">
+                PLATFORM ENGINE
+              </p>
+              <p className="text-white font-medium text-[15px]">
+                Explore the Data Spine
+              </p>
+              <p className="text-sm text-gray-400 mt-1">
+                30 attributes, 21 integrations, 6 audience segments
+              </p>
+            </Link>
           </div>
         </div>
 
