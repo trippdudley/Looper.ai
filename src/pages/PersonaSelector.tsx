@@ -123,6 +123,21 @@ export default function PersonaSelector() {
             })}
           </div>
 
+          {/* Coaching OS — standalone experience */}
+          <div className="max-w-3xl mx-auto mt-6">
+            <Link to="/coaching-os" className="glass-card p-6 block text-center">
+              <p className="text-[11px] uppercase tracking-wider text-accent-light font-semibold mb-2">
+                COACHING OS
+              </p>
+              <p className="text-white font-medium text-[15px]">
+                Launch Session View
+              </p>
+              <p className="text-sm text-gray-400 mt-1">
+                Full-stack coaching intelligence — shot rail, AI diagnosis, and intervention planning
+              </p>
+            </Link>
+          </div>
+
           {/* Platform Engine — below prototype cards */}
           <div className="max-w-3xl mx-auto mt-6">
             <Link to="/spine" className="glass-card p-6 block text-center">

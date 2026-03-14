@@ -15,6 +15,7 @@ import StudentDetail from './personas/coach/pages/StudentDetail';
 import SessionCapture from './personas/coach/pages/SessionCapture';
 import SessionReview from './personas/coach/pages/SessionReview';
 import Analytics from './personas/coach/pages/Analytics';
+import CoachSession from './personas/coach/pages/CoachSession';
 import FitterLayout from './personas/fitter/FitterLayout';
 import GolferLookup from './personas/fitter/pages/GolferLookup';
 import PreFittingBrief from './personas/fitter/pages/PreFittingBrief';
@@ -25,6 +26,7 @@ import SpineLayout from './personas/spine/SpineLayout';
 import DataSpine from './personas/spine/pages/DataSpine';
 import AudienceEngine from './personas/spine/pages/AudienceEngine';
 import IntegrationHub from './personas/spine/pages/IntegrationHub';
+import CoachingOS from './pages/CoachingOS';
 
 export default function App() {
   return (
@@ -33,6 +35,7 @@ export default function App() {
         <Route path="/" element={<PersonaSelector />} />
         <Route path="/thesis" element={<ThesisPage />} />
         <Route path="/narrative" element={<LooperNarrative />} />
+        <Route path="/coaching-os" element={<CoachingOS />} />
 
         <Route path="/golfer" element={<GolferLayout />}>
           <Route index element={<GolferHome />} />
@@ -49,6 +52,7 @@ export default function App() {
           <Route path="capture" element={<SessionCapture />} />
           <Route path="review" element={<SessionReview />} />
           <Route path="analytics" element={<Analytics />} />
+          <Route path="session" element={<CoachSession />} />
         </Route>
 
         <Route path="/fitter" element={<FitterLayout />}>
