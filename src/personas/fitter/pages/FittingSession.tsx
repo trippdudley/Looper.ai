@@ -79,7 +79,7 @@ export default function FittingSession() {
             <ArrowLeft className="w-4 h-4" />
             <span>Brief</span>
           </Link>
-          <h1 className="font-serif text-xl text-white font-bold">
+          <h1 className="text-xl text-white font-bold">
             Fitting Session &mdash; {golfer.name}
           </h1>
         </div>

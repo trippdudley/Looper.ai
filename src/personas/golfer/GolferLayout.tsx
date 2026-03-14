@@ -15,7 +15,7 @@ export default function GolferLayout() {
     <MobileShell>
       {/* Top bar */}
       <div className="flex items-center justify-between px-5 py-3">
-        <Link to="/" className="font-serif text-xl font-bold text-accent-light">Looper</Link>
+        <Link to="/" className="text-xl font-bold text-accent-light tracking-tight">Looper.AI</Link>
         <Bell className="w-5 h-5 text-gray-500" />
       </div>
       {/* Content */}

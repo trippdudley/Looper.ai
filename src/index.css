@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
 @theme {
-  --color-navy: #1B2A4A;
-  --color-accent: #2E8B57;
-  --color-accent-light: #3BA86D;
+  /* Brand palette — Looper.AI brand guidelines */
+  --color-navy: #1C2B2D;
+  --color-accent: #3A9D78;
+  --color-accent-light: #4DB88A;
   --color-data-blue: #4A90D9;
   --color-warm-amber: #D4A843;
-  --color-coral: #CC6B6B;
-  --color-bg-light: #F8F9FA;
-  --color-bg-dark: #0F1A2E;
-  --color-card-dark: #1A2740;
-  --color-border-dark: #2A3A55;
+  --color-coral: #C45C4A;
+  --color-bg-light: #F7F8F9;
+  --color-bg-dark: #0F1A1C;
+  --color-card-dark: #1A2D30;
+  --color-border-dark: #2D4A4F;
 
-  --font-serif: Georgia, 'Times New Roman', serif;
   --font-sans: Inter, system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', Menlo, monospace;
 }
@@ -63,15 +63,15 @@ button:not(:disabled):active, a.btn:active {
 
 /* ── Liquid Glass Design System ──────────────────────────── */
 
-/* Ambient background — subtle drifting green/blue glows */
+/* Ambient background — subtle drifting green/teal glows */
 .ambient-bg {
   position: fixed;
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(ellipse 600px 400px at 30% 20%, rgba(46, 139, 87, 0.06), transparent),
-    radial-gradient(ellipse 500px 500px at 70% 80%, rgba(74, 144, 217, 0.04), transparent),
-    linear-gradient(180deg, #0D1520 0%, #1B2A4A 100%);
+    radial-gradient(ellipse 600px 400px at 30% 20%, rgba(58, 157, 120, 0.06), transparent),
+    radial-gradient(ellipse 500px 500px at 70% 80%, rgba(45, 74, 79, 0.06), transparent),
+    linear-gradient(180deg, #0A1415 0%, #1C2B2D 100%);
   animation: ambientShift 20s ease-in-out infinite alternate;
 }
 
@@ -109,7 +109,7 @@ button:not(:disabled):active, a.btn:active {
 
 /* Glass sidebar — frosted panel with noise overlay */
 .glass-sidebar {
-  background: linear-gradient(180deg, rgba(13, 21, 32, 0.95) 0%, rgba(27, 42, 74, 0.92) 100%);
+  background: linear-gradient(180deg, rgba(12, 20, 22, 0.95) 0%, rgba(28, 43, 45, 0.92) 100%);
   backdrop-filter: blur(32px);
   -webkit-backdrop-filter: blur(32px);
   position: relative;
@@ -139,7 +139,7 @@ button:not(:disabled):active, a.btn:active {
 
 /* Phone frame gradient border */
 .phone-gradient-border {
-  background: linear-gradient(145deg, rgba(46, 139, 87, 0.15), rgba(74, 144, 217, 0.1), rgba(13, 21, 32, 0.9));
+  background: linear-gradient(145deg, rgba(58, 157, 120, 0.15), rgba(45, 74, 79, 0.1), rgba(12, 20, 22, 0.9));
   border-radius: 48px;
   padding: 4px;
 }

@@ -4,11 +4,11 @@ import { Mic, Link2, Flag, Search, Layers, Database, Brain, Target, TrendingUp, 
 import type { LucideIcon } from "lucide-react";
 
 const C = {
-  bg:"#0B0F1A", surface:"#111827", card:"#1A2235",
-  accent:"#38BDF8", accentDim:"#1E3A5F",
-  teal:"#34D399", tealDim:"#134E3A",
-  amber:"#FBBF24", red:"#F87171",
-  text:"#E2E8F0", muted:"#94A3B8", dim:"#475569", white:"#FFFFFF",
+  bg:"#0F1A1C", surface:"#162524", card:"#1A2D30",
+  accent:"#3A9D78", accentDim:"#1E3D35",
+  teal:"#4DB88A", tealDim:"#134E3A",
+  amber:"#D4A843", red:"#C45C4A",
+  text:"#F0F0F0", muted:"#94A3B8", dim:"#475569", white:"#FFFFFF",
 };
 
 
@@ -19,7 +19,7 @@ function useVis(ref: RefObject<HTMLDivElement | null>, th=0.15) {
 }
 function S({children,delay=0}:{children:ReactNode;delay?:number}){const r=useRef<HTMLDivElement>(null);const v=useVis(r,0.12);return <div ref={r} style={{opacity:v?1:0,transform:v?"translateY(0)":"translateY(36px)",transition:`all 0.8s cubic-bezier(0.16,1,0.3,1) ${delay}s`}}>{children}</div>;}
 function Stat({number,label,color=C.accent}:{number:string;label:string;color?:string}){return <div style={{textAlign:"center",padding:"24px 12px"}}><div style={{fontSize:40,fontWeight:800,color,letterSpacing:"-2px"}}>{number}</div><div style={{fontSize:12,color:C.muted,marginTop:4,textTransform:"uppercase",letterSpacing:"1.5px"}}>{label}</div></div>;}
-function Pill({name}:{name:string}){return <span style={{display:"inline-block",padding:"6px 14px",borderRadius:20,border:`1px solid ${C.dim}`,color:C.muted,fontSize:13,margin:"4px",fontFamily:"'DM Mono',monospace"}}>{name}</span>;}
+function Pill({name}:{name:string}){return <span style={{display:"inline-block",padding:"6px 14px",borderRadius:20,border:`1px solid ${C.dim}`,color:C.muted,fontSize:13,margin:"4px",fontFamily:"'JetBrains Mono',monospace"}}>{name}</span>;}
 function BA({before,after}:{before:string;after:string}){return <div style={{display:"grid",gridTemplateColumns:"1fr 36px 1fr",alignItems:"center",marginBottom:10}}><div style={{padding:"11px 14px",background:"rgba(248,113,113,0.07)",borderRadius:8,border:"1px solid rgba(248,113,113,0.18)",fontSize:14,color:C.muted}}><span style={{color:C.red,marginRight:8,fontWeight:700}}>✕</span>{before}</div><div style={{textAlign:"center",color:C.dim,fontSize:16}}>→</div><div style={{padding:"11px 14px",background:"rgba(52,211,153,0.07)",borderRadius:8,border:"1px solid rgba(52,211,153,0.18)",fontSize:14,color:C.text}}><span style={{color:C.teal,marginRight:8,fontWeight:700}}>✓</span>{after}</div></div>;}
 function TL({phase,title,desc,active=false}:{phase:string;title:string;desc:string;active?:boolean}){return <div style={{display:"flex",gap:16,marginBottom:24}}><div style={{display:"flex",flexDirection:"column",alignItems:"center",minWidth:40}}><div style={{width:14,height:14,borderRadius:"50%",background:active?C.teal:"transparent",border:`2px solid ${active?C.teal:C.dim}`}}/><div style={{width:2,flex:1,background:C.dim,marginTop:4}}/></div><div style={{paddingBottom:8}}><div style={{fontSize:11,color:C.teal,fontWeight:700,letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:4}}>{phase}</div><div style={{fontSize:17,fontWeight:700,color:C.text,marginBottom:4}}>{title}</div><div style={{fontSize:14,color:C.muted,lineHeight:1.6}}>{desc}</div></div></div>;}
 function IconBox({icon:Icon,color=C.teal,size=20}:{icon:LucideIcon;color?:string;size?:number}){return <div style={{width:40,height:40,borderRadius:10,background:`${color}12`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}><Icon size={size} color={color} strokeWidth={1.8}/></div>;}
@@ -43,9 +43,9 @@ export default function LooperNarrative(){
   ];
 
   return(
-    <div style={{background:C.bg,minHeight:"100vh",color:C.text,fontFamily:"'DM Sans',sans-serif"}}>
+    <div style={{background:C.bg,minHeight:"100vh",color:C.text,fontFamily:"Inter,system-ui,-apple-system,sans-serif"}}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;0,9..40,800;1,9..40,400&family=DM+Mono:wght@400&family=Playfair+Display:ital,wght@0,700;1,400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
         *{box-sizing:border-box;margin:0;padding:0}
         ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:${C.bg}}::-webkit-scrollbar-thumb{background:${C.dim};border-radius:3px}
         @keyframes pulse{0%,100%{opacity:0.3}50%{opacity:1}}
@@ -59,10 +59,10 @@ export default function LooperNarrative(){
 
       {/* THESIS */}
       <div style={{minHeight:"100vh",display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center",padding:"0 24px",position:"relative",overflow:"hidden"}}>
-        <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 60%,rgba(56,189,248,0.04) 0%,transparent 55%)"}}/>
+        <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 60%,rgba(58,157,120,0.04) 0%,transparent 55%)"}}/>
         <div style={{maxWidth:680,position:"relative",zIndex:1}}>
           <div style={{animation:"fadeUp 1s ease-out"}}>
-            <div style={{fontSize:12,color:C.accent,letterSpacing:"3px",textTransform:"uppercase",fontWeight:700,marginBottom:28,fontFamily:"'DM Mono',monospace"}}>Thesis</div>
+            <div style={{fontSize:12,color:C.accent,letterSpacing:"3px",textTransform:"uppercase",fontWeight:700,marginBottom:28,fontFamily:"'JetBrains Mono',monospace"}}>Thesis</div>
             <h1 style={{fontSize:44,fontWeight:800,letterSpacing:"-2px",lineHeight:1.12,marginBottom:28,color:C.text}}>AI will transform how golf is taught, how players learn, and how equipment is fitted.</h1>
           </div>
           <div style={{animation:"fadeUp 1s ease-out 0.3s both"}}>
@@ -75,7 +75,7 @@ export default function LooperNarrative(){
           </div>
           <div style={{animation:"fadeUp 1s ease-out 0.7s both"}}>
             <div style={{padding:"22px 24px",borderLeft:`3px solid ${C.accent}`,background:`${C.accentDim}22`,borderRadius:"0 12px 12px 0"}}>
-              <p style={{fontSize:20,color:C.accent,fontWeight:700,lineHeight:1.4,fontFamily:"'Playfair Display',serif",fontStyle:"italic"}}>The question is not whether AI will reshape golf. The question is who builds the infrastructure first.</p>
+              <p style={{fontSize:20,color:C.accent,fontWeight:700,lineHeight:1.4,fontFamily:"Inter,sans-serif",fontStyle:"italic"}}>The question is not whether AI will reshape golf. The question is who builds the infrastructure first.</p>
             </div>
           </div>
         </div>
@@ -86,24 +86,25 @@ export default function LooperNarrative(){
 
       {/* HERO — looper.ai reveal */}
       <div style={{minHeight:"100vh",display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center",padding:"0 24px",position:"relative",overflow:"hidden",borderTop:`1px solid ${C.dim}18`}}>
-        <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 35%,rgba(52,211,153,0.05) 0%,transparent 60%)"}}/>
+        <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 35%,rgba(77,184,138,0.05) 0%,transparent 60%)"}}/>
         <div style={{textAlign:"center",maxWidth:740,position:"relative",zIndex:1}}>
           <S><div style={{marginBottom:8}}>
             <div style={{display:"inline-block"}}><span style={{fontSize:62,fontWeight:800,letterSpacing:"-2.5px",color:C.text}}>looper</span><span style={{fontSize:62,fontWeight:800,letterSpacing:"-2.5px",color:C.teal}}>.ai</span></div>
           </div>
-          <p style={{fontSize:20,color:C.muted,marginBottom:48,fontFamily:"'Playfair Display',serif",fontStyle:"italic"}}>The operating system for golf coaching and fitting</p></S>
+          <p style={{fontSize:13,color:C.accent,letterSpacing:"3px",textTransform:"uppercase",fontWeight:600,marginBottom:12}}>Expertise, engineered.</p>
+          <p style={{fontSize:18,color:C.muted,marginBottom:48}}>The decision platform for golf coaching and fitting</p></S>
           <S delay={0.15}>
             <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12}}>
               {pillars.slice(0,3).map((p,i) => (
                 <div key={i} style={{padding:"20px 14px",borderRadius:12,border:`1px solid ${C.dim}33`,background:`${C.card}88`,textAlign:"left"}}>
-                  <div style={{fontSize:28,fontWeight:800,color:p.color,opacity:0.3,marginBottom:6,fontFamily:"'DM Mono',monospace"}}>{p.num}</div>
+                  <div style={{fontSize:28,fontWeight:800,color:p.color,opacity:0.3,marginBottom:6,fontFamily:"'JetBrains Mono',monospace"}}>{p.num}</div>
                   <div style={{fontSize:14,fontWeight:700,color:p.color,marginBottom:6,lineHeight:1.3}}>{p.title}</div>
                   <div style={{fontSize:12,color:C.muted,lineHeight:1.4}}>{p.desc}</div>
                 </div>
               ))}
             </div>
             <div style={{marginTop:12,padding:"20px 24px",borderRadius:12,border:`1px solid ${C.dim}33`,background:`${C.card}88`,textAlign:"left",display:"flex",alignItems:"center",gap:20}}>
-              <div style={{fontSize:28,fontWeight:800,color:pillars[3].color,opacity:0.3,fontFamily:"'DM Mono',monospace",flexShrink:0}}>{pillars[3].num}</div>
+              <div style={{fontSize:28,fontWeight:800,color:pillars[3].color,opacity:0.3,fontFamily:"'JetBrains Mono',monospace",flexShrink:0}}>{pillars[3].num}</div>
               <div>
                 <div style={{fontSize:14,fontWeight:700,color:pillars[3].color,marginBottom:4,lineHeight:1.3}}>{pillars[3].title}</div>
                 <div style={{fontSize:12,color:C.muted,lineHeight:1.4}}>{pillars[3].desc}</div>
@@ -146,7 +147,7 @@ export default function LooperNarrative(){
           ))}
         </div></S>
         <S delay={0.1}><div style={{padding:"22px 24px",borderLeft:`3px solid ${C.teal}`,background:`${C.tealDim}22`,borderRadius:"0 12px 12px 0"}}>
-          <p style={{fontSize:18,color:C.teal,fontWeight:600,fontFamily:"'Playfair Display',serif",fontStyle:"italic",lineHeight:1.5}}>The missing asset in golf is not more swing data. It is a persistent record of coaching and fitting decisions and outcomes.</p>
+          <p style={{fontSize:18,color:C.teal,fontWeight:600,fontFamily:"Inter,sans-serif",fontStyle:"italic",lineHeight:1.5}}>The missing asset in golf is not more swing data. It is a persistent record of coaching and fitting decisions and outcomes.</p>
         </div></S>
       </div>
 
@@ -181,7 +182,7 @@ export default function LooperNarrative(){
               <div style={{flex:1}}>
                 <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:6,flexWrap:"wrap"}}>
                   <span style={{fontSize:16,fontWeight:700,color:C.text}}>{item.title}</span>
-                  <span style={{fontSize:10,color:C.teal,letterSpacing:"1px",padding:"2px 8px",border:`1px solid ${C.tealDim}`,borderRadius:4,fontFamily:"'DM Mono',monospace"}}>{item.tag}</span>
+                  <span style={{fontSize:10,color:C.teal,letterSpacing:"1px",padding:"2px 8px",border:`1px solid ${C.tealDim}`,borderRadius:4,fontFamily:"'JetBrains Mono',monospace"}}>{item.tag}</span>
                 </div>
                 <p style={{fontSize:14,color:C.muted,lineHeight:1.6}}>{item.desc}</p>
               </div>
@@ -311,7 +312,7 @@ export default function LooperNarrative(){
         <S>
           <div style={{marginBottom:24}}><span style={{fontSize:32,fontWeight:800,letterSpacing:"-1px",color:C.text}}>looper</span><span style={{fontSize:32,fontWeight:800,letterSpacing:"-1px",color:C.teal}}>.ai</span></div>
           <h2 style={{fontSize:38,fontWeight:800,letterSpacing:"-1.5px",lineHeight:1.2,marginBottom:20}}>Every great golfer has had a <span style={{color:C.teal}}>looper</span>.</h2>
-          <p style={{fontSize:18,color:C.muted,lineHeight:1.7,maxWidth:520,margin:"0 auto 32px",fontFamily:"'Playfair Display',serif",fontStyle:"italic"}}>Someone who knows your game, remembers what happened last time, and helps you make better decisions.</p>
+          <p style={{fontSize:18,color:C.muted,lineHeight:1.7,maxWidth:520,margin:"0 auto 32px",fontFamily:"Inter,sans-serif",fontStyle:"italic"}}>Someone who knows your game, remembers what happened last time, and helps you make better decisions.</p>
           <p style={{fontSize:16,color:C.muted,lineHeight:1.7,maxWidth:520,margin:"0 auto 36px"}}>looper.ai captures what great coaches and fitters know, structures it, and makes it permanent. Then it builds the AI engine that learns from it at scale.</p>
           <div style={{padding:"20px 28px",borderLeft:`3px solid ${C.teal}`,background:`${C.tealDim}22`,borderRadius:"0 12px 12px 0",display:"inline-block",textAlign:"left",maxWidth:460}}>
             <p style={{fontSize:15,color:C.teal,fontWeight:600,lineHeight:1.5}}>The hook is workflow. The value is the amplifier. The endgame is golf's AI engine.</p>

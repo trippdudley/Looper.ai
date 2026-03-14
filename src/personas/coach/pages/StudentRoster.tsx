@@ -89,7 +89,7 @@ export default function StudentRoster() {
     <div>
       {/* ---- Top bar ---- */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
-        <h1 className="font-serif text-2xl text-navy font-bold">Students</h1>
+        <h1 className="text-2xl text-navy font-bold">Students</h1>
 
         <div className="flex items-center gap-3">
           {/* Search */}

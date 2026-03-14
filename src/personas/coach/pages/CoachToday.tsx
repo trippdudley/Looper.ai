@@ -136,7 +136,7 @@ export default function CoachToday() {
       {/* ---- Top Section ---- */}
       <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-8">
         <div>
-          <h1 className="font-serif text-navy text-2xl font-bold">
+          <h1 className="text-navy text-2xl font-bold">
             Good morning, Austin
           </h1>
           <p className="text-gray-500 text-sm mt-1">Saturday, March 8, 2026</p>
@@ -174,7 +174,7 @@ export default function CoachToday() {
         <div className="flex-[2] min-w-0 space-y-6">
           {/* Today's Schedule */}
           <div className="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 className="font-serif text-navy text-lg font-bold mb-4">
+            <h2 className="text-navy text-lg font-bold mb-4">
               Today&apos;s Schedule
             </h2>
             <div className="space-y-3">
@@ -252,7 +252,7 @@ export default function CoachToday() {
 
           {/* Recent Activity Feed */}
           <div className="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 className="font-serif text-navy text-lg font-bold mb-4">
+            <h2 className="text-navy text-lg font-bold mb-4">
               Recent Activity
             </h2>
             <div className="space-y-4">
@@ -280,7 +280,7 @@ export default function CoachToday() {
             <div className="bg-white rounded-xl border border-gray-200 p-5">
               <div className="flex items-center gap-2 mb-4">
                 <Clock className="w-4 h-4 text-data-blue" />
-                <h2 className="font-serif text-navy text-lg font-bold">
+                <h2 className="text-navy text-lg font-bold">
                   Next Up: {nextGolfer.name}
                 </h2>
               </div>
@@ -363,7 +363,7 @@ export default function CoachToday() {
 
           {/* Student Alerts */}
           <div className="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 className="font-serif text-navy text-lg font-bold mb-4">
+            <h2 className="text-navy text-lg font-bold mb-4">
               Student Alerts
             </h2>
             {alerts.length === 0 ? (

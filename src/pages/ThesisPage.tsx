@@ -42,7 +42,7 @@ export default function ThesisPage() {
       {/* Top nav */}
       <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-100">
         <div className="max-w-[720px] mx-auto flex items-center justify-between px-6 py-4">
-          <Link to="/" className="font-serif text-xl font-bold text-navy hover:opacity-80 transition-opacity">
+          <Link to="/" className="text-xl font-bold text-navy hover:opacity-80 transition-opacity">
             Looper.AI
           </Link>
           <Link to="/" className="text-sm text-gray-500 hover:text-navy transition-colors">
@@ -58,16 +58,19 @@ export default function ThesisPage() {
           {/* Watermark */}
           <span
             aria-hidden="true"
-            className="pointer-events-none select-none absolute inset-0 flex items-center justify-center font-serif text-[120px] font-bold text-navy/[0.03] leading-none"
+            className="pointer-events-none select-none absolute inset-0 flex items-center justify-center text-[120px] font-bold text-navy/[0.03] leading-none"
           >
             Looper.AI
           </span>
 
-          <h1 className="font-serif text-5xl font-bold text-navy tracking-tight relative">
+          <h1 className="text-5xl font-bold text-navy tracking-tight relative">
             Looper.AI
           </h1>
-          <p className="text-xl text-gray-500 font-serif italic mt-4 relative">
-            The Platform to Power Golf in the Age of AI
+          <p className="text-xs uppercase tracking-widest text-accent font-medium mt-3 relative">
+            Expertise, engineered.
+          </p>
+          <p className="text-lg text-gray-500 mt-2 relative">
+            The decision platform for golf coaching and fitting
           </p>
 
           <div className="w-[80px] h-px bg-accent mx-auto my-8" />
@@ -82,12 +85,12 @@ export default function ThesisPage() {
 
         {/* ── Section 1: The Opportunity ── */}
         <section ref={setRef(1)} className={`${sectionClass} mb-20`}>
-          <h2 className="font-serif text-[28px] text-navy font-bold mb-4">
+          <h2 className="text-[28px] text-navy font-bold mb-4">
             The Opportunity
           </h2>
 
           {/* Pull quote */}
-          <blockquote className="text-2xl font-serif italic text-navy border-l-[3px] border-accent pl-6 py-2 mb-10">
+          <blockquote className="text-2xl italic text-navy border-l-[3px] border-accent pl-6 py-2 mb-10">
             AI will transform how golf is taught, how players learn, and how equipment is fitted. The question is who builds the infrastructure first.
           </blockquote>
 
@@ -106,7 +109,7 @@ export default function ThesisPage() {
 
         {/* ── Section 2: The Problem ── */}
         <section ref={setRef(2)} className={`${sectionClass} mb-20`}>
-          <h2 className="font-serif text-[28px] text-navy font-bold mb-4">
+          <h2 className="text-[28px] text-navy font-bold mb-4">
             Golf&rsquo;s Medical Records Problem
           </h2>
 
@@ -121,7 +124,7 @@ export default function ThesisPage() {
 
         {/* ── Section 3: The Solution ── */}
         <section ref={setRef(3)} className={`${sectionClass} mb-20`}>
-          <h2 className="font-serif text-[28px] text-navy font-bold mb-4">
+          <h2 className="text-[28px] text-navy font-bold mb-4">
             Looper
           </h2>
 
@@ -136,7 +139,7 @@ export default function ThesisPage() {
 
         {/* ── Section 4: Business Model ── */}
         <section ref={setRef(4)} className={`${sectionClass} mb-20`}>
-          <h2 className="font-serif text-[28px] text-navy font-bold mb-8">
+          <h2 className="text-[28px] text-navy font-bold mb-8">
             Four-Stage Revenue Model
           </h2>
 
@@ -193,12 +196,12 @@ export default function ThesisPage() {
 
         {/* ── Section 5: Financial Projections ── */}
         <section ref={setRef(5)} className={`${sectionClass} mb-20`}>
-          <h2 className="font-serif text-[28px] text-navy font-bold mb-8">
+          <h2 className="text-[28px] text-navy font-bold mb-8">
             Five-Year Financial Projections
           </h2>
 
           {/* P&L Table */}
-          <h3 className="font-serif text-xl text-navy font-semibold mb-4">
+          <h3 className="text-xl text-navy font-semibold mb-4">
             P&amp;L Summary
           </h3>
           <div className="rounded-xl overflow-hidden border border-gray-100 mb-10">
@@ -243,7 +246,7 @@ export default function ThesisPage() {
           </div>
 
           {/* Data Monetization Table */}
-          <h3 className="font-serif text-xl text-navy font-semibold mb-4">
+          <h3 className="text-xl text-navy font-semibold mb-4">
             Data Monetization Revenue
           </h3>
           <div className="rounded-xl overflow-hidden border border-gray-100 mb-10">
@@ -290,7 +293,7 @@ export default function ThesisPage() {
 
         {/* ── Section 6: The Moat ── */}
         <section ref={setRef(6)} className={`${sectionClass} mb-20`}>
-          <h2 className="font-serif text-[28px] text-navy font-bold mb-4">
+          <h2 className="text-[28px] text-navy font-bold mb-4">
             Why This Gets Harder to Compete With Over Time
           </h2>
 
@@ -301,7 +304,7 @@ export default function ThesisPage() {
 
         {/* ── Section 7: Team & Contact ── */}
         <section ref={setRef(7)} className={`${sectionClass} mb-12`}>
-          <h2 className="font-serif text-[28px] text-navy font-bold mb-6">
+          <h2 className="text-[28px] text-navy font-bold mb-6">
             Team
           </h2>
 
@@ -319,7 +322,7 @@ export default function ThesisPage() {
         <div className="w-[80px] h-px bg-accent mx-auto my-8" />
 
         <footer className="text-sm text-gray-400 text-center py-8">
-          Looper — Confidential — March 2026
+          Looper.AI — Confidential — March 2026
         </footer>
       </div>
     </div>

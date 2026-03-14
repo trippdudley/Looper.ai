@@ -157,7 +157,7 @@ export default function GolferLookup() {
                   {getInitials(golfer.name)}
                 </div>
                 <div>
-                  <h2 className="font-serif text-xl font-bold text-navy">
+                  <h2 className="text-xl font-bold text-navy">
                     {golfer.name}
                   </h2>
                   <p className="text-sm text-gray-500">{golfer.email}</p>

@@ -72,7 +72,7 @@ export default function EquipmentProfile() {
 
       {/* ── Top Bar ── */}
       <div className="flex items-center justify-between">
-        <h1 className="font-serif text-2xl text-navy font-bold">
+        <h1 className="text-2xl text-navy font-bold">
           Equipment Profile &mdash; {golfer.name}
         </h1>
         <Link

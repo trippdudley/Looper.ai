@@ -189,7 +189,7 @@ export default function SessionCapture() {
           </div>
         </div>
         {/* center */}
-        <div className="font-serif text-base font-semibold tracking-wide">{session.focus}</div>
+        <div className="text-base font-semibold tracking-wide">{session.focus}</div>
         {/* right */}
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 text-sm font-mono">

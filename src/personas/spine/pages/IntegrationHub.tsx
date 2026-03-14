@@ -85,7 +85,7 @@ export default function IntegrationHub() {
     <div>
       {/* Header */}
       <div className="mb-6">
-        <h1 className="font-serif text-3xl font-bold text-white">Integration Hub</h1>
+        <h1 className="text-3xl font-bold text-white">Integration Hub</h1>
         <p className="text-gray-400 mt-1">
           Every data source in the golf ecosystem — connected, available, or coming soon.
         </p>
@@ -114,7 +114,7 @@ export default function IntegrationHub() {
         if (!items || items.length === 0) return null;
         return (
           <div key={catKey}>
-            <h2 className="text-lg font-serif text-white mt-6 mb-3">
+            <h2 className="text-lg text-white mt-6 mb-3">
               {categoryLabels[catKey]}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">

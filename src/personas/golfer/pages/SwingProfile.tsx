@@ -99,7 +99,7 @@ export default function SwingProfile() {
     <div className="pb-8 space-y-6">
       {/* 1. Header */}
       <div>
-        <h1 className="text-xl font-serif text-navy font-bold">My Swing</h1>
+        <h1 className="text-xl text-navy font-bold">My Swing</h1>
         <p className="text-sm text-gray-500">{golfer.name}</p>
       </div>
 

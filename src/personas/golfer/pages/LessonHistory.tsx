@@ -55,7 +55,7 @@ export default function LessonHistory() {
   return (
     <div className="flex flex-col gap-5 pb-8">
       {/* Header */}
-      <h1 className="text-xl font-serif text-navy font-bold">Lesson History</h1>
+      <h1 className="text-xl text-navy font-bold">Lesson History</h1>
 
       {/* Filter Chips */}
       <div className="flex overflow-x-auto gap-2 pb-1 -mx-1 px-1 scrollbar-hide">

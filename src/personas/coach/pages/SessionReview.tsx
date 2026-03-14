@@ -103,7 +103,7 @@ export default function SessionReview() {
         </div>
       </div>
 
-      <h1 className="font-serif text-2xl text-navy font-bold">Session Review</h1>
+      <h1 className="text-2xl text-navy font-bold">Session Review</h1>
 
       {/* 2-Column Layout */}
       <div className="flex gap-6">
@@ -117,7 +117,7 @@ export default function SessionReview() {
                   {getInitials(golfer.name)}
                 </div>
                 <div>
-                  <h2 className="font-serif text-lg font-bold text-navy">{golfer.name}</h2>
+                  <h2 className="text-lg font-bold text-navy">{golfer.name}</h2>
                   <p className="text-sm text-gray-500">{formatDate(session.date)}</p>
                 </div>
               </div>

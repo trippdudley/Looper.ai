@@ -6,19 +6,19 @@ const personas = [
   {
     label: "I'm a Golfer",
     icon: User,
-    description: "Track your improvement, review lessons, practice with purpose",
+    description: "Track improvement, review lessons, practice with purpose",
     path: "/golfer",
   },
   {
     label: "I'm a Coach",
     icon: GraduationCap,
-    description: "Capture sessions, manage students, see what works",
+    description: "Capture sessions, diagnose limiting factors, see what works",
     path: "/coach",
   },
   {
     label: "I'm a Fitter",
     icon: Wrench,
-    description: "Access coaching history, fit with context, see swing evolution",
+    description: "Fit with full context, estimate outcomes, produce auditable builds",
     path: "/fitter",
   },
 ];
@@ -55,11 +55,14 @@ export default function PersonaSelector() {
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 py-16 max-w-4xl mx-auto">
         {/* Hero */}
         <div ref={heroRef} className="fade-in-up text-center mb-12">
-          <h1 className="font-serif text-3xl sm:text-5xl font-bold text-white tracking-tight mb-3">
+          <h1 className="text-3xl sm:text-5xl font-bold text-white tracking-tight mb-2">
             Looper.AI
           </h1>
-          <p className="text-lg text-gray-400 font-serif italic">
-            The Platform to Power Golf in the Age of AI
+          <p className="text-sm uppercase tracking-widest text-accent-light font-medium mb-1">
+            Expertise, engineered.
+          </p>
+          <p className="text-base text-gray-400">
+            The decision platform for golf coaching and fitting
           </p>
           <div className="w-20 h-px bg-accent mx-auto my-6" />
         </div>

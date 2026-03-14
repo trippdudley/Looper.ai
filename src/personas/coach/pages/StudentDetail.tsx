@@ -158,7 +158,7 @@ export default function StudentDetail() {
               {getInitials(golfer.name)}
             </div>
             <div>
-              <h1 className="font-serif text-2xl text-navy font-bold">{golfer.name}</h1>
+              <h1 className="text-2xl text-navy font-bold">{golfer.name}</h1>
               <p className="text-sm text-gray-500">{golfer.email}</p>
             </div>
           </div>

@@ -79,7 +79,7 @@ export default function FittingReport() {
 
       {/* ── Header ── */}
       <div>
-        <h1 className="font-serif text-2xl text-white font-bold">
+        <h1 className="text-2xl text-white font-bold">
           Fitting Report &mdash; Mike Reynolds
         </h1>
         <p className="text-sm text-gray-400 mt-1">March 8, 2026</p>

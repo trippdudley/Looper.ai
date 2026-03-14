@@ -368,7 +368,7 @@ export default function DataSpine() {
     <div className="max-w-6xl mx-auto space-y-8">
       {/* ── Header ── */}
       <div>
-        <h1 className="font-serif text-3xl font-bold text-white mb-2">
+        <h1 className="text-3xl font-bold text-white mb-2">
           The Looper Data Spine
         </h1>
         <p className="text-gray-400">
@@ -413,7 +413,7 @@ export default function DataSpine() {
       <div className="bg-card-dark rounded-xl border border-border-dark overflow-hidden">
         {/* Table header bar with filters */}
         <div className="px-5 py-4 border-b border-border-dark flex flex-col sm:flex-row sm:items-center gap-3">
-          <h2 className="font-serif text-lg font-bold text-white">Data Catalog</h2>
+          <h2 className="text-lg font-bold text-white">Data Catalog</h2>
           <div className="flex-1" />
           <div className="relative">
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />

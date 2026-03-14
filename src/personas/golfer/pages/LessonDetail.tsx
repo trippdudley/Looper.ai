@@ -54,7 +54,7 @@ export default function LessonDetail() {
   if (!session) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-center p-8">
-        <h2 className="text-xl font-serif text-navy font-bold mb-2">Session not found</h2>
+        <h2 className="text-xl text-navy font-bold mb-2">Session not found</h2>
         <p className="text-sm text-gray-500 mb-4">
           The session you are looking for does not exist.
         </p>
@@ -83,7 +83,7 @@ export default function LessonDetail() {
           <span>Lessons</span>
         </Link>
       </div>
-      <h1 className="font-serif text-lg font-bold text-navy">Lesson Detail</h1>
+      <h1 className="text-lg font-bold text-navy">Lesson Detail</h1>
 
       {/* 2. Session header card */}
       <Card>

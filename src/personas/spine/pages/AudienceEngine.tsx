@@ -39,7 +39,7 @@ export default function AudienceEngine() {
     <div>
       {/* Header */}
       <div className="mb-6">
-        <h1 className="font-serif text-3xl font-bold text-white">Audience Engine</h1>
+        <h1 className="text-3xl font-bold text-white">Audience Engine</h1>
         <p className="text-gray-400 mt-1">
           First-party behavioral segments powered by coaching data — the most valuable targeting signals in golf.
         </p>
@@ -115,7 +115,7 @@ export default function AudienceEngine() {
 
       {/* How It Works */}
       <div className="mt-8">
-        <h2 className="text-xl font-serif text-white mb-4">How It Works</h2>
+        <h2 className="text-xl text-white mb-4">How It Works</h2>
         <div className="grid grid-cols-3 gap-4">
           {howItWorks.map((step) => {
             const Icon = step.icon;
