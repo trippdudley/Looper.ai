@@ -56,7 +56,7 @@ export default function PersonaSelector() {
         {/* Hero */}
         <div ref={heroRef} className="fade-in-up text-center mb-12">
           <h1 className="font-serif text-3xl sm:text-5xl font-bold text-white tracking-tight mb-3">
-            LOOPER
+            Looper.AI
           </h1>
           <p className="text-lg text-gray-400 font-serif italic">
             The Platform to Power Golf in the Age of AI

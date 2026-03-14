@@ -52,6 +52,11 @@ export default function LooperNarrative(){
         @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
       `}</style>
 
+      {/* Back to home */}
+      <a href="/" style={{position:"fixed",top:20,left:24,zIndex:100,display:"inline-flex",alignItems:"center",gap:8,padding:"8px 16px",borderRadius:10,background:`${C.card}cc`,border:`1px solid ${C.dim}44`,color:C.muted,fontSize:13,fontWeight:500,textDecoration:"none",backdropFilter:"blur(12px)",transition:"color 0.2s, border-color 0.2s"}} onMouseEnter={e=>{e.currentTarget.style.color=C.text;e.currentTarget.style.borderColor=C.accent}} onMouseLeave={e=>{e.currentTarget.style.color=C.muted;e.currentTarget.style.borderColor=`${C.dim}44`}}>
+        <span style={{fontSize:16}}>←</span> Back to Home
+      </a>
+
       {/* THESIS */}
       <div style={{minHeight:"100vh",display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center",padding:"0 24px",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 60%,rgba(56,189,248,0.04) 0%,transparent 55%)"}}/>

@@ -26,7 +26,7 @@ export default function Sidebar({ brandLabel, navItems, integrationStatus }: Sid
       {/* Brand */}
       <div className="px-5 pt-6 pb-4">
         <Link to="/" className="flex items-center gap-2">
-          <span className="font-serif text-xl font-bold text-accent-light">Looper</span>
+          <span className="font-serif text-xl font-bold text-accent-light">Looper.AI</span>
           <span className="text-[10px] font-semibold uppercase tracking-wider bg-accent/20 text-accent-light px-2 py-0.5 rounded-full">
             {brandLabel}
           </span>

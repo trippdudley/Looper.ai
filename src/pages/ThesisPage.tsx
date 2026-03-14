@@ -43,7 +43,7 @@ export default function ThesisPage() {
       <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-100">
         <div className="max-w-[720px] mx-auto flex items-center justify-between px-6 py-4">
           <Link to="/" className="font-serif text-xl font-bold text-navy hover:opacity-80 transition-opacity">
-            Looper
+            Looper.AI
           </Link>
           <Link to="/" className="text-sm text-gray-500 hover:text-navy transition-colors">
             &larr; Back to Prototype
@@ -60,11 +60,11 @@ export default function ThesisPage() {
             aria-hidden="true"
             className="pointer-events-none select-none absolute inset-0 flex items-center justify-center font-serif text-[120px] font-bold text-navy/[0.03] leading-none"
           >
-            LOOPER
+            Looper.AI
           </span>
 
           <h1 className="font-serif text-5xl font-bold text-navy tracking-tight relative">
-            LOOPER
+            Looper.AI
           </h1>
           <p className="text-xl text-gray-500 font-serif italic mt-4 relative">
             The Platform to Power Golf in the Age of AI
