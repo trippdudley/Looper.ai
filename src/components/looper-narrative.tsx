@@ -1,5 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
+import type { ReactNode, RefObject } from "react";
 import { Mic, Link2, Flag, Search, Layers, Database, Brain, Target, TrendingUp, GraduationCap, Wrench, User, ClipboardList, BarChart3, Globe, ChevronDown } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 const C = {
   bg:"#0B0F1A", surface:"#111827", card:"#1A2235",
@@ -10,17 +12,17 @@ const C = {
 };
 
 
-function useVis(ref, th=0.15) {
+function useVis(ref: RefObject<HTMLDivElement | null>, th=0.15) {
   const [v,setV]=useState(false);
   useEffect(()=>{const el=ref.current;if(!el)return;const o=new IntersectionObserver(([e])=>{if(e.isIntersecting)setV(true)},{threshold:th});o.observe(el);return()=>o.disconnect();},[ref,th]);
   return v;
 }
-function S({children,delay=0}){const r=useRef(null);const v=useVis(r,0.12);return <div ref={r} style={{opacity:v?1:0,transform:v?"translateY(0)":"translateY(36px)",transition:`all 0.8s cubic-bezier(0.16,1,0.3,1) ${delay}s`}}>{children}</div>;}
-function Stat({number,label,color=C.accent}){return <div style={{textAlign:"center",padding:"24px 12px"}}><div style={{fontSize:40,fontWeight:800,color,letterSpacing:"-2px"}}>{number}</div><div style={{fontSize:12,color:C.muted,marginTop:4,textTransform:"uppercase",letterSpacing:"1.5px"}}>{label}</div></div>;}
-function Pill({name}){return <span style={{display:"inline-block",padding:"6px 14px",borderRadius:20,border:`1px solid ${C.dim}`,color:C.muted,fontSize:13,margin:"4px",fontFamily:"'DM Mono',monospace"}}>{name}</span>;}
-function BA({before,after}){return <div style={{display:"grid",gridTemplateColumns:"1fr 36px 1fr",alignItems:"center",marginBottom:10}}><div style={{padding:"11px 14px",background:"rgba(248,113,113,0.07)",borderRadius:8,border:"1px solid rgba(248,113,113,0.18)",fontSize:14,color:C.muted}}><span style={{color:C.red,marginRight:8,fontWeight:700}}>✕</span>{before}</div><div style={{textAlign:"center",color:C.dim,fontSize:16}}>→</div><div style={{padding:"11px 14px",background:"rgba(52,211,153,0.07)",borderRadius:8,border:"1px solid rgba(52,211,153,0.18)",fontSize:14,color:C.text}}><span style={{color:C.teal,marginRight:8,fontWeight:700}}>✓</span>{after}</div></div>;}
-function TL({phase,title,desc,active}){return <div style={{display:"flex",gap:16,marginBottom:24}}><div style={{display:"flex",flexDirection:"column",alignItems:"center",minWidth:40}}><div style={{width:14,height:14,borderRadius:"50%",background:active?C.teal:"transparent",border:`2px solid ${active?C.teal:C.dim}`}}/><div style={{width:2,flex:1,background:C.dim,marginTop:4}}/></div><div style={{paddingBottom:8}}><div style={{fontSize:11,color:C.teal,fontWeight:700,letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:4}}>{phase}</div><div style={{fontSize:17,fontWeight:700,color:C.text,marginBottom:4}}>{title}</div><div style={{fontSize:14,color:C.muted,lineHeight:1.6}}>{desc}</div></div></div>;}
-function IconBox({icon:Icon,color=C.teal,size=20}){return <div style={{width:40,height:40,borderRadius:10,background:`${color}12`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}><Icon size={size} color={color} strokeWidth={1.8}/></div>;}
+function S({children,delay=0}:{children:ReactNode;delay?:number}){const r=useRef<HTMLDivElement>(null);const v=useVis(r,0.12);return <div ref={r} style={{opacity:v?1:0,transform:v?"translateY(0)":"translateY(36px)",transition:`all 0.8s cubic-bezier(0.16,1,0.3,1) ${delay}s`}}>{children}</div>;}
+function Stat({number,label,color=C.accent}:{number:string;label:string;color?:string}){return <div style={{textAlign:"center",padding:"24px 12px"}}><div style={{fontSize:40,fontWeight:800,color,letterSpacing:"-2px"}}>{number}</div><div style={{fontSize:12,color:C.muted,marginTop:4,textTransform:"uppercase",letterSpacing:"1.5px"}}>{label}</div></div>;}
+function Pill({name}:{name:string}){return <span style={{display:"inline-block",padding:"6px 14px",borderRadius:20,border:`1px solid ${C.dim}`,color:C.muted,fontSize:13,margin:"4px",fontFamily:"'DM Mono',monospace"}}>{name}</span>;}
+function BA({before,after}:{before:string;after:string}){return <div style={{display:"grid",gridTemplateColumns:"1fr 36px 1fr",alignItems:"center",marginBottom:10}}><div style={{padding:"11px 14px",background:"rgba(248,113,113,0.07)",borderRadius:8,border:"1px solid rgba(248,113,113,0.18)",fontSize:14,color:C.muted}}><span style={{color:C.red,marginRight:8,fontWeight:700}}>✕</span>{before}</div><div style={{textAlign:"center",color:C.dim,fontSize:16}}>→</div><div style={{padding:"11px 14px",background:"rgba(52,211,153,0.07)",borderRadius:8,border:"1px solid rgba(52,211,153,0.18)",fontSize:14,color:C.text}}><span style={{color:C.teal,marginRight:8,fontWeight:700}}>✓</span>{after}</div></div>;}
+function TL({phase,title,desc,active=false}:{phase:string;title:string;desc:string;active?:boolean}){return <div style={{display:"flex",gap:16,marginBottom:24}}><div style={{display:"flex",flexDirection:"column",alignItems:"center",minWidth:40}}><div style={{width:14,height:14,borderRadius:"50%",background:active?C.teal:"transparent",border:`2px solid ${active?C.teal:C.dim}`}}/><div style={{width:2,flex:1,background:C.dim,marginTop:4}}/></div><div style={{paddingBottom:8}}><div style={{fontSize:11,color:C.teal,fontWeight:700,letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:4}}>{phase}</div><div style={{fontSize:17,fontWeight:700,color:C.text,marginBottom:4}}>{title}</div><div style={{fontSize:14,color:C.muted,lineHeight:1.6}}>{desc}</div></div></div>;}
+function IconBox({icon:Icon,color=C.teal,size=20}:{icon:LucideIcon;color?:string;size?:number}){return <div style={{width:40,height:40,borderRadius:10,background:`${color}12`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}><Icon size={size} color={color} strokeWidth={1.8}/></div>;}
 
 export default function LooperNarrative(){
   const [fly,setFly]=useState(0);
