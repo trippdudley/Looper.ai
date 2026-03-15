@@ -1,6 +1,6 @@
 // ─── Types ──────────────────────────────────────────────────────
 
-export type TabId = 'overview' | 'video-analysis' | 'diagnosis' | 'interventions' | 'player-plan';
+export type TabId = 'overview' | 'video-analysis' | 'diagnosis' | 'interventions' | 'player-plan' | 'player-history';
 export type L1Mode = 'session' | 'players' | 'history' | 'drill-library';
 export type ClubAbbrev = '9i' | 'PW' | '7i';
 export type ShotQuality = 'good' | 'moderate' | 'poor' | 'outlier';
@@ -70,6 +70,62 @@ export interface SessionContext {
   goal: string;
   coachName: string;
   coachInitials: string;
+}
+
+// ─── Player History Types ───────────────────────────────────────
+
+export type SessionStatus = 'completed' | 'in-progress' | 'scheduled';
+
+export interface LessonMetric {
+  label: string;
+  before: string;
+  after: string;
+  improved: boolean;
+}
+
+export interface LessonRecord {
+  sessionNumber: number;
+  date: string;
+  status: SessionStatus;
+  focus: string;
+  club: string;
+  summary: string;
+  keyTakeaway: string;
+  cueUsed: string | null;
+  metrics: LessonMetric[];
+  coachNotes: string;
+}
+
+export interface ArccosRound {
+  date: string;
+  course: string;
+  score: number;
+  scoreToPar: number;
+  gir: number;
+  fairways: number;
+  puttsPerRound: number;
+  proximityToHole: string;
+}
+
+export interface HandicapEntry {
+  date: string;
+  index: number;
+}
+
+export interface OnCourseData {
+  arccosRounds: ArccosRound[];
+  handicapTrend: HandicapEntry[];
+  clubDistances: Array<{
+    club: string;
+    avgCarry: number;
+    avgTotal: number;
+    dispersion: string;
+  }>;
+}
+
+export interface PlayerHistory {
+  lessons: LessonRecord[];
+  onCourse: OnCourseData;
 }
 
 // ─── Color Constants (UX System) ────────────────────────────────
@@ -391,6 +447,7 @@ export const tabs: Array<{ id: TabId; label: string }> = [
   { id: 'diagnosis', label: 'Diagnosis' },
   { id: 'interventions', label: 'Interventions' },
   { id: 'player-plan', label: 'Player Plan' },
+  { id: 'player-history', label: 'Player History' },
 ];
 
 // ─── L1 Mode config ─────────────────────────────────────────────
@@ -401,3 +458,108 @@ export const l1Modes: Array<{ id: L1Mode; label: string }> = [
   { id: 'history', label: 'History' },
   { id: 'drill-library', label: 'Drill Library' },
 ];
+
+// ─── Player History Mock Data ──────────────────────────────────
+
+export const playerHistory: PlayerHistory = {
+  lessons: [
+    {
+      sessionNumber: 1,
+      date: 'Feb 4, 2026',
+      status: 'completed',
+      focus: 'Initial Assessment — Full Bag Evaluation',
+      club: 'Full bag',
+      summary: 'Comprehensive swing assessment across driver, 7-iron, and wedges. Identified two primary patterns: steep attack angle with irons producing inconsistent strike location, and early extension through impact causing heel-biased contact. Ball-striking efficiency is below handicap benchmark.',
+      keyTakeaway: 'Steep delivery + early extension = heel-biased inconsistency. Address delivery angle first.',
+      cueUsed: null,
+      metrics: [
+        { label: 'Attack Angle (7i)', before: '-5.8°', after: '-5.4°', improved: true },
+        { label: 'Strike Spread', before: '18 mm', after: '16 mm', improved: true },
+        { label: 'Carry Consistency', before: '±12.4 yds', after: '±11.8 yds', improved: true },
+        { label: 'Smash Factor (7i)', before: '1.38', after: '1.39', improved: true },
+      ],
+      coachNotes: 'Jake has good athletic movement but is stuck in a steep pattern from junior golf. Needs external cues — he over-processes internal mechanics. Start with ground-pressure work next session. Do NOT discuss shaft lean or hand position directly.',
+    },
+    {
+      sessionNumber: 2,
+      date: 'Feb 18, 2026',
+      status: 'completed',
+      focus: 'Ground Pressure & Low Point Control',
+      club: '7-iron',
+      summary: 'Focused session on ground interaction. Introduced "press the ground 2 inches before the ball" external cue on swing 8. Jake showed initial confusion (attack angle briefly steepened) then adapted well. Final 5 swings showed attack angle improvement from -5.4° baseline to -3.1° average. Strike pattern shifted from heel-biased to near-center.',
+      keyTakeaway: 'Ground-pressure cue is working. Strike centering improving. Continue with same cue — do not introduce new variables yet.',
+      cueUsed: 'Press the ground 2 inches before the ball',
+      metrics: [
+        { label: 'Attack Angle (7i)', before: '-5.4°', after: '-3.1°', improved: true },
+        { label: 'Strike Spread', before: '16 mm', after: '8 mm', improved: true },
+        { label: 'Avg Carry (7i)', before: '155 yds', after: '161 yds', improved: true },
+        { label: 'Spin Rate (7i)', before: '7,100 rpm', after: '6,500 rpm', improved: true },
+      ],
+      coachNotes: 'Big breakthrough session. Jake\'s motor learning response to external cues is excellent — confirms coaching approach. He asked about "what his hands are doing" twice. Redirected to feel-based language. Next session: confirm retention after 2-week gap, then layer in strike consistency drill.',
+    },
+    {
+      sessionNumber: 3,
+      date: 'Mar 4, 2026',
+      status: 'in-progress',
+      focus: 'Strike Consistency — 7-Iron',
+      club: '7-iron',
+      summary: 'Current session. Confirming retention of ground-pressure cue after 2-week break. Pre-cue baseline showed partial regression (attack angle -5.0° vs last session\'s -3.1° endpoint). Re-introduced cue at swing 10 — immediate response. Post-cue swings 12-14 show strong improvement.',
+      keyTakeaway: 'Retention partial after 2-week gap — cue needs reinforcement. Motor pattern not yet automatic.',
+      cueUsed: 'Press the ground before the ball / Feel the sole brush forward',
+      metrics: [
+        { label: 'Attack Angle (7i)', before: '-5.0°', after: '-2.5°', improved: true },
+        { label: 'Strike Spread', before: '14 mm', after: '3 mm', improved: true },
+        { label: 'Avg Carry (7i)', before: '156.7 yds', after: '166.7 yds', improved: true },
+        { label: 'Spin Rate (7i)', before: '6,883 rpm', after: '6,127 rpm', improved: true },
+      ],
+      coachNotes: 'In progress.',
+    },
+  ],
+  onCourse: {
+    arccosRounds: [
+      {
+        date: 'Mar 8, 2026',
+        course: 'Pebble Creek GC',
+        score: 82,
+        scoreToPar: 10,
+        gir: 38.9,
+        fairways: 57.1,
+        puttsPerRound: 31,
+        proximityToHole: '34 ft',
+      },
+      {
+        date: 'Feb 22, 2026',
+        course: 'Ridgeview Country Club',
+        score: 79,
+        scoreToPar: 7,
+        gir: 44.4,
+        fairways: 64.3,
+        puttsPerRound: 29,
+        proximityToHole: '28 ft',
+      },
+      {
+        date: 'Feb 9, 2026',
+        course: 'Pebble Creek GC',
+        score: 84,
+        scoreToPar: 12,
+        gir: 33.3,
+        fairways: 50.0,
+        puttsPerRound: 33,
+        proximityToHole: '41 ft',
+      },
+    ],
+    handicapTrend: [
+      { date: 'Mar 1, 2026', index: 8.2 },
+      { date: 'Feb 15, 2026', index: 8.6 },
+      { date: 'Feb 1, 2026', index: 9.1 },
+      { date: 'Jan 15, 2026', index: 9.4 },
+      { date: 'Jan 1, 2026', index: 9.8 },
+    ],
+    clubDistances: [
+      { club: 'Driver', avgCarry: 248, avgTotal: 268, dispersion: '42 yds L-R' },
+      { club: '5-iron', avgCarry: 182, avgTotal: 194, dispersion: '28 yds L-R' },
+      { club: '7-iron', avgCarry: 159, avgTotal: 168, dispersion: '22 yds L-R' },
+      { club: 'PW', avgCarry: 128, avgTotal: 134, dispersion: '16 yds L-R' },
+    ],
+  },
+};

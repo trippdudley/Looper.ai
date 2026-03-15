@@ -9,11 +9,14 @@ import {
   Play,
   ArrowUpRight,
   ArrowDownRight,
+  Calendar,
+  TrendingUp,
+  MapPin,
 } from 'lucide-react';
 import type { TabId, ShotData, DiagnosisFactor } from '../data/coachingOSData';
 import {
   C, F, shots, sessionContext, tabs, l1Modes, baselineAvg,
-  diagnosisFactors, interventions,
+  diagnosisFactors, interventions, playerHistory,
   getInsightForShot, getRecommendationForShot,
   fmtDelta, confidenceLevel,
 } from '../data/coachingOSData';
@@ -201,12 +204,14 @@ export default function CoachingOS() {
   const [shotRailCollapsed, setShotRailCollapsed] = useState(false);
   const [expandedStages, setExpandedStages] = useState<Set<string>>(new Set());
   const [advancedOpen, setAdvancedOpen] = useState(false);
+  const [expandedLessons, setExpandedLessons] = useState<Set<number>>(new Set());
+  const [onCourseExpanded, setOnCourseExpanded] = useState(true);
 
   const currentShot = useMemo(() => shots.find((s) => s.id === activeShot) || shots[shots.length - 1], [activeShot]);
   const insight = useMemo(() => getInsightForShot(activeShot), [activeShot]);
   const recommendation = useMemo(() => getRecommendationForShot(activeShot), [activeShot]);
 
-  const showShotRail = activeTab !== 'player-plan';
+  const showShotRail = activeTab !== 'player-plan' && activeTab !== 'player-history';
 
   const toggleStage = (id: string) => {
     setExpandedStages((prev) => {
@@ -216,6 +221,20 @@ export default function CoachingOS() {
       return next;
     });
   };
+
+  const toggleLesson = (sessionNum: number) => {
+    setExpandedLessons((prev) => {
+      const next = new Set(prev);
+      if (next.has(sessionNum)) next.delete(sessionNum);
+      else next.add(sessionNum);
+      return next;
+    });
+  };
+
+  // Find last completed lesson for the hero card
+  const lastCompletedLesson = playerHistory.lessons
+    .filter((l) => l.status === 'completed')
+    .sort((a, b) => b.sessionNumber - a.sessionNumber)[0];
 
   // ─── Shot-level deltas ────────────────────────────────────────
   const carryDelta = currentShot.club === '7i' ? currentShot.carry - baselineAvg.carry : undefined;
@@ -288,16 +307,18 @@ export default function CoachingOS() {
       {/* ═══ L2: CONTEXT BAR ══════════════════════════════════════ */}
       <div style={{
         height: 34, background: C.surface, display: 'flex', alignItems: 'center',
-        gap: 8, padding: '0 20px', borderBottom: `0.5px solid ${C.border}`, flexShrink: 0,
+        gap: 6, padding: '0 20px', borderBottom: `0.5px solid ${C.border}`,
+        flexShrink: 0, overflow: 'hidden',
       }}>
         {/* Active pill */}
-        <span style={{
-          fontFamily: F.data, fontSize: 10, fontWeight: 700, padding: '3px 10px',
+        <button style={{
+          fontFamily: F.data, fontSize: 9, fontWeight: 700, padding: '3px 10px',
           borderRadius: 12, background: C.accentBg, color: C.accent,
-          border: `1px solid ${C.accent}`,
+          border: `0.5px solid ${C.accent}`, whiteSpace: 'nowrap' as const,
+          cursor: 'pointer', lineHeight: 1.3,
         }}>
           {sessionContext.playerName} · {sessionContext.handicap}
-        </span>
+        </button>
         {/* Neutral pills */}
         {[
           `${sessionContext.club} · ${sessionContext.clubModel}`,
@@ -305,12 +326,14 @@ export default function CoachingOS() {
           `Swing ${activeShot}/${sessionContext.totalSwings}`,
           `Goal: ${sessionContext.goal}`,
         ].map((text) => (
-          <span key={text} style={{
-            fontFamily: F.data, fontSize: 10, padding: '3px 10px',
+          <button key={text} style={{
+            fontFamily: F.data, fontSize: 9, padding: '3px 10px',
             borderRadius: 12, border: `0.5px solid ${C.borderSub}`, color: C.muted,
+            background: 'transparent', whiteSpace: 'nowrap' as const,
+            cursor: 'pointer', lineHeight: 1.3,
           }}>
             {text}
-          </span>
+          </button>
         ))}
       </div>
 
@@ -868,6 +891,435 @@ export default function CoachingOS() {
                     ))}
                   </div>
                 </div>
+              </div>
+            )}
+
+            {/* ════ PLAYER HISTORY TAB ═══════════════════════════════ */}
+            {activeTab === 'player-history' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 800 }}>
+
+                {/* ──── SECTION 1: LAST LESSON RECAP (Hero Card) ──── */}
+                {lastCompletedLesson && (
+                  <div style={{
+                    background: C.accentBg, borderRadius: 12,
+                    borderLeft: `3px solid ${C.accent}`, padding: '20px 24px',
+                  }}>
+                    <div style={{
+                      fontFamily: F.data, fontSize: 10, fontWeight: 700,
+                      textTransform: 'uppercase' as const, letterSpacing: '.08em', color: C.accent,
+                      marginBottom: 10,
+                    }}>
+                      Last Lesson Recap
+                    </div>
+
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
+                      <h2 style={{
+                        fontFamily: F.brand, fontSize: 18, fontWeight: 700, color: C.ink, margin: 0,
+                      }}>
+                        Session {lastCompletedLesson.sessionNumber}: {lastCompletedLesson.focus}
+                      </h2>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0, marginLeft: 16 }}>
+                        <Calendar size={12} color={C.muted} />
+                        <span style={{ fontFamily: F.data, fontSize: 10, color: C.muted }}>
+                          {lastCompletedLesson.date}
+                        </span>
+                      </div>
+                    </div>
+
+                    <p style={{
+                      fontFamily: F.brand, fontSize: 13, color: C.body, lineHeight: 1.7, margin: '0 0 14px',
+                    }}>
+                      {lastCompletedLesson.summary}
+                    </p>
+
+                    {/* Key metrics grid */}
+                    <div style={{
+                      display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0,1fr))', gap: 8,
+                      marginBottom: 14,
+                    }}>
+                      {lastCompletedLesson.metrics.map((m) => (
+                        <div key={m.label} style={{
+                          background: C.surface, borderRadius: 8, padding: '8px 10px',
+                        }}>
+                          <div style={{
+                            fontFamily: F.data, fontSize: 9, fontWeight: 700,
+                            textTransform: 'uppercase' as const, letterSpacing: '.08em', color: C.muted,
+                          }}>
+                            {m.label}
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginTop: 4 }}>
+                            <span style={{ fontFamily: F.data, fontSize: 14, fontWeight: 700, color: C.ink }}>
+                              {m.after}
+                            </span>
+                            <span style={{ fontFamily: F.data, fontSize: 9, color: m.improved ? C.conf : C.flag }}>
+                              from {m.before}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Cue used pill */}
+                    {lastCompletedLesson.cueUsed && (
+                      <div style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 6,
+                        padding: '6px 12px', background: C.surface, borderRadius: 6,
+                        border: `0.5px solid ${C.borderSub}`, marginBottom: 12,
+                      }}>
+                        <span style={{
+                          fontFamily: F.data, fontSize: 9, fontWeight: 700,
+                          textTransform: 'uppercase' as const, letterSpacing: '.08em', color: C.accent,
+                        }}>
+                          Cue Used
+                        </span>
+                        <span style={{
+                          fontFamily: F.brand, fontSize: 12, fontWeight: 500, color: C.ink, fontStyle: 'italic',
+                        }}>
+                          &ldquo;{lastCompletedLesson.cueUsed}&rdquo;
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Continue From Here callout */}
+                    <div style={{
+                      padding: '10px 14px', background: C.surface, borderRadius: 8,
+                      borderLeft: `2px solid ${C.accent}`,
+                    }}>
+                      <div style={{
+                        fontFamily: F.data, fontSize: 9, fontWeight: 700,
+                        textTransform: 'uppercase' as const, letterSpacing: '.08em', color: C.muted,
+                        marginBottom: 4,
+                      }}>
+                        Continue From Here
+                      </div>
+                      <p style={{
+                        fontFamily: F.brand, fontSize: 13, fontWeight: 500, color: C.ink,
+                        lineHeight: 1.5, margin: 0,
+                      }}>
+                        {lastCompletedLesson.keyTakeaway}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* ──── SECTION 2: SESSION HISTORY ──────────────────── */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  <div style={{
+                    fontFamily: F.data, fontSize: 10, fontWeight: 700,
+                    textTransform: 'uppercase' as const, letterSpacing: '.08em', color: C.muted,
+                  }}>
+                    Session History
+                  </div>
+
+                  {[...playerHistory.lessons].reverse().map((lesson) => {
+                    const isExpanded = expandedLessons.has(lesson.sessionNumber);
+                    const statusColor = lesson.status === 'completed' ? C.conf
+                      : lesson.status === 'in-progress' ? C.caution : C.muted;
+                    const statusBg = lesson.status === 'completed' ? C.confBg
+                      : lesson.status === 'in-progress' ? C.cautionBg : C.surfaceAlt;
+                    const borderColor = lesson.status === 'in-progress' ? C.caution : C.accent;
+
+                    return (
+                      <div key={lesson.sessionNumber} style={{
+                        background: C.surface, borderRadius: 12, border: `0.5px solid ${C.borderSub}`,
+                        borderLeft: `3px solid ${borderColor}`, overflow: 'hidden',
+                      }}>
+                        <button
+                          onClick={() => toggleLesson(lesson.sessionNumber)}
+                          style={{
+                            width: '100%', padding: '12px 16px', display: 'flex', alignItems: 'center',
+                            justifyContent: 'space-between', background: 'none', border: 'none',
+                            cursor: 'pointer', textAlign: 'left',
+                          }}
+                        >
+                          <div style={{ flex: 1 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                              <span style={{
+                                fontFamily: F.data, fontSize: 9, fontWeight: 700,
+                                textTransform: 'uppercase' as const, letterSpacing: '.08em', color: C.muted,
+                              }}>
+                                Session {lesson.sessionNumber}
+                              </span>
+                              <span style={{ fontFamily: F.data, fontSize: 9, color: C.dim }}>
+                                {lesson.date}
+                              </span>
+                              <span style={{
+                                fontFamily: F.data, fontSize: 9, fontWeight: 700,
+                                padding: '2px 8px', borderRadius: 3,
+                                background: statusBg, color: statusColor,
+                              }}>
+                                {lesson.status === 'in-progress' ? 'In Progress' : lesson.status === 'completed' ? 'Completed' : 'Scheduled'}
+                              </span>
+                            </div>
+                            <div style={{ fontFamily: F.brand, fontSize: 13, fontWeight: 500, color: C.ink }}>
+                              {lesson.focus}
+                            </div>
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            {isExpanded
+                              ? <ChevronUp size={14} color={C.muted} />
+                              : <ChevronDown size={14} color={C.muted} />
+                            }
+                          </div>
+                        </button>
+
+                        {isExpanded && (
+                          <div style={{ padding: '0 16px 14px', borderTop: `0.5px solid ${C.borderSub}` }}>
+                            <p style={{
+                              fontFamily: F.brand, fontSize: 12, color: C.body,
+                              lineHeight: 1.6, marginTop: 10, marginBottom: 12,
+                            }}>
+                              {lesson.summary}
+                            </p>
+
+                            <div style={{
+                              display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0,1fr))',
+                              gap: 8, marginBottom: 12,
+                            }}>
+                              {lesson.metrics.map((m) => (
+                                <div key={m.label} style={{
+                                  background: C.surfaceAlt, borderRadius: 8, padding: '8px 10px',
+                                }}>
+                                  <div style={{
+                                    fontFamily: F.data, fontSize: 9, fontWeight: 700,
+                                    textTransform: 'uppercase' as const, letterSpacing: '.08em', color: C.muted,
+                                  }}>
+                                    {m.label}
+                                  </div>
+                                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginTop: 2 }}>
+                                    <span style={{ fontFamily: F.data, fontSize: 14, fontWeight: 700, color: C.ink }}>
+                                      {m.after}
+                                    </span>
+                                    <span style={{ fontFamily: F.data, fontSize: 9, color: m.improved ? C.conf : C.flag }}>
+                                      from {m.before}
+                                    </span>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+
+                            {lesson.cueUsed && (
+                              <div style={{
+                                display: 'inline-flex', alignItems: 'center', gap: 6,
+                                padding: '4px 10px', background: C.accentBg, borderRadius: 4,
+                                marginBottom: 10,
+                              }}>
+                                <span style={{
+                                  fontFamily: F.data, fontSize: 9, fontWeight: 700,
+                                  textTransform: 'uppercase' as const, letterSpacing: '.08em', color: C.accent,
+                                }}>
+                                  Cue
+                                </span>
+                                <span style={{
+                                  fontFamily: F.brand, fontSize: 11, color: C.ink, fontStyle: 'italic',
+                                }}>
+                                  &ldquo;{lesson.cueUsed}&rdquo;
+                                </span>
+                              </div>
+                            )}
+
+                            <div style={{
+                              padding: '8px 12px', background: C.surfaceAlt, borderRadius: 8,
+                              borderLeft: `2px solid ${C.muted}`,
+                            }}>
+                              <div style={{
+                                fontFamily: F.data, fontSize: 9, fontWeight: 700,
+                                textTransform: 'uppercase' as const, letterSpacing: '.08em', color: C.muted,
+                                marginBottom: 4,
+                              }}>
+                                Coach Notes
+                              </div>
+                              <p style={{
+                                fontFamily: F.brand, fontSize: 12, color: C.body,
+                                lineHeight: 1.5, margin: 0, fontStyle: 'italic',
+                              }}>
+                                {lesson.coachNotes}
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* ──── SECTION 3: ON-COURSE PERFORMANCE ────────────── */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  <button
+                    onClick={() => setOnCourseExpanded(!onCourseExpanded)}
+                    style={{
+                      background: 'none', border: 'none', cursor: 'pointer',
+                      display: 'flex', alignItems: 'center', gap: 6,
+                      fontFamily: F.data, fontSize: 10, fontWeight: 700,
+                      textTransform: 'uppercase' as const, letterSpacing: '.08em', color: C.muted,
+                      padding: 0,
+                    }}
+                  >
+                    {onCourseExpanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                    On-Course Performance
+                  </button>
+
+                  {onCourseExpanded && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+
+                      {/* Handicap Trend Card */}
+                      <div style={{
+                        background: C.surface, borderRadius: 12, border: `0.5px solid ${C.borderSub}`,
+                        borderLeft: `3px solid ${C.conf}`, padding: '14px 16px',
+                      }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                          <div style={{
+                            fontFamily: F.data, fontSize: 9, fontWeight: 700,
+                            textTransform: 'uppercase' as const, letterSpacing: '.08em', color: C.muted,
+                          }}>
+                            GHIN Handicap Index
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                            <TrendingUp size={12} color={C.conf} />
+                            <span style={{ fontFamily: F.data, fontSize: 9, fontWeight: 700, color: C.conf }}>
+                              -1.6 since Jan 1
+                            </span>
+                          </div>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 10 }}>
+                          <span style={{
+                            fontFamily: F.data, fontSize: 28, fontWeight: 700, color: C.ink, letterSpacing: '-.01em',
+                          }}>
+                            {playerHistory.onCourse.handicapTrend[0].index}
+                          </span>
+                          <span style={{ fontFamily: F.data, fontSize: 11, color: C.muted }}>
+                            current index
+                          </span>
+                        </div>
+                        <div style={{ display: 'flex', gap: 12 }}>
+                          {playerHistory.onCourse.handicapTrend.map((entry, i) => (
+                            <div key={entry.date} style={{ textAlign: 'center' }}>
+                              <div style={{
+                                fontFamily: F.data, fontSize: 13, fontWeight: 700,
+                                color: i === 0 ? C.accent : C.ink,
+                              }}>
+                                {entry.index}
+                              </div>
+                              <div style={{ fontFamily: F.data, fontSize: 8, color: C.dim, marginTop: 2 }}>
+                                {entry.date.replace(', 2026', '')}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Arccos Rounds */}
+                      <div style={{
+                        fontFamily: F.data, fontSize: 9, fontWeight: 700,
+                        textTransform: 'uppercase' as const, letterSpacing: '.08em', color: C.muted,
+                      }}>
+                        Recent Rounds (Arccos)
+                      </div>
+
+                      {playerHistory.onCourse.arccosRounds.map((round) => {
+                        const girColor = round.gir >= 40 ? C.conf : round.gir >= 30 ? C.caution : C.flag;
+                        return (
+                          <div key={round.date} style={{
+                            background: C.surface, borderRadius: 12, border: `0.5px solid ${C.borderSub}`,
+                            padding: '14px 16px',
+                          }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                                  <MapPin size={11} color={C.muted} />
+                                  <span style={{ fontFamily: F.brand, fontSize: 13, fontWeight: 500, color: C.ink }}>
+                                    {round.course}
+                                  </span>
+                                </div>
+                                <span style={{ fontFamily: F.data, fontSize: 9, color: C.dim }}>
+                                  {round.date}
+                                </span>
+                              </div>
+                              <div style={{ display: 'flex', alignItems: 'baseline', gap: 3 }}>
+                                <span style={{ fontFamily: F.data, fontSize: 18, fontWeight: 700, color: C.ink }}>
+                                  {round.score}
+                                </span>
+                                <span style={{ fontFamily: F.data, fontSize: 10, color: C.flag }}>
+                                  +{round.scoreToPar}
+                                </span>
+                              </div>
+                            </div>
+                            <div style={{
+                              display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0,1fr))', gap: 8,
+                            }}>
+                              {[
+                                { label: 'GIR', value: `${round.gir.toFixed(1)}%`, color: girColor },
+                                { label: 'Fairways', value: `${round.fairways.toFixed(1)}%`, color: round.fairways >= 57 ? C.conf : C.caution },
+                                { label: 'Putts', value: String(round.puttsPerRound), color: round.puttsPerRound <= 30 ? C.conf : C.caution },
+                                { label: 'Proximity', value: round.proximityToHole, color: C.ink },
+                              ].map((stat) => (
+                                <div key={stat.label} style={{
+                                  background: C.surfaceAlt, borderRadius: 8, padding: '6px 10px',
+                                }}>
+                                  <div style={{
+                                    fontFamily: F.data, fontSize: 9, fontWeight: 700,
+                                    textTransform: 'uppercase' as const, letterSpacing: '.08em', color: C.muted,
+                                  }}>
+                                    {stat.label}
+                                  </div>
+                                  <div style={{
+                                    fontFamily: F.data, fontSize: 14, fontWeight: 700, color: stat.color, marginTop: 2,
+                                  }}>
+                                    {stat.value}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        );
+                      })}
+
+                      {/* Club Distances */}
+                      <div style={{
+                        background: C.surface, borderRadius: 12, border: `0.5px solid ${C.borderSub}`,
+                        padding: '14px 16px',
+                      }}>
+                        <div style={{
+                          fontFamily: F.data, fontSize: 9, fontWeight: 700,
+                          textTransform: 'uppercase' as const, letterSpacing: '.08em', color: C.muted,
+                          marginBottom: 10,
+                        }}>
+                          On-Course Club Distances (Arccos Avg)
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                          {playerHistory.onCourse.clubDistances.map((club) => (
+                            <div key={club.club} style={{
+                              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                              padding: '6px 0', borderBottom: `0.5px solid ${C.borderSub}`,
+                            }}>
+                              <span style={{
+                                fontFamily: F.brand, fontSize: 12, fontWeight: 500, color: C.ink, minWidth: 60,
+                              }}>
+                                {club.club}
+                              </span>
+                              <div style={{ display: 'flex', gap: 16 }}>
+                                <div style={{ textAlign: 'right' }}>
+                                  <div style={{ fontFamily: F.data, fontSize: 9, color: C.muted }}>CARRY</div>
+                                  <div style={{ fontFamily: F.data, fontSize: 13, fontWeight: 700, color: C.ink }}>{club.avgCarry}</div>
+                                </div>
+                                <div style={{ textAlign: 'right' }}>
+                                  <div style={{ fontFamily: F.data, fontSize: 9, color: C.muted }}>TOTAL</div>
+                                  <div style={{ fontFamily: F.data, fontSize: 13, fontWeight: 700, color: C.ink }}>{club.avgTotal}</div>
+                                </div>
+                                <div style={{ textAlign: 'right', minWidth: 70 }}>
+                                  <div style={{ fontFamily: F.data, fontSize: 9, color: C.muted }}>DISPERSION</div>
+                                  <div style={{ fontFamily: F.data, fontSize: 13, fontWeight: 700, color: C.caution }}>{club.dispersion}</div>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                    </div>
+                  )}
+                </div>
+
               </div>
             )}
 

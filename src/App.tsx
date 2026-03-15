@@ -27,6 +27,7 @@ import DataSpine from './personas/spine/pages/DataSpine';
 import AudienceEngine from './personas/spine/pages/AudienceEngine';
 import IntegrationHub from './personas/spine/pages/IntegrationHub';
 import CoachingOS from './pages/CoachingOS';
+import SizzleReel from './pages/SizzleReel';
 
 export default function App() {
   return (
@@ -36,6 +37,7 @@ export default function App() {
         <Route path="/thesis" element={<ThesisPage />} />
         <Route path="/narrative" element={<LooperNarrative />} />
         <Route path="/coaching-os" element={<CoachingOS />} />
+        <Route path="/vision" element={<SizzleReel />} />
 
         <Route path="/golfer" element={<GolferLayout />}>
           <Route index element={<GolferHome />} />

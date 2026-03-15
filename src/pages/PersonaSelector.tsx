@@ -13,7 +13,7 @@ const personas = [
     label: "I'm a Coach",
     icon: GraduationCap,
     description: "Capture sessions, diagnose limiting factors, see what works",
-    path: "/coach",
+    path: "/coaching-os",
   },
   {
     label: "I'm a Fitter",
@@ -25,6 +25,7 @@ const personas = [
 
 export default function PersonaSelector() {
   const heroRef = useRef<HTMLDivElement>(null);
+  const visionRef = useRef<HTMLDivElement>(null);
   const featureRef = useRef<HTMLDivElement>(null);
   const personaRef = useRef<HTMLDivElement>(null);
 
@@ -40,7 +41,7 @@ export default function PersonaSelector() {
       { threshold: 0.1 }
     );
 
-    const sections = [heroRef.current, featureRef.current, personaRef.current];
+    const sections = [heroRef.current, visionRef.current, featureRef.current, personaRef.current];
     sections.forEach((el) => {
       if (el) observer.observe(el);
     });
@@ -65,6 +66,60 @@ export default function PersonaSelector() {
             The decision platform for golf coaching and fitting
           </p>
           <div className="w-20 h-px bg-accent mx-auto my-6" />
+        </div>
+
+        {/* Vision in Action — sizzle reel entry */}
+        <div ref={visionRef} className="fade-in-up max-w-3xl mx-auto mb-6 w-full">
+          <Link to="/vision" style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            background: '#E6F5F1',
+            borderLeft: '3px solid #0D7C66',
+            borderRadius: 10,
+            padding: '14px 20px',
+            textDecoration: 'none',
+          }}>
+            <div>
+              <div style={{
+                fontFamily: "'Cabinet Grotesk', sans-serif",
+                fontSize: 16,
+                fontWeight: 700,
+                color: '#1A1F2B',
+                marginBottom: 2,
+              }}>
+                Vision in Action
+              </div>
+              <div style={{
+                fontFamily: "'Cabinet Grotesk', sans-serif",
+                fontSize: 13,
+                fontWeight: 400,
+                color: '#4B5563',
+              }}>
+                Watch the 90-second product walkthrough
+              </div>
+            </div>
+            <div style={{
+              width: 36,
+              height: 36,
+              borderRadius: '50%',
+              background: '#0D7C66',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+              marginLeft: 16,
+            }}>
+              <div style={{
+                width: 0,
+                height: 0,
+                borderLeft: '10px solid white',
+                borderTop: '6px solid transparent',
+                borderBottom: '6px solid transparent',
+                marginLeft: 2,
+              }} />
+            </div>
+          </Link>
         </div>
 
         {/* Feature links — Narrative + Thesis */}
@@ -121,21 +176,6 @@ export default function PersonaSelector() {
                 </Link>
               );
             })}
-          </div>
-
-          {/* Coaching OS — standalone experience */}
-          <div className="max-w-3xl mx-auto mt-6">
-            <Link to="/coaching-os" className="glass-card p-6 block text-center">
-              <p className="text-[11px] uppercase tracking-wider text-accent-light font-semibold mb-2">
-                COACHING OS
-              </p>
-              <p className="text-white font-medium text-[15px]">
-                Launch Session View
-              </p>
-              <p className="text-sm text-gray-400 mt-1">
-                Full-stack coaching intelligence — shot rail, AI diagnosis, and intervention planning
-              </p>
-            </Link>
           </div>
 
           {/* Platform Engine — below prototype cards */}
