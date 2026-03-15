@@ -1,14 +1,14 @@
 import { CD, F, vis, fadeIn, fadeInOut } from './tokens';
 
 const T = {
-  quote:       400,
-  attribution: 1800,
-  quoteOut:    3200,
-  coachCard:   3800,
-  coachOut:    7800,
-  playerCard:  8400,
-  playerOut:   12400,
-  insight:     13000,
+  coachCard:   400,
+  coachOut:    5400,
+  quote:       6000,
+  attribution: 7400,
+  quoteOut:    8800,
+  playerCard:  9400,
+  playerOut:   13400,
+  insight:     14000,
 };
 
 const gridBg = [

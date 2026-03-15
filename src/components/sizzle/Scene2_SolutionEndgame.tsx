@@ -1,4 +1,3 @@
-import { ClipboardList, Database, Brain, Target, TrendingUp } from 'lucide-react';
 import { CD, F, vis, fadeIn, fadeInOut } from './tokens';
 
 // Timing triggers (ms from scene start)
@@ -8,24 +7,15 @@ const T = {
   tagline:      1200,
   descriptor:   2000,
   wordmarkOut:  3200,
-  // Act 2: Day One Value
+  // Act 2: Day One Value — Coach OS First Act
   d1Intro:      3800,
   d1IntroOut:   5600,
   feat1:        6000,
   feat2:        7200,
   feat3:        8400,
   feat4:        9600,
-  featOut:      11200,
-  // Act 3: Endgame
-  endIntro:     11800,
-  endIntroOut:  13600,
-  flyHeader:    14000,
-  fly0:         14600,
-  fly1:         15000,
-  fly2:         15400,
-  fly3:         15800,
-  fly4:         16200,
-  flyCallout:   16800,
+  feat5:        10800,
+  featOut:      12400,
 };
 
 const gridBg = [
@@ -34,7 +24,9 @@ const gridBg = [
 ].join(', ');
 
 const features = [
-  { title: 'Automatic Session Summaries', tag: 'COACHING + FITTING',
+  { title: 'Integrated Coaching Operating System', tag: 'COACHING + FITTING',
+    desc: 'Single pane of glass that connects the coaching infrastructure.' },
+  { title: 'Automatic Session Summaries', tag: 'CAPTURE',
     desc: 'Audio capture transcribes the conversation. AI extracts what was identified, what was prescribed, and why.' },
   { title: 'Record Strings', tag: 'CONTINUITY',
     desc: 'Every session links to the last. A coach picking up with a returning student never starts cold.' },
@@ -44,13 +36,6 @@ const features = [
     desc: 'Data translated into the language pros already think in. Strike variability, not launch monitor jargon.' },
 ];
 
-const flywheelNodes = [
-  { label: 'Sessions captured', Icon: ClipboardList },
-  { label: 'Structured data',  Icon: Database },
-  { label: 'Models trained',   Icon: Brain },
-  { label: 'Better insights',  Icon: Target },
-  { label: 'More adoption',    Icon: TrendingUp },
-];
 
 export default function Scene2_SolutionEndgame({ elapsed }: { elapsed: number }) {
   return (
@@ -163,7 +148,7 @@ export default function Scene2_SolutionEndgame({ elapsed }: { elapsed: number })
               }}
             >
               {features.map((f, i) => {
-                const trigger = [T.feat1, T.feat2, T.feat3, T.feat4][i];
+                const trigger = [T.feat1, T.feat2, T.feat3, T.feat4, T.feat5][i];
                 return (
                   <div
                     key={i}
@@ -217,226 +202,6 @@ export default function Scene2_SolutionEndgame({ elapsed }: { elapsed: number })
             </div>
           )}
 
-          {/* === Act 3: Endgame === */}
-          {/* Intro line */}
-          {vis(elapsed, T.endIntro) && elapsed < T.endIntroOut + 600 && (
-            <div style={fadeInOut(elapsed, T.endIntro, T.endIntroOut)}>
-              <div
-                style={{
-                  fontFamily: F.serif,
-                  fontStyle: 'italic',
-                  fontSize: 22,
-                  lineHeight: 1.5,
-                  color: CD.ink,
-                }}
-              >
-                We develop the industry standard infrastructure layer
-                to power AI coaching.
-              </div>
-            </div>
-          )}
-
-          {/* Flywheel — card-based */}
-          {vis(elapsed, T.flyHeader) && (
-            <div style={{ maxWidth: 620, marginLeft: 'auto', marginRight: 'auto' }}>
-              {/* Header */}
-              <div style={fadeIn(elapsed, T.flyHeader, 600)}>
-                <div
-                  style={{
-                    fontFamily: F.brand,
-                    fontWeight: 800,
-                    fontSize: 24,
-                    lineHeight: 1.2,
-                    color: CD.ink,
-                    marginBottom: 8,
-                  }}
-                >
-                  The wedge is workflow.{' '}
-                  <span style={{ color: CD.accent }}>The moat is data.</span>
-                </div>
-                <div
-                  style={{
-                    fontFamily: F.data,
-                    fontSize: 11,
-                    color: CD.body,
-                    lineHeight: 1.6,
-                    marginBottom: 24,
-                  }}
-                >
-                  Every session captured on the platform feeds the AI engine. The engine gets smarter.
-                  Smarter recommendations drive more adoption. The flywheel compounds.
-                </div>
-              </div>
-
-              {/* Row 1: 3 cards with arrows */}
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 8,
-                  marginBottom: 12,
-                }}
-              >
-                {flywheelNodes.slice(0, 3).map((node, i) => {
-                  const triggers = [T.fly0, T.fly1, T.fly2];
-                  const active = elapsed >= triggers[i];
-                  const highlighted = i === 1;
-                  return (
-                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <div
-                        style={{
-                          ...fadeIn(elapsed, triggers[i], 400),
-                          padding: '14px 16px',
-                          borderRadius: 12,
-                          background: active
-                            ? highlighted ? `${CD.accent}18` : 'transparent'
-                            : 'transparent',
-                          border: `1.5px solid ${active ? CD.accent : CD.dim}`,
-                          textAlign: 'center',
-                          minWidth: 120,
-                          position: 'relative' as const,
-                        }}
-                      >
-                        {highlighted && active && (
-                          <div
-                            style={{
-                              position: 'absolute',
-                              top: 8,
-                              right: 8,
-                              width: 6,
-                              height: 6,
-                              borderRadius: '50%',
-                              background: CD.accent,
-                            }}
-                          />
-                        )}
-                        <div style={{ marginBottom: 6, display: 'flex', justifyContent: 'center' }}>
-                          <node.Icon
-                            size={20}
-                            strokeWidth={1.8}
-                            color={active ? CD.accent : CD.dim}
-                          />
-                        </div>
-                        <div
-                          style={{
-                            fontFamily: F.data,
-                            fontSize: 11,
-                            fontWeight: 600,
-                            color: active ? CD.ink : CD.dim,
-                          }}
-                        >
-                          {node.label}
-                        </div>
-                      </div>
-                      {i < 2 && (
-                        <span
-                          style={{
-                            ...fadeIn(elapsed, triggers[i], 400),
-                            fontFamily: F.data,
-                            fontSize: 16,
-                            color: active ? CD.accent : CD.dim,
-                          }}
-                        >
-                          →
-                        </span>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Row 2: 2 cards with arrows */}
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 8,
-                  marginBottom: 20,
-                }}
-              >
-                {flywheelNodes.slice(3).map((node, i) => {
-                  const triggers = [T.fly3, T.fly4];
-                  const active = elapsed >= triggers[i];
-                  return (
-                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <div
-                        style={{
-                          ...fadeIn(elapsed, triggers[i], 400),
-                          padding: '14px 16px',
-                          borderRadius: 12,
-                          background: 'transparent',
-                          border: `1.5px solid ${active ? CD.accent : CD.dim}`,
-                          textAlign: 'center',
-                          minWidth: 120,
-                        }}
-                      >
-                        <div style={{ marginBottom: 6, display: 'flex', justifyContent: 'center' }}>
-                          <node.Icon
-                            size={20}
-                            strokeWidth={1.8}
-                            color={active ? CD.accent : CD.dim}
-                          />
-                        </div>
-                        <div
-                          style={{
-                            fontFamily: F.data,
-                            fontSize: 11,
-                            fontWeight: 600,
-                            color: active ? CD.ink : CD.dim,
-                          }}
-                        >
-                          {node.label}
-                        </div>
-                      </div>
-                      {i === 0 && (
-                        <span
-                          style={{
-                            ...fadeIn(elapsed, triggers[i], 400),
-                            fontFamily: F.data,
-                            fontSize: 16,
-                            color: active ? CD.accent : CD.dim,
-                          }}
-                        >
-                          →
-                        </span>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Callout */}
-              {vis(elapsed, T.flyCallout) && (
-                <div
-                  style={{
-                    ...fadeIn(elapsed, T.flyCallout, 600),
-                    textAlign: 'center',
-                    padding: '14px 20px',
-                    background: `${CD.accent}12`,
-                    borderRadius: 10,
-                    border: `1px solid ${CD.accent}30`,
-                  }}
-                >
-                  <div
-                    style={{
-                      fontFamily: F.data,
-                      fontSize: 11,
-                      color: CD.body,
-                      lineHeight: 1.6,
-                    }}
-                  >
-                    Replicating this requires building the OS, earning adoption, accumulating
-                    thousands of structured interactions, and waiting for outcomes.{' '}
-                    <span style={{ color: CD.accent, fontWeight: 700 }}>
-                      That is a multi-year head start.
-                    </span>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
         </div>
       </div>
     </div>

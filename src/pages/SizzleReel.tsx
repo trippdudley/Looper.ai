@@ -7,17 +7,19 @@ import Scene2_SolutionEndgame from '../components/sizzle/Scene2_SolutionEndgame'
 import Scene3_PlayerRecord from '../components/sizzle/Scene2_PlayerRecord';
 import Scene4_LiveSession from '../components/sizzle/Scene3_LiveSession';
 import Scene5_Summary from '../components/sizzle/Scene4_Summary';
-import Scene6_Close from '../components/sizzle/Scene5_Close';
+import Scene6_Endgame from '../components/sizzle/Scene6_Endgame';
+import Scene7_Close from '../components/sizzle/Scene5_Close';
 import { C } from '../components/sizzle/tokens';
 
 const SCENES = [
-  { duration: 8000,  Component: Scene0_Thesis },
-  { duration: 14000, Component: Scene1_Problem },
-  { duration: 20000, Component: Scene2_SolutionEndgame },
-  { duration: 31000, Component: Scene4_LiveSession },
-  { duration: 14000, Component: Scene5_Summary },
-  { duration: 16000, Component: Scene3_PlayerRecord },
-  { duration: 6000,  Component: Scene6_Close },
+  { duration: 8000,  Component: Scene0_Thesis },           // Scene 0: Thesis
+  { duration: 16000, Component: Scene1_Problem },           // Scene 1: Problem
+  { duration: 14000, Component: Scene2_SolutionEndgame },   // Scene 2: Coach OS First Act (brand + features)
+  { duration: 31000, Component: Scene4_LiveSession },       // Scene 3: Live Session
+  { duration: 14000, Component: Scene5_Summary },           // Scene 4: Session Summary
+  { duration: 16000, Component: Scene3_PlayerRecord },      // Scene 5: Player Record
+  { duration: 15000, Component: Scene6_Endgame },           // Scene 6: Endgame — Golf AI at Scale
+  { duration: 6000,  Component: Scene7_Close },             // Scene 7: Close
 ];
 
 const TOTAL_DURATION = SCENES.reduce((sum, s) => sum + s.duration, 0);

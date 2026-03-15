@@ -51,7 +51,7 @@ export default function Scene0_Thesis({ elapsed }: { elapsed: number }) {
                 style={{
                   fontFamily: F.serif,
                   fontStyle: 'italic',
-                  fontSize: 24,
+                  fontSize: 30,
                   lineHeight: 1.55,
                   color: CD.ink,
                 }}
