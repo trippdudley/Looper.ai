@@ -260,7 +260,6 @@ export default function Scene2_PlayerRecord({ elapsed }: { elapsed: number }) {
     elapsed < T.titleFadeOut
       ? 0
       : Math.min(1, (elapsed - T.titleFadeOut) / 800);
-  const bgColor = bgProgress < 1 ? CD.bg : C.bg;
   const bgOpacity = bgProgress;
 
   return (

@@ -10,7 +10,6 @@ import {
   User,
 } from 'lucide-react';
 import type { CoachSessionData, CoachSessionSwing } from '../../data/coachSessionData';
-import { getQualityColor } from '../../data/coachSessionData';
 
 interface SessionSummaryViewProps {
   sessionData: CoachSessionData;
@@ -299,7 +298,6 @@ export default function SessionSummaryView({ sessionData }: SessionSummaryViewPr
             </thead>
             <tbody>
               {swings.map((swing) => {
-                const qc = getQualityColor(swing.qualityScore);
                 const tag = tagForSwing(swing);
                 const note = noteForSwing(swing.swingNumber);
 

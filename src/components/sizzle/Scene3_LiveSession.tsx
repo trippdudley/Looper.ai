@@ -1,4 +1,3 @@
-import React from 'react';
 import { C, F, vis, fadeIn, fadeInOut, easeOutCubic, countUp } from './tokens';
 import swingVideo from '../../assets/images/swing-clip.mov';
 
