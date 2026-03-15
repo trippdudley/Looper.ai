@@ -98,25 +98,28 @@ export default function SizzleReel() {
     rafRef.current = requestAnimationFrame(tick);
   }, [currentScene]);
 
+  // Start background music and timers once on mount
   useEffect(() => {
     startRef.current = Date.now();
     sceneStartRef.current = Date.now();
-    rafRef.current = requestAnimationFrame(tick);
 
-    // Start background music
-    if (!audioRef.current) {
-      const audio = new Audio(brandAnthem);
-      audio.volume = 0.5;
-      audio.play().catch(() => {});
-      audioRef.current = audio;
-    }
+    const audio = new Audio(brandAnthem);
+    audio.volume = 0.5;
+    audio.play().catch(() => {});
+    audioRef.current = audio;
+
+    return () => {
+      audio.pause();
+      audioRef.current = null;
+    };
+  }, []);
+
+  // Animation loop — restarts when tick changes (scene transitions)
+  useEffect(() => {
+    rafRef.current = requestAnimationFrame(tick);
 
     return () => {
       cancelAnimationFrame(rafRef.current);
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
     };
   }, [tick]);
 
