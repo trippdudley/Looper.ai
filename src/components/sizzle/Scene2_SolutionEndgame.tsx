@@ -4,18 +4,18 @@ import { CD, F, vis, fadeIn, fadeInOut } from './tokens';
 const T = {
   // Act 1: Brand reveal
   wordmark:     400,
-  tagline:      1200,
-  descriptor:   2000,
-  wordmarkOut:  3200,
+  tagline:      1400,
+  descriptor:   2400,
+  wordmarkOut:  4200,
   // Act 2: Day One Value — Coach OS First Act
-  d1Intro:      3800,
-  d1IntroOut:   5600,
-  feat1:        6000,
-  feat2:        7200,
-  feat3:        8400,
-  feat4:        9600,
-  feat5:        10800,
-  featOut:      12400,
+  d1Intro:      4800,
+  d1IntroOut:   7800,     // 3s hold for intro line
+  feat1:        8400,
+  feat2:        10000,    // 1.6s between features (was 1.2s)
+  feat3:        11600,
+  feat4:        13200,
+  feat5:        14800,
+  featOut:      20000,    // 5.2s hold after last card appears
 };
 
 const gridBg = [

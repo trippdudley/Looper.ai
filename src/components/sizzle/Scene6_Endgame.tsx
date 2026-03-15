@@ -4,23 +4,23 @@ import { CD, F, vis, fadeIn, fadeInOut } from './tokens';
 const T = {
   // Beat 1: Transition editorial
   editorial:    400,
-  editorialOut: 3400,
+  editorialOut: 4400,     // 4s hold (was 3s)
   // Beat 2: Header
-  header:       4000,
-  headerOut:    6000,
+  header:       5000,
+  headerOut:    8000,     // 3s hold (was 2s)
   // Beat 3: Flywheel
-  flyHeader:    6500,
-  fly0:         7100,
-  fly1:         7500,
-  fly2:         7900,
-  fly3:         8300,
-  fly4:         8700,
+  flyHeader:    8600,
+  fly0:         9200,
+  fly1:         9800,     // 600ms between nodes (was 400ms)
+  fly2:         10400,
+  fly3:         11000,
+  fly4:         11600,
   // Beat 4: Scale pillars
-  pillar1:      9800,
-  pillar2:      10400,
-  pillar3:      11000,
+  pillar1:      13000,    // 1.4s gap after flywheel (was 1.1s)
+  pillar2:      13800,    // 800ms between pillars (was 600ms)
+  pillar3:      14600,
   // Beat 5: Callout
-  callout:      12200,
+  callout:      16400,    // 1.8s after last pillar (was 1.2s) — 5.6s hold to end
 };
 
 const flywheelNodes = [

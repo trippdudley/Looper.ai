@@ -13,12 +13,12 @@ import { C } from '../components/sizzle/tokens';
 
 const SCENES = [
   { duration: 8000,  Component: Scene0_Thesis },           // Scene 0: Thesis
-  { duration: 16000, Component: Scene1_Problem },           // Scene 1: Problem
-  { duration: 14000, Component: Scene2_SolutionEndgame },   // Scene 2: Coach OS First Act (brand + features)
+  { duration: 24000, Component: Scene1_Problem },           // Scene 1: Problem (+8s reading time)
+  { duration: 22000, Component: Scene2_SolutionEndgame },   // Scene 2: Coach OS First Act (+8s for features)
   { duration: 31000, Component: Scene4_LiveSession },       // Scene 3: Live Session
-  { duration: 14000, Component: Scene5_Summary },           // Scene 4: Session Summary
-  { duration: 16000, Component: Scene3_PlayerRecord },      // Scene 5: Player Record
-  { duration: 15000, Component: Scene6_Endgame },           // Scene 6: Endgame — Golf AI at Scale
+  { duration: 20000, Component: Scene5_Summary },           // Scene 4: Session Summary (+6s for report)
+  { duration: 22000, Component: Scene3_PlayerRecord },      // Scene 5: Player Record (+6s for spotlights)
+  { duration: 22000, Component: Scene6_Endgame },           // Scene 6: Endgame (+7s for pillars/callout)
   { duration: 6000,  Component: Scene7_Close },             // Scene 7: Close
 ];
 
@@ -105,6 +105,7 @@ export default function SizzleReel() {
 
     const audio = new Audio(brandAnthem);
     audio.volume = 0.5;
+    audio.loop = true;       // loop to cover full reel length
     audio.play().catch(() => {});
     audioRef.current = audio;
 

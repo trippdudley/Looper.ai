@@ -2,13 +2,13 @@ import { CD, F, vis, fadeIn, fadeInOut } from './tokens';
 
 const T = {
   coachCard:   400,
-  coachOut:    5400,
-  quote:       6000,
-  attribution: 7400,
-  quoteOut:    8800,
-  playerCard:  9400,
-  playerOut:   13400,
-  insight:     14000,
+  coachOut:    7400,      // 7s hold — 4 items + descriptions need reading time
+  quote:       8000,
+  attribution: 9800,
+  quoteOut:    12400,     // 4.4s hold — long quote needs breathing room
+  playerCard:  13000,
+  playerOut:   19000,     // 6s hold — matches coach card reading time
+  insight:     19600,     // 4.4s to absorb before scene ends
 };
 
 const gridBg = [

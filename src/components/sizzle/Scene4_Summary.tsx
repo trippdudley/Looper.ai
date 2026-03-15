@@ -4,12 +4,12 @@ import { C, F, vis, fadeIn, fadeInOut } from './tokens';
 // Timing constants (ms)
 const T = {
   editorial: 400,
-  editorialOut: 2200,
-  uiReveal: 3000,
-  spot1: 6000,
-  spot1Off: 9000,
-  spot2: 9500,
-  spot2Off: 12500,
+  editorialOut: 3200,     // 2.8s hold (was 1.8s)
+  uiReveal: 4000,
+  spot1: 8000,            // more time to absorb report before spotlight
+  spot1Off: 12000,        // 4s spotlight (was 3s)
+  spot2: 13000,
+  spot2Off: 17500,        // 4.5s spotlight (was 3s)
 };
 
 const metrics = [

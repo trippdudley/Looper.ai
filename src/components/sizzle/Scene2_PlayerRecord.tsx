@@ -3,12 +3,12 @@ import { C, CD, F, vis, fadeIn, fadeInOut } from './tokens';
 // Timing triggers (ms from scene start)
 const T = {
   titleCard:    400,
-  titleFadeOut: 2400,
-  uiReveal:     3200,
-  spot1:        5500,
-  spot2:        8500,
-  spot3:        11500,
-  spotsOff:     14800,
+  titleFadeOut: 3200,     // 2.8s hold (was 2s)
+  uiReveal:     4000,
+  spot1:        7000,     // more time to absorb UI before spotlights
+  spot2:        11000,    // 4s per spotlight (was 3s)
+  spot3:        15000,
+  spotsOff:     20000,    // 5s final spotlight hold
 };
 
 // ---------------------------------------------------------------------------
