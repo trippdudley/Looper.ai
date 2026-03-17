@@ -51,7 +51,7 @@ function MetricItem({ label, value, unit, delta, invert }: MetricRow) {
       <span className="text-[11px] text-[#9CA3AF]">{label}</span>
       <div className="flex items-center gap-2">
         <span
-          className="text-sm font-bold text-[#1A1F2B]"
+          className="text-sm font-bold text-[#1C2B2D]"
           style={{ fontFamily: "'JetBrains Mono', monospace" }}
         >
           {value}
@@ -123,7 +123,7 @@ export default function LaunchDataPanel({ selectedSwing, sessionAverages }: Laun
         {sections.map((section, si) => (
           <div key={section.title}>
             {si > 0 && <div className="border-t border-[#E2E5E8] my-2" />}
-            <h4 className="text-[10px] font-semibold uppercase tracking-wider text-[#0D7C66] mb-1 mt-1">
+            <h4 className="text-[10px] font-semibold uppercase tracking-wider text-[#3A9D78] mb-1 mt-1">
               {section.title}
             </h4>
             {section.metrics.map((m) => (

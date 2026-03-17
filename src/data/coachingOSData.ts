@@ -128,38 +128,40 @@ export interface PlayerHistory {
   onCourse: OnCourseData;
 }
 
-// ─── Color Constants (UX System) ────────────────────────────────
+// ─── Color Constants (aligned with Tailwind design tokens in index.css) ──
 
 export const C = {
-  bg:         '#F6F7F9',
+  bg:         '#F7F8F9',   // matches --color-bg-light
   surface:    '#FFFFFF',
   surfaceAlt: '#F0F2F5',
   border:     '#DFE2E7',
   borderSub:  '#ECEEF2',
 
-  accent:       '#0D7C66',
-  accentHov:    '#0A6352',
+  accent:       '#3A9D78',   // matches --color-accent
+  accentHov:    '#4DB88A',   // matches --color-accent-light
   accentBg:     '#E6F5F1',
-  accentBright: '#0FA87A',
+  accentBright: '#4DB88A',
 
-  ink:   '#1A1F2B',
+  ink:   '#1C2B2D',   // matches --color-navy
   body:  '#4B5563',
   muted: '#9CA3AF',
   dim:   '#C5CAD1',
 
-  conf:      '#0FA87A',
+  conf:      '#3A9D78',    // success = accent
   confBg:    '#E6F5F1',
-  caution:   '#D4980B',
+  caution:   '#D4A843',    // matches --color-warm-amber
   cautionBg: '#FDF6E3',
-  flag:      '#C93B3B',
+  flag:      '#C45C4A',    // matches --color-coral
   flagBg:    '#FDE8E8',
+
+  dataBlue:  '#4A90D9',    // matches --color-data-blue
 } as const;
 
-// ─── Font Constants ─────────────────────────────────────────────
+// ─── Font Constants (aligned with Tailwind --font-sans / --font-mono) ────
 
 export const F = {
-  brand: "'Cabinet Grotesk', Inter, system-ui, sans-serif",
-  data:  "'Space Mono', 'JetBrains Mono', monospace",
+  brand: "Inter, system-ui, -apple-system, sans-serif",
+  data:  "'JetBrains Mono', Menlo, monospace",
 } as const;
 
 // ─── Formatting Utilities ───────────────────────────────────────

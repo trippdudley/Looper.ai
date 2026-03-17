@@ -42,12 +42,12 @@ export default function CoachSession() {
         {/* Left: session metadata */}
         <div className="flex items-center gap-5">
           <div className="flex items-center gap-2">
-            <User className="w-4 h-4 text-[#0D7C66]" />
-            <span className="text-sm font-semibold text-[#1A1F2B]">{coachSessionData.playerName}</span>
+            <User className="w-4 h-4 text-[#3A9D78]" />
+            <span className="text-sm font-semibold text-[#1C2B2D]">{coachSessionData.playerName}</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-xs text-[#9CA3AF]">Coach:</span>
-            <span className="text-sm text-[#1A1F2B]">{coachSessionData.coachName}</span>
+            <span className="text-sm text-[#1C2B2D]">{coachSessionData.coachName}</span>
           </div>
           <div className="flex items-center gap-2">
             <Calendar className="w-3.5 h-3.5 text-[#9CA3AF]" />
@@ -68,7 +68,7 @@ export default function CoachSession() {
             onClick={() => setMode('live')}
             className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-xs font-semibold transition-all duration-200"
             style={{
-              backgroundColor: mode === 'live' ? '#0D7C66' : 'transparent',
+              backgroundColor: mode === 'live' ? '#3A9D78' : 'transparent',
               color: mode === 'live' ? 'white' : '#6B7280',
             }}
           >
@@ -79,7 +79,7 @@ export default function CoachSession() {
             onClick={() => setMode('summary')}
             className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-xs font-semibold transition-all duration-200"
             style={{
-              backgroundColor: mode === 'summary' ? '#0D7C66' : 'transparent',
+              backgroundColor: mode === 'summary' ? '#3A9D78' : 'transparent',
               color: mode === 'summary' ? 'white' : '#6B7280',
             }}
           >

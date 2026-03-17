@@ -252,26 +252,47 @@ export default function CoachingOS() {
 
       {/* ═══ L1: SESSION BAR ════════════════════════════════════════ */}
       <div style={{
-        height: 40, background: C.ink, display: 'flex', alignItems: 'center',
-        justifyContent: 'space-between', padding: '0 16px', flexShrink: 0,
+        height: 44, background: C.ink, display: 'flex', alignItems: 'center',
+        justifyContent: 'space-between', padding: '0 20px', flexShrink: 0,
+        borderBottom: '1px solid rgba(255,255,255,0.06)',
       }}>
-        {/* Back to Dashboard */}
-        <Link to="/coach" style={{
-          textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6,
-          color: 'rgba(255,255,255,0.6)', fontSize: 12, fontFamily: F.brand, fontWeight: 500,
-          transition: 'color 0.15s',
-        }}
-          onMouseEnter={(e) => (e.currentTarget.style.color = 'white')}
-          onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.6)')}
-        >
-          <ArrowLeft size={14} />
-          Dashboard
-        </Link>
+        {/* Left: Brand + Back */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <Link to="/" style={{
+            textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 0,
+          }}>
+            <span style={{
+              fontFamily: F.brand, fontSize: 13, fontWeight: 800,
+              letterSpacing: '.04em', color: 'rgba(255,255,255,0.7)',
+            }}>
+              LOOPER
+            </span>
+            <span style={{
+              fontFamily: F.brand, fontSize: 13, fontWeight: 800,
+              letterSpacing: '.04em', color: C.accent,
+            }}>
+              .AI
+            </span>
+          </Link>
+          <div style={{ width: 1, height: 20, background: 'rgba(255,255,255,0.1)' }} />
+          <Link to="/coach" style={{
+            textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6,
+            color: 'rgba(255,255,255,0.5)', fontSize: 12, fontFamily: F.brand, fontWeight: 500,
+            transition: 'color 0.15s',
+          }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.8)')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.5)')}
+          >
+            <ArrowLeft size={13} />
+            Dashboard
+          </Link>
+        </div>
 
-        {/* Session label */}
+        {/* Center: Live indicator */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <div style={{
-            width: 6, height: 6, borderRadius: '50%', background: '#4ADE80',
+            width: 7, height: 7, borderRadius: '50%', background: C.accent,
+            boxShadow: `0 0 8px ${C.accent}60`,
             animation: 'pulse 2s infinite',
           }} />
           <span style={{
@@ -280,18 +301,24 @@ export default function CoachingOS() {
           }}>
             Live Session
           </span>
+          <span style={{
+            fontFamily: F.data, fontSize: 10, fontWeight: 400,
+            color: 'rgba(255,255,255,0.35)', marginLeft: 4,
+          }}>
+            {sessionContext.playerName}
+          </span>
         </div>
 
-        {/* End Session */}
+        {/* Right: End Session */}
         <button
           onClick={() => navigate('/coach/review')}
           style={{
             fontFamily: F.brand, fontSize: 11, fontWeight: 600,
-            padding: '5px 14px', borderRadius: 6, border: 'none', cursor: 'pointer',
-            background: C.accent, color: 'white', transition: 'opacity 0.15s',
+            padding: '6px 16px', borderRadius: 6, border: 'none', cursor: 'pointer',
+            background: C.accent, color: 'white', transition: 'all 0.15s',
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
-          onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+          onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.85'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
         >
           End Session →
         </button>

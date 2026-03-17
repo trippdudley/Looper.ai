@@ -99,7 +99,7 @@ export default function SessionSummaryView({ sessionData }: SessionSummaryViewPr
       <div className="bg-white rounded-xl border border-[#E2E5E8] p-8 mb-6">
         <div className="flex items-start justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-[#1A1F2B] mb-1">
+            <h1 className="text-2xl font-bold text-[#1C2B2D] mb-1">
               Session Summary
             </h1>
             <p className="text-sm text-[#9CA3AF]">
@@ -123,11 +123,11 @@ export default function SessionSummaryView({ sessionData }: SessionSummaryViewPr
         </div>
 
         {/* Headline metric */}
-        <div className="bg-[#F0FDFA] rounded-lg px-6 py-4 border border-[#0D7C6620]">
+        <div className="bg-[#F0FDFA] rounded-lg px-6 py-4 border border-[#3A9D7820]">
           <div className="flex items-center gap-3">
-            <TrendingUp className="w-5 h-5 text-[#0D7C66]" />
+            <TrendingUp className="w-5 h-5 text-[#3A9D78]" />
             <span
-              className="text-lg font-bold text-[#0D7C66]"
+              className="text-lg font-bold text-[#3A9D78]"
               style={{ fontFamily: "'JetBrains Mono', monospace" }}
             >
               {summary.headlineMetric}
@@ -139,7 +139,7 @@ export default function SessionSummaryView({ sessionData }: SessionSummaryViewPr
       {/* ── 2. AI Lesson Summary ────────────────────────────── */}
       <div className="bg-white rounded-xl border border-[#E2E5E8] p-8 mb-6">
         <div className="flex items-center gap-2 mb-6">
-          <BookOpen className="w-4 h-4 text-[#0D7C66]" />
+          <BookOpen className="w-4 h-4 text-[#3A9D78]" />
           <h2 className="text-xs font-semibold uppercase tracking-wider text-[#9CA3AF]">
             Lesson Summary
           </h2>
@@ -151,7 +151,7 @@ export default function SessionSummaryView({ sessionData }: SessionSummaryViewPr
               key={idx}
               className="text-sm leading-relaxed"
               style={{
-                color: '#1A1F2B',
+                color: '#1C2B2D',
                 fontStyle: idx === 0 ? 'italic' : 'normal',
                 fontFamily: idx === 0 ? "'Playfair Display', Georgia, serif" : 'inherit',
                 fontSize: idx === 0 ? '15px' : '14px',
@@ -166,7 +166,7 @@ export default function SessionSummaryView({ sessionData }: SessionSummaryViewPr
       {/* ── 3. Key Comparisons ─────────────────────────────── */}
       <div className="bg-white rounded-xl border border-[#E2E5E8] p-8 mb-6">
         <div className="flex items-center gap-2 mb-6">
-          <BarChart3 className="w-4 h-4 text-[#0D7C66]" />
+          <BarChart3 className="w-4 h-4 text-[#3A9D78]" />
           <h2 className="text-xs font-semibold uppercase tracking-wider text-[#9CA3AF]">
             Key Comparisons
           </h2>
@@ -191,7 +191,7 @@ export default function SessionSummaryView({ sessionData }: SessionSummaryViewPr
                 </span>
                 <ArrowRight className="w-3.5 h-3.5 text-[#9CA3AF]" />
                 <span
-                  className="text-sm font-bold text-[#1A1F2B]"
+                  className="text-sm font-bold text-[#1C2B2D]"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
                   {c.postCue}
@@ -222,7 +222,7 @@ export default function SessionSummaryView({ sessionData }: SessionSummaryViewPr
       {/* ── 4. Practice Plan ───────────────────────────────── */}
       <div className="bg-white rounded-xl border border-[#E2E5E8] p-8 mb-6">
         <div className="flex items-center gap-2 mb-6">
-          <Target className="w-4 h-4 text-[#0D7C66]" />
+          <Target className="w-4 h-4 text-[#3A9D78]" />
           <h2 className="text-xs font-semibold uppercase tracking-wider text-[#9CA3AF]">
             Practice Plan
           </h2>
@@ -232,12 +232,12 @@ export default function SessionSummaryView({ sessionData }: SessionSummaryViewPr
           {summary.practicePlan.map((item, idx) => (
             <div key={idx} className="rounded-lg border border-[#E2E5E8] p-5">
               <div className="flex items-start justify-between mb-3">
-                <h3 className="text-sm font-bold text-[#1A1F2B]">{item.name}</h3>
+                <h3 className="text-sm font-bold text-[#1C2B2D]">{item.name}</h3>
                 <span
                   className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
                   style={{
                     backgroundColor: item.cueType === 'external' ? '#ECFDF5' : '#EFF6FF',
-                    color: item.cueType === 'external' ? '#0D7C66' : '#3B82F6',
+                    color: item.cueType === 'external' ? '#3A9D78' : '#3B82F6',
                   }}
                 >
                   {item.cueType === 'external' ? 'External Cue' : 'Internal Cue'}
@@ -249,19 +249,19 @@ export default function SessionSummaryView({ sessionData }: SessionSummaryViewPr
                   <span className="text-[10px] font-semibold uppercase tracking-wider text-[#9CA3AF]">
                     Cue
                   </span>
-                  <p className="text-xs text-[#1A1F2B] mt-0.5 italic">"{item.cue}"</p>
+                  <p className="text-xs text-[#1C2B2D] mt-0.5 italic">"{item.cue}"</p>
                 </div>
                 <div>
                   <span className="text-[10px] font-semibold uppercase tracking-wider text-[#9CA3AF]">
                     Reps
                   </span>
-                  <p className="text-xs text-[#1A1F2B] mt-0.5">{item.reps}</p>
+                  <p className="text-xs text-[#1C2B2D] mt-0.5">{item.reps}</p>
                 </div>
                 <div>
                   <span className="text-[10px] font-semibold uppercase tracking-wider text-[#9CA3AF]">
                     Success Criteria
                   </span>
-                  <p className="text-xs text-[#1A1F2B] mt-0.5">{item.successCriteria}</p>
+                  <p className="text-xs text-[#1C2B2D] mt-0.5">{item.successCriteria}</p>
                 </div>
               </div>
             </div>
@@ -272,7 +272,7 @@ export default function SessionSummaryView({ sessionData }: SessionSummaryViewPr
       {/* ── 5. Session Chronicle Log ──────────────────────── */}
       <div className="bg-white rounded-xl border border-[#E2E5E8] p-8">
         <div className="flex items-center gap-2 mb-6">
-          <BarChart3 className="w-4 h-4 text-[#0D7C66]" />
+          <BarChart3 className="w-4 h-4 text-[#3A9D78]" />
           <h2 className="text-xs font-semibold uppercase tracking-wider text-[#9CA3AF]">
             Session Chronicle
           </h2>
@@ -306,7 +306,7 @@ export default function SessionSummaryView({ sessionData }: SessionSummaryViewPr
                     <td className="py-2 px-2">
                       <span
                         className="font-bold"
-                        style={{ fontFamily: "'JetBrains Mono', monospace", color: '#1A1F2B' }}
+                        style={{ fontFamily: "'JetBrains Mono', monospace", color: '#1C2B2D' }}
                       >
                         {String(swing.swingNumber).padStart(2, '0')}
                       </span>
@@ -315,16 +315,16 @@ export default function SessionSummaryView({ sessionData }: SessionSummaryViewPr
                       {swing.timestamp}
                     </td>
                     <td className="py-2 px-2 text-[#6B7280]">{swing.club}</td>
-                    <td className="py-2 px-2 text-right" style={{ fontFamily: "'JetBrains Mono', monospace", color: '#1A1F2B' }}>
+                    <td className="py-2 px-2 text-right" style={{ fontFamily: "'JetBrains Mono', monospace", color: '#1C2B2D' }}>
                       {swing.ballSpeed.toFixed(1)}
                     </td>
-                    <td className="py-2 px-2 text-right font-bold" style={{ fontFamily: "'JetBrains Mono', monospace", color: '#1A1F2B' }}>
+                    <td className="py-2 px-2 text-right font-bold" style={{ fontFamily: "'JetBrains Mono', monospace", color: '#1C2B2D' }}>
                       {swing.carry}
                     </td>
-                    <td className="py-2 px-2 text-right" style={{ fontFamily: "'JetBrains Mono', monospace", color: '#1A1F2B' }}>
+                    <td className="py-2 px-2 text-right" style={{ fontFamily: "'JetBrains Mono', monospace", color: '#1C2B2D' }}>
                       {sign(swing.attackAngle)}{swing.attackAngle.toFixed(1)}°
                     </td>
-                    <td className="py-2 px-2 text-right" style={{ fontFamily: "'JetBrains Mono', monospace", color: '#1A1F2B' }}>
+                    <td className="py-2 px-2 text-right" style={{ fontFamily: "'JetBrains Mono', monospace", color: '#1C2B2D' }}>
                       {sign(swing.faceToPath)}{swing.faceToPath.toFixed(1)}°
                     </td>
                     <td className="py-2 px-2">
@@ -337,9 +337,9 @@ export default function SessionSummaryView({ sessionData }: SessionSummaryViewPr
                             : tag === 'Cue Introduced' ? '#F0FDFA'
                             : '#FFF7ED',
                           color: tag === 'Baseline' ? '#3B82F6'
-                            : tag === 'Validation' ? '#0D7C66'
+                            : tag === 'Validation' ? '#3A9D78'
                             : tag === 'Regression' ? '#C93B3B'
-                            : tag === 'Cue Introduced' ? '#0D7C66'
+                            : tag === 'Cue Introduced' ? '#3A9D78'
                             : '#D4980B',
                         }}
                       >

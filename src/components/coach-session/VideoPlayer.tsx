@@ -31,7 +31,7 @@ export default function VideoPlayer({ selectedSwing }: VideoPlayerProps) {
       {/* Toolbar */}
       <div className="flex items-center justify-between px-4 py-2 border-b border-[#E2E5E8] bg-[#F9FAFB]">
         <div className="flex items-center gap-3">
-          <span className="text-xs font-semibold text-[#1A1F2B]">
+          <span className="text-xs font-semibold text-[#1C2B2D]">
             Swing {swingLabel}
           </span>
           <span className="text-[10px] text-[#9CA3AF] font-medium">
@@ -59,8 +59,8 @@ export default function VideoPlayer({ selectedSwing }: VideoPlayerProps) {
             className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors"
             style={{
               backgroundColor: isComparing ? '#F0FDFA' : 'transparent',
-              color: isComparing ? '#0D7C66' : '#6B7280',
-              border: `1px solid ${isComparing ? '#0D7C66' : '#E2E5E8'}`,
+              color: isComparing ? '#3A9D78' : '#6B7280',
+              border: `1px solid ${isComparing ? '#3A9D78' : '#E2E5E8'}`,
             }}
           >
             <Columns2 className="w-3.5 h-3.5" />
@@ -82,7 +82,7 @@ export default function VideoPlayer({ selectedSwing }: VideoPlayerProps) {
             {/* Player swing */}
             <div className="flex-1 border-r border-[#E2E5E8] flex flex-col items-center justify-center bg-[#F6F7F9] relative">
               <div className="absolute top-3 left-3">
-                <span className="text-[10px] font-semibold px-2 py-1 rounded bg-white/90 text-[#1A1F2B] shadow-sm">
+                <span className="text-[10px] font-semibold px-2 py-1 rounded bg-white/90 text-[#1C2B2D] shadow-sm">
                   Player: {selectedSwing.club} {swingLabel}
                 </span>
               </div>
@@ -97,7 +97,7 @@ export default function VideoPlayer({ selectedSwing }: VideoPlayerProps) {
             {/* Reference swing */}
             <div className="flex-1 flex flex-col items-center justify-center bg-[#F6F7F9] relative">
               <div className="absolute top-3 left-3">
-                <span className="text-[10px] font-semibold px-2 py-1 rounded bg-white/90 text-[#1A1F2B] shadow-sm">
+                <span className="text-[10px] font-semibold px-2 py-1 rounded bg-white/90 text-[#1C2B2D] shadow-sm">
                   Reference: Rory McIlroy
                 </span>
               </div>
@@ -116,7 +116,7 @@ export default function VideoPlayer({ selectedSwing }: VideoPlayerProps) {
             <div className="flex flex-col items-center gap-4">
               <div
                 className="w-20 h-20 rounded-full flex items-center justify-center cursor-pointer transition-all duration-200"
-                style={{ backgroundColor: isPlaying ? '#0D7C66' : '#E2E5E8' }}
+                style={{ backgroundColor: isPlaying ? '#3A9D78' : '#E2E5E8' }}
                 onClick={() => setIsPlaying(!isPlaying)}
               >
                 {isPlaying ? (
@@ -126,7 +126,7 @@ export default function VideoPlayer({ selectedSwing }: VideoPlayerProps) {
                 )}
               </div>
               <div className="text-center">
-                <p className="text-lg font-semibold text-[#1A1F2B]">
+                <p className="text-lg font-semibold text-[#1C2B2D]">
                   Video: Swing {swingLabel}
                 </p>
                 <p className="text-xs text-[#9CA3AF] mt-1">
@@ -153,11 +153,11 @@ export default function VideoPlayer({ selectedSwing }: VideoPlayerProps) {
           >
             <div
               className="h-full rounded-full transition-all duration-100"
-              style={{ width: `${scrubPosition}%`, backgroundColor: '#0D7C66' }}
+              style={{ width: `${scrubPosition}%`, backgroundColor: '#3A9D78' }}
             />
           </div>
           <div
-            className="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-[#0D7C66] shadow-sm border-2 border-white"
+            className="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-[#3A9D78] shadow-sm border-2 border-white"
             style={{ left: `${scrubPosition}%`, marginLeft: -6 }}
           />
         </div>
@@ -179,8 +179,8 @@ export default function VideoPlayer({ selectedSwing }: VideoPlayerProps) {
               onClick={() => setIsPlaying(!isPlaying)}
               className="p-2 rounded-lg transition-colors"
               style={{
-                backgroundColor: isPlaying ? '#0D7C66' : '#F3F4F6',
-                color: isPlaying ? 'white' : '#1A1F2B',
+                backgroundColor: isPlaying ? '#3A9D78' : '#F3F4F6',
+                color: isPlaying ? 'white' : '#1C2B2D',
               }}
             >
               {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
@@ -212,7 +212,7 @@ export default function VideoPlayer({ selectedSwing }: VideoPlayerProps) {
                 onClick={() => setPlaybackSpeed(speed)}
                 className="px-2 py-1 rounded text-[10px] font-semibold transition-colors"
                 style={{
-                  backgroundColor: playbackSpeed === speed ? '#0D7C66' : 'transparent',
+                  backgroundColor: playbackSpeed === speed ? '#3A9D78' : 'transparent',
                   color: playbackSpeed === speed ? 'white' : '#6B7280',
                 }}
               >
