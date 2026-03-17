@@ -11,6 +11,7 @@ import {
   Zap,
   RotateCcw,
   Target,
+  FileText,
 } from 'lucide-react';
 import { golfers } from '../../../data/golfers';
 import { drills } from '../../../data/drills';
@@ -208,6 +209,14 @@ export default function CoachToday() {
                         <span className="font-semibold text-navy text-sm">
                           {golfer.name}
                         </span>
+                        <Link
+                          to={`/coach/brief/${golfer.id}`}
+                          className="inline-flex items-center gap-1 text-[10px] font-semibold text-data-blue hover:text-accent transition px-1.5 py-0.5 rounded bg-data-blue/10 hover:bg-accent/10"
+                          title="Pre-session brief"
+                        >
+                          <FileText className="w-3 h-3" />
+                          Brief
+                        </Link>
                         <span
                           className={`text-xs px-2 py-0.5 rounded-full font-medium ${typeBadgeColor[slot.type]}`}
                         >

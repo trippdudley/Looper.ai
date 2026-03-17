@@ -14,6 +14,7 @@ import StudentRoster from './personas/coach/pages/StudentRoster';
 import StudentDetail from './personas/coach/pages/StudentDetail';
 import SessionCapture from './personas/coach/pages/SessionCapture';
 import SessionReview from './personas/coach/pages/SessionReview';
+import PreSessionBrief from './personas/coach/pages/PreSessionBrief';
 import Analytics from './personas/coach/pages/Analytics';
 import CoachSession from './personas/coach/pages/CoachSession';
 import FitterLayout from './personas/fitter/FitterLayout';
@@ -51,6 +52,7 @@ export default function App() {
           <Route index element={<CoachToday />} />
           <Route path="students" element={<StudentRoster />} />
           <Route path="students/:id" element={<StudentDetail />} />
+          <Route path="brief/:id" element={<PreSessionBrief />} />
           <Route path="capture" element={<SessionCapture />} />
           <Route path="review" element={<SessionReview />} />
           <Route path="analytics" element={<Analytics />} />
