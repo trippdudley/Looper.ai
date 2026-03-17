@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import PersonaSelector from './pages/PersonaSelector';
 import ThesisPage from './pages/ThesisPage';
 import LooperNarrative from './components/looper-narrative';
@@ -36,7 +36,7 @@ export default function App() {
         <Route path="/" element={<PersonaSelector />} />
         <Route path="/thesis" element={<ThesisPage />} />
         <Route path="/narrative" element={<LooperNarrative />} />
-        <Route path="/coaching-os" element={<CoachingOS />} />
+        <Route path="/coaching-os" element={<Navigate to="/coach/live" replace />} />
         <Route path="/vision" element={<SizzleReel />} />
 
         <Route path="/golfer" element={<GolferLayout />}>
@@ -55,6 +55,7 @@ export default function App() {
           <Route path="review" element={<SessionReview />} />
           <Route path="analytics" element={<Analytics />} />
           <Route path="session" element={<CoachSession />} />
+          <Route path="live" element={<CoachingOS />} />
         </Route>
 
         <Route path="/fitter" element={<FitterLayout />}>

@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
-  Settings,
+  ArrowLeft,
   ChevronLeft,
   ChevronRight,
   ChevronDown,
@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import type { TabId, ShotData, DiagnosisFactor } from '../data/coachingOSData';
 import {
-  C, F, shots, sessionContext, tabs, l1Modes, baselineAvg,
+  C, F, shots, sessionContext, tabs, baselineAvg,
   diagnosisFactors, interventions, playerHistory,
   getInsightForShot, getRecommendationForShot,
   fmtDelta, confidenceLevel,
@@ -199,6 +199,7 @@ function StageCardComponent({ factor, isExpanded, onToggle }: {
 // ─── Main Page Component ────────────────────────────────────────
 
 export default function CoachingOS() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabId>('overview');
   const [activeShot, setActiveShot] = useState(14);
   const [shotRailCollapsed, setShotRailCollapsed] = useState(false);
@@ -249,59 +250,51 @@ export default function CoachingOS() {
   return (
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: C.bg, fontFamily: F.brand }}>
 
-      {/* ═══ L1: GLOBAL BAR ═══════════════════════════════════════ */}
+      {/* ═══ L1: SESSION BAR ════════════════════════════════════════ */}
       <div style={{
-        height: 44, background: C.ink, display: 'flex', alignItems: 'center',
-        justifyContent: 'space-between', padding: '0 20px', flexShrink: 0,
+        height: 40, background: C.ink, display: 'flex', alignItems: 'center',
+        justifyContent: 'space-between', padding: '0 16px', flexShrink: 0,
       }}>
-        {/* Logo */}
-        <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
-          <span style={{
-            fontFamily: F.brand, fontSize: 13, fontWeight: 800,
-            letterSpacing: '.05em', color: 'white',
-          }}>
-            LOOPER
-          </span>
-          <span style={{
-            fontFamily: F.brand, fontSize: 13, fontWeight: 800,
-            letterSpacing: '.05em', color: C.accent,
-          }}>
-            .AI
-          </span>
+        {/* Back to Dashboard */}
+        <Link to="/coach" style={{
+          textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6,
+          color: 'rgba(255,255,255,0.6)', fontSize: 12, fontFamily: F.brand, fontWeight: 500,
+          transition: 'color 0.15s',
+        }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = 'white')}
+          onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.6)')}
+        >
+          <ArrowLeft size={14} />
+          Dashboard
         </Link>
 
-        {/* Mode Switcher */}
-        <div style={{ display: 'flex', gap: 4 }}>
-          {l1Modes.map((mode) => (
-            <button key={mode.id} style={{
-              fontFamily: F.brand, fontSize: 12, fontWeight: 500,
-              padding: '5px 14px', borderRadius: 6, border: 'none', cursor: 'pointer',
-              background: mode.id === 'session' ? 'rgba(255,255,255,0.12)' : 'transparent',
-              color: mode.id === 'session' ? 'white' : 'rgba(255,255,255,0.4)',
-              transition: 'all 0.15s',
-            }}>
-              {mode.label}
-            </button>
-          ))}
+        {/* Session label */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div style={{
+            width: 6, height: 6, borderRadius: '50%', background: '#4ADE80',
+            animation: 'pulse 2s infinite',
+          }} />
+          <span style={{
+            fontFamily: F.brand, fontSize: 12, fontWeight: 600,
+            color: 'white', letterSpacing: '.02em',
+          }}>
+            Live Session
+          </span>
         </div>
 
-        {/* Settings + Avatar */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <button style={{
-            fontFamily: F.brand, fontSize: 12, color: 'rgba(255,255,255,0.4)',
-            background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4,
-          }}>
-            <Settings size={14} />
-            Settings
-          </button>
-          <div style={{
-            width: 28, height: 28, borderRadius: '50%', background: C.accent,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontFamily: F.brand, fontSize: 10, fontWeight: 700, color: 'white',
-          }}>
-            {sessionContext.coachInitials}
-          </div>
-        </div>
+        {/* End Session */}
+        <button
+          onClick={() => navigate('/coach/review')}
+          style={{
+            fontFamily: F.brand, fontSize: 11, fontWeight: 600,
+            padding: '5px 14px', borderRadius: 6, border: 'none', cursor: 'pointer',
+            background: C.accent, color: 'white', transition: 'opacity 0.15s',
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
+          onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+        >
+          End Session →
+        </button>
       </div>
 
       {/* ═══ L2: CONTEXT BAR ══════════════════════════════════════ */}

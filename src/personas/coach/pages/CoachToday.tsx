@@ -237,7 +237,7 @@ export default function CoachToday() {
                       )}
                       {slot.status === 'upcoming' && (
                         <Link
-                          to="/coach/capture"
+                          to="/coach/live"
                           className="text-xs font-medium bg-accent text-white px-3 py-1.5 rounded-lg hover:bg-accent-light transition"
                         >
                           Start Session

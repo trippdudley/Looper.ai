@@ -13,7 +13,7 @@ const personas = [
     label: "I'm a Coach",
     icon: GraduationCap,
     description: "Capture sessions, diagnose limiting factors, see what works",
-    path: "/coaching-os",
+    path: "/coach",
   },
   {
     label: "I'm a Fitter",
