@@ -132,14 +132,27 @@ export default function SizzleReel() {
     navigate('/');
   }, [navigate]);
 
-  // Escape key handler
+  // Keyboard handler: Escape to exit, arrows to navigate scenes
+  const jumpToScene = useCallback((sceneIdx: number) => {
+    if (sceneIdx < 0 || sceneIdx >= SCENES.length) return;
+    setCurrentScene(sceneIdx);
+    sceneStartRef.current = Date.now();
+    setSceneElapsed(0);
+    setTransitioning(false);
+    setTransitionProgress(0);
+    setDone(false);
+  }, []);
+
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') stopAndNavigate();
+      if (e.key === 'ArrowRight') jumpToScene(currentScene + 1);
+      if (e.key === 'ArrowLeft') jumpToScene(currentScene - 1);
+      if (e.key === ' ') { e.preventDefault(); /* pause/resume could go here */ }
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [stopAndNavigate]);
+  }, [stopAndNavigate, jumpToScene, currentScene]);
 
   const CurrentComponent = SCENES[currentScene]?.Component;
   const NextComponent = transitioning && currentScene < SCENES.length - 1
@@ -196,6 +209,50 @@ export default function SizzleReel() {
       >
         x
       </button>
+
+      {/* Scene indicator dots */}
+      <div style={{
+        position: 'absolute',
+        bottom: 16,
+        left: '50%',
+        transform: 'translateX(-50%)',
+        zIndex: 10000,
+        display: 'flex',
+        gap: 6,
+      }}>
+        {SCENES.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => jumpToScene(i)}
+            style={{
+              width: i === currentScene ? 16 : 6,
+              height: 6,
+              borderRadius: 3,
+              background: i === currentScene ? C.accent : 'rgba(255,255,255,0.2)',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              padding: 0,
+            }}
+            aria-label={`Go to scene ${i + 1}`}
+          />
+        ))}
+      </div>
+
+      {/* Keyboard hint */}
+      <div style={{
+        position: 'absolute',
+        bottom: 32,
+        left: '50%',
+        transform: 'translateX(-50%)',
+        zIndex: 10000,
+        fontFamily: "'Space Mono', monospace",
+        fontSize: 9,
+        color: 'rgba(255,255,255,0.15)',
+        letterSpacing: '0.05em',
+      }}>
+        ← → arrow keys to navigate &middot; ESC to exit
+      </div>
 
       {/* Progress bar */}
       <div style={{

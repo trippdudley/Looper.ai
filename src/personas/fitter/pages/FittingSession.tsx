@@ -16,6 +16,8 @@ import { liveFittingInsights } from '../../../data/fittingAIInsights';
 import FittingAIInsightCard from '../../../components/fitter/FittingAIInsightCard';
 import ShaftComparisonTable from '../../../components/fitter/ShaftComparisonTable';
 import OptimalWindowChart from '../../../components/fitter/OptimalWindowChart';
+import AIThinkingIndicator from '../../../components/ui/AIThinkingIndicator';
+import { useStaggeredReveal } from '../../../hooks/useStaggeredReveal';
 
 // ── Mock fitting shots ──
 const fittingShots = [
@@ -45,6 +47,8 @@ export default function FittingSession() {
   const navigate = useNavigate();
   const [feedbackMode, setFeedbackMode] = useState(false);
   const [aiQuestion, setAiQuestion] = useState('');
+  const visibleInsights = useStaggeredReveal(liveFittingInsights.length, 2500, 1500);
+  const isThinking = visibleInsights < liveFittingInsights.length;
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -209,10 +213,10 @@ export default function FittingSession() {
               <p className="text-[10px] text-gray-500 mt-0.5">Powered by 2.4M fittings</p>
             </div>
 
-            {/* Insight feed */}
+            {/* Insight feed — staggered reveal with AI thinking */}
             <div className="flex-1 overflow-y-auto p-3 space-y-3">
-              {liveFittingInsights.map((insight) => (
-                <div key={insight.id}>
+              {liveFittingInsights.slice(0, visibleInsights).map((insight, i) => (
+                <div key={insight.id} className="animate-stagger-in" style={{ animationDelay: `${i * 50}ms` }}>
                   <FittingAIInsightCard insight={insight} />
                   {/* Feedback buttons */}
                   {feedbackMode && (
@@ -230,6 +234,12 @@ export default function FittingSession() {
                   )}
                 </div>
               ))}
+              {isThinking && (
+                <AIThinkingIndicator
+                  label="Analyzing shot cluster..."
+                  detail={`Processing ${(2.4).toLocaleString()}M fitting outcomes`}
+                />
+              )}
             </div>
 
             {/* Ask the AI */}

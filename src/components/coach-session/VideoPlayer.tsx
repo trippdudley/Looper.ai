@@ -133,9 +133,25 @@ export default function VideoPlayer({ selectedSwing }: VideoPlayerProps) {
                   {selectedSwing.club} • {selectedSwing.carry} yds carry
                 </p>
               </div>
-              <span className="text-[10px] text-[#9CA3AF]/60 italic px-3 py-1 rounded-full border border-[#E2E5E8]">
-                Sample Video — Drop .mp4 files into /assets/videos/
-              </span>
+              <div className="flex flex-col items-center gap-2">
+                <span className="text-[10px] text-[#9CA3AF]/60 italic px-3 py-1 rounded-full border border-[#E2E5E8]">
+                  Sample Video — Swing Analysis
+                </span>
+                <div className="flex gap-4 mt-1">
+                  <div className="flex flex-col items-center">
+                    <div className="w-8 h-8 rounded bg-[#E2E5E8] flex items-center justify-center mb-1">
+                      <span className="text-[8px] font-bold text-[#9CA3AF]">DTL</span>
+                    </div>
+                    <span className="text-[9px] text-[#9CA3AF]/60">Down the Line</span>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <div className="w-8 h-8 rounded bg-[#3A9D78]/20 flex items-center justify-center mb-1 border border-[#3A9D78]/40">
+                      <span className="text-[8px] font-bold text-[#3A9D78]">FO</span>
+                    </div>
+                    <span className="text-[9px] text-[#3A9D78]">Face On</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}

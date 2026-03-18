@@ -27,7 +27,7 @@ export default function OptimalWindowChart({ metrics }: OptimalWindowProps) {
         const inWindow = m.current >= m.range.min && m.current <= m.range.max;
 
         return (
-          <div key={m.label}>
+          <div key={m.label} role="meter" aria-label={`${m.label}: ${m.current} ${m.unit}`} aria-valuenow={m.current} aria-valuemin={m.fullMin} aria-valuemax={m.fullMax}>
             <div className="flex items-center justify-between mb-1.5">
               <span className="text-xs text-gray-400">{m.label}</span>
               <span className={`text-xs font-mono font-semibold ${inWindow ? 'text-accent-light' : 'text-coral'}`}>

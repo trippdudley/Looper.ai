@@ -264,6 +264,29 @@ export default function FittingReport() {
           Export PDF
         </button>
       </div>
+
+      {/* Cross-persona data flow */}
+      <div className="glass-card p-5 mt-6">
+        <p className="text-[10px] uppercase tracking-wider text-accent-light font-semibold mb-3">
+          Data shared with
+        </p>
+        <div className="flex flex-wrap gap-3">
+          <Link
+            to="/golfer"
+            className="inline-flex items-center gap-2 text-xs bg-white/5 rounded-lg border border-white/10 px-3 py-2 hover:border-accent/40 transition-colors text-gray-300"
+          >
+            <span className="w-4 h-4 rounded-full bg-accent/20 flex items-center justify-center text-[8px] font-bold text-accent-light">G</span>
+            Golfer Equipment Profile
+          </Link>
+          <Link
+            to="/coach/students/golfer-mike"
+            className="inline-flex items-center gap-2 text-xs bg-white/5 rounded-lg border border-white/10 px-3 py-2 hover:border-accent/40 transition-colors text-gray-300"
+          >
+            <span className="w-4 h-4 rounded-full bg-data-blue/20 flex items-center justify-center text-[8px] font-bold text-data-blue">C</span>
+            Coach Student Record
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

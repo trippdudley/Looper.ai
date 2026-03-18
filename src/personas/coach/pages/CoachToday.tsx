@@ -259,14 +259,18 @@ export default function CoachToday() {
             </div>
           </div>
 
-          {/* Recent Activity Feed */}
+          {/* Recent Activity Feed — staggered entrance */}
           <div className="bg-white rounded-xl border border-gray-200 p-5">
             <h2 className="text-navy text-lg font-bold mb-4">
               Recent Activity
             </h2>
             <div className="space-y-4">
-              {activityFeed.map((item) => (
-                <div key={item.id} className="flex items-start gap-3">
+              {activityFeed.map((item, i) => (
+                <div
+                  key={item.id}
+                  className="flex items-start gap-3 animate-stagger-in"
+                  style={{ animationDelay: `${i * 120}ms` }}
+                >
                   <div
                     className={`mt-1 w-7 h-7 rounded-full ${item.color}/15 flex items-center justify-center shrink-0`}
                   >
