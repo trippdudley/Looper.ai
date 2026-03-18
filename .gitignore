@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Large media files
+sizzle-reel.mp4
+
+# Claude local settings
+.claude/settings.local.json
