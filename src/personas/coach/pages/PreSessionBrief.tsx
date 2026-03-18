@@ -12,6 +12,9 @@ import {
   Repeat,
   BarChart3,
   Clock,
+  Sparkles,
+  Flag,
+  Dumbbell,
 } from 'lucide-react';
 import { golfers } from '../../../data/golfers';
 import { playerHistory } from '../../../data/coachingOSData';
@@ -87,7 +90,7 @@ export default function PreSessionBrief() {
       </Link>
 
       {/* ═══════════════════════════════════════════════════════════════
-          HEADER: Player Identity + Session Info
+          HEADER: Player Identity + Key Context
           ═══════════════════════════════════════════════════════════════ */}
       <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
         <div className="flex items-start gap-5">
@@ -121,12 +124,8 @@ export default function PreSessionBrief() {
                 </div>
               </div>
               <div className="bg-bg-light rounded-lg px-4 py-2.5 text-center">
-                <p className="text-[10px] uppercase tracking-wide text-gray-500 font-semibold">Sessions</p>
-                <p className="text-lg font-bold text-navy mt-0.5">{golfer.sessionsCompleted}</p>
-              </div>
-              <div className="bg-bg-light rounded-lg px-4 py-2.5 text-center">
-                <p className="text-[10px] uppercase tracking-wide text-gray-500 font-semibold">Last Round</p>
-                <p className="text-lg font-bold text-navy mt-0.5">{latestRound?.score ?? '—'}</p>
+                <p className="text-[10px] uppercase tracking-wide text-gray-500 font-semibold">Last Session</p>
+                <p className="text-sm font-bold text-navy mt-0.5">{lastCompleted?.date?.replace(', 2026', '') ?? '—'}</p>
               </div>
               <div className="bg-bg-light rounded-lg px-4 py-2.5 text-center">
                 <p className="text-[10px] uppercase tracking-wide text-gray-500 font-semibold">Connected</p>
@@ -153,114 +152,193 @@ export default function PreSessionBrief() {
       </div>
 
       {/* ═══════════════════════════════════════════════════════════════
-          SECTION 1: TODAY'S GAME PLAN
+          TODAY'S GAME PLAN — 3 sub-cards
           ═══════════════════════════════════════════════════════════════ */}
       <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-5">
           <Target className="w-4 h-4 text-accent" />
           <h2 className="text-navy font-bold text-base">Today&apos;s Game Plan</h2>
+          <span className="text-xs text-gray-400 ml-auto">{brief?.todaysFocus ?? ''}</span>
         </div>
-        <p className="text-sm text-gray-700 leading-relaxed mb-4">
-          {brief?.todaysObjective ?? 'No session objective set.'}
-        </p>
 
-        {/* Coaching reminders — AI-generated from history */}
-        <div className="bg-accent/5 border border-accent/15 rounded-lg p-4">
-          <div className="flex items-center gap-2 mb-3">
-            <Lightbulb className="w-3.5 h-3.5 text-accent" />
-            <span className="text-[10px] uppercase tracking-wide text-accent font-bold">Coaching Reminders</span>
-          </div>
-          <ul className="space-y-2">
-            {lastCompleted?.coachNotes && (
-              <li className="flex items-start gap-2 text-sm text-gray-700">
-                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
-                <span>
-                  <strong className="text-navy">From Session {lastCompleted.sessionNumber}:</strong>{' '}
-                  {lastCompleted.coachNotes.split('.').slice(0, 2).join('.')}.
-                </span>
-              </li>
-            )}
-            <li className="flex items-start gap-2 text-sm text-gray-700">
-              <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
-              <span>Use <strong className="text-navy">external focus cues only</strong> — player over-processes internal mechanics.</span>
-            </li>
-            {partialRegression && (
-              <li className="flex items-start gap-2 text-sm text-gray-700">
-                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-warm-amber shrink-0" />
-                <span><strong className="text-navy">Expect partial regression</strong> — last session showed cue needs reinforcement after time off.</span>
-              </li>
-            )}
-          </ul>
-        </div>
-      </div>
+        <div className="space-y-4">
 
-      {/* Two-column layout for recap + on-course */}
-      <div className="flex flex-col lg:flex-row gap-6 mb-6">
+          {/* ── Sub-card 1: Last Session Overview ── */}
+          <div className="bg-bg-light rounded-lg border border-gray-100 p-4">
+            <div className="flex items-center gap-2 mb-3">
+              <BookOpen className="w-3.5 h-3.5 text-data-blue" />
+              <span className="text-[10px] uppercase tracking-wide text-data-blue font-bold">Last Session</span>
+              <span className="text-[10px] text-gray-400 ml-auto font-mono">{lastCompleted?.date}</span>
+            </div>
 
-        {/* ═══════════════════════════════════════════════════════════
-            SECTION 2: LAST LESSON RECAP
-            ═══════════════════════════════════════════════════════════ */}
-        <div className="flex-1 min-w-0 bg-white rounded-xl border border-gray-200 p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <BookOpen className="w-4 h-4 text-data-blue" />
-            <h2 className="text-navy font-bold text-base">Last Lesson Recap</h2>
-            <span className="text-xs text-gray-400 ml-auto font-mono">
-              {lastCompleted?.date}
-            </span>
-          </div>
+            {lastCompleted ? (
+              <>
+                <h3 className="text-sm font-semibold text-navy mb-2">
+                  Session {lastCompleted.sessionNumber}: {lastCompleted.focus}
+                </h3>
+                <p className="text-sm text-gray-600 leading-relaxed mb-3">
+                  {lastCompleted.summary}
+                </p>
 
-          {lastCompleted ? (
-            <>
-              <h3 className="text-sm font-semibold text-navy mb-2">
-                Session {lastCompleted.sessionNumber}: {lastCompleted.focus}
-              </h3>
-              <p className="text-sm text-gray-600 leading-relaxed mb-4">
-                {lastCompleted.summary}
-              </p>
-
-              {/* Metrics */}
-              <div className="grid grid-cols-2 gap-2 mb-4">
-                {lastCompleted.metrics.map((m) => (
-                  <div key={m.label} className="bg-bg-light rounded-lg px-3 py-2">
-                    <p className="text-[10px] uppercase tracking-wide text-gray-500 font-semibold">{m.label}</p>
-                    <div className="flex items-baseline gap-2 mt-0.5">
-                      <span className="text-sm font-bold text-navy">{m.after}</span>
-                      <span className={`text-[10px] font-semibold ${m.improved ? 'text-accent' : 'text-coral'}`}>
-                        from {m.before}
-                      </span>
+                {/* Key metrics — compact row */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-3">
+                  {lastCompleted.metrics.map((m) => (
+                    <div key={m.label} className="bg-white rounded-lg px-3 py-2">
+                      <p className="text-[10px] uppercase tracking-wide text-gray-500 font-semibold">{m.label}</p>
+                      <div className="flex items-baseline gap-1.5 mt-0.5">
+                        <span className="text-sm font-bold text-navy">{m.after}</span>
+                        <span className={`text-[10px] font-semibold ${m.improved ? 'text-accent' : 'text-coral'}`}>
+                          from {m.before}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
 
-              {/* Cue used */}
-              {lastCompleted.cueUsed && (
-                <div className="flex items-center gap-2 bg-accent/5 rounded-lg px-3 py-2 mb-4">
-                  <Repeat className="w-3.5 h-3.5 text-accent shrink-0" />
-                  <span className="text-[10px] uppercase tracking-wide text-accent font-bold shrink-0">Cue</span>
-                  <span className="text-sm text-navy font-medium italic">
-                    &ldquo;{lastCompleted.cueUsed}&rdquo;
+                {/* Cue + drills row */}
+                <div className="flex flex-wrap gap-2">
+                  {lastCompleted.cueUsed && (
+                    <div className="flex items-center gap-1.5 bg-accent/5 rounded-full px-3 py-1">
+                      <Repeat className="w-3 h-3 text-accent shrink-0" />
+                      <span className="text-[10px] text-accent font-bold uppercase">Cue:</span>
+                      <span className="text-xs text-navy font-medium italic">&ldquo;{lastCompleted.cueUsed}&rdquo;</span>
+                    </div>
+                  )}
+                  <div className="flex items-center gap-1.5 bg-data-blue/5 rounded-full px-3 py-1">
+                    <Dumbbell className="w-3 h-3 text-data-blue shrink-0" />
+                    <span className="text-[10px] text-data-blue font-bold uppercase">Drill:</span>
+                    <span className="text-xs text-navy font-medium">Ground pressure gate</span>
+                  </div>
+                </div>
+
+                {/* Key takeaway */}
+                <div className="border-l-2 border-accent pl-3 py-1 mt-3">
+                  <p className="text-[10px] uppercase tracking-wide text-gray-500 font-semibold mb-0.5">Where We Left Off</p>
+                  <p className="text-sm text-navy font-medium leading-relaxed">
+                    {lastCompleted.keyTakeaway}
+                  </p>
+                </div>
+              </>
+            ) : (
+              <p className="text-sm text-gray-400">No previous sessions</p>
+            )}
+          </div>
+
+          {/* ── Sub-card 2: On the Course ── */}
+          <div className="bg-bg-light rounded-lg border border-gray-100 p-4">
+            <div className="flex items-center gap-2 mb-3">
+              <Flag className="w-3.5 h-3.5 text-warm-amber" />
+              <span className="text-[10px] uppercase tracking-wide text-warm-amber font-bold">On the Course</span>
+              {latestRound && (
+                <span className="text-[10px] text-gray-400 ml-auto">Latest: {latestRound.course}</span>
+              )}
+            </div>
+
+            {latestRound ? (
+              <>
+                <div className="flex items-center gap-4 mb-3">
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-lg font-bold text-navy">{latestRound.score}</span>
+                    <span className="text-xs text-coral font-semibold">+{latestRound.scoreToPar}</span>
+                  </div>
+                  <div className="h-4 w-px bg-gray-200" />
+                  <div className="flex gap-3 text-xs">
+                    <span className={latestRound.gir < 40 ? 'text-coral font-semibold' : 'text-gray-600'}>
+                      GIR {latestRound.gir.toFixed(0)}%
+                    </span>
+                    <span className="text-gray-600">
+                      FW {latestRound.fairways.toFixed(0)}%
+                    </span>
+                    <span className={latestRound.puttsPerRound > 30 ? 'text-coral font-semibold' : 'text-gray-600'}>
+                      {latestRound.puttsPerRound} putts
+                    </span>
+                    <span className="text-gray-600">
+                      {latestRound.proximityToHole} prox
+                    </span>
+                  </div>
+                </div>
+
+                {/* Course-derived insights — compact */}
+                <div className="space-y-1.5">
+                  {girBelow40 && (
+                    <div className="flex items-start gap-2">
+                      <AlertTriangle className="w-3 h-3 text-warm-amber mt-0.5 shrink-0" />
+                      <p className="text-xs text-gray-700">
+                        <strong className="text-navy">GIR below 40%</strong> — approach shots are the biggest scoring leak.
+                      </p>
+                    </div>
+                  )}
+                  {puttingHigh && (
+                    <div className="flex items-start gap-2">
+                      <AlertTriangle className="w-3 h-3 text-warm-amber mt-0.5 shrink-0" />
+                      <p className="text-xs text-gray-700">
+                        <strong className="text-navy">31 putts</strong> — proximity ({latestRound.proximityToHole}) says this is an approach problem, not putting.
+                      </p>
+                    </div>
+                  )}
+                  <div className="flex items-start gap-2">
+                    <Target className="w-3 h-3 text-data-blue mt-0.5 shrink-0" />
+                    <p className="text-xs text-gray-700">
+                      <strong className="text-navy">7-iron dispersion 22 yds L-R</strong> — strike improvements haven&apos;t fully transferred to the course yet.
+                    </p>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <p className="text-sm text-gray-400">No recent rounds</p>
+            )}
+          </div>
+
+          {/* ── Sub-card 3: AI Recommendation ── */}
+          <div className="bg-accent/5 border border-accent/15 rounded-lg p-4">
+            <div className="flex items-center gap-2 mb-3">
+              <Sparkles className="w-3.5 h-3.5 text-accent" />
+              <span className="text-[10px] uppercase tracking-wide text-accent font-bold">AI Session Recommendation</span>
+            </div>
+
+            <p className="text-sm text-gray-700 leading-relaxed mb-3">
+              {brief?.todaysObjective ?? 'No session objective set.'}
+            </p>
+
+            <div className="space-y-2">
+              {lastCompleted?.coachNotes && (
+                <div className="flex items-start gap-2 text-sm text-gray-700">
+                  <Lightbulb className="w-3.5 h-3.5 text-accent mt-0.5 shrink-0" />
+                  <span>
+                    <strong className="text-navy">From Session {lastCompleted.sessionNumber}:</strong>{' '}
+                    {lastCompleted.coachNotes.split('.').slice(0, 2).join('.')}.
                   </span>
                 </div>
               )}
-
-              {/* Key takeaway */}
-              <div className="border-l-2 border-accent pl-3 py-1">
-                <p className="text-[10px] uppercase tracking-wide text-gray-500 font-semibold mb-1">Continue From Here</p>
-                <p className="text-sm text-navy font-medium leading-relaxed">
-                  {lastCompleted.keyTakeaway}
-                </p>
+              {girBelow40 && (
+                <div className="flex items-start gap-2 text-sm text-gray-700">
+                  <Lightbulb className="w-3.5 h-3.5 text-accent mt-0.5 shrink-0" />
+                  <span>
+                    <strong className="text-navy">Course data supports today&apos;s focus</strong> — GIR is {latestRound?.gir.toFixed(0)}%, directly tied to iron strike quality. Wedge work will compound here.
+                  </span>
+                </div>
+              )}
+              <div className="flex items-start gap-2 text-sm text-gray-700">
+                <Lightbulb className="w-3.5 h-3.5 text-accent mt-0.5 shrink-0" />
+                <span>Use <strong className="text-navy">external focus cues only</strong> — player over-processes internal mechanics.</span>
               </div>
-            </>
-          ) : (
-            <p className="text-sm text-gray-400">No previous sessions</p>
-          )}
-        </div>
+              {partialRegression && (
+                <div className="flex items-start gap-2 text-sm text-gray-700">
+                  <AlertTriangle className="w-3.5 h-3.5 text-warm-amber mt-0.5 shrink-0" />
+                  <span><strong className="text-navy">Expect partial regression</strong> — last session showed cue needs reinforcement after time off.</span>
+                </div>
+              )}
+            </div>
+          </div>
 
-        {/* ═══════════════════════════════════════════════════════════
-            SECTION 3: ON-COURSE INTELLIGENCE
-            ═══════════════════════════════════════════════════════════ */}
-        <div className="flex-1 min-w-0 bg-white rounded-xl border border-gray-200 p-6">
+        </div>
+      </div>
+
+      {/* ═══════════════════════════════════════════════════════════════
+          ON-COURSE INTELLIGENCE
+          ═══════════════════════════════════════════════════════════════ */}
+      <div className="mb-6">
+        <div className="bg-white rounded-xl border border-gray-200 p-6">
           <div className="flex items-center gap-2 mb-4">
             <BarChart3 className="w-4 h-4 text-warm-amber" />
             <h2 className="text-navy font-bold text-base">On-Course Intelligence</h2>
