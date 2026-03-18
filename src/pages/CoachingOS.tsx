@@ -24,19 +24,21 @@ import {
 /** Hook: reveals shots one at a time with delay to simulate real-time data */
 function useRealtimeShots(allShots: ShotData[], intervalMs = 1800) {
   const [visibleCount, setVisibleCount] = useState(3); // start with warm-up
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const totalRef = useRef(allShots.length);
+  totalRef.current = allShots.length;
 
   useEffect(() => {
-    if (visibleCount >= allShots.length) return;
-    timerRef.current = setInterval(() => {
+    const timer = setInterval(() => {
       setVisibleCount(prev => {
-        const next = prev + 1;
-        if (next >= allShots.length && timerRef.current) clearInterval(timerRef.current);
-        return next;
+        if (prev >= totalRef.current) {
+          clearInterval(timer);
+          return prev;
+        }
+        return prev + 1;
       });
     }, intervalMs);
-    return () => { if (timerRef.current) clearInterval(timerRef.current); };
-  }, [allShots.length, intervalMs, visibleCount]);
+    return () => clearInterval(timer);
+  }, [intervalMs]);
 
   return allShots.slice(0, visibleCount);
 }
