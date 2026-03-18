@@ -1,0 +1,273 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand palette — Looper.AI brand guidelines */
+  --color-navy: #1C2B2D;
+  --color-accent: #3A9D78;
+  --color-accent-light: #4DB88A;
+  --color-data-blue: #4A90D9;
+  --color-warm-amber: #D4A843;
+  --color-coral: #C45C4A;
+  --color-bg-light: #F7F8F9;
+  --color-bg-dark: #0F1A1C;
+  --color-card-dark: #1A2D30;
+  --color-border-dark: #2D4A4F;
+
+  --font-sans: Inter, system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', Menlo, monospace;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Focus-visible rings for keyboard accessibility */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-accent-light);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.mobile-scroll::-webkit-scrollbar {
+  width: 0px;
+}
+
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -20;
+  }
+}
+
+.animate-dash-flow {
+  animation: dash-flow 1s linear infinite;
+}
+
+/* Page fade-in transition */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fade-in 200ms ease;
+}
+
+/* Cursor pointer on all interactive elements */
+a, button, [role="button"], [tabindex="0"] {
+  cursor: pointer;
+}
+
+/* Button hover/active micro-interactions */
+button:not(:disabled):hover, a.btn:hover {
+  filter: brightness(1.05);
+}
+
+button:not(:disabled):active, a.btn:active {
+  transform: scale(0.98);
+}
+
+/* ── Liquid Glass Design System ──────────────────────────── */
+
+/* Ambient background — subtle drifting green/teal glows */
+.ambient-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 600px 400px at 30% 20%, rgba(58, 157, 120, 0.06), transparent),
+    radial-gradient(ellipse 500px 500px at 70% 80%, rgba(45, 74, 79, 0.06), transparent),
+    linear-gradient(180deg, #0A1415 0%, #1C2B2D 100%);
+  animation: ambientShift 20s ease-in-out infinite alternate;
+}
+
+@keyframes ambientShift {
+  0%   { background-position: 0% 0%; }
+  100% { background-position: 100% 100%; }
+}
+
+/* Glass card — dark variant (spine, session capture, landing) */
+.glass-card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  transition: all 200ms ease;
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Glass card — light variant (golfer mobile app) */
+.glass-card-light {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+/* Glass sidebar — frosted panel with noise overlay */
+.glass-sidebar {
+  background: linear-gradient(180deg, rgba(12, 20, 22, 0.95) 0%, rgba(28, 43, 45, 0.92) 100%);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  position: relative;
+}
+
+.glass-sidebar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.02;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+}
+
+/* Scroll reveal animation */
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 600ms ease, transform 600ms ease;
+}
+
+.fade-in-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Phone frame gradient border */
+.phone-gradient-border {
+  background: linear-gradient(145deg, rgba(58, 157, 120, 0.15), rgba(45, 74, 79, 0.1), rgba(12, 20, 22, 0.9));
+  border-radius: 48px;
+  padding: 4px;
+}
+
+/* ── Page transition ─────────────────────────────────────── */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-page-enter {
+  animation: page-enter 350ms ease-out both;
+}
+
+/* ── AI pulse glow ───────────────────────────────────────── */
+@keyframes ai-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(58, 157, 120, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(58, 157, 120, 0); }
+}
+
+.animate-ai-pulse {
+  animation: ai-pulse 2s ease-in-out infinite;
+}
+
+/* ── Staggered fade-in for lists ─────────────────────────── */
+@keyframes stagger-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-stagger-in {
+  animation: stagger-in 400ms ease-out both;
+}
+
+/* ── KPI pulse (number update flash) ─────────────────────── */
+@keyframes kpi-flash {
+  0% { background-color: rgba(58, 157, 120, 0.15); }
+  100% { background-color: transparent; }
+}
+
+.animate-kpi-flash {
+  animation: kpi-flash 800ms ease-out;
+}
+
+/* ── Gauge draw animation ────────────────────────────────── */
+@keyframes gauge-draw {
+  from { stroke-dashoffset: var(--gauge-circumference); }
+  to { stroke-dashoffset: var(--gauge-offset); }
+}
+
+.animate-gauge-draw {
+  animation: gauge-draw 1.2s ease-out forwards;
+}
+
+/* ── Notification slide-in ───────────────────────────────── */
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 400ms ease-out both;
+}
+
+/* ── Pull-to-refresh indicator ───────────────────────────── */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin 1s linear infinite;
+}
+
+/* ── Toast notification ──────────────────────────────────── */
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-toast-in {
+  animation: toast-in 300ms ease-out both;
+}
