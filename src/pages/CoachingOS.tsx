@@ -655,15 +655,33 @@ export default function CoachingOS() {
                   }}>
                     <span style={{ fontFamily: F.brand, fontSize: 12, color: C.dim }}>Select reference</span>
                   </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginTop: 8 }}>
-                    {['Tour pro — Rory McIlroy P6', 'Previous best — Session 2, Swing 9', '3D avatar overlay'].map((ref) => (
-                      <div key={ref} style={{
-                        fontFamily: F.brand, fontSize: 11, color: C.body, padding: '4px 8px',
-                        borderRadius: 6, background: C.surfaceAlt, cursor: 'pointer',
-                      }}>
-                        {ref}
-                      </div>
-                    ))}
+                  {/* AI-recommended comparisons based on session focus */}
+                  <div style={{ marginTop: 8, padding: '6px 8px', background: `${C.accent}11`, borderRadius: 8, border: `0.5px solid ${C.accent}33` }}>
+                    <div style={{ fontFamily: F.data, fontSize: 8, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '.08em', color: C.accent, marginBottom: 4 }}>
+                      AI Recommended
+                    </div>
+                    <div style={{ fontFamily: F.brand, fontSize: 10, color: C.muted, marginBottom: 6, lineHeight: 1.4 }}>
+                      Based on current focus: <span style={{ color: C.body, fontWeight: 600 }}>strike consistency + face control</span>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                      {[
+                        { label: 'Collin Morikawa — P6 delivery', reason: 'Elite low-point control, similar build. Iron strike pattern closest to coaching target.' },
+                        { label: 'Matt Fitzpatrick — impact sequence', reason: 'Compact swing with exceptional face stability through impact zone.' },
+                        { label: 'Your best — Session 2, Swing 9', reason: 'Post-cue swing with best strike + face-to-path combination this arc.' },
+                      ].map((ref, i) => (
+                        <div key={ref.label} style={{
+                          padding: '6px 8px', borderRadius: 6, background: C.surfaceAlt, cursor: 'pointer',
+                          border: i === 0 ? `0.5px solid ${C.accent}44` : `0.5px solid transparent`,
+                        }}>
+                          <div style={{ fontFamily: F.brand, fontSize: 11, color: C.body, fontWeight: 500 }}>
+                            {ref.label}
+                          </div>
+                          <div style={{ fontFamily: F.brand, fontSize: 10, color: C.muted, lineHeight: 1.3, marginTop: 2 }}>
+                            {ref.reason}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
