@@ -35,9 +35,9 @@ export interface Golfer {
 
 export const golfers: Golfer[] = [
   {
-    id: "golfer-mike",
-    name: "Mike Reynolds",
-    email: "mike.reynolds@email.com",
+    id: "golfer-moe",
+    name: "Moe Norman",
+    email: "moe.norman@email.com",
     handicapIndex: 15.2,
     handicapTrend: [18.1, 17.4, 16.8, 16.2, 15.9, 15.2],
     memberSince: "2025-09-15",

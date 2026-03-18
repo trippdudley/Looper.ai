@@ -44,10 +44,10 @@ function monthsAgo(dateStr: string): number {
 }
 
 function computeSessionAverages(
-  mikeSessions: Session[],
+  golferSessions: Session[],
   allShots: TrackmanShot[]
 ) {
-  return mikeSessions.map((session) => {
+  return golferSessions.map((session) => {
     const shots = allShots.filter((s) => s.sessionId === session.id);
     const count = shots.length || 1;
     const avgClubSpeed =
@@ -73,7 +73,7 @@ const systemColors: Record<string, { bg: string; text: string }> = {
 };
 
 export default function GolferLookup() {
-  const [query, setQuery] = useState('Mike Reynolds');
+  const [query, setQuery] = useState('Moe Norman');
 
   const golfer = useMemo(() => {
     if (!query.trim()) return null;
@@ -87,36 +87,36 @@ export default function GolferLookup() {
     );
   }, [query]);
 
-  const mikeSessions = useMemo(() => {
+  const golferSessions = useMemo(() => {
     if (!golfer) return [];
     return sessions
       .filter((s) => s.golferId === golfer.id)
       .sort((a, b) => a.date.localeCompare(b.date));
   }, [golfer]);
 
-  const mikeShots = useMemo(() => {
+  const golferShots = useMemo(() => {
     if (!golfer) return [];
-    const sessionIds = new Set(mikeSessions.map((s) => s.id));
+    const sessionIds = new Set(golferSessions.map((s) => s.id));
     return trackmanShots.filter((s) => sessionIds.has(s.sessionId));
-  }, [golfer, mikeSessions]);
+  }, [golfer, golferSessions]);
 
   const avgClubSpeed = useMemo(() => {
-    if (mikeShots.length === 0) return 0;
+    if (golferShots.length === 0) return 0;
     return (
       Math.round(
-        (mikeShots.reduce((sum, s) => sum + s.clubSpeed, 0) /
-          mikeShots.length) *
+        (golferShots.reduce((sum, s) => sum + s.clubSpeed, 0) /
+          golferShots.length) *
           10
       ) / 10
     );
-  }, [mikeShots]);
+  }, [golferShots]);
 
   const sessionTrends = useMemo(
-    () => computeSessionAverages(mikeSessions, trackmanShots),
-    [mikeSessions]
+    () => computeSessionAverages(golferSessions, trackmanShots),
+    [golferSessions]
   );
 
-  const latestSession = mikeSessions[mikeSessions.length - 1] ?? null;
+  const latestSession = golferSessions[golferSessions.length - 1] ?? null;
 
   const handicapData = golfer
     ? golfer.handicapTrend.map((v, i) => ({ idx: i, value: v }))

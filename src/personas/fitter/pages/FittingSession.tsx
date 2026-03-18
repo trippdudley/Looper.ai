@@ -58,7 +58,7 @@ export default function FittingSession() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [navigate]);
 
-  const golfer = golfers.find((g) => g.id === 'golfer-mike')!;
+  const golfer = golfers.find((g) => g.id === 'golfer-moe')!;
 
   // Session averages (driver only, all shafts combined for the overview)
   const driverShots = fittingShots.filter((s) => s.club === 'Driver');

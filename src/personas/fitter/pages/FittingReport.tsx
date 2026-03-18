@@ -80,7 +80,7 @@ export default function FittingReport() {
       {/* ── Header ── */}
       <div>
         <h1 className="text-2xl text-white font-bold">
-          Fitting Report &mdash; Mike Reynolds
+          Fitting Report &mdash; Moe Norman
         </h1>
         <p className="text-sm text-gray-400 mt-1">March 8, 2026</p>
       </div>
@@ -279,7 +279,7 @@ export default function FittingReport() {
             Golfer Equipment Profile
           </Link>
           <Link
-            to="/coach/students/golfer-mike"
+            to="/coach/students/golfer-moe"
             className="inline-flex items-center gap-2 text-xs bg-white/5 rounded-lg border border-white/10 px-3 py-2 hover:border-accent/40 transition-colors text-gray-300"
           >
             <span className="w-4 h-4 rounded-full bg-data-blue/20 flex items-center justify-center text-[8px] font-bold text-data-blue">C</span>

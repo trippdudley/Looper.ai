@@ -99,7 +99,7 @@ export default function StudentDetail() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [navigate]);
 
-  const golfer: Golfer = golfers.find((g) => g.id === id) || golfers.find((g) => g.id === 'golfer-mike')!;
+  const golfer: Golfer = golfers.find((g) => g.id === id) || golfers.find((g) => g.id === 'golfer-moe')!;
   const golferSessions: Session[] = sessions
     .filter((s) => s.golferId === golfer.id)
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());

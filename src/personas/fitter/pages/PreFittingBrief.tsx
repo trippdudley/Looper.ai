@@ -52,7 +52,7 @@ export default function PreFittingBrief() {
                 <User className="w-5 h-5 text-gray-400" />
               </div>
               <div>
-                <h2 className="text-white font-semibold">Mike Reynolds</h2>
+                <h2 className="text-white font-semibold">Moe Norman</h2>
                 <p className="text-xs text-gray-500">
                   HCP{' '}
                   <span className="text-white font-mono font-semibold">

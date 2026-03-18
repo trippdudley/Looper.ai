@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { golfers } from '../../../data/golfers';
 
-const golfer = golfers.find((g) => g.id === 'golfer-mike')!;
+const golfer = golfers.find((g) => g.id === 'golfer-moe')!;
 
 // ── Parse equipment strings ──
 function splitDriverParts(raw: string) {

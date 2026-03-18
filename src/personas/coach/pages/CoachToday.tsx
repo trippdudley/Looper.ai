@@ -20,7 +20,7 @@ import { drills } from '../../../data/drills';
 const todaySchedule = [
   {
     time: '9:00 AM',
-    golferId: 'golfer-mike',
+    golferId: 'golfer-moe',
     type: 'full-swing' as const,
     focus: 'Driver Consistency Tune-Up',
     duration: '60 min',
@@ -47,7 +47,7 @@ const todaySchedule = [
 const activityFeed = [
   {
     id: 1,
-    text: 'Mike Reynolds completed practice session',
+    text: 'Moe Norman completed practice session',
     time: '2 hours ago',
     color: 'bg-accent',
     icon: Activity,

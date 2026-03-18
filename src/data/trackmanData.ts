@@ -20,7 +20,7 @@ export interface TrackmanShot {
 
 export const trackmanShots: TrackmanShot[] = [
   // ===== SESSION 1 — Dec 10, 2025 — Initial Assessment =====
-  // Early session: Mike's typical pattern — driver slice, poor weight transfer
+  // Early session: Moe's typical pattern — driver slice, poor weight transfer
   {
     id: "s1-shot-01", sessionId: "session-1", shotNumber: 1, club: "Driver",
     clubSpeed: 94.2, ballSpeed: 131.5, launchAngle: 12.8, spinRate: 3180,
