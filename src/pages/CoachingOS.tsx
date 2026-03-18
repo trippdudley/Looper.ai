@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, ChevronDown, ChevronUp, Play, Pause, SkipBack, SkipForward } from 'lucide-react';
+import { ArrowLeft, ChevronDown, ChevronUp, Play, Pause } from 'lucide-react';
 import type { TabId, ShotData } from '../data/coachingOSData';
 import {
   shots, sessionContext, tabs,
