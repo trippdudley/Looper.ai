@@ -377,6 +377,39 @@ export default function SessionReview() {
             </button>
           </div>
         </div>
+
+        {/* Cross-persona links — show how data flows to other personas */}
+        <div className="bg-accent/5 rounded-xl border border-accent/20 p-5 mt-6">
+          <p className="text-xs uppercase tracking-wider text-accent font-semibold mb-3">
+            Where this session data goes
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              to="/golfer/lessons/session-1"
+              className="inline-flex items-center gap-2 text-sm bg-white rounded-lg border border-gray-200 px-4 py-2 hover:border-accent/40 transition-colors"
+            >
+              <span className="w-5 h-5 rounded-full bg-accent/10 flex items-center justify-center text-[10px] font-bold text-accent">G</span>
+              <span className="text-gray-700">Golfer Lesson View</span>
+              <ArrowRight className="w-3.5 h-3.5 text-gray-400" />
+            </Link>
+            <Link
+              to="/fitter/brief"
+              className="inline-flex items-center gap-2 text-sm bg-white rounded-lg border border-gray-200 px-4 py-2 hover:border-accent/40 transition-colors"
+            >
+              <span className="w-5 h-5 rounded-full bg-data-blue/10 flex items-center justify-center text-[10px] font-bold text-data-blue">F</span>
+              <span className="text-gray-700">Fitter AI Brief</span>
+              <ArrowRight className="w-3.5 h-3.5 text-gray-400" />
+            </Link>
+            <Link
+              to="/spine"
+              className="inline-flex items-center gap-2 text-sm bg-white rounded-lg border border-gray-200 px-4 py-2 hover:border-accent/40 transition-colors"
+            >
+              <span className="w-5 h-5 rounded-full bg-navy/10 flex items-center justify-center text-[10px] font-bold text-navy">S</span>
+              <span className="text-gray-700">Data Spine</span>
+              <ArrowRight className="w-3.5 h-3.5 text-gray-400" />
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

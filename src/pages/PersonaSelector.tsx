@@ -149,20 +149,21 @@ export default function PersonaSelector() {
           </Link>
         </div>
 
-        {/* Persona cards */}
+        {/* Persona cards — staggered entrance */}
         <div ref={personaRef} className="fade-in-up w-full">
           <p className="text-xs uppercase tracking-wider text-gray-500 font-semibold text-center mb-4">
             Enter the Prototype
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
-            {personas.map((p) => {
+            {personas.map((p, i) => {
               const Icon = p.icon;
               return (
                 <Link
                   key={p.path}
                   to={p.path}
-                  className="glass-card p-6 text-center block"
+                  className="glass-card p-6 text-center block animate-stagger-in"
+                  style={{ animationDelay: `${200 + i * 150}ms` }}
                 >
                   <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-3">
                     <Icon className="w-6 h-6 text-accent-light" />

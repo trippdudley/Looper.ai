@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -20,6 +20,26 @@ import {
   getInsightForShot, getRecommendationForShot,
   fmtDelta, confidenceLevel,
 } from '../data/coachingOSData';
+
+/** Hook: reveals shots one at a time with delay to simulate real-time data */
+function useRealtimeShots(allShots: ShotData[], intervalMs = 1800) {
+  const [visibleCount, setVisibleCount] = useState(3); // start with warm-up
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    if (visibleCount >= allShots.length) return;
+    timerRef.current = setInterval(() => {
+      setVisibleCount(prev => {
+        const next = prev + 1;
+        if (next >= allShots.length && timerRef.current) clearInterval(timerRef.current);
+        return next;
+      });
+    }, intervalMs);
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, [allShots.length, intervalMs, visibleCount]);
+
+  return allShots.slice(0, visibleCount);
+}
 
 // ─── Reusable sub-components (inline) ───────────────────────────
 
@@ -207,8 +227,24 @@ export default function CoachingOS() {
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [expandedLessons, setExpandedLessons] = useState<Set<number>>(new Set());
   const [onCourseExpanded, setOnCourseExpanded] = useState(true);
+  const [kpiFlash, setKpiFlash] = useState(false);
 
-  const currentShot = useMemo(() => shots.find((s) => s.id === activeShot) || shots[shots.length - 1], [activeShot]);
+  // Simulate real-time shot arrival
+  const visibleShots = useRealtimeShots(shots, 2200);
+
+  // Flash KPI tiles when a new shot arrives
+  const prevCountRef = useRef(visibleShots.length);
+  useEffect(() => {
+    if (visibleShots.length > prevCountRef.current) {
+      setKpiFlash(true);
+      setActiveShot(visibleShots[visibleShots.length - 1].id);
+      const t = setTimeout(() => setKpiFlash(false), 800);
+      prevCountRef.current = visibleShots.length;
+      return () => clearTimeout(t);
+    }
+  }, [visibleShots]);
+
+  const currentShot = useMemo(() => visibleShots.find((s) => s.id === activeShot) || visibleShots[visibleShots.length - 1], [activeShot, visibleShots]);
   const insight = useMemo(() => getInsightForShot(activeShot), [activeShot]);
   const recommendation = useMemo(() => getRecommendationForShot(activeShot), [activeShot]);
 
@@ -415,7 +451,7 @@ export default function CoachingOS() {
             {/* Shot entries */}
             {!shotRailCollapsed && (
               <div style={{ flex: 1, overflowY: 'auto' }}>
-                {[...shots].reverse().map((shot) => {
+                {[...visibleShots].reverse().map((shot, revIdx) => {
                   const isActive = shot.id === activeShot;
                   const badgeBg = isActive ? C.accent : shot.flagged ? C.flag : C.surfaceAlt;
                   const badgeColor = isActive || shot.flagged ? 'white' : C.ink;
@@ -424,6 +460,7 @@ export default function CoachingOS() {
                   return (
                     <button
                       key={shot.id}
+                      className={revIdx === 0 ? 'animate-stagger-in' : ''}
                       onClick={() => setActiveShot(shot.id)}
                       style={{
                         width: '100%', display: 'flex', flexDirection: 'column',
@@ -466,7 +503,7 @@ export default function CoachingOS() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
 
                 {/* KPI Grid (4 columns) */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0,1fr))', gap: 10 }}>
+                <div className={kpiFlash ? 'animate-kpi-flash' : ''} style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0,1fr))', gap: 10, borderRadius: 12 }}>
                   <KpiTile
                     label="Carry" value={String(currentShot.carry)} unit="yds"
                     delta={carryDelta} deltaType="yds"
@@ -512,7 +549,9 @@ export default function CoachingOS() {
                   </div>
 
                   {/* Strike Map */}
-                  <StrikeMapSVG allShots={shots} activeShotId={activeShot} />
+                  <div role="img" aria-label={`Strike map showing ${visibleShots.length} impact locations on clubface. Active shot ${activeShot}.`}>
+                    <StrikeMapSVG allShots={visibleShots} activeShotId={activeShot} />
+                  </div>
                 </div>
 
                 {/* AI Insight Card */}

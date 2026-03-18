@@ -1,79 +1,117 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import ErrorBoundary from './components/ui/ErrorBoundary';
+import DemoWalkthroughBanner from './components/ui/DemoWalkthroughBanner';
+import { SkeletonCard } from './components/ui/Skeleton';
+
+// Eagerly loaded (landing page — must be fast)
 import PersonaSelector from './pages/PersonaSelector';
-import ThesisPage from './pages/ThesisPage';
-import LooperNarrative from './components/looper-narrative';
-import GolferLayout from './personas/golfer/GolferLayout';
-import GolferHome from './personas/golfer/pages/GolferHome';
-import LessonHistory from './personas/golfer/pages/LessonHistory';
-import LessonDetail from './personas/golfer/pages/LessonDetail';
-import SwingProfile from './personas/golfer/pages/SwingProfile';
-import Practice from './personas/golfer/pages/Practice';
-import CoachLayout from './personas/coach/CoachLayout';
-import CoachToday from './personas/coach/pages/CoachToday';
-import StudentRoster from './personas/coach/pages/StudentRoster';
-import StudentDetail from './personas/coach/pages/StudentDetail';
-import SessionCapture from './personas/coach/pages/SessionCapture';
-import SessionReview from './personas/coach/pages/SessionReview';
-import PreSessionBrief from './personas/coach/pages/PreSessionBrief';
-import Analytics from './personas/coach/pages/Analytics';
-import CoachSession from './personas/coach/pages/CoachSession';
-import FitterLayout from './personas/fitter/FitterLayout';
-import GolferLookup from './personas/fitter/pages/GolferLookup';
-import PreFittingBrief from './personas/fitter/pages/PreFittingBrief';
-import FittingSession from './personas/fitter/pages/FittingSession';
-import FittingReport from './personas/fitter/pages/FittingReport';
-import EquipmentProfile from './personas/fitter/pages/EquipmentProfile';
-import SpineLayout from './personas/spine/SpineLayout';
-import DataSpine from './personas/spine/pages/DataSpine';
-import AudienceEngine from './personas/spine/pages/AudienceEngine';
-import IntegrationHub from './personas/spine/pages/IntegrationHub';
-import CoachingOS from './pages/CoachingOS';
-import SizzleReel from './pages/SizzleReel';
+
+// Lazy-loaded persona routes
+const ThesisPage = lazy(() => import('./pages/ThesisPage'));
+const LooperNarrative = lazy(() => import('./components/looper-narrative'));
+const SizzleReel = lazy(() => import('./pages/SizzleReel'));
+const CoachingOS = lazy(() => import('./pages/CoachingOS'));
+
+const GolferLayout = lazy(() => import('./personas/golfer/GolferLayout'));
+const GolferHome = lazy(() => import('./personas/golfer/pages/GolferHome'));
+const LessonHistory = lazy(() => import('./personas/golfer/pages/LessonHistory'));
+const LessonDetail = lazy(() => import('./personas/golfer/pages/LessonDetail'));
+const SwingProfile = lazy(() => import('./personas/golfer/pages/SwingProfile'));
+const Practice = lazy(() => import('./personas/golfer/pages/Practice'));
+
+const CoachLayout = lazy(() => import('./personas/coach/CoachLayout'));
+const CoachToday = lazy(() => import('./personas/coach/pages/CoachToday'));
+const StudentRoster = lazy(() => import('./personas/coach/pages/StudentRoster'));
+const StudentDetail = lazy(() => import('./personas/coach/pages/StudentDetail'));
+const SessionCapture = lazy(() => import('./personas/coach/pages/SessionCapture'));
+const SessionReview = lazy(() => import('./personas/coach/pages/SessionReview'));
+const PreSessionBrief = lazy(() => import('./personas/coach/pages/PreSessionBrief'));
+const Analytics = lazy(() => import('./personas/coach/pages/Analytics'));
+const CoachSession = lazy(() => import('./personas/coach/pages/CoachSession'));
+
+const FitterLayout = lazy(() => import('./personas/fitter/FitterLayout'));
+const GolferLookup = lazy(() => import('./personas/fitter/pages/GolferLookup'));
+const PreFittingBrief = lazy(() => import('./personas/fitter/pages/PreFittingBrief'));
+const FittingSession = lazy(() => import('./personas/fitter/pages/FittingSession'));
+const FittingReport = lazy(() => import('./personas/fitter/pages/FittingReport'));
+const EquipmentProfile = lazy(() => import('./personas/fitter/pages/EquipmentProfile'));
+
+const SpineLayout = lazy(() => import('./personas/spine/SpineLayout'));
+const DataSpine = lazy(() => import('./personas/spine/pages/DataSpine'));
+const AudienceEngine = lazy(() => import('./personas/spine/pages/AudienceEngine'));
+const IntegrationHub = lazy(() => import('./personas/spine/pages/IntegrationHub'));
+
+function LoadingFallback() {
+  return (
+    <div className="min-h-screen flex items-center justify-center p-8">
+      <div className="w-full max-w-md space-y-4">
+        <SkeletonCard lines={3} />
+        <SkeletonCard lines={2} />
+      </div>
+    </div>
+  );
+}
+
+function AppRoutes() {
+  const location = useLocation();
+
+  return (
+    <>
+      <Suspense fallback={<LoadingFallback />}>
+        <Routes>
+          <Route path="/" element={<PersonaSelector />} />
+          <Route path="/thesis" element={<ErrorBoundary><ThesisPage /></ErrorBoundary>} />
+          <Route path="/narrative" element={<ErrorBoundary><LooperNarrative /></ErrorBoundary>} />
+          <Route path="/coaching-os" element={<Navigate to="/coach/live" replace />} />
+          <Route path="/vision" element={<ErrorBoundary><SizzleReel /></ErrorBoundary>} />
+
+          <Route path="/golfer" element={<ErrorBoundary fallbackTitle="Golfer view error"><GolferLayout /></ErrorBoundary>}>
+            <Route index element={<GolferHome />} />
+            <Route path="lessons" element={<LessonHistory />} />
+            <Route path="lessons/:id" element={<LessonDetail />} />
+            <Route path="swing" element={<SwingProfile />} />
+            <Route path="practice" element={<Practice />} />
+          </Route>
+
+          <Route path="/coach" element={<ErrorBoundary fallbackTitle="Coach view error"><CoachLayout /></ErrorBoundary>}>
+            <Route index element={<CoachToday />} />
+            <Route path="students" element={<StudentRoster />} />
+            <Route path="students/:id" element={<StudentDetail />} />
+            <Route path="brief/:id" element={<PreSessionBrief />} />
+            <Route path="capture" element={<SessionCapture />} />
+            <Route path="review" element={<SessionReview />} />
+            <Route path="analytics" element={<Analytics />} />
+            <Route path="session" element={<CoachSession />} />
+            <Route path="live" element={<CoachingOS />} />
+          </Route>
+
+          <Route path="/fitter" element={<ErrorBoundary fallbackTitle="Fitter view error"><FitterLayout /></ErrorBoundary>}>
+            <Route index element={<GolferLookup />} />
+            <Route path="brief" element={<PreFittingBrief />} />
+            <Route path="session" element={<FittingSession />} />
+            <Route path="report" element={<FittingReport />} />
+            <Route path="equipment" element={<EquipmentProfile />} />
+          </Route>
+
+          <Route path="/spine" element={<ErrorBoundary fallbackTitle="Platform view error"><SpineLayout /></ErrorBoundary>}>
+            <Route index element={<DataSpine />} />
+            <Route path="audience" element={<AudienceEngine />} />
+            <Route path="integrations" element={<IntegrationHub />} />
+          </Route>
+        </Routes>
+      </Suspense>
+
+      {/* Cross-persona demo walkthrough banner */}
+      <DemoWalkthroughBanner currentPath={location.pathname} />
+    </>
+  );
+}
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<PersonaSelector />} />
-        <Route path="/thesis" element={<ThesisPage />} />
-        <Route path="/narrative" element={<LooperNarrative />} />
-        <Route path="/coaching-os" element={<Navigate to="/coach/live" replace />} />
-        <Route path="/vision" element={<SizzleReel />} />
-
-        <Route path="/golfer" element={<GolferLayout />}>
-          <Route index element={<GolferHome />} />
-          <Route path="lessons" element={<LessonHistory />} />
-          <Route path="lessons/:id" element={<LessonDetail />} />
-          <Route path="swing" element={<SwingProfile />} />
-          <Route path="practice" element={<Practice />} />
-        </Route>
-
-        <Route path="/coach" element={<CoachLayout />}>
-          <Route index element={<CoachToday />} />
-          <Route path="students" element={<StudentRoster />} />
-          <Route path="students/:id" element={<StudentDetail />} />
-          <Route path="brief/:id" element={<PreSessionBrief />} />
-          <Route path="capture" element={<SessionCapture />} />
-          <Route path="review" element={<SessionReview />} />
-          <Route path="analytics" element={<Analytics />} />
-          <Route path="session" element={<CoachSession />} />
-          <Route path="live" element={<CoachingOS />} />
-        </Route>
-
-        <Route path="/fitter" element={<FitterLayout />}>
-          <Route index element={<GolferLookup />} />
-          <Route path="brief" element={<PreFittingBrief />} />
-          <Route path="session" element={<FittingSession />} />
-          <Route path="report" element={<FittingReport />} />
-          <Route path="equipment" element={<EquipmentProfile />} />
-        </Route>
-
-        <Route path="/spine" element={<SpineLayout />}>
-          <Route index element={<DataSpine />} />
-          <Route path="audience" element={<AudienceEngine />} />
-          <Route path="integrations" element={<IntegrationHub />} />
-        </Route>
-      </Routes>
+      <AppRoutes />
     </BrowserRouter>
   );
 }

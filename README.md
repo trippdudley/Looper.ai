@@ -1,73 +1,93 @@
-# React + TypeScript + Vite
+# Looper.AI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Expertise, engineered.** — The decision platform for golf coaching and fitting.
 
-Currently, two official plugins are available:
+## What is Looper.AI?
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Looper.AI integrates three systems that don't exist today in the golf instruction industry:
 
-## React Compiler
+1. **The Coaching Record** — Persistent, structured capture of coaching sessions with audio transcription, video, launch monitor data, prescribed drills, and outcome tracking
+2. **The Coaching Intelligence Engine** — AI trained on real coaching outcomes, matching prescriptions to measured improvements
+3. **The Unified Data Spine** — A structured golfer profile that persists across coaches, facilities, and years
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Demo Overview
 
-## Expanding the ESLint configuration
+This prototype demonstrates the full product vision through four personas:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+| Persona | Route | Description |
+|---------|-------|-------------|
+| **Golfer** | `/golfer` | Mobile app — track improvement, review lessons, practice with purpose |
+| **Coach** | `/coach` | Desktop dashboard — capture sessions, diagnose limiting factors, see what works |
+| **Fitter** | `/fitter` | Desktop dashboard — fit with full context, AI-powered equipment recommendations |
+| **Platform** | `/spine` | Internal view — data spine, audience engine, integration hub |
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Additional Pages
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- `/vision` — 90-second animated product walkthrough (sizzle reel)
+- `/narrative` — Full narrative: thesis, problem, solution, flywheel, business model
+- `/thesis` — Business case with market sizing and five-year model
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Demo Walkthrough (recommended order)
+
+1. Start at `/` to see the persona selector
+2. Enter **Coach** → Today → Start a Live Session (`/coach/live`)
+3. After reviewing the session, see how data flows to the **Golfer** view (`/golfer/lessons`)
+4. Check the **Fitter** AI Brief (`/fitter/brief`) — powered by coaching data
+5. Explore the **Data Spine** (`/spine`) to see the full integration map
+
+## Tech Stack
+
+- **React 19** + **TypeScript** + **Vite**
+- **Tailwind CSS 4** with custom design tokens
+- **Recharts** for data visualizations
+- **Lucide React** for icons
+- Liquid Glass design system with frosted panels, ambient gradients, and scroll reveal animations
+
+## Getting Started
+
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Build
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run build    # TypeScript check + Vite production build
+npm run preview  # Serve the production build locally
 ```
+
+## Project Structure
+
+```
+src/
+├── pages/          # Top-level routes (PersonaSelector, CoachingOS, SizzleReel, ThesisPage)
+├── personas/       # User role layouts + pages
+│   ├── coach/      # 7 coach pages + layout
+│   ├── golfer/     # 5 golfer pages + mobile layout
+│   ├── fitter/     # 5 fitter pages + layout
+│   └── spine/      # 3 platform pages + layout
+├── components/
+│   ├── ui/         # Reusable primitives (Card, MetricCard, Badge, Skeleton, ErrorBoundary)
+│   ├── layout/     # Shell components (DesktopShell, MobileShell, Sidebar, TopBar)
+│   ├── charts/     # Data visualizations
+│   ├── sizzle/     # Animated scene components for the sizzle reel
+│   └── ...         # Domain-specific components
+├── data/           # Static mock data (golfers, sessions, drills, integrations)
+├── hooks/          # Custom hooks (useCountUp, useStaggeredReveal, useTypewriter)
+└── App.tsx         # Router with lazy-loaded routes and error boundaries
+```
+
+## Design Tokens
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| Navy | `#1C2B2D` | Primary text, headers |
+| Accent | `#3A9D78` | Primary green, CTAs |
+| Data Blue | `#4A90D9` | Charts, data highlights |
+| Warm Amber | `#D4A843` | Secondary highlights |
+| Coral | `#C45C4A` | Warnings, alerts |
+
+**Confidential** — Clickable Prototype — March 2026

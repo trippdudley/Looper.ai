@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { integrations } from '../../../data/integrations';
 import type { Integration } from '../../../data/integrations';
+import { CheckCircle, Loader2 } from 'lucide-react';
 
 type FilterTab = 'all' | 'connected' | 'available' | 'coming-soon';
 
@@ -62,6 +63,16 @@ const statusLabel: Record<string, string> = {
 
 export default function IntegrationHub() {
   const [activeFilter, setActiveFilter] = useState<FilterTab>('all');
+  const [testingId, setTestingId] = useState<string | null>(null);
+  const [testedIds, setTestedIds] = useState<Set<string>>(new Set());
+
+  const handleTestConnection = useCallback((id: string) => {
+    setTestingId(id);
+    setTimeout(() => {
+      setTestingId(null);
+      setTestedIds(prev => new Set([...prev, id]));
+    }, 1500);
+  }, []);
 
   const connectedCount = integrations.filter((i) => i.status === 'connected').length;
   const availableCount = integrations.filter((i) => i.status === 'available').length;
@@ -162,11 +173,34 @@ export default function IntegrationHub() {
                     </div>
                   </div>
 
-                  {/* Last Sync */}
-                  {integration.status === 'connected' && integration.lastSync && (
-                    <p className="text-xs text-gray-500 mt-2">
-                      Last sync: {relativeTime(integration.lastSync)}
-                    </p>
+                  {/* Last Sync + Test Connection */}
+                  {integration.status === 'connected' && (
+                    <div className="flex items-center justify-between mt-2">
+                      {integration.lastSync && (
+                        <p className="text-xs text-gray-500">
+                          Last sync: {relativeTime(integration.lastSync)}
+                        </p>
+                      )}
+                      <button
+                        onClick={() => handleTestConnection(integration.id)}
+                        disabled={testingId === integration.id}
+                        className="text-[10px] font-medium text-accent-light hover:text-white transition-colors flex items-center gap-1 disabled:opacity-50"
+                      >
+                        {testingId === integration.id ? (
+                          <>
+                            <Loader2 className="w-3 h-3 animate-spin" />
+                            Testing...
+                          </>
+                        ) : testedIds.has(integration.id) ? (
+                          <>
+                            <CheckCircle className="w-3 h-3" />
+                            Connected
+                          </>
+                        ) : (
+                          'Test Connection'
+                        )}
+                      </button>
+                    </div>
                   )}
                 </div>
               ))}

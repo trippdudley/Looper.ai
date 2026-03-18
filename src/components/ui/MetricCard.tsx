@@ -1,4 +1,5 @@
 import { LineChart, Line, ResponsiveContainer } from 'recharts';
+import { useCountUp } from '../../hooks/useCountUp';
 
 interface MetricCardProps {
   label: string;
@@ -9,6 +10,17 @@ interface MetricCardProps {
   className?: string;
 }
 
+function AnimatedValue({ value }: { value: string }) {
+  const numericPart = parseFloat(value.replace(/[^0-9.-]/g, ''));
+  const suffix = value.replace(/[0-9.-]/g, '').trim();
+  const animated = useCountUp(isNaN(numericPart) ? 0 : numericPart, 1000);
+
+  if (isNaN(numericPart)) return <>{value}</>;
+
+  const display = Number.isInteger(numericPart) ? Math.round(animated) : animated.toFixed(1);
+  return <>{display}{suffix}</>;
+}
+
 export default function MetricCard({ label, value, delta, deltaLabel, sparkData, className = '' }: MetricCardProps) {
   const chartData = sparkData?.map((v, i) => ({ i, v }));
 
@@ -16,7 +28,9 @@ export default function MetricCard({ label, value, delta, deltaLabel, sparkData,
     <div className={`bg-white rounded-xl shadow-sm p-4 ${className}`}>
       <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">{label}</p>
       <div className="flex items-end justify-between">
-        <p className="text-2xl font-bold text-navy">{value}</p>
+        <p className="text-2xl font-bold text-navy">
+          <AnimatedValue value={value} />
+        </p>
         {sparkData && chartData && (
           <div className="w-20 h-8">
             <ResponsiveContainer width="100%" height="100%">

@@ -42,7 +42,7 @@ export default function CoachLayout() {
         />
       }
     >
-      <div className="bg-bg-light p-6 min-h-full">
+      <div className="bg-bg-light p-6 min-h-full animate-page-enter">
         <Outlet />
       </div>
     </DesktopShell>

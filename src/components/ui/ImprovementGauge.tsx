@@ -1,3 +1,5 @@
+import { useCountUp } from '../../hooks/useCountUp';
+
 interface ImprovementGaugeProps {
   score: number;
   trend?: number;
@@ -6,6 +8,7 @@ interface ImprovementGaugeProps {
 
 export default function ImprovementGauge({ score, trend, trendLabel }: ImprovementGaugeProps) {
   const clampedScore = Math.max(0, Math.min(100, score));
+  const animatedScore = useCountUp(clampedScore, 1200);
 
   // SVG semicircle gauge using stroke-dasharray/stroke-dashoffset
   const cx = 60;
@@ -14,7 +17,7 @@ export default function ImprovementGauge({ score, trend, trendLabel }: Improveme
 
   // Semicircle arc length (half circumference)
   const halfCircumference = Math.PI * r;
-  const filled = (clampedScore / 100) * halfCircumference;
+  const filled = (animatedScore / 100) * halfCircumference;
   const offset = halfCircumference - filled;
 
   return (
@@ -33,7 +36,7 @@ export default function ImprovementGauge({ score, trend, trendLabel }: Improveme
           strokeDashoffset={0}
           transform={`rotate(180, ${cx}, ${cy})`}
         />
-        {/* Filled arc (accent green) */}
+        {/* Filled arc (accent green) — animated */}
         <circle
           cx={cx}
           cy={cy}
@@ -45,7 +48,7 @@ export default function ImprovementGauge({ score, trend, trendLabel }: Improveme
           strokeDasharray={`${halfCircumference} ${halfCircumference}`}
           strokeDashoffset={offset}
           transform={`rotate(180, ${cx}, ${cy})`}
-          className="transition-all duration-500 ease-out"
+          style={{ transition: 'stroke-dashoffset 0.1s linear' }}
         />
         {/* Score text in center */}
         <text
@@ -56,7 +59,7 @@ export default function ImprovementGauge({ score, trend, trendLabel }: Improveme
           className="fill-navy font-bold"
           fontSize="24"
         >
-          {score}
+          {Math.round(animatedScore)}
         </text>
       </svg>
       {/* Trend text below gauge */}

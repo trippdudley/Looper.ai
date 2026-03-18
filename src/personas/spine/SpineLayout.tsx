@@ -28,7 +28,7 @@ export default function SpineLayout() {
           />
         }
       >
-        <div className="bg-transparent p-6 min-h-full">
+        <div className="bg-transparent p-6 min-h-full animate-page-enter">
           <Outlet />
         </div>
       </DesktopShell>
