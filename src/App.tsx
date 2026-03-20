@@ -16,6 +16,8 @@ const TrackmanIntegration = lazy(() => import('./pages/TrackmanIntegration'));
 
 const GolferLayout = lazy(() => import('./personas/golfer/GolferLayout'));
 const GolferHome = lazy(() => import('./personas/golfer/pages/GolferHome'));
+const GameAnalytics = lazy(() => import('./personas/golfer/pages/GameAnalytics'));
+const CoachConnection = lazy(() => import('./personas/golfer/pages/CoachConnection'));
 const LessonHistory = lazy(() => import('./personas/golfer/pages/LessonHistory'));
 const LessonDetail = lazy(() => import('./personas/golfer/pages/LessonDetail'));
 const SwingProfile = lazy(() => import('./personas/golfer/pages/SwingProfile'));
@@ -69,6 +71,8 @@ function AppRoutes() {
 
           <Route path="/golfer" element={<ErrorBoundary fallbackTitle="Golfer view error"><GolferLayout /></ErrorBoundary>}>
             <Route index element={<GolferHome />} />
+            <Route path="game" element={<GameAnalytics />} />
+            <Route path="coach" element={<CoachConnection />} />
             <Route path="lessons" element={<LessonHistory />} />
             <Route path="lessons/:id" element={<LessonDetail />} />
             <Route path="swing" element={<SwingProfile />} />
