@@ -1,9 +1,9 @@
 import { useState, useMemo } from 'react';
-import { ChevronLeft, ChevronRight, AlertTriangle, MessageSquare, Mic } from 'lucide-react';
+import { ChevronLeft, ChevronRight, AlertTriangle, Mic } from 'lucide-react';
 import type { TrackmanShot } from '../../data/trackmanData';
 import { C, F } from './TPSColors';
 import {
-  sessionContext, aiInsights, recommendations, baselineAvg, playerHistory,
+  sessionContext, aiInsights, recommendations, playerHistory,
 } from '../../data/coachingOSData';
 
 // ─── Sub-tab type ────────────────────────────────────────────────
