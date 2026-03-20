@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, ChevronDown, ChevronUp, Play, Pause } from 'lucide-react';
+import { ArrowLeft, ChevronDown, ChevronUp, Play, Pause, Wifi } from 'lucide-react';
 import type { TabId, ShotData } from '../data/coachingOSData';
 import {
   shots, sessionContext, tabs,
@@ -949,18 +949,33 @@ export default function CoachingOS() {
           </span>
         </div>
 
-        {/* End Session */}
-        <button
-          onClick={() => navigate('/coach/review')}
-          style={{
-            fontFamily: F.brand, fontSize: 11, fontWeight: 600,
-            padding: '5px 14px', borderRadius: 6, cursor: 'pointer',
-            background: `${C.flag}10`, border: `1px solid ${C.flag}30`,
-            color: C.flag, transition: 'all 0.15s',
-          }}
-        >
-          End Session
-        </button>
+        {/* TrackMan + End Session */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <button
+            onClick={() => navigate('/coach/trackman')}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 5,
+              fontFamily: F.data, fontSize: 9, fontWeight: 700,
+              padding: '5px 12px', borderRadius: 6, cursor: 'pointer',
+              background: 'rgba(230,57,70,0.06)', border: '1px solid rgba(230,57,70,0.18)',
+              color: '#E63946', letterSpacing: '.04em',
+              transition: 'all 0.15s',
+            }}
+          >
+            <Wifi size={11} /> TRACKMAN
+          </button>
+          <button
+            onClick={() => navigate('/coach/review')}
+            style={{
+              fontFamily: F.brand, fontSize: 11, fontWeight: 600,
+              padding: '5px 14px', borderRadius: 6, cursor: 'pointer',
+              background: `${C.flag}10`, border: `1px solid ${C.flag}30`,
+              color: C.flag, transition: 'all 0.15s',
+            }}
+          >
+            End Session
+          </button>
+        </div>
       </div>
 
       {/* ═══ L2: CONTEXT BAR + FOCUS CHIP ═════════════════════════ */}
