@@ -11,8 +11,7 @@ import PersonaSelector from './pages/PersonaSelector';
 const ThesisPage = lazy(() => import('./pages/ThesisPage'));
 const LooperNarrative = lazy(() => import('./components/looper-narrative'));
 const SizzleReel = lazy(() => import('./pages/SizzleReel'));
-const CoachingOS = lazy(() => import('./pages/CoachingOS'));
-const TrackmanIntegration = lazy(() => import('./pages/TrackmanIntegration'));
+const CoachingOS = lazy(() => import('./pages/LiveSessionSideline'));
 
 const GolferLayout = lazy(() => import('./personas/golfer/GolferLayout'));
 const GolferHome = lazy(() => import('./personas/golfer/pages/GolferHome'));
@@ -104,8 +103,8 @@ function AppRoutes() {
         </Routes>
       </Suspense>
 
-      {/* Cross-persona demo walkthrough banner */}
-      <DemoWalkthroughBanner currentPath={location.pathname} />
+      {/* Cross-persona demo walkthrough banner (hidden on sideline demo which has its own nav) */}
+      {!location.pathname.startsWith('/coach/live') && <DemoWalkthroughBanner currentPath={location.pathname} />}
     </>
   );
 }
