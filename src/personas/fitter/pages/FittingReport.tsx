@@ -99,7 +99,7 @@ export default function FittingReport() {
           </span>
         </div>
 
-        <div className="grid grid-cols-2 gap-x-8 gap-y-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
           <div>
             <p className="text-xs text-gray-500 uppercase tracking-wide">Head</p>
             <p className="text-sm text-white font-medium font-mono">
@@ -190,7 +190,7 @@ export default function FittingReport() {
           Predicted On-Course Impact
         </h2>
 
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {[
             { stat: '+12 yards', subtitle: 'Avg off the tee' },
             { stat: '18%', subtitle: 'Tighter dispersion' },

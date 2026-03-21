@@ -202,7 +202,7 @@ export default function GolferLookup() {
             </div>
 
             {/* 4-Column Metric Row */}
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {/* Handicap Trend */}
               <div className="bg-gray-50 rounded-lg p-3">
                 <p className="text-xs text-gray-500 mb-1">Handicap Trend</p>

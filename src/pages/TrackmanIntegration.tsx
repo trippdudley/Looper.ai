@@ -46,8 +46,9 @@ export default function TrackmanIntegration() {
 
       {/* ═══ TOP BAR ═══════════════════════════════════════════════ */}
       <div style={{
-        height: 44, display: 'flex', alignItems: 'center',
-        justifyContent: 'space-between', padding: '0 20px', flexShrink: 0,
+        minHeight: 44, display: 'flex', alignItems: 'center',
+        justifyContent: 'space-between', padding: '0 12px', flexShrink: 0,
+        flexWrap: 'wrap' as const, gap: 6,
         background: `${C.surface}ee`, backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
         borderBottom: `1px solid ${C.border}`, zIndex: 10, position: 'relative',
@@ -106,7 +107,7 @@ export default function TrackmanIntegration() {
 
       {/* ═══ SPLIT CONTENT ═════════════════════════════════════════ */}
       <div style={{
-        flex: 1, display: 'flex', overflow: 'hidden',
+        flex: 1, display: 'flex', overflow: 'auto',
         position: 'relative', zIndex: 1,
       }}>
         <TPSSimulator

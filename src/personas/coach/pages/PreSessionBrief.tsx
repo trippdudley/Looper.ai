@@ -385,7 +385,7 @@ export default function PreSessionBrief() {
                   <span className="text-xs text-coral font-semibold">+{latestRound.scoreToPar}</span>
                 </div>
               </div>
-              <div className="grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                 {[
                   { label: 'GIR', value: `${latestRound.gir.toFixed(1)}%`, warn: latestRound.gir < 40 },
                   { label: 'Fairways', value: `${latestRound.fairways.toFixed(1)}%`, warn: latestRound.fairways < 55 },

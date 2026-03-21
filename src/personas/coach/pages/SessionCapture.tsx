@@ -412,7 +412,7 @@ export default function SessionCapture() {
 
           {/* Data Tile Grid */}
           <div className="px-4 pb-4 flex-1">
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
               {dataTiles.map((tile) => {
                 const absDelta = Math.abs(tile.delta);
                 const isQualitative = tile.label === 'Shot Shape' || tile.label === 'Quality';
