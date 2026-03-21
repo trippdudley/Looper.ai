@@ -170,7 +170,7 @@ export default function FittingSession() {
           </div>
 
           {/* Additional metrics tiles */}
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
               { label: 'Smash Factor', value: '1.47', ok: true },
               { label: 'Shots Hit', value: String(fittingShots.length), ok: true },

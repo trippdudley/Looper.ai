@@ -210,29 +210,30 @@ Golfer uses `MobileShell` (iPhone 15 frame, 390×844px) + `BottomTabBar`. All ot
 ### Colors (defined in both `index.css` @theme and `coachingOSData.ts` C constant)
 | Token | Hex | Usage |
 |-------|-----|-------|
-| `accent` | `#3A9D78` | Primary action, success, confidence |
-| `accent-light` | `#4DB88A` | Hover states |
-| `navy` | `#1C2B2D` | Primary text, headings |
+| `accent` | `#0D7C66` | Primary brand accent, CTAs, links |
+| `accent-light` | `#0A6352` | Hover states |
+| `accent-bright` | `#0FA87A` | Confidence-high indicators |
+| `navy` | `#1A1F2B` | Primary text, headings |
 | `data-blue` | `#4A90D9` | Data/info indicators |
-| `warm-amber` | `#D4A843` | Caution, warnings |
-| `coral` | `#C45C4A` | Errors, alerts, flags |
-| `bg-light` | `#F7F8F9` | Light mode backgrounds |
-| `bg-dark` | `#0F1A1C` | Dark mode backgrounds |
-| `card-dark` | `#1A2D30` | Dark mode cards |
-| `border-dark` | `#2D4A4F` | Dark mode borders |
+| `warm-amber` | `#D4980B` | Caution, warnings |
+| `coral` | `#C93B3B` | Errors, alerts, flags |
+| `bg-light` | `#F6F7F9` | Light mode backgrounds |
+| `bg-dark` | `#0C1117` | Dark mode backgrounds |
+| `card-dark` | `#1E2A36` | Dark mode cards |
+| `border-dark` | `#1E2A36` | Dark mode borders |
 
 ### Fonts
 | Token | Stack | Usage |
 |-------|-------|-------|
-| `sans` | Inter, system-ui, sans-serif | All UI text |
-| `mono` | JetBrains Mono, Menlo, monospace | Data values, metrics |
+| `sans` | DM Sans, system-ui, sans-serif | All UI text |
+| `mono` | Space Mono, Menlo, monospace | Data values, metrics |
 
 ### CRITICAL: Token Sync Rule
 `src/data/coachingOSData.ts` exports `C` (colors) and `F` (fonts) constants used by CoachingOS inline styles. These **must stay in sync** with the Tailwind tokens in `index.css`. If you change a color in one place, change it in both. The canonical values are:
-- `C.accent` = `#3A9D78` = `--color-accent`
-- `C.ink` = `#1C2B2D` = `--color-navy`
-- `F.brand` = `Inter` = `--font-sans`
-- `F.data` = `JetBrains Mono` = `--font-mono`
+- `C.accent` = `#0D7C66` = `--color-accent`
+- `C.ink` = `#1A1F2B` = `--color-navy`
+- `F.brand` = `DM Sans` = `--font-sans`
+- `F.data` = `Space Mono` = `--font-mono`
 
 ## Key Data Files
 

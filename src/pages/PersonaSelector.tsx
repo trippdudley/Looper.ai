@@ -1,11 +1,19 @@
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { User, GraduationCap, Wrench, Play, ArrowRight, Database } from 'lucide-react';
+import { User, GraduationCap, Wrench, Play, ArrowRight, Database, Route } from 'lucide-react';
 
 const personas = [
   {
     label: "Player",
     module: "01",
+    icon: Route,
+    description: "Your full game on one timeline — every source, every session, one story",
+    path: "/player",
+    accent: "rgba(77, 184, 138, 0.4)",
+  },
+  {
+    label: "Golfer",
+    module: "02",
     icon: User,
     description: "Track improvement, review lessons, practice with purpose",
     path: "/golfer",
@@ -13,7 +21,7 @@ const personas = [
   },
   {
     label: "Coach",
-    module: "02",
+    module: "03",
     icon: GraduationCap,
     description: "Capture sessions, diagnose limiting factors, see what works",
     path: "/coach",
@@ -21,7 +29,7 @@ const personas = [
   },
   {
     label: "Fitter",
-    module: "03",
+    module: "04",
     icon: Wrench,
     description: "Fit with full context, estimate outcomes, produce auditable builds",
     path: "/fitter",
@@ -159,7 +167,7 @@ export default function PersonaSelector() {
             {/* Connecting spine line */}
             <div className="absolute top-0 bottom-0 left-1/2 -translate-x-px w-[1px] bg-gradient-to-b from-transparent via-accent/20 to-transparent hidden sm:block pointer-events-none z-0" />
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-border-dark/50 rounded-2xl overflow-hidden border border-border-dark/60">
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-px bg-border-dark/50 rounded-2xl overflow-hidden border border-border-dark/60">
               {personas.map((p, i) => {
                 const Icon = p.icon;
                 return (

@@ -239,7 +239,8 @@ export default function SizzleReel() {
         ))}
       </div>
 
-      {/* Keyboard hint */}
+      {/* Keyboard hint — hidden on touch devices */}
+      {'ontouchstart' in window ? null : (
       <div style={{
         position: 'absolute',
         bottom: 32,
@@ -253,6 +254,7 @@ export default function SizzleReel() {
       }}>
         ← → arrow keys to navigate &middot; ESC to exit
       </div>
+      )}
 
       {/* Progress bar */}
       <div style={{
