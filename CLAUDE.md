@@ -1,258 +1,408 @@
-# Think Like an Elite Golf Coach
+# Looper.AI — Claude Code Reference
 
-## Organizing Principle
+**Last updated: March 21, 2026**
+
+This is the primary reference for Claude Code when working on this codebase. Read this file completely before making any changes.
+
+---
+
+## What Looper.AI Is
+
+Looper.AI is the AI-native Coaching OS for golf. It is a **copilot, not a dashboard.** One intelligence layer powers three experiences — coach copilot, player copilot, and fitter copilot. Each speaks when useful, stays quiet when not, and learns from every human correction.
+
+The product captures what happens during lessons and fittings — video, launch data, coaching interventions, equipment context — and turns it into a persistent, intelligent record that makes every session build on the last.
+
+**The core architecture principle: the timeline is the data model. The tabs are views.** Every piece of data is a typed event on a unified chronological timeline. Surfaces like Dashboard, Practice, Rounds, and My Journey are filtered lenses on that timeline — not separate products.
+
+**Tagline:** Expertise, engineered.
+
+---
+
+## Product Architecture
+
+### One Intelligence, Three Copilot Experiences
+
+**Coach Copilot** — the primary product (academy-facing)
+- Pre-session briefing auto-assembled from player history, last session, practice adherence, WHOOP recovery, Arccos patterns
+- In-session: subtle notifications that speak only when useful (pattern detection, limiting factor alerts)
+- Post-session: auto-generated summary — coach reviews/corrects in 30 seconds instead of creating from scratch
+- Between-lesson: weekly player digest, practice plan monitoring, re-engagement nudges
+
+**Player Copilot** — the consumer product (Looper Player)
+- Mobile-first, timeline-driven
+- Four surfaces: Dashboard, Practice, Rounds, My Journey
+- "Ask Looper" conversational overlay
+- Cross-source connections (WHOOP recovery → practice dispersion) are the key differentiator
+- Must be fully valuable standalone for uncoached players
+
+**Fitter Copilot** — fitting session intelligence
+- Real-time next-configuration suggestions
+- Counterfactual reasoning with uncertainty bands
+- Auto-generated build sheets
+- Equipment ontology awareness (structured specs, not just brand/model/flex)
+
+### Data Capture Paradigm
+
+The full vision is **agent-based ambient capture** — the record builds itself as a byproduct of the session:
+- Vision agent reads launch monitor screens via camera
+- Audio agent extracts intervention labels from coach conversation
+- Video agent processes swing camera feeds
+
+**For now (MVP):** CSV/file import from TrackMan/Foresight with a normalization layer. Manual session logging with structured fields.
+
+Every coach correction of an AI-generated summary is an RLHF training signal. This is the core data moat.
+
+---
+
+## Think Like an Elite Golf Coach
+
+### Organizing Principle
 
 **Coaching intent organizes data.** Every screen, metric, and visualization exists to support a coaching decision — not to display information. If a data point doesn't change what the coach would do or say, it doesn't belong on screen.
 
----
+### Hard Rules
 
-## Hard Rules
+**1. Club Context Is Non-Negotiable.** Never show a swing metric without the club that produced it. A 94 mph swing speed means something completely different for a driver vs. a 7-iron.
 
-### 1. Club Context Is Non-Negotiable
-Never show a swing metric without the club that produced it. A 94 mph swing speed means something completely different for a driver vs. a 7-iron. Every metric panel, every comparison, every trend line must carry club context.
+**2. No Universal Baselines.** "Tour average" is almost always the wrong comparison. Baselines should come from the player's own history, their peer cohort, or their stated goals.
 
-### 2. No Universal Baselines
-"Tour average" is almost always the wrong comparison. A 15-handicap's optimal numbers look nothing like a scratch player's. Baselines should be derived from the player's own history, their peer cohort, or their stated goals — never from a generic "good" number.
+**3. Connection Before Prescription.** Before showing what to fix, show what you know about the player. The pre-session brief exists because the best coaches spend 5 minutes remembering the human before spending 55 minutes on the swing.
 
-### 3. Connection Before Prescription
-Before showing what to fix, show what you know about the player. The pre-session brief exists because the best coaches spend 5 minutes remembering the human before spending 55 minutes on the swing. Surface: What did we work on last time? What did they commit to practicing? What's happening in their game right now?
+**4. Feel vs. Real Is the Central Tension.** The most important coaching data is often the gap between what the player thinks they're doing and what they're actually doing.
 
-### 4. Feel vs. Real Is the Central Tension
-The most important coaching data is often the gap between what the player thinks they're doing and what they're actually doing. Design for this: show the player's self-reported feel alongside the measured reality. This is where breakthroughs happen.
+**5. Less Information, More Intelligence.** A coach needs 3-4 data points that matter right now, with context for why they matter. Every dashboard should answer: "What's the one thing I should focus on in this session?"
 
-### 5. Less Information, More Intelligence
-A coach doesn't need 47 data points. They need 3-4 that matter right now, with context for why they matter. Every dashboard should answer: "What's the one thing I should focus on in this session?" If it can't answer that, it has too much data and not enough intelligence.
+**6. The Coach Controls the Player View.** Never auto-share data with players. The coach decides what the player sees and when.
 
-### 6. The Coach Controls the Player View
-Coaches are protective of what players see. A coach might know the player's path is 4 degrees out-to-in but choose not to mention it because they're working on something else first. Never auto-share data with players. The coach decides what the player sees and when.
+**7. Capture the Reasoning, Not Just the Data.** The most valuable artifact is WHY the coach chose a particular intervention — not the launch monitor numbers.
 
-### 7. Capture the Reasoning, Not Just the Data
-The most valuable coaching artifact isn't the launch monitor numbers — it's why the coach chose a particular intervention. "Moved ball position forward because impact point was low on face" is gold. Design for capturing coaching reasoning at the moment of decision.
+**8. Know What to Leave Alone.** A strong grip that produces a reliable draw isn't a fault — it's a strategy. Track what the coach has explicitly decided NOT to change and why.
 
-### 8. Know What to Leave Alone
-Elite coaches know that some "problems" in a swing are actually features. A strong grip that produces a reliable draw isn't a fault — it's a strategy. The system should track what the coach has explicitly decided NOT to change and why, so future sessions don't accidentally "fix" it.
+### Anti-Patterns
 
----
+- **Data vomit:** Showing all available metrics because you can
+- **False precision:** Displaying spin rate to 1 RPM when uncertainty is ±200
+- **Decontextualized trends:** "Your swing speed increased 2 mph!" (but you switched clubs)
+- **Robot coach voice:** "Based on your metrics, consider adjusting..." — coaches don't talk this way
+- **One-size-fits-all workflows:** A 30-minute wedge tune-up and a 2-hour full bag fitting are completely different
+- **Ignoring the emotional arc:** A player who just shot their best round needs celebration, not a fix list
+- **"Our AI recommends..."** — the system recommends, not "the AI"
 
-## Anti-Patterns to Avoid
+### Golf Domain Knowledge
 
-- **Data vomit**: Showing all available metrics because you can
-- **False precision**: Displaying spin rate to 1 RPM when the measurement uncertainty is +/- 200
-- **Decontextualized trends**: "Your swing speed increased 2 mph!" (but you switched from 7-iron to 6-iron)
-- **Robot coach voice**: "Based on your metrics, consider adjusting..." — coaches don't talk like this
-- **One-size-fits-all workflows**: A 30-minute wedge tune-up and a 2-hour full bag fitting are completely different sessions
-- **Ignoring the emotional arc**: A player who just shot their best round needs celebration, not a list of things to fix
+**Scoring Hierarchy:** (1) Putting inside 10 feet, (2) Approach shot proximity, (3) Tee shot accuracy, (4) Short game up-and-down %, (5) Driving distance. Most amateurs obsess over #5. Most coaches focus on #1-3.
 
----
+**Launch Monitor Literacy:**
+- Ball speed is the most reliable predictor of distance (not swing speed)
+- Spin rate varies enormously by strike quality — a single number means little
+- Club path + face angle = shot shape, but the relationship is non-linear
+- Attack angle is heavily influenced by ball position
+- Smash factor (ball speed / club speed) 1.45+ for driver is efficient
 
-## The Three Coaching Moments
-
-### 1. Before the Session (Player Brief)
-**Coach's question**: "What do I need to remember about this player?"
-- Last session recap: what we worked on, what clicked, what didn't
-- Practice compliance: did they do what we agreed on?
-- Recent rounds: are they playing better or worse?
-- Current lesson arc: where are we in the bigger plan?
-- Emotional context: anything I should know walking in?
-
-### 2. During the Session (Live Coaching)
-**Coach's question**: "What's happening right now and what should I do about it?"
-- Real-time data with immediate context
-- Comparison to the player's own baseline (not tour average)
-- Pattern detection: "This is the 3rd swing in a row with early extension"
-- Intervention suggestions based on what's worked before for this player
-- Minimal chrome — the session is about the player, not the software
-
-### 3. After the Session (Session Summary)
-**Coach's question**: "What did we accomplish and what's the plan?"
-- Key metrics that changed during the session
-- Interventions that were tried and their results
-- Coach's notes and reasoning (captured during session)
-- Homework: specific drills with specific targets
-- Next session preview: what we'll work on next
+**Session Types:** Assessment (baseline, no intervention), Technical (changing movement patterns), Performance (optimizing what's there), Playing lesson (on-course), Club fitting (equipment optimization).
 
 ---
 
-## Golf Domain Knowledge
+## Design System — CANONICAL TOKENS
 
-### Scoring Hierarchy
-The fastest way to lower scores (in order): 1) Putting inside 10 feet, 2) Approach shot proximity, 3) Tee shot accuracy, 4) Short game up-and-down %, 5) Driving distance. Most amateurs obsess over #5. Most coaches focus on #1-3.
+### ⚠️ CRITICAL: Known Technical Debt
 
-### The Handicap System
-Handicap Index is calculated from the best 8 of last 20 rounds. A rising handicap doesn't mean the player is getting worse — it might mean they're playing harder courses, or their bad rounds are getting worse while their good rounds stay the same. Context matters.
+The **Looper Player** build (`src/personas/player/`) uses the CORRECT tokens below. Everything else in the codebase — `index.css`, `coachingOSData.ts`, the narrative page, coach/fitter/golfer/spine personas — uses WRONG legacy tokens (`#3A9D78`, `#1C2B2D`, Inter, JetBrains Mono). When building new features or updating existing ones, always use the tokens below.
 
-### Launch Monitor Literacy
-- **Ball speed** is the most reliable predictor of distance (not swing speed)
-- **Spin rate** varies enormously by strike quality — a single number means little
-- **Club path + face angle** = shot shape, but the relationship is non-linear
-- **Attack angle** is heavily influenced by ball position — a "steep" swing might just be a setup issue
-- **Smash factor** (ball speed / club speed) indicates strike quality — 1.45+ for driver is efficient
+### Colors — Light Mode (Default)
 
-### Session Types
-- **Assessment**: Baseline data collection, no intervention. "Let me see what you've got."
-- **Technical**: Changing a movement pattern. Requires patience and regression tolerance.
-- **Performance**: Optimizing what's already there. Stats-focused, game-context heavy.
-- **Playing lesson**: On-course coaching. Completely different skill set — strategy, mental game, course management.
-- **Club fitting**: Equipment optimization. Requires launch monitor mastery and understanding of gear-swing interaction.
+```javascript
+const C = {
+  // Foundation
+  bg:         '#F6F7F9',   // Page background
+  surface:    '#FFFFFF',   // Cards, content areas
+  surfaceAlt: '#F0F2F5',  // Nested cards, table rows
+  border:     '#DFE2E7',  // Primary borders
+  borderSub:  '#ECEEF2',  // Subtle borders
+
+  // Brand accent — deep teal
+  accent:       '#0D7C66', // CTAs, links, .AI in logo, active states
+  accentHov:    '#0A6352', // Hover state
+  accentBg:     '#E6F5F1', // Accent tint background (badges, rec cards)
+  accentBright: '#0FA87A', // Confidence-high indicators
+
+  // Text hierarchy
+  ink:    '#1A1F2B',       // Primary text, headings
+  body:   '#4B5563',       // Body copy
+  muted:  '#9CA3AF',       // Labels, captions
+  dim:    '#C5CAD1',       // Placeholder, disabled
+
+  // Semantic
+  conf:      '#0FA87A',    // High confidence, positive delta
+  confBg:    '#E6F5F1',
+  caution:   '#D4980B',    // Medium confidence, warnings
+  cautionBg: '#FDF6E3',
+  flag:      '#C93B3B',    // Low confidence, errors
+  flagBg:    '#FDE8E8',
+};
+```
+
+### Colors — Dark Mode (Bay/Simulator Environments Only)
+
+```javascript
+const CD = {
+  bg:       '#0C1117',
+  surface:  '#151D28',
+  surfaceAlt: '#1A2332',
+  border:   '#1E2A36',
+  accent:   '#10B981',     // Emerald, adjusted for dark
+  accentHov:'#34D399',
+  ink:      '#E8ECF1',
+  body:     '#8B99A8',
+  muted:    '#5E6E7E',
+};
+```
+
+### Fonts
+
+```javascript
+const F = {
+  brand: "'DM Sans', system-ui, -apple-system, sans-serif",      // Brand voice
+  data:  "'Space Mono', 'SF Mono', 'Fira Code', monospace",      // Data voice
+  editorial: "'Playfair Display', Georgia, serif",                 // Editorial (rare)
+};
+```
+
+**Production fonts** (for when real fonts are installed): Cabinet Grotesk (brand), Space Mono (data), Instrument Serif italic (editorial). DM Sans, Space Mono, and Playfair Display are the Google Fonts fallbacks used in this codebase.
+
+### Split Voice Rules
+
+- **DM Sans** handles all human-authored or human-readable text (headings, body, descriptions)
+- **Space Mono** handles all machine-generated values (metrics, labels, confidence intervals, data)
+- Never use DM Sans for numbers in data cards — always Space Mono
+- Never use Space Mono for body paragraphs — always DM Sans
+- Playfair Display italic only for taglines, pull quotes, editorial moments — never body or data
+
+### Color Usage Rules
+
+- Positive deltas: `C.conf` (#0FA87A) with ▲ prefix
+- Negative deltas: `C.flag` (#C93B3B) with ▼ prefix
+- Neutral/zero: `C.muted`
+- Confidence badges: colored text on matching `*Bg` tint background
+- `C.accent` (#0D7C66) is reserved for interactive elements and brand marks — never for data viz encoding
+- Semantic colors always paired with text labels or shapes (▲▼) — never color alone (accessibility)
+
+### Icons
+
+- **Lucide React** only — clean, single-color, consistent stroke weight
+- **No emoji anywhere.** Not in UI, not in labels, not in data, not in comments that render in UI
+- Use numbered markers (01, 02, 03) or typographic separators for section labels
 
 ---
+
+## Component Patterns
+
+### Card Styles (Solid — Default for All Data Surfaces)
+
+```javascript
+const S = {
+  card: {
+    background: C.surface,
+    borderRadius: '12px',
+    border: `0.5px solid ${C.borderSub}`,
+    padding: '14px 16px',
+  },
+  cardInner: {
+    background: C.surfaceAlt,
+    borderRadius: '8px',
+    border: 'none',
+    padding: '10px 12px',
+  },
+};
+```
+
+Glass effects are for overlays and marketing only. Never use glass on primary data surfaces. Dark mode environments always use solid surfaces.
+
+### Geometric Layout Discipline
+
+- All cards in a row: equal size — no exceptions
+- All gaps: consistent per context (8px dense data, 12px standard, 16px sections)
+- All edges: aligned to shared grid
+- Video panels in comparison views: identical dimensions
+- Border-radius by depth: outer 12px, inner 8px, badges 3px
+- Two-column layouts: always `1fr 1fr`
+
+### Number Formatting
+
+```javascript
+const fmt = (v, type) => {
+  switch(type) {
+    case 'yds':  return v.toFixed(1) + ' yds';
+    case 'mph':  return v.toFixed(1) + ' mph';
+    case 'rpm':  return Math.round(v).toLocaleString() + ' rpm';
+    case 'deg':  return v.toFixed(1) + '°';
+    case 'pct':  return v.toFixed(1) + '%';
+    case 'sg':   return (v > 0 ? '+' : '') + v.toFixed(1);
+    default:     return String(v);
+  }
+};
+```
+
+- Always use `toLocaleString()` for numbers ≥1,000
+- Always show `+` prefix on positive deltas
+- Ranges: `262-272 yds` (no "to")
+- Never more than one decimal in session metrics
+- Spin rate: always integers
+
+### Override Pattern
+
+Every AI recommendation must have an override control. The practitioner is always in control. Manual adjustments replace AI suggestions and are logged as human overrides (training signal).
+
 ---
 
-# Looper.AI — Project Reference
+## Navigation Architecture
 
-## What This Is
+### Four-Layer System
 
-Looper.AI is an AI-native decision platform for golf coaching and club fitting. It's a prototype/demo app — all data is mocked in TypeScript files, there is no backend. The app demonstrates four distinct persona experiences through a single React application.
+```
+L1: Global bar (dark #1A1F2B, persistent, 44px)
+    Logo + mode switcher + account controls
 
-## Tech Stack
+L2: Context bar (light, pills, 34px)
+    Editable state display — NOT navigation
+    Clicking a pill opens quick-edit popover
 
-- **React 19** + **React Router 7** (nested routes with `<Outlet />`)
-- **TypeScript 5.9** + **Vite 7** (build tool)
-- **Tailwind CSS 4** (utility-first styling, theme tokens in `index.css`)
-- **Recharts** (data visualization)
-- **Lucide React** (icon library)
-- **Playwright** + **ffmpeg-static** (sizzle reel video recording)
-- **No backend** — all data in `src/data/*.ts`
+L3: Decision tabs (light, workflow sequence)
+    Left-to-right follows session progression
+    Max 5 tabs
 
-## Four Personas
+L4: Content disclosure (collapsible cards)
+    NOT navigation — expand/collapse within content
+```
 
-| Persona | Route | Shell | UX Posture |
-|---------|-------|-------|------------|
-| **Golfer** | `/golfer` | `MobileShell` (iPhone frame + BottomTabBar) | Light, consumer, mobile-first |
-| **Coach** | `/coach` | `DesktopShell` (Sidebar + TopBar) | Professional, data-dense, desktop |
-| **Fitter** | `/fitter` | `DesktopShell` (dark theme + ambient bg) | Premium, equipment-focused, dark |
-| **Spine** | `/spine` | `DesktopShell` (dark theme + ambient bg) | Internal, data-ops, dark |
+- L1 always dark, everything below light
+- Maximum two clickable navigation layers (L1 + L3)
+- Never nest tabs inside tabs
+- L1 + L2 combined height: under 90px
 
-Entry point is `PersonaSelector` at `/` — each card routes to a persona.
+### Coaching OS Tab Sequence
+
+Overview → Video Analysis → Diagnosis → Interventions → Player Plan
+
+### Shot Rail (Session-Active Tabs)
+
+72px collapsible left rail. Shot number + club abbreviation only. Newest on top. Selecting a shot updates entire content area.
+
+---
 
 ## File Structure
 
 ```
 src/
-├── pages/               # App-level pages (PersonaSelector, CoachingOS, SizzleReel, ThesisPage)
+├── pages/              # Standalone pages (PersonaSelector, SizzleReel, ThesisPage)
 ├── personas/
-│   ├── golfer/          # GolferLayout.tsx + pages/
-│   ├── coach/           # CoachLayout.tsx + pages/
-│   ├── fitter/          # FitterLayout.tsx + pages/
-│   └── spine/           # SpineLayout.tsx + pages/
+│   ├── player/         # ✅ CURRENT — Looper Player (correct tokens)
+│   │   ├── components/ # Layout, overlays, shared, timeline
+│   │   ├── data/       # tokens.ts (canonical), player, timeline, sources
+│   │   └── pages/      # Dashboard, PracticeMode, Rounds, MyJourney, Lessons
+│   ├── coach/          # ⚠️ OUTDATED TOKENS — uses old palette
+│   ├── fitter/         # ⚠️ OUTDATED TOKENS — uses old palette
+│   ├── golfer/         # ❌ DEPRECATED — replaced by personas/player/
+│   └── spine/          # ❌ DEPRECATED — no longer part of product architecture
 ├── components/
-│   ├── layout/          # DesktopShell, MobileShell, Sidebar, TopBar, BottomTabBar
-│   ├── ui/              # Card, Badge, MetricCard, StatusDot, etc.
-│   ├── coach-session/   # VoiceAIPanel, VideoPlayer, LaunchDataPanel, etc.
-│   ├── fitter/          # FittingAIInsightCard, ShaftComparisonTable, etc.
-│   ├── trackman/        # TrackmanDataGrid, ShotRow, MetricDelta
-│   └── spine/           # DataFlowNode, AudienceSegmentCard, etc.
-├── data/                # All mock data (golfers, sessions, drills, coachingOSData, etc.)
-├── index.css            # Tailwind imports + @theme tokens + glass effects
-├── App.tsx              # All route definitions
-└── main.tsx             # React entry point
+│   ├── layout/         # DesktopShell, MobileShell, Sidebar, TopBar, BottomTabBar
+│   ├── ui/             # Card, Badge, MetricCard, Skeleton, ErrorBoundary
+│   ├── coach-session/  # VoiceAIPanel, VideoPlayer, LaunchDataPanel
+│   ├── fitter/         # FittingAIInsightCard, ShaftComparisonTable
+│   └── ...
+├── data/               # Mock data files
+│   └── coachingOSData.ts  # ⚠️ C and F constants use WRONG legacy tokens
+├── index.css           # ⚠️ Tailwind @theme uses WRONG legacy tokens
+└── App.tsx             # Router
 ```
+
+### Canonical Token Source
+
+The correct tokens live in `src/personas/player/data/tokens.ts`. When updating other parts of the codebase, reference this file — not `index.css` or `coachingOSData.ts`.
+
+---
 
 ## Routing
 
-### Coach Routes (most complex)
+### Active Routes
+
 ```
-/coach                → CoachToday (dashboard with schedule, alerts, activity)
-/coach/students       → StudentRoster
-/coach/students/:id   → StudentDetail
-/coach/brief/:id      → PreSessionBrief (pre-session player intelligence)
-/coach/live           → CoachingOS (immersive, full-bleed — no sidebar/topbar)
-/coach/capture        → SessionCapture
-/coach/review         → SessionReview
+/                     → PersonaSelector (landing page)
+/player               → Looper Player (correct design system)
+/coach                → Coach dashboard (legacy tokens — needs migration)
+/coach/live           → CoachingOS immersive session (legacy tokens)
+/coach/students       → Student roster
+/coach/students/:id   → Student detail
+/coach/brief/:id      → Pre-session brief
+/coach/session        → Coach session
+/coach/capture        → Session capture
+/coach/review         → Session review
 /coach/analytics      → Analytics
-/coach/session        → CoachSession
+/coach/trackman       → TrackMan integration
+/fitter               → Fitter views (legacy tokens)
+/narrative            → Strategic narrative (⚠️ outdated language — needs rewrite)
+/thesis               → Business case page
+/vision               → Sizzle reel
 ```
 
-### Other Personas
+### Deprecated Routes
+
 ```
-/golfer               → GolferHome (mobile)
-/golfer/lessons       → LessonHistory
-/golfer/lessons/:id   → LessonDetail
-/golfer/swing         → SwingProfile
-/golfer/practice      → Practice
-
-/fitter               → GolferLookup
-/fitter/brief         → PreFittingBrief
-/fitter/session       → FittingSession
-/fitter/report        → FittingReport
-/fitter/equipment     → EquipmentProfile
-
-/spine                → DataSpine
-/spine/audience       → AudienceEngine
-/spine/integrations   → IntegrationHub
+/golfer/*             → OLD mobile app concept — replaced by /player
+/spine/*              → DataSpine/AudienceEngine/IntegrationHub — removed from product architecture
 ```
 
-### Standalone
-```
-/                     → PersonaSelector
-/thesis               → ThesisPage
-/narrative            → LooperNarrative
-/vision               → SizzleReel
-/coaching-os          → Redirects to /coach/live
-```
+### Immersive Mode (Coach Only)
 
-## Architecture Patterns
+`CoachLayout` detects `/coach/live` and renders `<Outlet />` directly — no sidebar, no topbar. CoachingOS provides its own L1 (session bar), L2 (context bar), and L3 (analysis tabs). This is a full-screen experience that bypasses the coach chrome.
 
-### 1. Shell + Layout + Outlet
-Every persona has a Layout component that wraps child pages via React Router's `<Outlet />`. The Layout provides persistent chrome (sidebar, topbar); the page content swaps inside.
+---
 
-### 2. Immersive Mode (Coach Only)
-`CoachLayout` detects `/coach/live` via `useLocation()` and renders `<Outlet />` directly — no DesktopShell, no sidebar, no topbar. CoachingOS provides its own L1 (session bar), L2 (context bar with player/club), and L3 (6 analysis tabs). This is the critical pattern — CoachingOS is a full-screen experience that lives inside the coach route tree but bypasses the coach chrome.
+## Brand Voice (For Any User-Facing Text)
 
-### 3. Dark Theme with Ambient Effects
-Fitter and Spine personas use `ambient-bg` class (radial gradients + noise overlay) and pass `dark` prop to TopBar/Sidebar for inverted color schemes.
+**Sound like** the smartest colleague in the fitting bay who never talks down to anyone. Like an engineer who also plays golf and gets why feel matters.
 
-### 4. Mobile vs. Desktop Shell
-Golfer uses `MobileShell` (iPhone 15 frame, 390×844px) + `BottomTabBar`. All other personas use `DesktopShell` (sidebar + responsive main area with hamburger menu on mobile).
+**Always:**
+- "The data suggests X with Y confidence"
+- "What to try next"
+- "Your expertise, systematized"
+- Use golf language naturally: strike, dispersion, carry windows, club path, face control
 
-## Design Tokens
+**Never:**
+- "Our AI determined..." — the system recommends, not "the AI"
+- "Revolutionary," "game-changing," "disrupting"
+- "Guaranteed" — use "expected," "estimated," "with X% confidence"
+- "Replaces" or "automates" the coach — always "augments," "systematizes," "empowers"
+- AI/ML jargon in UI: embeddings, bandits, counterfactual, hierarchical Bayesian
 
-### Colors (defined in both `index.css` @theme and `coachingOSData.ts` C constant)
-| Token | Hex | Usage |
-|-------|-----|-------|
-| `accent` | `#3A9D78` | Primary action, success, confidence |
-| `accent-light` | `#4DB88A` | Hover states |
-| `navy` | `#1C2B2D` | Primary text, headings |
-| `data-blue` | `#4A90D9` | Data/info indicators |
-| `warm-amber` | `#D4A843` | Caution, warnings |
-| `coral` | `#C45C4A` | Errors, alerts, flags |
-| `bg-light` | `#F7F8F9` | Light mode backgrounds |
-| `bg-dark` | `#0F1A1C` | Dark mode backgrounds |
-| `card-dark` | `#1A2D30` | Dark mode cards |
-| `border-dark` | `#2D4A4F` | Dark mode borders |
+---
 
-### Fonts
-| Token | Stack | Usage |
-|-------|-------|-------|
-| `sans` | Inter, system-ui, sans-serif | All UI text |
-| `mono` | JetBrains Mono, Menlo, monospace | Data values, metrics |
+## Skill Files
 
-### CRITICAL: Token Sync Rule
-`src/data/coachingOSData.ts` exports `C` (colors) and `F` (fonts) constants used by CoachingOS inline styles. These **must stay in sync** with the Tailwind tokens in `index.css`. If you change a color in one place, change it in both. The canonical values are:
-- `C.accent` = `#3A9D78` = `--color-accent`
-- `C.ink` = `#1C2B2D` = `--color-navy`
-- `F.brand` = `Inter` = `--font-sans`
-- `F.data` = `JetBrains Mono` = `--font-mono`
+Read these before building any Looper UI:
 
-## Key Data Files
+- `.claude/skills/looper-ux-system/SKILL.md` — Full UX implementation reference (components, layout, data viz, anti-patterns)
+- `.claude/skills/looper-brand-assets/SKILL.md` — Brand voice, tone, content guidelines
+- `.claude/skills/looper-player/SKILL.md` — Looper Player product spec and build prompt
+- `.claude/skills/looper-coach-domain/SKILL.md` — Coaching domain context
 
-| File | What It Exports |
-|------|----------------|
-| `golfers.ts` | `Golfer` interface + `golfers[]` — player profiles with handicap, equipment, goals |
-| `sessions.ts` | `Session` interface + `sessions[]` — lesson records with metrics and drills |
-| `drills.ts` | `Drill` interface + `drills[]` — drill library with instructions and target faults |
-| `coachingOSData.ts` | `C`, `F` constants, `ShotData[]`, `AIInsight[]`, `Recommendation[]`, `DiagnosisFactor[]`, `InterventionCard[]`, `PlayerHistory`, formatting utils (`fmt`, `fmtDelta`, `confidenceLevel`), session context, tab definitions |
-| `trackmanData.ts` | Raw launch monitor shot data |
-| `coaches.ts` | Coach profiles |
-| `fittingComparisons.ts` | Shaft/head comparison data |
-| `fittingRecommendations.ts` | AI fitting recommendations |
-| `integrations.ts` | Connected system catalog (Trackman, Arccos, etc.) |
+---
 
 ## Build Commands
 
 ```bash
-npm run dev       # Vite dev server
+npm run dev       # Vite dev server (http://localhost:5173)
 npm run build     # tsc -b && vite build
 npm run lint      # ESLint
-npm run preview   # Vite preview of production build
+npm run preview   # Serve production build locally
 ```
+
+## Tech Stack
+
+- React 19 + TypeScript + Vite
+- Tailwind CSS 4 (⚠️ theme tokens need updating to match canonical palette)
+- Recharts for data visualization
+- Lucide React for icons
+- React Router 7 (nested routes with Outlet)
+- No backend — all data mocked in `src/data/*.ts`
+- Demo mock names: Coach = M. Thompson, Player = Moe Norman
