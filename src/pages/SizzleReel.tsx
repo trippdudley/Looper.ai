@@ -37,6 +37,7 @@ export default function SizzleReel() {
   const sceneStartRef = useRef(0);
   const rafRef = useRef(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const tickRef = useRef<() => void>(() => {});
 
   const tick = useCallback(() => {
     const now = Date.now();
@@ -69,7 +70,7 @@ export default function SizzleReel() {
           setSceneElapsed(0);
           setTransitioning(false);
           setTransitionProgress(0);
-          rafRef.current = requestAnimationFrame(tick);
+          rafRef.current = requestAnimationFrame(tickRef.current);
         }
       };
       rafRef.current = requestAnimationFrame(crossfadeTick);
@@ -95,8 +96,10 @@ export default function SizzleReel() {
       return;
     }
 
-    rafRef.current = requestAnimationFrame(tick);
+    rafRef.current = requestAnimationFrame(tickRef.current);
   }, [currentScene]);
+
+  useEffect(() => { tickRef.current = tick; });
 
   // Start background music and timers once on mount
   useEffect(() => {

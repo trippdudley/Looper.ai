@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
 import { ClipboardList, Database, Brain, Target, TrendingUp, Layers, BarChart3, Cpu } from 'lucide-react';
+import { useIsMobile } from '../../hooks/useIsMobile';
 import { CD, F, vis, fadeIn, fadeInOut } from './tokens';
 
 const T = {
@@ -54,18 +54,6 @@ const gridBg = [
   `linear-gradient(to right, ${CD.border}26 1px, transparent 1px)`,
   `linear-gradient(to bottom, ${CD.border}26 1px, transparent 1px)`,
 ].join(', ');
-
-function useIsMobile() {
-  const [m, setM] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px)');
-    setM(mq.matches);
-    const h = (e: MediaQueryListEvent) => setM(e.matches);
-    mq.addEventListener('change', h);
-    return () => mq.removeEventListener('change', h);
-  }, []);
-  return m;
-}
 
 export default function Scene6_Endgame({ elapsed }: { elapsed: number }) {
   const isMobile = useIsMobile();

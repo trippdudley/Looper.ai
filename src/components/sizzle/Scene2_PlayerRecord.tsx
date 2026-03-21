@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
 import { C, CD, F, vis, fadeIn, fadeInOut } from './tokens';
+import { useIsMobile } from '../../hooks/useIsMobile';
 
 // Timing triggers (ms from scene start)
 const T = {
@@ -251,18 +251,6 @@ function getSpotlight(elapsed: number): 0 | 1 | 2 | 3 {
 // ---------------------------------------------------------------------------
 // Main component
 // ---------------------------------------------------------------------------
-
-function useIsMobile() {
-  const [m, setM] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px)');
-    setM(mq.matches);
-    const h = (e: MediaQueryListEvent) => setM(e.matches);
-    mq.addEventListener('change', h);
-    return () => mq.removeEventListener('change', h);
-  }, []);
-  return m;
-}
 
 export default function Scene2_PlayerRecord({ elapsed }: { elapsed: number }) {
   const isMobile = useIsMobile();

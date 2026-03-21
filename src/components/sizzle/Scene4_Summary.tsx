@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { C, F, vis, fadeIn, fadeInOut } from './tokens';
+import { useIsMobile } from '../../hooks/useIsMobile';
 
 // Timing constants (ms)
 const T = {
@@ -36,18 +37,6 @@ const drills = [
     desc: 'Full swings with feet together. Forces centered balance and clean contact.',
   },
 ];
-
-function useIsMobile() {
-  const [m, setM] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px)');
-    setM(mq.matches);
-    const h = (e: MediaQueryListEvent) => setM(e.matches);
-    mq.addEventListener('change', h);
-    return () => mq.removeEventListener('change', h);
-  }, []);
-  return m;
-}
 
 export default function Scene4_Summary({ elapsed }: { elapsed: number }) {
   const isMobile = useIsMobile();

@@ -213,7 +213,7 @@ export default function GolferLookup() {
                         <Line
                           type="monotone"
                           dataKey="value"
-                          stroke="#2E8B57"
+                          stroke="#0D7C66"
                           strokeWidth={2}
                           dot={false}
                         />
@@ -416,9 +416,9 @@ export default function GolferLookup() {
                         <Line
                           type="monotone"
                           dataKey="attackAngle"
-                          stroke="#2E8B57"
+                          stroke="#0D7C66"
                           strokeWidth={2}
-                          dot={{ r: 2, fill: '#2E8B57' }}
+                          dot={{ r: 2, fill: '#0D7C66' }}
                         />
                       </LineChart>
                     </ResponsiveContainer>

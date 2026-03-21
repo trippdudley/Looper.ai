@@ -3,18 +3,18 @@
 @theme {
   /* Brand palette — Looper.AI brand guidelines */
   --color-navy: #1C2B2D;
-  --color-accent: #3A9D78;
-  --color-accent-light: #4DB88A;
+  --color-accent: #0D7C66;
+  --color-accent-light: #0FA87A;
   --color-data-blue: #4A90D9;
-  --color-warm-amber: #D4A843;
-  --color-coral: #C45C4A;
+  --color-warm-amber: #D4980B;
+  --color-coral: #C93B3B;
   --color-bg-light: #F7F8F9;
   --color-bg-dark: #0F1A1C;
   --color-card-dark: #1A2D30;
   --color-border-dark: #2D4A4F;
 
-  --font-sans: Inter, system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', Menlo, monospace;
+  --font-sans: DM Sans, system-ui, -apple-system, sans-serif;
+  --font-mono: 'Space Mono', 'SF Mono', monospace;
 }
 
 body {
@@ -101,7 +101,7 @@ button:not(:disabled):active, a.btn:active {
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(ellipse 600px 400px at 30% 20%, rgba(58, 157, 120, 0.06), transparent),
+    radial-gradient(ellipse 600px 400px at 30% 20%, rgba(13, 124, 102, 0.06), transparent),
     radial-gradient(ellipse 500px 500px at 70% 80%, rgba(45, 74, 79, 0.06), transparent),
     linear-gradient(180deg, #0A1415 0%, #1C2B2D 100%);
   animation: ambientShift 20s ease-in-out infinite alternate;
@@ -118,7 +118,7 @@ button:not(:disabled):active, a.btn:active {
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
+  border-radius: 12px;
   transition: all 200ms ease;
 }
 
@@ -135,7 +135,7 @@ button:not(:disabled):active, a.btn:active {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 12px;
+  border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
@@ -171,7 +171,7 @@ button:not(:disabled):active, a.btn:active {
 
 /* Phone frame gradient border */
 .phone-gradient-border {
-  background: linear-gradient(145deg, rgba(58, 157, 120, 0.15), rgba(45, 74, 79, 0.1), rgba(12, 20, 22, 0.9));
+  background: linear-gradient(145deg, rgba(13, 124, 102, 0.15), rgba(45, 74, 79, 0.1), rgba(12, 20, 22, 0.9));
   border-radius: 48px;
   padding: 4px;
 }
@@ -194,8 +194,8 @@ button:not(:disabled):active, a.btn:active {
 
 /* ── AI pulse glow ───────────────────────────────────────── */
 @keyframes ai-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(58, 157, 120, 0.4); }
-  50% { box-shadow: 0 0 0 8px rgba(58, 157, 120, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(13, 124, 102, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(13, 124, 102, 0); }
 }
 
 .animate-ai-pulse {
@@ -220,7 +220,7 @@ button:not(:disabled):active, a.btn:active {
 
 /* ── KPI pulse (number update flash) ─────────────────────── */
 @keyframes kpi-flash {
-  0% { background-color: rgba(58, 157, 120, 0.15); }
+  0% { background-color: rgba(13, 124, 102, 0.15); }
   100% { background-color: transparent; }
 }
 

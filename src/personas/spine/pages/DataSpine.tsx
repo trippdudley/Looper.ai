@@ -41,7 +41,7 @@ const sourceGroups: { group: string; nodes: SourceNode[] }[] = [
   {
     group: 'Coaching',
     nodes: [
-      { label: 'Looper Sessions', color: '#2E8B57', y: 240 },
+      { label: 'Looper Sessions', color: '#0D7C66', y: 240 },
       { label: 'Sportsbox AI', color: '#6C5CE7', y: 270 },
     ],
   },
@@ -61,9 +61,9 @@ const sourceGroups: { group: string; nodes: SourceNode[] }[] = [
 const allSources = sourceGroups.flatMap((g) => g.nodes);
 
 const outputNodes: OutputNode[] = [
-  { label: 'Coaching Intelligence', color: '#2E8B57', y: 100 },
+  { label: 'Coaching Intelligence', color: '#0D7C66', y: 100 },
   { label: 'Audience Segments', color: '#4A90D9', y: 180 },
-  { label: 'Monetization Engine', color: '#D4A843', y: 260 },
+  { label: 'Monetization Engine', color: '#D4980B', y: 260 },
   { label: 'Fitting Recommendations', color: '#CC6B6B', y: 340 },
 ];
 
@@ -98,10 +98,10 @@ const monetizationColors: Record<DataAttribute['monetizationRelevance'], string>
 function SparkStar({ cx, cy }: { cx: number; cy: number }) {
   return (
     <g>
-      <line x1={cx} y1={cy - 5} x2={cx} y2={cy + 5} stroke="#D4A843" strokeWidth={1.5} opacity={0.8} />
-      <line x1={cx - 5} y1={cy} x2={cx + 5} y2={cy} stroke="#D4A843" strokeWidth={1.5} opacity={0.8} />
-      <line x1={cx - 3} y1={cy - 3} x2={cx + 3} y2={cy + 3} stroke="#D4A843" strokeWidth={1} opacity={0.5} />
-      <line x1={cx + 3} y1={cy - 3} x2={cx - 3} y2={cy + 3} stroke="#D4A843" strokeWidth={1} opacity={0.5} />
+      <line x1={cx} y1={cy - 5} x2={cx} y2={cy + 5} stroke="#D4980B" strokeWidth={1.5} opacity={0.8} />
+      <line x1={cx - 5} y1={cy} x2={cx + 5} y2={cy} stroke="#D4980B" strokeWidth={1.5} opacity={0.8} />
+      <line x1={cx - 3} y1={cy - 3} x2={cx + 3} y2={cy + 3} stroke="#D4980B" strokeWidth={1} opacity={0.5} />
+      <line x1={cx + 3} y1={cy - 3} x2={cx - 3} y2={cy + 3} stroke="#D4980B" strokeWidth={1} opacity={0.5} />
     </g>
   );
 }
@@ -162,7 +162,7 @@ function DataFlowDiagram() {
               y={src.y + 4}
               fill="white"
               fontSize={11}
-              fontFamily="Inter, sans-serif"
+              fontFamily="DM Sans, sans-serif"
             >
               {src.label}
             </text>
@@ -200,7 +200,7 @@ function DataFlowDiagram() {
           fill="white"
           fontSize={11}
           textAnchor="middle"
-          fontFamily="Inter, sans-serif"
+          fontFamily="DM Sans, sans-serif"
         >
           Data Ingestion
         </text>
@@ -210,7 +210,7 @@ function DataFlowDiagram() {
           fill="#94A3B8"
           fontSize={10}
           textAnchor="middle"
-          fontFamily="Inter, sans-serif"
+          fontFamily="DM Sans, sans-serif"
         >
           &amp; Normalization
         </text>
@@ -223,7 +223,7 @@ function DataFlowDiagram() {
           fill="white"
           fontSize={11}
           textAnchor="middle"
-          fontFamily="Inter, sans-serif"
+          fontFamily="DM Sans, sans-serif"
         >
           LLM Processing
         </text>
@@ -233,7 +233,7 @@ function DataFlowDiagram() {
           fill="#94A3B8"
           fontSize={10}
           textAnchor="middle"
-          fontFamily="Inter, sans-serif"
+          fontFamily="DM Sans, sans-serif"
         >
           (Anthropic Claude)
         </text>
@@ -241,8 +241,8 @@ function DataFlowDiagram() {
         <SparkStar cx={centerLeft + 262} cy={188} />
 
         {/* Layer 3: Unified Golfer Identity */}
-        <rect x={centerLeft + 20} y={232} width={260} height={52} rx={8} fill="#2E8B57" opacity={0.35} />
-        <rect x={centerLeft + 20} y={232} width={260} height={52} rx={8} fill="none" stroke="#2E8B57" strokeWidth={1} opacity={0.6} />
+        <rect x={centerLeft + 20} y={232} width={260} height={52} rx={8} fill="#0D7C66" opacity={0.35} />
+        <rect x={centerLeft + 20} y={232} width={260} height={52} rx={8} fill="none" stroke="#0D7C66" strokeWidth={1} opacity={0.6} />
         <text
           x={centerLeft + 150}
           y={256}
@@ -250,7 +250,7 @@ function DataFlowDiagram() {
           fontSize={12}
           fontWeight="bold"
           textAnchor="middle"
-          fontFamily="Inter, sans-serif"
+          fontFamily="DM Sans, sans-serif"
         >
           Unified Golfer Identity
         </text>
@@ -260,7 +260,7 @@ function DataFlowDiagram() {
           fill="#3BA86D"
           fontSize={9}
           textAnchor="middle"
-          fontFamily="JetBrains Mono, monospace"
+          fontFamily="Space Mono, monospace"
         >
           golfer_synth_id::0x7F3A
         </text>
@@ -268,13 +268,13 @@ function DataFlowDiagram() {
         {/* ── Arrows from center right edge ── */}
         <defs>
           <marker id="arrowAccent" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto">
-            <polygon points="0 0, 6 2, 0 4" fill="#2E8B57" opacity={0.6} />
+            <polygon points="0 0, 6 2, 0 4" fill="#0D7C66" opacity={0.6} />
           </marker>
           <marker id="arrowBlue" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto">
             <polygon points="0 0, 6 2, 0 4" fill="#4A90D9" opacity={0.6} />
           </marker>
           <marker id="arrowAmber" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto">
-            <polygon points="0 0, 6 2, 0 4" fill="#D4A843" opacity={0.6} />
+            <polygon points="0 0, 6 2, 0 4" fill="#D4980B" opacity={0.6} />
           </marker>
           <marker id="arrowCoral" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto">
             <polygon points="0 0, 6 2, 0 4" fill="#CC6B6B" opacity={0.6} />
@@ -291,7 +291,7 @@ function DataFlowDiagram() {
               fill="white"
               fontSize={11}
               textAnchor="end"
-              fontFamily="Inter, sans-serif"
+              fontFamily="DM Sans, sans-serif"
             >
               {out.label}
             </text>
@@ -308,7 +308,7 @@ function DataFlowDiagram() {
               y={minY - 10}
               fill="#64748B"
               fontSize={8}
-              fontFamily="Inter, sans-serif"
+              fontFamily="DM Sans, sans-serif"
               letterSpacing="0.05em"
               style={{ textTransform: 'uppercase' }}
             >

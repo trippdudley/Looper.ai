@@ -37,7 +37,7 @@ export const CD = {
 
 // Font stacks
 export const F = {
-  brand: "'Cabinet Grotesk', -apple-system, BlinkMacSystemFont, sans-serif",
+  brand: "'DM Sans', system-ui, -apple-system, sans-serif",
   data:  "'Space Mono', monospace",
   serif: "'Instrument Serif', Georgia, serif",
 };

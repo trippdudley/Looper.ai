@@ -35,7 +35,7 @@ export default function MetricCard({ label, value, delta, deltaLabel, sparkData,
           <div className="w-20 h-8">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={chartData}>
-                <Line type="monotone" dataKey="v" stroke="#2E8B57" strokeWidth={1.5} dot={false} />
+                <Line type="monotone" dataKey="v" stroke="#0D7C66" strokeWidth={1.5} dot={false} />
               </LineChart>
             </ResponsiveContainer>
           </div>

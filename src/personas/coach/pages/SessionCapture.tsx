@@ -76,24 +76,22 @@ export default function SessionCapture() {
   const selectedShot = sessionShots[selectedShotIndex];
 
   // compute session-level averages for delta indicators
-  const averages = useMemo(() => {
-    const avg = (fn: (s: TrackmanShot) => number) => {
-      const sum = sessionShots.reduce((a, s) => a + fn(s), 0);
-      return sum / sessionShots.length;
-    };
-    return {
-      clubSpeed: avg((s) => s.clubSpeed),
-      ballSpeed: avg((s) => s.ballSpeed),
-      smashFactor: avg((s) => s.smashFactor),
-      launchAngle: avg((s) => s.launchAngle),
-      spinRate: avg((s) => s.spinRate),
-      carry: avg((s) => s.carry),
-      total: avg((s) => s.total),
-      attackAngle: avg((s) => s.attackAngle),
-      clubPath: avg((s) => s.clubPath),
-      faceAngle: avg((s) => s.faceAngle),
-    };
-  }, [sessionShots]);
+  const avg = (fn: (s: TrackmanShot) => number) => {
+    const sum = sessionShots.reduce((a, s) => a + fn(s), 0);
+    return sum / sessionShots.length;
+  };
+  const averages = {
+    clubSpeed: avg((s) => s.clubSpeed),
+    ballSpeed: avg((s) => s.ballSpeed),
+    smashFactor: avg((s) => s.smashFactor),
+    launchAngle: avg((s) => s.launchAngle),
+    spinRate: avg((s) => s.spinRate),
+    carry: avg((s) => s.carry),
+    total: avg((s) => s.total),
+    attackAngle: avg((s) => s.attackAngle),
+    clubPath: avg((s) => s.clubPath),
+    faceAngle: avg((s) => s.faceAngle),
+  };
 
   // transcript data
   const transcript = [
@@ -379,7 +377,7 @@ export default function SessionCapture() {
                 <path
                   d={`M ${originX} ${groundY} Q ${cpX} ${cpY}, ${landX} ${groundY}`}
                   fill="none"
-                  stroke="#2E8B57"
+                  stroke="#0D7C66"
                   strokeWidth="2.5"
                   strokeLinecap="round"
                   className="transition-all duration-500"
@@ -391,12 +389,12 @@ export default function SessionCapture() {
                 />
 
                 {/* Origin dot */}
-                <circle cx={originX} cy={groundY} r="3" fill="#2E8B57" />
+                <circle cx={originX} cy={groundY} r="3" fill="#0D7C66" />
 
                 {/* Landing zone marker */}
-                <circle cx={landX} cy={groundY} r="4" fill="none" stroke="#D4A843" strokeWidth="1.5" />
-                <circle cx={landX} cy={groundY} r="1.5" fill="#D4A843" />
-                <text x={landX} y={groundY - 10} fill="#D4A843" fontSize="10" textAnchor="middle" fontFamily="var(--font-mono)" fontWeight="bold">
+                <circle cx={landX} cy={groundY} r="4" fill="none" stroke="#D4980B" strokeWidth="1.5" />
+                <circle cx={landX} cy={groundY} r="1.5" fill="#D4980B" />
+                <text x={landX} y={groundY - 10} fill="#D4980B" fontSize="10" textAnchor="middle" fontFamily="var(--font-mono)" fontWeight="bold">
                   {selectedShot.carry} yds
                 </text>
               </svg>
@@ -495,7 +493,7 @@ export default function SessionCapture() {
                   className="w-[3px] rounded-full flex-shrink-0"
                   style={{
                     height: isMicOn ? `${h}%` : '12%',
-                    backgroundColor: isMicOn ? '#2E8B57' : '#D1D5DB',
+                    backgroundColor: isMicOn ? '#0D7C66' : '#D1D5DB',
                     transition: 'height 0.3s ease',
                     animation: isMicOn ? `waveform 0.8s ease-in-out ${(i * 0.06).toFixed(2)}s infinite alternate` : 'none',
                   }}

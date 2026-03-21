@@ -129,7 +129,7 @@ Entry point is `PersonaSelector` at `/` — each card routes to a persona.
 
 ```
 src/
-├── pages/               # App-level pages (PersonaSelector, CoachingOS, SizzleReel, ThesisPage)
+├── pages/               # App-level pages (PersonaSelector, LiveSessionSideline, SizzleReel, ThesisPage)
 ├── personas/
 │   ├── golfer/          # GolferLayout.tsx + pages/
 │   ├── coach/           # CoachLayout.tsx + pages/
@@ -140,8 +140,7 @@ src/
 │   ├── ui/              # Card, Badge, MetricCard, StatusDot, etc.
 │   ├── coach-session/   # VoiceAIPanel, VideoPlayer, LaunchDataPanel, etc.
 │   ├── fitter/          # FittingAIInsightCard, ShaftComparisonTable, etc.
-│   ├── trackman/        # TrackmanDataGrid, ShotRow, MetricDelta
-│   └── spine/           # DataFlowNode, AudienceSegmentCard, etc.
+│   └── spine/           # Spine persona components
 ├── data/                # All mock data (golfers, sessions, drills, coachingOSData, etc.)
 ├── index.css            # Tailwind imports + @theme tokens + glass effects
 ├── App.tsx              # All route definitions
@@ -210,12 +209,12 @@ Golfer uses `MobileShell` (iPhone 15 frame, 390×844px) + `BottomTabBar`. All ot
 ### Colors (defined in both `index.css` @theme and `coachingOSData.ts` C constant)
 | Token | Hex | Usage |
 |-------|-----|-------|
-| `accent` | `#3A9D78` | Primary action, success, confidence |
-| `accent-light` | `#4DB88A` | Hover states |
+| `accent` | `#0D7C66` | Primary action, brand accent |
+| `accent-light` | `#0FA87A` | Hover states, confidence/success |
 | `navy` | `#1C2B2D` | Primary text, headings |
 | `data-blue` | `#4A90D9` | Data/info indicators |
-| `warm-amber` | `#D4A843` | Caution, warnings |
-| `coral` | `#C45C4A` | Errors, alerts, flags |
+| `warm-amber` | `#D4980B` | Caution, warnings |
+| `coral` | `#C93B3B` | Errors, alerts, flags |
 | `bg-light` | `#F7F8F9` | Light mode backgrounds |
 | `bg-dark` | `#0F1A1C` | Dark mode backgrounds |
 | `card-dark` | `#1A2D30` | Dark mode cards |
@@ -224,15 +223,15 @@ Golfer uses `MobileShell` (iPhone 15 frame, 390×844px) + `BottomTabBar`. All ot
 ### Fonts
 | Token | Stack | Usage |
 |-------|-------|-------|
-| `sans` | Inter, system-ui, sans-serif | All UI text |
-| `mono` | JetBrains Mono, Menlo, monospace | Data values, metrics |
+| `sans` | DM Sans, system-ui, sans-serif | All UI text |
+| `mono` | Space Mono, SF Mono, monospace | Data values, metrics |
 
 ### CRITICAL: Token Sync Rule
-`src/data/coachingOSData.ts` exports `C` (colors) and `F` (fonts) constants used by CoachingOS inline styles. These **must stay in sync** with the Tailwind tokens in `index.css`. If you change a color in one place, change it in both. The canonical values are:
-- `C.accent` = `#3A9D78` = `--color-accent`
+`src/data/coachingOSData.ts` exports `C` (colors) and `F` (fonts) constants used by coach session inline styles. These **must stay in sync** with the Tailwind tokens in `index.css`. If you change a color in one place, change it in both. The canonical values are:
+- `C.accent` = `#0D7C66` = `--color-accent`
 - `C.ink` = `#1C2B2D` = `--color-navy`
-- `F.brand` = `Inter` = `--font-sans`
-- `F.data` = `JetBrains Mono` = `--font-mono`
+- `F.brand` = `DM Sans` = `--font-sans`
+- `F.data` = `Space Mono` = `--font-mono`
 
 ## Key Data Files
 

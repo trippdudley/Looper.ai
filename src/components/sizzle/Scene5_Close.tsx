@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
 import { CD, F, vis, fadeIn, fadeInOut } from './tokens';
+import { useIsMobile } from '../../hooks/useIsMobile';
 
 const T = {
   looper:    400,
@@ -8,18 +8,6 @@ const T = {
   tagline:   4600,
   url:       5200,
 };
-
-function useIsMobile() {
-  const [m, setM] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px)');
-    setM(mq.matches);
-    const h = (e: MediaQueryListEvent) => setM(e.matches);
-    mq.addEventListener('change', h);
-    return () => mq.removeEventListener('change', h);
-  }, []);
-  return m;
-}
 
 export default function Scene5_Close({ elapsed }: { elapsed: number }) {
   const isMobile = useIsMobile();

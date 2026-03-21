@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
 import { C, F, vis, fadeIn, fadeInOut, easeOutCubic, countUp } from './tokens';
+import { useIsMobile } from '../../hooks/useIsMobile';
 import swingVideo from '../../assets/images/swing-clip.mov';
 
 // ---- Timing (ms) ----
@@ -83,19 +83,6 @@ const S = {
     padding: 14,
   },
 };
-
-// ---- Responsive hook ----
-function useIsMobile() {
-  const [m, setM] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px)');
-    setM(mq.matches);
-    const h = (e: MediaQueryListEvent) => setM(e.matches);
-    mq.addEventListener('change', h);
-    return () => mq.removeEventListener('change', h);
-  }, []);
-  return m;
-}
 
 // ---- Component ----
 export default function Scene3_LiveSession({ elapsed }: { elapsed: number }) {
