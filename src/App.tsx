@@ -12,6 +12,7 @@ const ThesisPage = lazy(() => import('./pages/ThesisPage'));
 const LooperNarrative = lazy(() => import('./components/looper-narrative'));
 const SizzleReel = lazy(() => import('./pages/SizzleReel'));
 const CoachingOS = lazy(() => import('./pages/LiveSessionSideline'));
+const TrackmanIntegration = lazy(() => import('./pages/TrackmanIntegration'));
 
 const PlayerLayout = lazy(() => import('./personas/player/PlayerLayout'));
 const GolferLayout = lazy(() => import('./personas/golfer/GolferLayout'));
