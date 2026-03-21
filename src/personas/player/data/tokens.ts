@@ -71,11 +71,10 @@ export const fmt = (v: number, type: string): string => {
   }
 };
 
-export const fmtDelta = (v: number, type: string): { text: string; color: string } => {
+export const fmtDelta = (v: number, _type: string): { text: string; color: string } => {
   const prefix = v > 0 ? '\u25B2 +' : v < 0 ? '\u25BC \u2212' : '';
   const color = v > 0 ? C.conf : v < 0 ? C.flag : C.muted;
   // Use base format but strip any sign prefix from the absolute value
-  const fmtType = type === 'sg' ? 'pct' : type; // avoid sg's +/- prefix on abs value
   const formatted = Math.abs(v).toFixed(1);
   return { text: prefix + formatted, color };
 };
