@@ -15,7 +15,7 @@ export interface TimelineEvent {
   id: string;
   date: string;       // ISO date: '2026-03-18'
   time: string | null; // '16:30' or null for all-day
-  type: 'lesson' | 'practice' | 'round' | 'score' | 'body' | 'rest' | 'fitting' | 'equipment' | 'milestone';
+  type: 'lesson' | 'practice' | 'round' | 'score' | 'body' | 'rest' | 'fitting' | 'equip' | 'milestone';
   source: string;
   title: string;
   metrics: TimelineMetric[];
@@ -388,7 +388,7 @@ export const timelineEvents: TimelineEvent[] = [
     id: 'ev-0115-equipment',
     date: '2026-01-15',
     time: '10:00',
-    type: 'equipment',
+    type: 'equip',
     source: 'coaching',
     title: 'Iron fitting complete',
     metrics: [

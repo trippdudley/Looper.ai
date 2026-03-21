@@ -34,4 +34,13 @@ export const player = {
     ball:    'Titleist Pro V1x',
     lastFitting: 'Jan 15, 2026',
   },
+
+  milestones: [
+    { date: 'Jan 2025', label: 'Started coaching with M. Thompson', type: 'coach' },
+    { date: 'Mar 2025', label: 'Broke 90 for the first time', type: 'score' },
+    { date: 'Aug 2025', label: 'Driver fitting \u2014 switched to Qi10 LS', type: 'equip' },
+    { date: 'Nov 2025', label: 'Handicap reached 14.0', type: 'hcp' },
+    { date: 'Jan 2026', label: 'Iron fitting \u2014 switched to T200', type: 'equip' },
+    { date: 'Mar 2026', label: 'Handicap reached 12.4', type: 'hcp' },
+  ],
 };

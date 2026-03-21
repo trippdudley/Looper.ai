@@ -18,7 +18,7 @@ const filters: { key: FilterKey; label: string }[] = [
 
 const filterFns: Record<FilterKey, (e: typeof timelineEvents[0]) => boolean> = {
   everything: () => true,
-  golf: (e) => ['round', 'practice', 'score', 'fitting', 'equipment'].includes(e.type),
+  golf: (e) => ['round', 'practice', 'score', 'fitting', 'equip'].includes(e.type),
   body: (e) => ['body', 'rest'].includes(e.type),
   coaching: (e) => ['lesson', 'milestone'].includes(e.type) || e.source === 'coaching',
 };
