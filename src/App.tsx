@@ -13,6 +13,7 @@ const LooperNarrative = lazy(() => import('./components/looper-narrative'));
 const SizzleReel = lazy(() => import('./pages/SizzleReel'));
 const CoachingOS = lazy(() => import('./pages/LiveSessionSideline'));
 
+const PlayerLayout = lazy(() => import('./personas/player/PlayerLayout'));
 const GolferLayout = lazy(() => import('./personas/golfer/GolferLayout'));
 const GolferHome = lazy(() => import('./personas/golfer/pages/GolferHome'));
 const LessonHistory = lazy(() => import('./personas/golfer/pages/LessonHistory'));
@@ -65,6 +66,8 @@ function AppRoutes() {
           <Route path="/narrative" element={<ErrorBoundary><LooperNarrative /></ErrorBoundary>} />
           <Route path="/coaching-os" element={<Navigate to="/coach/live" replace />} />
           <Route path="/vision" element={<ErrorBoundary><SizzleReel /></ErrorBoundary>} />
+
+          <Route path="/player" element={<ErrorBoundary fallbackTitle="Player view error"><PlayerLayout /></ErrorBoundary>} />
 
           <Route path="/golfer" element={<ErrorBoundary fallbackTitle="Golfer view error"><GolferLayout /></ErrorBoundary>}>
             <Route index element={<GolferHome />} />

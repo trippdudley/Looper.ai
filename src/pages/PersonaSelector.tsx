@@ -1,8 +1,14 @@
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { User, GraduationCap, Wrench } from 'lucide-react';
+import { User, GraduationCap, Wrench, Route } from 'lucide-react';
 
 const personas = [
+  {
+    label: "I'm a Player",
+    icon: Route,
+    description: "Your full game on one timeline \u2014 every source, every session, one story",
+    path: "/player",
+  },
   {
     label: "I'm a Golfer",
     icon: User,
