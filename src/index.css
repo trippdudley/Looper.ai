@@ -2,19 +2,20 @@
 
 @theme {
   /* Brand palette — Looper.AI brand guidelines */
-  --color-navy: #1C2B2D;
-  --color-accent: #3A9D78;
-  --color-accent-light: #4DB88A;
+  --color-navy: #1A1F2B;
+  --color-accent: #0D7C66;
+  --color-accent-light: #0A6352;
+  --color-accent-bright: #0FA87A;
   --color-data-blue: #4A90D9;
-  --color-warm-amber: #D4A843;
-  --color-coral: #C45C4A;
-  --color-bg-light: #F7F8F9;
-  --color-bg-dark: #0F1A1C;
-  --color-card-dark: #1A2D30;
-  --color-border-dark: #2D4A4F;
+  --color-warm-amber: #D4980B;
+  --color-coral: #C93B3B;
+  --color-bg-light: #F6F7F9;
+  --color-bg-dark: #0C1117;
+  --color-card-dark: #1E2A36;
+  --color-border-dark: #1E2A36;
 
-  --font-sans: Inter, system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', Menlo, monospace;
+  --font-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Space Mono', Menlo, monospace;
 }
 
 body {
