@@ -20,12 +20,12 @@ export default function TopBar({ title, searchPlaceholder, userName, dark }: Top
           <h1 className={`text-sm font-semibold ${textClass}`}>{title}</h1>
         )}
         {searchPlaceholder && (
-          <div className="relative">
+          <div className="relative hidden sm:block">
             <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${subtextClass}`} />
             <input
               type="text"
               placeholder={searchPlaceholder}
-              className={`${inputBgClass} pl-9 pr-4 py-2 rounded-lg text-sm border focus:outline-none focus:ring-1 focus:ring-accent w-64`}
+              className={`${inputBgClass} pl-9 pr-4 py-2 rounded-lg text-sm border focus:outline-none focus:ring-1 focus:ring-accent w-40 sm:w-64`}
             />
           </div>
         )}
@@ -40,7 +40,7 @@ export default function TopBar({ title, searchPlaceholder, userName, dark }: Top
         </button>
         {userName && (
           <>
-            <span className={`text-sm font-medium ${textClass}`}>{userName}</span>
+            <span className={`text-sm font-medium ${textClass} hidden sm:inline`}>{userName}</span>
             <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white bg-accent">
               {userName
                 .split(/[\s,]+/)

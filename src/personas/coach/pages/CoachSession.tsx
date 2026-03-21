@@ -93,7 +93,7 @@ export default function CoachSession() {
       {mode === 'live' ? (
         <div className="flex flex-1 min-h-0 overflow-hidden">
           {/* Left Rail: Swing Catalog — 20% width */}
-          <div className="w-[20%] min-w-[220px] max-w-[300px] flex-shrink-0 border-r border-[#E2E5E8] bg-[#F9FAFB]">
+          <div className="hidden md:block w-[20%] min-w-[220px] max-w-[300px] flex-shrink-0 border-r border-[#E2E5E8] bg-[#F9FAFB]">
             <SwingCatalog
               swings={coachSessionData.swings}
               selectedSwingId={selectedSwingId}

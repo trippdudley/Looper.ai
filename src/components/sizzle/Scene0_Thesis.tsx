@@ -40,7 +40,7 @@ export default function Scene0_Thesis({ elapsed }: { elapsed: number }) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          padding: 32,
+          padding: 16,
         }}
       >
         <div style={{ maxWidth: 680, width: '100%', textAlign: 'center' }}>

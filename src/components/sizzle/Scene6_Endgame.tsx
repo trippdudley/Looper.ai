@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { ClipboardList, Database, Brain, Target, TrendingUp, Layers, BarChart3, Cpu } from 'lucide-react';
 import { CD, F, vis, fadeIn, fadeInOut } from './tokens';
 
@@ -54,7 +55,20 @@ const gridBg = [
   `linear-gradient(to bottom, ${CD.border}26 1px, transparent 1px)`,
 ].join(', ');
 
+function useIsMobile() {
+  const [m, setM] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    setM(mq.matches);
+    const h = (e: MediaQueryListEvent) => setM(e.matches);
+    mq.addEventListener('change', h);
+    return () => mq.removeEventListener('change', h);
+  }, []);
+  return m;
+}
+
 export default function Scene6_Endgame({ elapsed }: { elapsed: number }) {
+  const isMobile = useIsMobile();
   return (
     <div
       style={{
@@ -162,6 +176,7 @@ export default function Scene6_Endgame({ elapsed }: { elapsed: number }) {
                   justifyContent: 'center',
                   gap: 8,
                   marginBottom: 12,
+                  flexWrap: 'wrap' as const,
                 }}
               >
                 {flywheelNodes.slice(0, 3).map((node, i) => {
@@ -297,7 +312,8 @@ export default function Scene6_Endgame({ elapsed }: { elapsed: number }) {
               <div
                 style={{
                   display: 'flex',
-                  gap: 14,
+                  flexDirection: isMobile ? 'column' as const : 'row' as const,
+                  gap: isMobile ? 10 : 14,
                   marginBottom: 18,
                 }}
               >
