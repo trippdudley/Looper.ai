@@ -1,10 +1,11 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, ChevronDown, ChevronUp, Play, Pause, Wifi } from 'lucide-react';
+import { ArrowLeft, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, Play, Pause, Wifi, AlertTriangle, Mic } from 'lucide-react';
 import type { TabId, ShotData } from '../data/coachingOSData';
 import {
   shots, sessionContext, tabs,
   diagnosisFactors, interventions, playerHistory,
+  aiInsights, recommendations,
   getInsightForShot, getRecommendationForShot,
 } from '../data/coachingOSData';
 
@@ -841,6 +842,556 @@ function AdvancedGroup({ label, children }: { label: string; children: React.Rea
 }
 
 // ═══════════════════════════════════════════════════════════════
+//  COACHING INTELLIGENCE PANEL (docked right)
+// ═══════════════════════════════════════════════════════════════
+
+type IntelTab = 'brief' | 'insights' | 'capture' | 'diagnosis' | 'plan';
+
+const INTEL_TABS: Array<{ id: IntelTab; label: string }> = [
+  { id: 'brief', label: 'Brief' },
+  { id: 'insights', label: 'Insights' },
+  { id: 'capture', label: 'Capture' },
+  { id: 'diagnosis', label: 'Diagnosis' },
+  { id: 'plan', label: 'Plan' },
+];
+
+// ─── Pattern insights for the diagnosis sub-tab ──────────────
+interface PatternInsight {
+  id: string;
+  type: 'trend' | 'alert' | 'breakthrough';
+  title: string;
+  detail: string;
+  confidence: number;
+  shotRange: string;
+}
+
+const patterns: PatternInsight[] = [
+  {
+    id: 'p1', type: 'trend',
+    title: 'Attack angle improving across session',
+    detail: 'Ground-pressure cue producing +2.0° shallowing trend. Weight transfer feel translating to measurable delivery change.',
+    confidence: 87, shotRange: 'Shots 1-10',
+  },
+  {
+    id: 'p2', type: 'breakthrough',
+    title: 'Best strike quality of program',
+    detail: 'Center-face contact with optimal attack angle. External cue fully transferred into motor pattern.',
+    confidence: 94, shotRange: 'Shot 14',
+  },
+  {
+    id: 'p3', type: 'alert',
+    title: 'Brief regression on shot 11',
+    detail: 'Lost ground-pressure feel momentarily — attack angle steepened to -6.2° (old pattern). Player likely over-processed the cue. Recovered by shot 12.',
+    confidence: 72, shotRange: 'Shot 11',
+  },
+  {
+    id: 'p4', type: 'trend',
+    title: 'Spin rate trending down post-cue',
+    detail: 'Compression improving as strike centers. Spin dropped ~800 rpm from baseline — pure contact gains, not deloft.',
+    confidence: 81, shotRange: 'Shots 12-14',
+  },
+];
+
+// ─── Intel Brief Sub-tab ─────────────────────────────────────
+function IntelBriefTab() {
+  const lastLesson = playerHistory.lessons[1];
+  const currentLesson = playerHistory.lessons[2];
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      {/* Player Context */}
+      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+        {[
+          `${sessionContext.playerName} · ${sessionContext.handicap} hcp`,
+          `Session ${sessionContext.sessionNumber}/${sessionContext.totalSessions}`,
+          `Goal: ${sessionContext.goal}`,
+        ].map(text => (
+          <span key={text} style={{
+            fontFamily: F.data, fontSize: 8, padding: '3px 8px',
+            borderRadius: 12, border: `1px solid ${C.borderSub}`, color: C.muted,
+          }}>{text}</span>
+        ))}
+      </div>
+
+      {/* Last Session Recap */}
+      <div style={{
+        background: C.surface, borderRadius: 10, border: `1px solid ${C.border}`,
+        padding: '12px 14px',
+      }}>
+        <div style={{
+          fontFamily: F.data, fontSize: 8, fontWeight: 700,
+          letterSpacing: '.08em', color: C.muted, textTransform: 'uppercase',
+          marginBottom: 6,
+        }}>Last Session · {lastLesson.date}</div>
+        <div style={{
+          fontFamily: F.brand, fontSize: 12, fontWeight: 500, color: C.ink,
+          marginBottom: 4,
+        }}>{lastLesson.focus}</div>
+        <div style={{
+          fontFamily: F.brand, fontSize: 11, color: C.body, lineHeight: 1.55,
+        }}>{lastLesson.keyTakeaway}</div>
+        {lastLesson.cueUsed && (
+          <div style={{
+            marginTop: 6, fontFamily: F.data, fontSize: 8, color: C.accent,
+            padding: '3px 8px', borderRadius: 4, background: C.accentBg,
+            display: 'inline-block',
+          }}>CUE: "{lastLesson.cueUsed}"</div>
+        )}
+      </div>
+
+      {/* Current Session Focus */}
+      <div style={{
+        background: C.surface, borderRadius: 10, border: `1px solid ${C.border}`,
+        padding: '12px 14px',
+      }}>
+        <div style={{
+          fontFamily: F.data, fontSize: 8, fontWeight: 700,
+          letterSpacing: '.08em', color: C.muted, textTransform: 'uppercase',
+          marginBottom: 6,
+        }}>Current Session Focus</div>
+        <div style={{
+          fontFamily: F.brand, fontSize: 12, fontWeight: 500, color: C.ink,
+          marginBottom: 4,
+        }}>{currentLesson.focus}</div>
+        <div style={{
+          fontFamily: F.brand, fontSize: 11, color: C.body, lineHeight: 1.55,
+        }}>{currentLesson.keyTakeaway}</div>
+      </div>
+
+      {/* Coach Notes from last session */}
+      <div style={{
+        background: C.elevated, borderRadius: 8, padding: '10px 14px',
+        border: `1px solid ${C.borderSub}`,
+      }}>
+        <div style={{
+          fontFamily: F.data, fontSize: 7, fontWeight: 700,
+          letterSpacing: '.08em', color: C.dim, marginBottom: 4,
+          textTransform: 'uppercase',
+        }}>Coach Notes from Session {lastLesson.sessionNumber}</div>
+        <div style={{
+          fontFamily: F.brand, fontSize: 10, color: C.muted,
+          lineHeight: 1.5, fontStyle: 'italic',
+        }}>"{lastLesson.coachNotes}"</div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Intel Insights Sub-tab ──────────────────────────────────
+function IntelInsightsTab({ shot }: { shot: ShotData }) {
+  const relevantInsight = useMemo(() => {
+    return getInsightForShot(shot.id);
+  }, [shot.id]);
+
+  const relevantRec = useMemo(() => {
+    return getRecommendationForShot(shot.id);
+  }, [shot.id]);
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      {/* Shot context */}
+      <div style={{
+        fontFamily: F.data, fontSize: 9, fontWeight: 700,
+        letterSpacing: '.06em', color: C.muted, textTransform: 'uppercase',
+      }}>
+        Swing {shot.id} · {shot.club}
+      </div>
+
+      {/* AI Observation */}
+      {relevantInsight && (
+        <div style={{
+          background: `linear-gradient(135deg, ${C.surface} 0%, ${C.accent}05 100%)`,
+          borderRadius: 10, padding: '12px 14px',
+          border: `1px solid ${C.accent}18`, position: 'relative',
+        }}>
+          <div style={{
+            position: 'absolute', top: 0, left: 0, right: 0, height: 1,
+            background: `linear-gradient(90deg, transparent, ${C.accent}35, transparent)`,
+          }} />
+          <div style={{
+            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+            marginBottom: 6,
+          }}>
+            <span style={{
+              fontFamily: F.data, fontSize: 8, fontWeight: 700,
+              color: C.accent, letterSpacing: '.06em',
+            }}>AI OBSERVATION</span>
+            <ConfBadge value={relevantInsight.confidence} />
+          </div>
+          <div style={{
+            fontFamily: F.brand, fontSize: 11.5, color: C.body, lineHeight: 1.6,
+          }}>{relevantInsight.observation}</div>
+        </div>
+      )}
+
+      {/* Recommendation */}
+      {relevantRec && (
+        <div style={{
+          background: C.surface, borderRadius: 10, padding: '12px 14px',
+          border: `1px solid ${C.caution}18`, position: 'relative',
+        }}>
+          <div style={{
+            position: 'absolute', top: 0, left: 0, right: 0, height: 1,
+            background: `linear-gradient(90deg, transparent, ${C.caution}25, transparent)`,
+          }} />
+          <div style={{
+            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+            marginBottom: 6,
+          }}>
+            <span style={{
+              fontFamily: F.data, fontSize: 8, fontWeight: 700,
+              color: C.caution, letterSpacing: '.06em',
+            }}>RECOMMENDATION</span>
+            <span style={{
+              fontFamily: F.data, fontSize: 8, fontWeight: 700,
+              padding: '1px 6px', borderRadius: 3,
+              background: C.cautionBg, color: C.caution,
+            }}>{relevantRec.infoGain}</span>
+          </div>
+          <div style={{
+            fontFamily: F.brand, fontSize: 11.5, color: C.body, lineHeight: 1.6,
+          }}>{relevantRec.text}</div>
+          <button style={{
+            marginTop: 8, fontFamily: F.data, fontSize: 8, fontWeight: 700,
+            textTransform: 'uppercase', letterSpacing: '.06em',
+            padding: '3px 10px', borderRadius: 4, cursor: 'pointer',
+            background: 'transparent', border: `1px solid ${C.border}`, color: C.muted,
+          }}>Override</button>
+        </div>
+      )}
+
+      {/* Quick metrics context */}
+      <div style={{
+        background: C.elevated, borderRadius: 8, padding: '10px 14px',
+        border: `1px solid ${C.borderSub}`,
+      }}>
+        <div style={{
+          fontFamily: F.data, fontSize: 7, fontWeight: 700,
+          letterSpacing: '.08em', color: C.dim, marginBottom: 6,
+          textTransform: 'uppercase',
+        }}>Key Numbers</div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
+          {[
+            { label: 'Carry', value: `${shot.carry} yds` },
+            { label: 'Ball Speed', value: `${shot.ballSpeed.toFixed(1)} mph` },
+            { label: 'Attack', value: `${fmtSigned(shot.attackAngle, 'deg')}°` },
+            { label: 'Spin', value: `${Math.round(shot.spinRate).toLocaleString()} rpm` },
+          ].map(m => (
+            <div key={m.label}>
+              <div style={{ fontFamily: F.data, fontSize: 7, color: C.dim, letterSpacing: '.06em' }}>{m.label}</div>
+              <div style={{ fontFamily: F.data, fontSize: 11, fontWeight: 700, color: C.data }}>{m.value}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Intel Capture Sub-tab ───────────────────────────────────
+function IntelCaptureTab() {
+  const [notes, setNotes] = useState('');
+  const quickTags = ['Cue landed', 'Revert to old pattern', 'Breakthrough', 'Fatigue', 'Player frustrated', 'Good feel'];
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      <div style={{
+        fontFamily: F.data, fontSize: 8, fontWeight: 700,
+        letterSpacing: '.08em', color: C.muted, textTransform: 'uppercase',
+      }}>Session Capture</div>
+
+      {/* Quick tags */}
+      <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+        {quickTags.map(tag => (
+          <button key={tag} style={{
+            fontFamily: F.data, fontSize: 8, padding: '3px 8px',
+            borderRadius: 12, border: `1px solid ${C.borderSub}`,
+            background: 'transparent', color: C.muted, cursor: 'pointer',
+            transition: 'all 0.15s',
+          }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = C.accent; e.currentTarget.style.color = C.accent; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = C.borderSub; e.currentTarget.style.color = C.muted; }}
+            onClick={() => setNotes(prev => prev + (prev ? '\n' : '') + tag + ': ')}
+          >{tag}</button>
+        ))}
+      </div>
+
+      {/* Notes area */}
+      <textarea
+        value={notes}
+        onChange={e => setNotes(e.target.value)}
+        placeholder="Type coaching notes... Why did you choose this intervention? What did the player say?"
+        style={{
+          fontFamily: F.brand, fontSize: 11, color: C.body, lineHeight: 1.55,
+          background: C.surface, border: `1px solid ${C.border}`,
+          borderRadius: 8, padding: '10px 12px', minHeight: 120,
+          resize: 'vertical', outline: 'none',
+        }}
+        onFocus={e => e.currentTarget.style.borderColor = C.accent}
+        onBlur={e => e.currentTarget.style.borderColor = C.border}
+      />
+
+      {/* Voice note button */}
+      <button style={{
+        display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'center',
+        fontFamily: F.data, fontSize: 9, fontWeight: 700,
+        padding: '8px 12px', borderRadius: 8, cursor: 'pointer',
+        background: C.elevated, border: `1px solid ${C.border}`, color: C.muted,
+      }}>
+        <Mic size={12} /> Voice Note
+      </button>
+
+      <div style={{
+        fontFamily: F.data, fontSize: 7, color: C.dim,
+        letterSpacing: '.06em', textTransform: 'uppercase',
+      }}>
+        Reasoning captured here is saved with the session record
+      </div>
+    </div>
+  );
+}
+
+// ─── Intel Diagnosis Sub-tab ─────────────────────────────────
+function IntelDiagnosisTab() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      <div style={{
+        fontFamily: F.data, fontSize: 8, fontWeight: 700,
+        letterSpacing: '.08em', color: C.muted, textTransform: 'uppercase',
+      }}>Session Patterns</div>
+
+      {patterns.map(p => {
+        const cl = confidenceLevel(p.confidence);
+        return (
+          <div key={p.id} style={{
+            padding: '10px 12px', borderRadius: 8,
+            background: C.surface, border: `1px solid ${C.border}`,
+            borderLeft: `3px solid ${
+              p.type === 'breakthrough' ? C.conf
+              : p.type === 'alert' ? C.caution : C.body
+            }`,
+          }}>
+            <div style={{
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              marginBottom: 4,
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                {p.type === 'alert' && <AlertTriangle size={10} color={C.caution} />}
+                <span style={{
+                  fontFamily: F.brand, fontSize: 11, fontWeight: 600, color: C.ink,
+                }}>{p.title}</span>
+              </div>
+              <ConfBadge value={p.confidence} />
+            </div>
+            <div style={{
+              fontFamily: F.brand, fontSize: 10.5, color: C.body, lineHeight: 1.55,
+            }}>{p.detail}</div>
+            <span style={{
+              fontFamily: F.data, fontSize: 7, color: C.dim, marginTop: 4,
+              display: 'inline-block',
+            }}>{p.shotRange}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ─── Intel Plan Sub-tab ──────────────────────────────────────
+function IntelPlanTab() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      <div style={{
+        fontFamily: F.data, fontSize: 8, fontWeight: 700,
+        letterSpacing: '.08em', color: C.muted, textTransform: 'uppercase',
+      }}>Player Plan · {sessionContext.playerName}</div>
+
+      <div style={{
+        background: C.surface, borderRadius: 10, border: `1px solid ${C.border}`,
+        padding: '12px 14px',
+      }}>
+        <div style={{
+          fontFamily: F.brand, fontSize: 13, fontWeight: 500, color: C.ink,
+          marginBottom: 6,
+        }}>Current Arc: Strike Consistency</div>
+        <div style={{
+          fontFamily: F.brand, fontSize: 11, color: C.body, lineHeight: 1.6,
+        }}>
+          Session 3 of 8. Ground-pressure cue producing measurable improvement.
+          Partial regression after 2-week break confirms motor pattern not yet
+          automatic. Reinforce cue 2 more sessions, then layer constraint drill.
+        </div>
+      </div>
+
+      <div style={{
+        background: C.surface, borderRadius: 10, border: `1px solid ${C.border}`,
+        padding: '12px 14px',
+      }}>
+        <div style={{
+          fontFamily: F.brand, fontSize: 12, fontWeight: 500, color: C.ink,
+          marginBottom: 6,
+        }}>Homework</div>
+        <ul style={{
+          fontFamily: F.brand, fontSize: 11, color: C.body, lineHeight: 1.6,
+          margin: 0, paddingLeft: 18,
+        }}>
+          <li>50 balls, 7-iron only, ground-pressure feel, 3x this week</li>
+          <li>70% effort max — focus on feel, not distance</li>
+          <li>Note divot start position relative to ball</li>
+        </ul>
+      </div>
+
+      <div style={{
+        background: C.elevated, borderRadius: 8, padding: '10px 14px',
+        border: `1px solid ${C.borderSub}`,
+      }}>
+        <div style={{
+          fontFamily: F.data, fontSize: 7, fontWeight: 700,
+          letterSpacing: '.08em', color: C.dim, marginBottom: 4,
+          textTransform: 'uppercase',
+        }}>Leave Alone (Coach Decision)</div>
+        <div style={{
+          fontFamily: F.brand, fontSize: 10, color: C.muted, lineHeight: 1.5,
+        }}>
+          Strong grip producing reliable draw shape — feature, not fault.
+          Do NOT discuss shaft lean or hand position with this player.
+        </div>
+      </div>
+
+      <div style={{
+        background: C.surface, borderRadius: 10, border: `1px solid ${C.accent}18`,
+        padding: '12px 14px',
+      }}>
+        <div style={{
+          fontFamily: F.data, fontSize: 8, fontWeight: 700,
+          letterSpacing: '.08em', color: C.accent, textTransform: 'uppercase',
+          marginBottom: 6,
+        }}>Next Session Preview</div>
+        <div style={{
+          fontFamily: F.brand, fontSize: 11, color: C.body, lineHeight: 1.6,
+        }}>
+          If cue retention holds: introduce tee-peg gate drill. If regression:
+          continue ground-pressure work with refined language ("sole brushes
+          forward" vs "press the ground").
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Coaching Intelligence Panel (main container) ────────────
+function CoachIntelPanel({ shot, collapsed, onToggle }: {
+  shot: ShotData;
+  collapsed: boolean;
+  onToggle: () => void;
+}) {
+  const [activeIntelTab, setActiveIntelTab] = useState<IntelTab>('insights');
+
+  if (collapsed) {
+    return (
+      <div style={{
+        width: 36, display: 'flex', flexDirection: 'column',
+        background: C.surface, borderLeft: `1px solid ${C.border}`,
+        alignItems: 'center', flexShrink: 0,
+      }}>
+        <button onClick={onToggle} style={{
+          padding: '10px 0', border: 'none', cursor: 'pointer',
+          background: 'transparent', color: C.accent,
+        }}>
+          <ChevronLeft size={14} />
+        </button>
+        <div style={{
+          writingMode: 'vertical-rl', textOrientation: 'mixed',
+          fontFamily: F.brand, fontSize: 10, fontWeight: 800,
+          letterSpacing: '.05em', color: C.ink, marginTop: 8,
+        }}>
+          <span>LOOPER</span>
+          <span style={{ color: C.accent }}>.AI</span>
+        </div>
+        <div style={{
+          writingMode: 'vertical-rl', textOrientation: 'mixed',
+          fontFamily: F.data, fontSize: 7, color: C.muted,
+          marginTop: 12, letterSpacing: '.04em',
+        }}>COACHING INTELLIGENCE</div>
+        <div style={{
+          width: 6, height: 6, borderRadius: '50%',
+          background: C.accent, marginTop: 16,
+          animation: 'pulse 2s infinite',
+        }} />
+      </div>
+    );
+  }
+
+  return (
+    <div style={{
+      width: 340, minWidth: 280, maxWidth: 400,
+      display: 'flex', flexDirection: 'column',
+      overflow: 'hidden', borderLeft: `1px solid ${C.border}`,
+      flexShrink: 0,
+    }}>
+      {/* Panel Header */}
+      <div style={{
+        padding: '8px 12px', borderBottom: `1px solid ${C.border}`,
+        background: C.confBg, display: 'flex', alignItems: 'center',
+        justifyContent: 'space-between', flexShrink: 0,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{
+            fontFamily: F.brand, fontSize: 11, fontWeight: 800,
+            letterSpacing: '.05em', color: C.ink,
+          }}>LOOPER</span>
+          <span style={{
+            fontFamily: F.brand, fontSize: 11, fontWeight: 800,
+            letterSpacing: '.05em', color: C.accent,
+          }}>.AI</span>
+          <span style={{
+            fontFamily: F.data, fontSize: 7, color: C.muted,
+            letterSpacing: '.04em',
+          }}>COACHING INTELLIGENCE</span>
+        </div>
+        <button onClick={onToggle} style={{
+          padding: '2px 4px', border: 'none', cursor: 'pointer',
+          background: 'transparent', color: C.muted,
+        }}>
+          <ChevronRight size={14} />
+        </button>
+      </div>
+
+      {/* Sub-tabs */}
+      <div style={{
+        display: 'flex', borderBottom: `1px solid ${C.border}`,
+        flexShrink: 0,
+      }}>
+        {INTEL_TABS.map(tab => {
+          const isActive = tab.id === activeIntelTab;
+          return (
+            <button key={tab.id} onClick={() => setActiveIntelTab(tab.id)} style={{
+              flex: 1, padding: '6px 4px', border: 'none', cursor: 'pointer',
+              background: 'transparent',
+              borderBottom: isActive ? `2px solid ${C.accent}` : '2px solid transparent',
+              fontFamily: F.brand, fontSize: 10,
+              fontWeight: isActive ? 600 : 400,
+              color: isActive ? C.ink : C.muted,
+              transition: 'all 0.15s',
+            }}>{tab.label}</button>
+          );
+        })}
+      </div>
+
+      {/* Tab Content */}
+      <div style={{
+        flex: 1, overflowY: 'auto', padding: '12px 12px',
+      }}>
+        {activeIntelTab === 'brief' && <IntelBriefTab />}
+        {activeIntelTab === 'insights' && <IntelInsightsTab shot={shot} />}
+        {activeIntelTab === 'capture' && <IntelCaptureTab />}
+        {activeIntelTab === 'diagnosis' && <IntelDiagnosisTab />}
+        {activeIntelTab === 'plan' && <IntelPlanTab />}
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
 //  MAIN SESSION VIEW
 // ═══════════════════════════════════════════════════════════════
 
@@ -850,6 +1401,7 @@ export default function CoachingOS() {
   const [activeShot, setActiveShot] = useState(14);
   const [focusMetric, setFocusMetric] = useState<FocusMetric>('Strike quality');
   const [expandedStages, setExpandedStages] = useState<Set<string>>(new Set());
+  const [intelPanelOpen, setIntelPanelOpen] = useState(true);
 
   const visibleShots = useRealtimeShots(shots, 2200);
 
@@ -963,17 +1515,19 @@ export default function CoachingOS() {
         {/* TrackMan + End Session */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <button
-            onClick={() => navigate('/coach/trackman')}
+            onClick={() => setIntelPanelOpen(prev => !prev)}
             style={{
               display: 'flex', alignItems: 'center', gap: 5,
               fontFamily: F.data, fontSize: 9, fontWeight: 700,
               padding: '5px 12px', borderRadius: 6, cursor: 'pointer',
-              background: 'rgba(230,57,70,0.06)', border: '1px solid rgba(230,57,70,0.18)',
-              color: '#E63946', letterSpacing: '.04em',
+              background: intelPanelOpen ? 'rgba(16,185,129,0.10)' : 'rgba(230,57,70,0.06)',
+              border: intelPanelOpen ? '1px solid rgba(16,185,129,0.25)' : '1px solid rgba(230,57,70,0.18)',
+              color: intelPanelOpen ? C.accent : '#E63946',
+              letterSpacing: '.04em',
               transition: 'all 0.15s',
             }}
           >
-            <Wifi size={11} /> TRACKMAN
+            <Wifi size={11} /> {intelPanelOpen ? 'INTELLIGENCE' : 'INTELLIGENCE'}
           </button>
           <button
             onClick={() => navigate('/coach/review')}
@@ -1053,10 +1607,14 @@ export default function CoachingOS() {
         ))}
       </div>
 
-      {/* ═══ CONTENT AREA ═════════════════════════════════════════ */}
+      {/* ═══ CONTENT AREA + INTEL PANEL ════════════════════════════ */}
+      <div style={{
+        flex: 1, display: 'flex', overflow: 'hidden',
+        position: 'relative', zIndex: 1,
+      }}>
       <main style={{
         flex: 1, overflowY: 'auto', padding: isMobile ? '10px 12px' : '14px 20px',
-        position: 'relative', zIndex: 1,
+        minWidth: 0,
       }}>
         <div style={{ maxWidth: 1440, margin: '0 auto' }}>
 
@@ -1458,6 +2016,16 @@ export default function CoachingOS() {
 
         </div>
       </main>
+
+      {/* ═══ COACHING INTELLIGENCE PANEL (docked right) ═══════════ */}
+      {!isMobile && (
+        <CoachIntelPanel
+          shot={currentShot}
+          collapsed={!intelPanelOpen}
+          onToggle={() => setIntelPanelOpen(prev => !prev)}
+        />
+      )}
+      </div>
     </div>
   );
 }
