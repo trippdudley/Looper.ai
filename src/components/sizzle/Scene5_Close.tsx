@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { CD, F, vis, fadeIn, fadeInOut } from './tokens';
 
 const T = {
@@ -8,7 +9,20 @@ const T = {
   url:       5200,
 };
 
+function useIsMobile() {
+  const [m, setM] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    setM(mq.matches);
+    const h = (e: MediaQueryListEvent) => setM(e.matches);
+    mq.addEventListener('change', h);
+    return () => mq.removeEventListener('change', h);
+  }, []);
+  return m;
+}
+
 export default function Scene5_Close({ elapsed }: { elapsed: number }) {
+  const isMobile = useIsMobile();
   return (
     <div
       style={{
@@ -63,7 +77,7 @@ export default function Scene5_Close({ elapsed }: { elapsed: number }) {
                 style={{
                   fontFamily: F.brand,
                   fontWeight: 800,
-                  fontSize: 48,
+                  fontSize: isMobile ? 32 : 48,
                   color: CD.ink,
                 }}
               >
@@ -73,7 +87,7 @@ export default function Scene5_Close({ elapsed }: { elapsed: number }) {
                 style={{
                   fontFamily: F.brand,
                   fontWeight: 800,
-                  fontSize: 48,
+                  fontSize: isMobile ? 32 : 48,
                   color: CD.accent,
                 }}
               >

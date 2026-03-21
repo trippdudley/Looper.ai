@@ -84,6 +84,7 @@ function AppRoutes() {
             <Route path="analytics" element={<Analytics />} />
             <Route path="session" element={<CoachSession />} />
             <Route path="live" element={<CoachingOS />} />
+            <Route path="trackman" element={<TrackmanIntegration />} />
           </Route>
 
           <Route path="/fitter" element={<ErrorBoundary fallbackTitle="Fitter view error"><FitterLayout /></ErrorBoundary>}>
