@@ -3,11 +3,9 @@ import { CheckCircle, Circle } from 'lucide-react';
 import { C, F, S } from '../data/tokens';
 import { todaysPracticePlan, timelineEvents } from '../data/timeline';
 import SectionLabel from '../components/shared/SectionLabel';
-import KpiTile from '../components/shared/KpiTile';
 import Sparkline from '../components/shared/Sparkline';
 import SourcePill from '../components/shared/SourcePill';
 import TypeIcon from '../components/timeline/TypeIcon';
-import ConnectionInsight from '../components/timeline/ConnectionInsight';
 
 export default function PracticeMode() {
   const [blocks, setBlocks] = useState(todaysPracticePlan.blocks);

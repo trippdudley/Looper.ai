@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef } from 'react';
 import { Plus } from 'lucide-react';
 import { C, F } from '../../data/tokens';
 import { sourceConfig, connectedSources, availableSources } from '../../data/sources';
@@ -8,7 +8,7 @@ interface DataSourceBarProps {
 }
 
 export default function DataSourceBar({ onSourceTap }: DataSourceBarProps) {
-  const [scrollRef, setScrollRef] = useState<HTMLDivElement | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   return (
     <div
@@ -21,7 +21,7 @@ export default function DataSourceBar({ onSourceTap }: DataSourceBarProps) {
       }}
     >
       <div
-        ref={setScrollRef}
+        ref={scrollRef}
         style={{
           display: 'flex',
           gap: 6,

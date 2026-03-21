@@ -5,7 +5,6 @@ import SectionLabel from '../components/shared/SectionLabel';
 import KpiTile from '../components/shared/KpiTile';
 import Sparkline from '../components/shared/Sparkline';
 import SourcePill from '../components/shared/SourcePill';
-import TimelineEventCard from '../components/timeline/TimelineEvent';
 import TypeIcon from '../components/timeline/TypeIcon';
 
 export default function Rounds() {

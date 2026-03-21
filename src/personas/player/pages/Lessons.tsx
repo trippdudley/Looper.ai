@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {
   ChevronDown, ChevronRight, CheckCircle, Circle,
-  Video, ArrowRight, BookOpen,
+  Video, ArrowRight,
 } from 'lucide-react';
 import { C, F, S } from '../data/tokens';
 import { lessons, coachingArc } from '../data/lessons';

@@ -34,9 +34,17 @@ export const sourceConfig: Record<string, SourceConfig> = {
     color: '#F59E0B',
     short: 'GARMIN',
     status: 'synced',
-    lastSync: '4 hours ago',
-    dataTypes: ['Ball speed', 'Spin', 'Launch angle', 'Carry', 'Practice sessions'],
+    lastSync: '3 days ago',
+    dataTypes: ['Ball speed', 'Spin rate', 'Launch angle', 'Carry distance', 'Practice sessions'],
     crossSourceInsight: 'Last 3 sessions show 7-iron dispersion tightening from \u00B18.2 to \u00B15.4 yds. The prescribed drill is working.',
+  },
+  rapsodo: {
+    label: 'Rapsodo',
+    color: '#F59E0B',
+    short: 'RAPSODO',
+    status: 'available',
+    dataTypes: ['Ball speed', 'Spin rate', 'Launch angle', 'Carry distance', 'Practice sessions'],
+    crossSourceInsight: 'Import Rapsodo MLM2PRO session data. Practice metrics flowing into your unified timeline.',
   },
   ghin: {
     label: 'GHIN',
@@ -58,7 +66,7 @@ export const sourceConfig: Record<string, SourceConfig> = {
   apple: {
     label: 'Apple Health',
     color: '#EC4899',
-    short: 'APPLE',
+    short: 'HEALTH',
     status: 'available',
     dataTypes: ['Steps', 'Workouts', 'Heart rate', 'Sleep'],
     crossSourceInsight: 'Activity tracking and heart rate during rounds to understand how fitness affects performance.',
