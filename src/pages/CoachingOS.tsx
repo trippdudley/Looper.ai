@@ -853,6 +853,16 @@ export default function CoachingOS() {
 
   const visibleShots = useRealtimeShots(shots, 2200);
 
+  // Responsive breakpoint detection
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
   // Auto-advance to newest shot
   const prevCountRef = useRef(visibleShots.length);
   useEffect(() => {
@@ -907,8 +917,9 @@ export default function CoachingOS() {
 
       {/* ═══ L1: GLOBAL BAR ═══════════════════════════════════════ */}
       <div style={{
-        height: 44, display: 'flex', alignItems: 'center',
-        justifyContent: 'space-between', padding: '0 20px', flexShrink: 0,
+        minHeight: 44, display: 'flex', alignItems: 'center',
+        justifyContent: 'space-between', padding: isMobile ? '6px 12px' : '0 20px',
+        flexShrink: 0, flexWrap: 'wrap' as const, gap: 4,
         background: `${C.surface}ee`, backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
         borderBottom: `1px solid ${C.border}`, zIndex: 10,
@@ -929,7 +940,7 @@ export default function CoachingOS() {
             textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4,
             fontFamily: F.brand, fontSize: 12, color: C.muted, fontWeight: 500,
           }}>
-            <ArrowLeft size={12} /> Dashboard
+            <ArrowLeft size={12} /> {!isMobile && 'Dashboard'}
           </Link>
         </div>
 
@@ -980,8 +991,9 @@ export default function CoachingOS() {
 
       {/* ═══ L2: CONTEXT BAR + FOCUS CHIP ═════════════════════════ */}
       <div style={{
-        height: 36, display: 'flex', alignItems: 'center',
-        justifyContent: 'space-between', padding: '0 20px',
+        minHeight: 36, display: 'flex', alignItems: 'center',
+        justifyContent: 'space-between', padding: isMobile ? '4px 12px' : '0 20px',
+        flexWrap: 'wrap' as const, gap: 4,
         background: `${C.surface}99`, borderBottom: `1px solid ${C.border}`,
         flexShrink: 0, zIndex: 9, position: 'relative',
       }}>
@@ -1014,9 +1026,10 @@ export default function CoachingOS() {
       {/* ═══ L3: DECISION TABS ════════════════════════════════════ */}
       <div style={{
         height: 36, display: 'flex', alignItems: 'stretch',
-        padding: '0 20px', background: `${C.surface}60`,
+        padding: isMobile ? '0 8px' : '0 20px', background: `${C.surface}60`,
         borderBottom: `1px solid ${C.border}`, flexShrink: 0,
         zIndex: 8, position: 'relative',
+        overflowX: 'auto', WebkitOverflowScrolling: 'touch',
       }}>
         {tabs.map(tab => (
           <button
@@ -1027,7 +1040,8 @@ export default function CoachingOS() {
               fontWeight: activeTab === tab.id ? 600 : 400,
               color: activeTab === tab.id ? C.ink : C.muted,
               background: 'none', border: 'none', cursor: 'pointer',
-              padding: '0 14px', position: 'relative',
+              padding: isMobile ? '0 10px' : '0 14px', position: 'relative',
+              whiteSpace: 'nowrap',
               borderBottom: activeTab === tab.id
                 ? `2px solid ${C.accent}`
                 : '2px solid transparent',
@@ -1041,7 +1055,7 @@ export default function CoachingOS() {
 
       {/* ═══ CONTENT AREA ═════════════════════════════════════════ */}
       <main style={{
-        flex: 1, overflowY: 'auto', padding: '14px 20px',
+        flex: 1, overflowY: 'auto', padding: isMobile ? '10px 12px' : '14px 20px',
         position: 'relative', zIndex: 1,
       }}>
         <div style={{ maxWidth: 1440, margin: '0 auto' }}>
@@ -1063,14 +1077,14 @@ export default function CoachingOS() {
               {/* Row 1: Metric Grid (4×2) + Clubface Impact (320px) */}
               <div style={{
                 display: 'grid',
-                gridTemplateColumns: '1fr 320px',
+                gridTemplateColumns: isMobile ? '1fr' : '1fr 320px',
                 gap: 10,
               }}>
                 {/* 4×2 Metric Grid */}
                 <div style={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(4, 1fr)',
-                  gridTemplateRows: 'repeat(2, 1fr)',
+                  gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
+                  gridTemplateRows: isMobile ? 'repeat(4, 1fr)' : 'repeat(2, 1fr)',
                   gap: 6,
                 }}>
                   <MetricCell label="Carry" value={currentShot.carry} unit="yds" />
@@ -1100,7 +1114,7 @@ export default function CoachingOS() {
 
               {/* Row 3: Video Panels (DTL + Face-on) */}
               <div style={{
-                display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10,
+                display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 10,
               }}>
                 <VideoPanel
                   swingNumber={activeShot}
@@ -1245,7 +1259,7 @@ export default function CoachingOS() {
                           lineHeight: 1.6, marginTop: 10,
                         }}>{factor.detail}</p>
                         <div style={{
-                          display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
+                          display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
                           gap: 8, marginTop: 10,
                         }}>
                           {factor.metrics.map(m => (
@@ -1332,7 +1346,7 @@ export default function CoachingOS() {
               }}>
                 Video Analysis · Swing {activeShot}
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 10 }}>
                 <VideoPanel swingNumber={activeShot} angle="dtl" label="Player: Down the Line" />
                 <VideoPanel swingNumber={activeShot} angle="fo" label="Player: Face On" />
               </div>

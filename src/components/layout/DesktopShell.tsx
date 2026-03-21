@@ -25,7 +25,7 @@ export default function DesktopShell({ sidebar, topBar, children }: DesktopShell
           <div className="absolute inset-0 bg-black/50" />
           {/* Sidebar panel */}
           <aside
-            className="relative w-[280px] h-full"
+            className="relative w-[280px] max-w-[85vw] h-full"
             onClick={(e) => e.stopPropagation()}
           >
             <button
