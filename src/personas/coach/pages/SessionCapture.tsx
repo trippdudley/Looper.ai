@@ -218,7 +218,7 @@ export default function SessionCapture() {
       {/* ── 3-COLUMN BODY ──────────────────────────────────────── */}
       <div className="flex flex-1 min-h-0 overflow-hidden">
         {/* ─ LEFT COLUMN ───────────────────────────────────────── */}
-        <div className="w-[280px] flex-shrink-0 border-r border-white/[0.06] bg-white/[0.03] backdrop-blur-xl flex flex-col overflow-y-auto">
+        <div className="hidden md:flex w-[280px] flex-shrink-0 border-r border-white/[0.06] bg-white/[0.03] backdrop-blur-xl flex-col overflow-y-auto">
           {/* Shot History */}
           <div className="px-4 pt-4 pb-2">
             <h3 className="text-xs font-bold text-white/70 uppercase tracking-wider mb-3 flex items-center gap-2">
@@ -412,7 +412,7 @@ export default function SessionCapture() {
 
           {/* Data Tile Grid */}
           <div className="px-4 pb-4 flex-1">
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
               {dataTiles.map((tile) => {
                 const absDelta = Math.abs(tile.delta);
                 const isQualitative = tile.label === 'Shot Shape' || tile.label === 'Quality';
@@ -456,7 +456,7 @@ export default function SessionCapture() {
         </div>
 
         {/* ─ RIGHT COLUMN ──────────────────────────────────────── */}
-        <div className="w-[320px] flex-shrink-0 border-l border-white/[0.06] bg-white/[0.03] backdrop-blur-xl rounded-2xl flex flex-col overflow-y-auto">
+        <div className="hidden lg:flex w-[320px] flex-shrink-0 border-l border-white/[0.06] bg-white/[0.03] backdrop-blur-xl rounded-2xl flex-col overflow-y-auto">
           {/* Audio Capture Section */}
           <div className="px-4 pt-4 pb-3">
             <h3 className="text-xs font-bold text-white/70 uppercase tracking-wider mb-3 flex items-center gap-2">

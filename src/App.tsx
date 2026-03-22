@@ -11,8 +11,10 @@ import PersonaSelector from './pages/PersonaSelector';
 const ThesisPage = lazy(() => import('./pages/ThesisPage'));
 const LooperNarrative = lazy(() => import('./components/looper-narrative'));
 const SizzleReel = lazy(() => import('./pages/SizzleReel'));
-const CoachingOS = lazy(() => import('./pages/CoachingOS'));
+const CoachingOS = lazy(() => import('./pages/LiveSessionSideline'));
+const TrackmanIntegration = lazy(() => import('./pages/TrackmanIntegration'));
 
+const PlayerLayout = lazy(() => import('./personas/player/PlayerLayout'));
 const GolferLayout = lazy(() => import('./personas/golfer/GolferLayout'));
 const GolferHome = lazy(() => import('./personas/golfer/pages/GolferHome'));
 const LessonHistory = lazy(() => import('./personas/golfer/pages/LessonHistory'));
@@ -66,6 +68,8 @@ function AppRoutes() {
           <Route path="/coaching-os" element={<Navigate to="/coach/live" replace />} />
           <Route path="/vision" element={<ErrorBoundary><SizzleReel /></ErrorBoundary>} />
 
+          <Route path="/player" element={<ErrorBoundary fallbackTitle="Player view error"><PlayerLayout /></ErrorBoundary>} />
+
           <Route path="/golfer" element={<ErrorBoundary fallbackTitle="Golfer view error"><GolferLayout /></ErrorBoundary>}>
             <Route index element={<GolferHome />} />
             <Route path="lessons" element={<LessonHistory />} />
@@ -84,6 +88,7 @@ function AppRoutes() {
             <Route path="analytics" element={<Analytics />} />
             <Route path="session" element={<CoachSession />} />
             <Route path="live" element={<CoachingOS />} />
+            <Route path="trackman" element={<TrackmanIntegration />} />
           </Route>
 
           <Route path="/fitter" element={<ErrorBoundary fallbackTitle="Fitter view error"><FitterLayout /></ErrorBoundary>}>
@@ -102,8 +107,8 @@ function AppRoutes() {
         </Routes>
       </Suspense>
 
-      {/* Cross-persona demo walkthrough banner */}
-      <DemoWalkthroughBanner currentPath={location.pathname} />
+      {/* Cross-persona demo walkthrough banner (hidden on sideline demo which has its own nav) */}
+      {!location.pathname.startsWith('/coach/live') && <DemoWalkthroughBanner currentPath={location.pathname} />}
     </>
   );
 }

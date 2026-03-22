@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { C, F, vis, fadeIn, fadeInOut, easeOutCubic, countUp } from './tokens';
 import swingVideo from '../../assets/images/swing-clip.mov';
 
@@ -83,8 +84,22 @@ const S = {
   },
 };
 
+// ---- Responsive hook ----
+function useIsMobile() {
+  const [m, setM] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    setM(mq.matches);
+    const h = (e: MediaQueryListEvent) => setM(e.matches);
+    mq.addEventListener('change', h);
+    return () => mq.removeEventListener('change', h);
+  }, []);
+  return m;
+}
+
 // ---- Component ----
 export default function Scene3_LiveSession({ elapsed }: { elapsed: number }) {
+  const isMobile = useIsMobile();
   // Spotlight dimming
   const inSpotlight = elapsed >= T.spotlight && elapsed < T.spotlightOff;
   const dimOpacity = inSpotlight ? 0.15 : 1;
@@ -226,7 +241,7 @@ export default function Scene3_LiveSession({ elapsed }: { elapsed: number }) {
               letterSpacing: '0.04em',
             }}>LOOPER.AI</span>
             <div style={{ flex: 1 }} />
-            {['7-iron \u00B7 Session 13', 'Goal: Strike consistency', 'Swing 7/20'].map((pill, i) => (
+            {(isMobile ? ['7i \u00B7 S13', 'Swing 7/20'] : ['7-iron \u00B7 Session 13', 'Goal: Strike consistency', 'Swing 7/20']).map((pill, i) => (
               <span key={i} style={{
                 fontFamily: F.data,
                 fontSize: 9,
@@ -242,7 +257,8 @@ export default function Scene3_LiveSession({ elapsed }: { elapsed: number }) {
           <div style={{
             display: 'flex',
             gap: 18,
-            padding: '6px 16px 0 88px',
+            padding: isMobile ? '6px 8px 0 8px' : '6px 16px 0 88px',
+            overflowX: 'auto',
             borderBottom: `1px solid ${C.border}`,
             background: C.surface,
             opacity: dimOpacity,
@@ -267,13 +283,13 @@ export default function Scene3_LiveSession({ elapsed }: { elapsed: number }) {
             display: 'flex',
             overflow: 'hidden',
           }}>
-            {/* Shot Rail */}
+            {/* Shot Rail — hidden on mobile */}
             <div style={{
               width: 72,
+              display: isMobile ? 'none' : 'flex',
               borderRight: `1px solid ${C.border}`,
               background: C.surface,
               padding: '10px 0',
-              display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               gap: 4,
@@ -323,13 +339,14 @@ export default function Scene3_LiveSession({ elapsed }: { elapsed: number }) {
             <div style={{
               flex: 1,
               display: 'flex',
+              flexDirection: isMobile ? 'column' as const : 'row' as const,
               gap: 10,
-              padding: 10,
-              overflow: 'hidden',
+              padding: isMobile ? 6 : 10,
+              overflow: isMobile ? 'auto' : 'hidden',
             }}>
               {/* === Column 1: Swing Video === */}
               <div style={{
-                flex: '0 0 40%',
+                flex: isMobile ? 'none' : '0 0 40%',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 8,
@@ -433,7 +450,7 @@ export default function Scene3_LiveSession({ elapsed }: { elapsed: number }) {
 
               {/* === Column 2: Shot Data === */}
               <div style={{
-                flex: '0 0 30%',
+                flex: isMobile ? 'none' : '0 0 30%',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 8,
@@ -556,7 +573,7 @@ export default function Scene3_LiveSession({ elapsed }: { elapsed: number }) {
 
               {/* === Column 3: AI Insight === */}
               <div style={{
-                flex: '0 0 30%',
+                flex: isMobile ? 'none' : '0 0 30%',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 8,
@@ -670,7 +687,7 @@ export default function Scene3_LiveSession({ elapsed }: { elapsed: number }) {
           {/* ---- LLM callout ---- */}
           {vis(elapsed, T.aiStart) && elapsed < T.spotlight && (
             <div style={{
-              padding: '0 16px 0 88px',
+              padding: isMobile ? '0 8px' : '0 16px 0 88px',
               ...fadeIn(elapsed, T.aiStart, 800),
             }}>
               <div style={{

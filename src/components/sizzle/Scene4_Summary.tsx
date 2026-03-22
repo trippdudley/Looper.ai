@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { C, F, vis, fadeIn, fadeInOut } from './tokens';
 
 // Timing constants (ms)
@@ -37,7 +37,20 @@ const drills = [
   },
 ];
 
+function useIsMobile() {
+  const [m, setM] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    setM(mq.matches);
+    const h = (e: MediaQueryListEvent) => setM(e.matches);
+    mq.addEventListener('change', h);
+    return () => mq.removeEventListener('change', h);
+  }, []);
+  return m;
+}
+
 export default function Scene4_Summary({ elapsed }: { elapsed: number }) {
+  const isMobile = useIsMobile();
   const spot1Active = elapsed >= T.spot1 && elapsed < T.spot1Off;
   const spot2Active = elapsed >= T.spot2 && elapsed < T.spot2Off;
 
@@ -265,6 +278,7 @@ export default function Scene4_Summary({ elapsed }: { elapsed: number }) {
             >
               <div style={sectionLabelStyle}>KEY METRICS</div>
               {/* Header row */}
+              {!isMobile && (
               <div
                 style={{
                   display: 'grid',
@@ -278,12 +292,13 @@ export default function Scene4_Summary({ elapsed }: { elapsed: number }) {
                 <div style={metricHeaderStyle}>END OF SESSION</div>
                 <div style={metricHeaderStyle} />
               </div>
+              )}
               {metrics.map((m, i) => (
                 <div
                   key={i}
                   style={{
                     display: 'grid',
-                    gridTemplateColumns: '1fr 1fr 1fr 1fr',
+                    gridTemplateColumns: isMobile ? '1fr 1fr' : '1fr 1fr 1fr 1fr',
                     gap: 4,
                     alignItems: 'center',
                     marginBottom: 5,

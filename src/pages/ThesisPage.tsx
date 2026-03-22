@@ -63,7 +63,7 @@ export default function ThesisPage() {
             Looper.AI
           </span>
 
-          <h1 className="text-5xl font-bold text-navy tracking-tight relative">
+          <h1 className="text-3xl sm:text-5xl font-bold text-navy tracking-tight relative">
             Looper.AI
           </h1>
           <p className="text-xs uppercase tracking-widest text-accent font-medium mt-3 relative">
@@ -204,7 +204,7 @@ export default function ThesisPage() {
           <h3 className="text-xl text-navy font-semibold mb-4">
             P&amp;L Summary
           </h3>
-          <div className="rounded-xl overflow-hidden border border-gray-100 mb-10">
+          <div className="rounded-xl overflow-x-auto border border-gray-100 mb-10">
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-navy text-white text-xs uppercase tracking-wider">
@@ -249,7 +249,7 @@ export default function ThesisPage() {
           <h3 className="text-xl text-navy font-semibold mb-4">
             Data Monetization Revenue
           </h3>
-          <div className="rounded-xl overflow-hidden border border-gray-100 mb-10">
+          <div className="rounded-xl overflow-x-auto border border-gray-100 mb-10">
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-navy text-white text-xs uppercase tracking-wider">
