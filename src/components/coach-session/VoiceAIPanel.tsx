@@ -32,7 +32,7 @@ export default function VoiceAIPanel({
       {/* ── Section A: Coach Voice Transcript ── */}
       <div className="flex-1 flex flex-col min-h-0">
         <div className="px-4 pt-3 pb-2 border-b border-[#E2E5E8] bg-[#F9FAFB] flex items-center gap-2">
-          <MessageCircle className="w-3.5 h-3.5 text-[#3A9D78]" />
+          <MessageCircle className="w-3.5 h-3.5 text-[#0D7C66]" />
           <h3 className="text-xs font-semibold uppercase tracking-wider text-[#9CA3AF]">
             Coach Notes
           </h3>
@@ -47,7 +47,7 @@ export default function VoiceAIPanel({
                 className="flex gap-2.5 rounded-lg px-2.5 py-2 transition-colors duration-200"
                 style={{
                   backgroundColor: isHighlighted ? '#F0FDFA' : 'transparent',
-                  border: isHighlighted ? '1px solid #3A9D7820' : '1px solid transparent',
+                  border: isHighlighted ? '1px solid #0D7C6620' : '1px solid transparent',
                 }}
               >
                 {/* Swing badge */}
@@ -55,8 +55,8 @@ export default function VoiceAIPanel({
                   <span
                     className="inline-flex items-center justify-center text-[10px] font-bold px-1.5 py-0.5 rounded"
                     style={{
-                      fontFamily: "'JetBrains Mono', monospace",
-                      backgroundColor: isHighlighted ? '#3A9D78' : '#F3F4F6',
+                      fontFamily: "'Space Mono', monospace",
+                      backgroundColor: isHighlighted ? '#0D7C66' : '#F3F4F6',
                       color: isHighlighted ? 'white' : '#6B7280',
                     }}
                   >
@@ -68,7 +68,7 @@ export default function VoiceAIPanel({
                 <div className="flex-1 min-w-0">
                   <span
                     className="text-[10px] text-[#9CA3AF] block mb-0.5"
-                    style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                    style={{ fontFamily: "'Space Mono', monospace" }}
                   >
                     {t.timestamp}
                   </span>
@@ -86,13 +86,13 @@ export default function VoiceAIPanel({
       {currentInsight && (
         <div className="border-t border-[#E2E5E8]">
           <div className="px-4 pt-3 pb-2 bg-[#F9FAFB] flex items-center gap-2">
-            <Sparkles className="w-3.5 h-3.5 text-[#3A9D78]" />
+            <Sparkles className="w-3.5 h-3.5 text-[#0D7C66]" />
             <h3 className="text-xs font-semibold uppercase tracking-wider text-[#9CA3AF]">
               AI Insight
             </h3>
             <span
               className="text-[10px] ml-auto"
-              style={{ fontFamily: "'JetBrains Mono', monospace", color: '#9CA3AF' }}
+              style={{ fontFamily: "'Space Mono', monospace", color: '#9CA3AF' }}
             >
               Swing #{String(currentInsight.swingNumber).padStart(2, '0')}
             </span>

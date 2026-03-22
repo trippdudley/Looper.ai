@@ -11,7 +11,7 @@ import PersonaSelector from './pages/PersonaSelector';
 const ThesisPage = lazy(() => import('./pages/ThesisPage'));
 const LooperNarrative = lazy(() => import('./components/looper-narrative'));
 const SizzleReel = lazy(() => import('./pages/SizzleReel'));
-const CoachingOS = lazy(() => import('./pages/CoachingOS'));
+const CoachingOS = lazy(() => import('./pages/LiveSessionSideline'));
 
 const GolferLayout = lazy(() => import('./personas/golfer/GolferLayout'));
 const GolferHome = lazy(() => import('./personas/golfer/pages/GolferHome'));
@@ -84,6 +84,7 @@ function AppRoutes() {
             <Route path="analytics" element={<Analytics />} />
             <Route path="session" element={<CoachSession />} />
             <Route path="live" element={<CoachingOS />} />
+
           </Route>
 
           <Route path="/fitter" element={<ErrorBoundary fallbackTitle="Fitter view error"><FitterLayout /></ErrorBoundary>}>

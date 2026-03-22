@@ -6,7 +6,7 @@ interface TrendLineProps {
   color?: string;
 }
 
-export default function TrendLine({ data, height = 200, color = '#2E8B57' }: TrendLineProps) {
+export default function TrendLine({ data, height = 200, color = '#0D7C66' }: TrendLineProps) {
   return (
     <ResponsiveContainer width="100%" height={height}>
       <LineChart data={data}>

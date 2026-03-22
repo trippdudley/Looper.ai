@@ -42,7 +42,7 @@ export default function CoachSession() {
         {/* Left: session metadata */}
         <div className="flex items-center gap-5">
           <div className="flex items-center gap-2">
-            <User className="w-4 h-4 text-[#3A9D78]" />
+            <User className="w-4 h-4 text-[#0D7C66]" />
             <span className="text-sm font-semibold text-[#1C2B2D]">{coachSessionData.playerName}</span>
           </div>
           <div className="flex items-center gap-2">
@@ -68,7 +68,7 @@ export default function CoachSession() {
             onClick={() => setMode('live')}
             className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-xs font-semibold transition-all duration-200"
             style={{
-              backgroundColor: mode === 'live' ? '#3A9D78' : 'transparent',
+              backgroundColor: mode === 'live' ? '#0D7C66' : 'transparent',
               color: mode === 'live' ? 'white' : '#6B7280',
             }}
           >
@@ -79,7 +79,7 @@ export default function CoachSession() {
             onClick={() => setMode('summary')}
             className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-xs font-semibold transition-all duration-200"
             style={{
-              backgroundColor: mode === 'summary' ? '#3A9D78' : 'transparent',
+              backgroundColor: mode === 'summary' ? '#0D7C66' : 'transparent',
               color: mode === 'summary' ? 'white' : '#6B7280',
             }}
           >
@@ -93,7 +93,7 @@ export default function CoachSession() {
       {mode === 'live' ? (
         <div className="flex flex-1 min-h-0 overflow-hidden">
           {/* Left Rail: Swing Catalog — 20% width */}
-          <div className="w-[20%] min-w-[220px] max-w-[300px] flex-shrink-0 border-r border-[#E2E5E8] bg-[#F9FAFB]">
+          <div className="hidden md:block w-[20%] min-w-[220px] max-w-[300px] flex-shrink-0 border-r border-[#E2E5E8] bg-[#F9FAFB]">
             <SwingCatalog
               swings={coachSessionData.swings}
               selectedSwingId={selectedSwingId}

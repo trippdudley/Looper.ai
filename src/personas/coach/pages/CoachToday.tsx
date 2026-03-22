@@ -211,7 +211,11 @@ export default function CoachToday() {
                         </span>
                         <Link
                           to={`/coach/brief/${golfer.id}`}
-                          className="inline-flex items-center gap-1 text-[10px] font-semibold text-data-blue hover:text-accent transition px-1.5 py-0.5 rounded bg-data-blue/10 hover:bg-accent/10"
+                          className={`inline-flex items-center gap-1 text-[10px] font-semibold transition px-1.5 py-0.5 rounded ${
+                            slot.status === 'upcoming'
+                              ? 'text-accent hover:text-white bg-accent/15 hover:bg-accent ring-1 ring-accent/30'
+                              : 'text-data-blue hover:text-accent bg-data-blue/10 hover:bg-accent/10'
+                          }`}
                           title="Pre-session brief"
                         >
                           <FileText className="w-3 h-3" />

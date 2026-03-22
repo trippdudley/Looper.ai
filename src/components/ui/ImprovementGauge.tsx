@@ -42,7 +42,7 @@ export default function ImprovementGauge({ score, trend, trendLabel }: Improveme
           cy={cy}
           r={r}
           fill="none"
-          stroke="#2E8B57"
+          stroke="#0D7C66"
           strokeWidth={8}
           strokeLinecap="round"
           strokeDasharray={`${halfCircumference} ${halfCircumference}`}

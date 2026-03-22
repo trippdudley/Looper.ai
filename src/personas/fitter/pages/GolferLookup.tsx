@@ -202,7 +202,7 @@ export default function GolferLookup() {
             </div>
 
             {/* 4-Column Metric Row */}
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {/* Handicap Trend */}
               <div className="bg-gray-50 rounded-lg p-3">
                 <p className="text-xs text-gray-500 mb-1">Handicap Trend</p>
@@ -213,7 +213,7 @@ export default function GolferLookup() {
                         <Line
                           type="monotone"
                           dataKey="value"
-                          stroke="#2E8B57"
+                          stroke="#0D7C66"
                           strokeWidth={2}
                           dot={false}
                         />
@@ -416,9 +416,9 @@ export default function GolferLookup() {
                         <Line
                           type="monotone"
                           dataKey="attackAngle"
-                          stroke="#2E8B57"
+                          stroke="#0D7C66"
                           strokeWidth={2}
-                          dot={{ r: 2, fill: '#2E8B57' }}
+                          dot={{ r: 2, fill: '#0D7C66' }}
                         />
                       </LineChart>
                     </ResponsiveContainer>

@@ -25,7 +25,7 @@ export default function SwingCatalog({ swings, selectedSwingId, onSelectSwing }:
       {/* Header */}
       <div className="px-4 pt-4 pb-3 border-b border-[#E2E5E8]">
         <div className="flex items-center gap-2 mb-1">
-          <Hash className="w-4 h-4 text-[#3A9D78]" />
+          <Hash className="w-4 h-4 text-[#0D7C66]" />
           <h3 className="text-xs font-semibold uppercase tracking-wider text-[#9CA3AF]">
             Swing Catalog
           </h3>
@@ -46,9 +46,9 @@ export default function SwingCatalog({ swings, selectedSwingId, onSelectSwing }:
               className="w-full text-left rounded-lg transition-all duration-200"
               style={{
                 backgroundColor: isSelected ? '#F0FDFA' : '#FFFFFF',
-                border: `1px solid ${isSelected ? '#3A9D78' : '#E2E5E8'}`,
+                border: `1px solid ${isSelected ? '#0D7C66' : '#E2E5E8'}`,
                 borderLeftWidth: '3px',
-                borderLeftColor: isSelected ? '#3A9D78' : qc.border,
+                borderLeftColor: isSelected ? '#0D7C66' : qc.border,
                 boxShadow: isSelected ? '0 1px 4px rgba(13,124,102,0.10)' : 'none',
               }}
             >
@@ -58,13 +58,13 @@ export default function SwingCatalog({ swings, selectedSwingId, onSelectSwing }:
                   <div className="flex items-center gap-2">
                     <span
                       className="text-xs font-bold tracking-tight"
-                      style={{ fontFamily: "'JetBrains Mono', monospace", color: isSelected ? '#3A9D78' : '#1C2B2D' }}
+                      style={{ fontFamily: "'Space Mono', monospace", color: isSelected ? '#0D7C66' : '#1C2B2D' }}
                     >
                       #{String(swing.swingNumber).padStart(2, '0')}
                     </span>
                     <span
                       className="text-[10px] text-[#9CA3AF]"
-                      style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                      style={{ fontFamily: "'Space Mono', monospace" }}
                     >
                       {swing.timestamp}
                     </span>
@@ -79,7 +79,7 @@ export default function SwingCatalog({ swings, selectedSwingId, onSelectSwing }:
                   <div className="flex items-baseline gap-1">
                     <span
                       className="text-lg font-bold text-[#1C2B2D]"
-                      style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                      style={{ fontFamily: "'Space Mono', monospace" }}
                     >
                       {swing.carry}
                     </span>
@@ -103,7 +103,7 @@ export default function SwingCatalog({ swings, selectedSwingId, onSelectSwing }:
                           : swing.intentTag === 'Validation' ? '#ECFDF5'
                           : '#FFF7ED',
                         color: swing.intentTag === 'Baseline' ? '#3B82F6'
-                          : swing.intentTag === 'Validation' ? '#3A9D78'
+                          : swing.intentTag === 'Validation' ? '#0D7C66'
                           : '#D4980B',
                       }}
                     >
@@ -126,7 +126,7 @@ export default function SwingCatalog({ swings, selectedSwingId, onSelectSwing }:
           <div>
             <div
               className="text-sm font-bold text-[#1C2B2D]"
-              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+              style={{ fontFamily: "'Space Mono', monospace" }}
             >
               {stats.totalSwings}
             </div>
@@ -135,7 +135,7 @@ export default function SwingCatalog({ swings, selectedSwingId, onSelectSwing }:
           <div>
             <div
               className="text-sm font-bold text-[#1C2B2D]"
-              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+              style={{ fontFamily: "'Space Mono', monospace" }}
             >
               {stats.avgBallSpeed}
             </div>
@@ -144,7 +144,7 @@ export default function SwingCatalog({ swings, selectedSwingId, onSelectSwing }:
           <div>
             <div
               className="text-sm font-bold text-[#1C2B2D]"
-              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+              style={{ fontFamily: "'Space Mono', monospace" }}
             >
               {stats.avgCarry}
             </div>

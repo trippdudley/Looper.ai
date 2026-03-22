@@ -1,4 +1,5 @@
 import { C, CD, F, vis, fadeIn, fadeInOut } from './tokens';
+import { useIsMobile } from '../../hooks/useIsMobile';
 
 // Timing triggers (ms from scene start)
 const T = {
@@ -252,6 +253,7 @@ function getSpotlight(elapsed: number): 0 | 1 | 2 | 3 {
 // ---------------------------------------------------------------------------
 
 export default function Scene2_PlayerRecord({ elapsed }: { elapsed: number }) {
+  const isMobile = useIsMobile();
   const spot = getSpotlight(elapsed);
   const spotlightActive = spot > 0;
 
@@ -372,11 +374,13 @@ export default function Scene2_PlayerRecord({ elapsed }: { elapsed: number }) {
                 background: C.surface,
                 border: `1px solid ${C.border}`,
                 borderRadius: 10,
-                padding: 16,
+                padding: isMobile ? 12 : 16,
                 marginBottom: 14,
                 display: 'flex',
+                flexDirection: isMobile ? 'column' as const : 'row' as const,
                 justifyContent: 'space-between',
-                alignItems: 'center',
+                alignItems: isMobile ? 'flex-start' : 'center',
+                gap: isMobile ? 10 : 0,
                 opacity: spotlightActive ? 0.15 : 1,
                 transition: 'opacity 0.3s',
               }}
@@ -450,7 +454,7 @@ export default function Scene2_PlayerRecord({ elapsed }: { elapsed: number }) {
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
+                gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
                 gap: 14,
                 alignItems: 'start',
               }}

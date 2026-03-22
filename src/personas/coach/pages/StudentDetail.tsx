@@ -315,9 +315,9 @@ export default function StudentDetail() {
                     <Line
                       type="monotone"
                       dataKey="carry"
-                      stroke="#2E8B57"
+                      stroke="#0D7C66"
                       strokeWidth={2}
-                      dot={{ fill: '#2E8B57', strokeWidth: 2, r: 4 }}
+                      dot={{ fill: '#0D7C66', strokeWidth: 2, r: 4 }}
                       activeDot={{ r: 6 }}
                     />
                   </LineChart>

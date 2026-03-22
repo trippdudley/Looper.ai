@@ -14,7 +14,7 @@ export default function Card({ children, className = '', onClick, glass }: CardP
 
   const baseClasses = glass
     ? 'glass-card p-5'
-    : 'bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.06)] p-5';
+    : 'bg-white rounded-lg shadow-[0_1px_3px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.06)] p-5';
 
   return (
     <div

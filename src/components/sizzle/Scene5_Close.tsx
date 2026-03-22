@@ -1,4 +1,5 @@
 import { CD, F, vis, fadeIn, fadeInOut } from './tokens';
+import { useIsMobile } from '../../hooks/useIsMobile';
 
 const T = {
   looper:    400,
@@ -9,6 +10,7 @@ const T = {
 };
 
 export default function Scene5_Close({ elapsed }: { elapsed: number }) {
+  const isMobile = useIsMobile();
   return (
     <div
       style={{
@@ -63,7 +65,7 @@ export default function Scene5_Close({ elapsed }: { elapsed: number }) {
                 style={{
                   fontFamily: F.brand,
                   fontWeight: 800,
-                  fontSize: 48,
+                  fontSize: isMobile ? 32 : 48,
                   color: CD.ink,
                 }}
               >
@@ -73,7 +75,7 @@ export default function Scene5_Close({ elapsed }: { elapsed: number }) {
                 style={{
                   fontFamily: F.brand,
                   fontWeight: 800,
-                  fontSize: 48,
+                  fontSize: isMobile ? 32 : 48,
                   color: CD.accent,
                 }}
               >

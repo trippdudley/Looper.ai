@@ -1,5 +1,6 @@
 import React from 'react';
 import { C, F, vis, fadeIn, fadeInOut } from './tokens';
+import { useIsMobile } from '../../hooks/useIsMobile';
 
 // Timing constants (ms)
 const T = {
@@ -38,6 +39,7 @@ const drills = [
 ];
 
 export default function Scene4_Summary({ elapsed }: { elapsed: number }) {
+  const isMobile = useIsMobile();
   const spot1Active = elapsed >= T.spot1 && elapsed < T.spot1Off;
   const spot2Active = elapsed >= T.spot2 && elapsed < T.spot2Off;
 
@@ -265,6 +267,7 @@ export default function Scene4_Summary({ elapsed }: { elapsed: number }) {
             >
               <div style={sectionLabelStyle}>KEY METRICS</div>
               {/* Header row */}
+              {!isMobile && (
               <div
                 style={{
                   display: 'grid',
@@ -278,12 +281,13 @@ export default function Scene4_Summary({ elapsed }: { elapsed: number }) {
                 <div style={metricHeaderStyle}>END OF SESSION</div>
                 <div style={metricHeaderStyle} />
               </div>
+              )}
               {metrics.map((m, i) => (
                 <div
                   key={i}
                   style={{
                     display: 'grid',
-                    gridTemplateColumns: '1fr 1fr 1fr 1fr',
+                    gridTemplateColumns: isMobile ? '1fr 1fr' : '1fr 1fr 1fr 1fr',
                     gap: 4,
                     alignItems: 'center',
                     marginBottom: 5,

@@ -46,7 +46,7 @@ export default function AudienceEngine() {
       </div>
 
       {/* Top Row — Monetization Metric Cards */}
-      <div className="grid grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         {metrics.map((m) => {
           const Icon = m.icon;
           return (
@@ -116,7 +116,7 @@ export default function AudienceEngine() {
       {/* How It Works */}
       <div className="mt-8">
         <h2 className="text-xl text-white mb-4">How It Works</h2>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {howItWorks.map((step) => {
             const Icon = step.icon;
             return (

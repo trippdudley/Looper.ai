@@ -137,21 +137,21 @@ export const C = {
   border:     '#DFE2E7',
   borderSub:  '#ECEEF2',
 
-  accent:       '#3A9D78',   // matches --color-accent
-  accentHov:    '#4DB88A',   // matches --color-accent-light
+  accent:       '#0D7C66',   // matches --color-accent
+  accentHov:    '#0FA87A',   // matches --color-accent-light
   accentBg:     '#E6F5F1',
-  accentBright: '#4DB88A',
+  accentBright: '#0FA87A',
 
   ink:   '#1C2B2D',   // matches --color-navy
   body:  '#4B5563',
   muted: '#9CA3AF',
   dim:   '#C5CAD1',
 
-  conf:      '#3A9D78',    // success = accent
+  conf:      '#0D7C66',    // success = accent
   confBg:    '#E6F5F1',
-  caution:   '#D4A843',    // matches --color-warm-amber
+  caution:   '#D4980B',    // matches --color-warm-amber
   cautionBg: '#FDF6E3',
-  flag:      '#C45C4A',    // matches --color-coral
+  flag:      '#C93B3B',    // matches --color-coral
   flagBg:    '#FDE8E8',
 
   dataBlue:  '#4A90D9',    // matches --color-data-blue
@@ -160,8 +160,8 @@ export const C = {
 // ─── Font Constants (aligned with Tailwind --font-sans / --font-mono) ────
 
 export const F = {
-  brand: "Inter, system-ui, -apple-system, sans-serif",
-  data:  "'JetBrains Mono', Menlo, monospace",
+  brand: "DM Sans, system-ui, -apple-system, sans-serif",
+  data:  "'Space Mono', 'SF Mono', monospace",
 } as const;
 
 // ─── Formatting Utilities ───────────────────────────────────────
