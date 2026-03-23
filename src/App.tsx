@@ -15,12 +15,6 @@ const CoachingOS = lazy(() => import('./pages/LiveSessionSideline'));
 const TrackmanIntegration = lazy(() => import('./pages/TrackmanIntegration'));
 
 const PlayerLayout = lazy(() => import('./personas/player/PlayerLayout'));
-const GolferLayout = lazy(() => import('./personas/golfer/GolferLayout'));
-const GolferHome = lazy(() => import('./personas/golfer/pages/GolferHome'));
-const LessonHistory = lazy(() => import('./personas/golfer/pages/LessonHistory'));
-const LessonDetail = lazy(() => import('./personas/golfer/pages/LessonDetail'));
-const SwingProfile = lazy(() => import('./personas/golfer/pages/SwingProfile'));
-const Practice = lazy(() => import('./personas/golfer/pages/Practice'));
 
 const CoachLayout = lazy(() => import('./personas/coach/CoachLayout'));
 const CoachToday = lazy(() => import('./personas/coach/pages/CoachToday'));
@@ -31,18 +25,6 @@ const SessionReview = lazy(() => import('./personas/coach/pages/SessionReview'))
 const PreSessionBrief = lazy(() => import('./personas/coach/pages/PreSessionBrief'));
 const Analytics = lazy(() => import('./personas/coach/pages/Analytics'));
 const CoachSession = lazy(() => import('./personas/coach/pages/CoachSession'));
-
-const FitterLayout = lazy(() => import('./personas/fitter/FitterLayout'));
-const GolferLookup = lazy(() => import('./personas/fitter/pages/GolferLookup'));
-const PreFittingBrief = lazy(() => import('./personas/fitter/pages/PreFittingBrief'));
-const FittingSession = lazy(() => import('./personas/fitter/pages/FittingSession'));
-const FittingReport = lazy(() => import('./personas/fitter/pages/FittingReport'));
-const EquipmentProfile = lazy(() => import('./personas/fitter/pages/EquipmentProfile'));
-
-const SpineLayout = lazy(() => import('./personas/spine/SpineLayout'));
-const DataSpine = lazy(() => import('./personas/spine/pages/DataSpine'));
-const AudienceEngine = lazy(() => import('./personas/spine/pages/AudienceEngine'));
-const IntegrationHub = lazy(() => import('./personas/spine/pages/IntegrationHub'));
 
 function LoadingFallback() {
   return (
@@ -70,14 +52,6 @@ function AppRoutes() {
 
           <Route path="/player" element={<ErrorBoundary fallbackTitle="Player view error"><PlayerLayout /></ErrorBoundary>} />
 
-          <Route path="/golfer" element={<ErrorBoundary fallbackTitle="Golfer view error"><GolferLayout /></ErrorBoundary>}>
-            <Route index element={<GolferHome />} />
-            <Route path="lessons" element={<LessonHistory />} />
-            <Route path="lessons/:id" element={<LessonDetail />} />
-            <Route path="swing" element={<SwingProfile />} />
-            <Route path="practice" element={<Practice />} />
-          </Route>
-
           <Route path="/coach" element={<ErrorBoundary fallbackTitle="Coach view error"><CoachLayout /></ErrorBoundary>}>
             <Route index element={<CoachToday />} />
             <Route path="students" element={<StudentRoster />} />
@@ -89,20 +63,6 @@ function AppRoutes() {
             <Route path="session" element={<CoachSession />} />
             <Route path="live" element={<CoachingOS />} />
             <Route path="trackman" element={<TrackmanIntegration />} />
-          </Route>
-
-          <Route path="/fitter" element={<ErrorBoundary fallbackTitle="Fitter view error"><FitterLayout /></ErrorBoundary>}>
-            <Route index element={<GolferLookup />} />
-            <Route path="brief" element={<PreFittingBrief />} />
-            <Route path="session" element={<FittingSession />} />
-            <Route path="report" element={<FittingReport />} />
-            <Route path="equipment" element={<EquipmentProfile />} />
-          </Route>
-
-          <Route path="/spine" element={<ErrorBoundary fallbackTitle="Platform view error"><SpineLayout /></ErrorBoundary>}>
-            <Route index element={<DataSpine />} />
-            <Route path="audience" element={<AudienceEngine />} />
-            <Route path="integrations" element={<IntegrationHub />} />
           </Route>
         </Routes>
       </Suspense>

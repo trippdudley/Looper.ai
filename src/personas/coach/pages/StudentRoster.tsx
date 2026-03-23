@@ -7,8 +7,8 @@ import {
   TrendingUp,
   Wifi,
 } from 'lucide-react';
-import { golfers } from '../../../data/golfers';
-import type { Golfer } from '../../../data/golfers';
+import { golfers } from '../../../data/players';
+import type { Golfer } from '../../../data/players';
 
 // ---------- helpers ----------
 function getInitials(name: string) {

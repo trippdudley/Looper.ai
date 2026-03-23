@@ -10,7 +10,6 @@ import {
   List,
   TrendingDown,
   AlertTriangle,
-  Clock,
 } from 'lucide-react';
 import {
   LineChart,
@@ -20,25 +19,16 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from 'recharts';
-import { golfers } from '../../../data/golfers';
+import { golfers } from '../../../data/players';
 import { sessions } from '../../../data/sessions';
 import { drills } from '../../../data/drills';
-import type { Golfer } from '../../../data/golfers';
+import type { Golfer } from '../../../data/players';
 import type { Session } from '../../../data/sessions';
 
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr + 'T00:00:00');
   return date.toLocaleDateString('en-US', {
     month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  });
-}
-
-function formatDateLong(dateStr: string): string {
-  const date = new Date(dateStr + 'T00:00:00');
-  return date.toLocaleDateString('en-US', {
-    month: 'long',
     day: 'numeric',
     year: 'numeric',
   });
@@ -79,13 +69,6 @@ const systemColors: Record<string, string> = {
   foresight: 'bg-warm-amber/10 text-warm-amber border-warm-amber/20',
 };
 
-function isFittingOld(lastFittingDate: string): boolean {
-  const fitting = new Date(lastFittingDate + 'T00:00:00');
-  const now = new Date();
-  const monthsDiff =
-    (now.getFullYear() - fitting.getFullYear()) * 12 + (now.getMonth() - fitting.getMonth());
-  return monthsDiff > 12;
-}
 
 export default function StudentDetail() {
   const { id } = useParams<{ id: string }>();
@@ -130,7 +113,6 @@ export default function StudentDetail() {
     }
   });
 
-  const fittingOld = isFittingOld(golfer.equipment.lastFittingDate);
 
   return (
     <div className="pb-8 space-y-6">
@@ -424,24 +406,6 @@ export default function StudentDetail() {
                   <p className="text-sm text-navy">{item.value}</p>
                 </div>
               ))}
-            </div>
-            <div className="mt-4 pt-3 border-t border-gray-100">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Clock className="w-3.5 h-3.5 text-gray-400" />
-                  <span className="text-xs text-gray-500">
-                    Last fitting: {formatDateLong(golfer.equipment.lastFittingDate)}
-                  </span>
-                </div>
-                {fittingOld && (
-                  <span className="text-xs text-warm-amber font-medium">12+ months ago</span>
-                )}
-              </div>
-              {fittingOld && (
-                <button className="mt-2 w-full px-3 py-2 border border-warm-amber text-warm-amber text-xs font-medium rounded-lg hover:bg-warm-amber/5 transition-colors">
-                  Request Re-Fitting
-                </button>
-              )}
             </div>
           </div>
 

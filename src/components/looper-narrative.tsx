@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import type { ReactNode, RefObject } from "react";
-import { Mic, Link2, Flag, Search, Layers, Database, Brain, Target, TrendingUp, GraduationCap, Wrench, User, ClipboardList, BarChart3, Globe, ChevronDown } from "lucide-react";
+import { Mic, Link2, Flag, Search, Layers, Database, Brain, Target, TrendingUp, GraduationCap, User, ClipboardList, BarChart3, Globe, ChevronDown } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 const C = {
@@ -63,14 +63,14 @@ export default function LooperNarrative(){
         <div style={{maxWidth:680,position:"relative",zIndex:1}}>
           <div style={{animation:"fadeUp 1s ease-out"}}>
             <div style={{fontSize:12,color:C.accent,letterSpacing:"3px",textTransform:"uppercase",fontWeight:700,marginBottom:28,fontFamily:"'JetBrains Mono',monospace"}}>Thesis</div>
-            <h1 style={{fontSize:44,fontWeight:800,letterSpacing:"-2px",lineHeight:1.12,marginBottom:28,color:C.text}}>AI will transform how golf is taught, how players learn, and how equipment is fitted.</h1>
+            <h1 style={{fontSize:44,fontWeight:800,letterSpacing:"-2px",lineHeight:1.12,marginBottom:28,color:C.text}}>AI will transform how golf is taught and how players learn.</h1>
           </div>
           <div style={{animation:"fadeUp 1s ease-out 0.3s both"}}>
             <p style={{fontSize:22,fontWeight:700,color:C.amber,lineHeight:1.4,marginBottom:28}}>But not the way the industry is approaching it.</p>
           </div>
           <div style={{animation:"fadeUp 1s ease-out 0.5s both"}}>
             <p style={{fontSize:17,color:C.muted,lineHeight:1.7,marginBottom:16}}>Hardware companies sell sensors. Content platforms sell subscriptions. Launch monitor makers guard proprietary ecosystems. Every player in golf tech is optimized for a single layer.</p>
-            <p style={{fontSize:17,color:C.muted,lineHeight:1.7,marginBottom:16}}>No one is building the structured data layer that connects coaching decisions to fitting decisions to on-course outcomes over time. No one is capturing the reasoning behind what great coaches and fitters actually do.</p>
+            <p style={{fontSize:17,color:C.muted,lineHeight:1.7,marginBottom:16}}>No one is building the structured data layer that connects coaching decisions to on-course outcomes over time. No one is capturing the reasoning behind what great coaches actually do.</p>
             <p style={{fontSize:17,color:C.muted,lineHeight:1.7,marginBottom:32}}>Without that infrastructure, there is nothing for AI to learn from. Sensor data alone is not enough. The missing asset is a persistent record of decisions and outcomes.</p>
           </div>
           <div style={{animation:"fadeUp 1s ease-out 0.7s both"}}>
@@ -92,7 +92,7 @@ export default function LooperNarrative(){
             <div style={{display:"inline-block"}}><span style={{fontSize:62,fontWeight:800,letterSpacing:"-2.5px",color:C.text}}>looper</span><span style={{fontSize:62,fontWeight:800,letterSpacing:"-2.5px",color:C.teal}}>.ai</span></div>
           </div>
           <p style={{fontSize:13,color:C.accent,letterSpacing:"3px",textTransform:"uppercase",fontWeight:600,marginBottom:12}}>Expertise, engineered.</p>
-          <p style={{fontSize:18,color:C.muted,marginBottom:48}}>The decision platform for golf coaching and fitting</p></S>
+          <p style={{fontSize:18,color:C.muted,marginBottom:48}}>The AI-native coaching copilot for golf</p></S>
           <S delay={0.15}>
             <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12}}>
               {pillars.slice(0,3).map((p,i) => (
@@ -121,8 +121,8 @@ export default function LooperNarrative(){
       {/* PROBLEM */}
       <div style={{maxWidth:700,margin:"0 auto",padding:"120px 24px"}}>
         <S><div style={{fontSize:12,color:C.red,letterSpacing:"3px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>The Problem</div>
-        <h2 style={{fontSize:38,fontWeight:800,letterSpacing:"-1.5px",lineHeight:1.15,marginBottom:24}}>Golf coaching and fitting have a <span style={{color:C.red}}>memory problem</span>.</h2></S>
-        <S delay={0.1}><p style={{fontSize:18,color:C.muted,lineHeight:1.7,marginBottom:20}}>Coaches and fitters run their businesses across disconnected tools. The professional carries all the context in their head.</p>
+        <h2 style={{fontSize:38,fontWeight:800,letterSpacing:"-1.5px",lineHeight:1.15,marginBottom:24}}>Golf coaching has a <span style={{color:C.red}}>memory problem</span>.</h2></S>
+        <S delay={0.1}><p style={{fontSize:18,color:C.muted,lineHeight:1.7,marginBottom:20}}>Coaches run their businesses across disconnected tools. The professional carries all the context in their head.</p>
         <p style={{fontSize:18,color:C.muted,lineHeight:1.7,marginBottom:32}}>When a session ends, the most valuable part — the diagnosis, the reasoning, the "why" behind every decision — disappears. The next session starts from scratch.</p></S>
         <S delay={0.15}><div style={{padding:"28px 24px",background:C.surface,borderRadius:16,marginBottom:32,border:`1px solid ${C.dim}22`}}>
           <div style={{fontSize:12,color:C.dim,textTransform:"uppercase",letterSpacing:"1.5px",marginBottom:16}}>Today's academy tech stack</div>
@@ -135,7 +135,6 @@ export default function LooperNarrative(){
         <S delay={0.2}><h3 style={{fontSize:20,fontWeight:700,marginBottom:16}}>What disappears after every session</h3>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:36}}>
           {[{icon:Mic,title:"Coaching reasoning",desc:"The cue that clicked. The prioritization choice. The feel-vs-real translation."},
-            {icon:Wrench,title:"Fitting rationale",desc:"Why one shaft over another. The distance-vs-dispersion tradeoff. The delivery pattern that drove the call."},
             {icon:Link2,title:"Session context",desc:"What was worked on last time. What was prescribed. What actually changed."},
             {icon:Flag,title:"Real-world outcomes",desc:"Whether the prescription worked on the course. Whether improvement stuck over time."}
           ].map((item,i)=>(
@@ -147,7 +146,7 @@ export default function LooperNarrative(){
           ))}
         </div></S>
         <S delay={0.1}><div style={{padding:"22px 24px",borderLeft:`3px solid ${C.teal}`,background:`${C.tealDim}22`,borderRadius:"0 12px 12px 0"}}>
-          <p style={{fontSize:18,color:C.teal,fontWeight:600,fontFamily:"Inter,sans-serif",fontStyle:"italic",lineHeight:1.5}}>The missing asset in golf is not more swing data. It is a persistent record of coaching and fitting decisions and outcomes.</p>
+          <p style={{fontSize:18,color:C.teal,fontWeight:600,fontFamily:"Inter,sans-serif",fontStyle:"italic",lineHeight:1.5}}>The missing asset in golf is not more swing data. It is a persistent record of coaching decisions and outcomes.</p>
         </div></S>
       </div>
 
@@ -155,12 +154,11 @@ export default function LooperNarrative(){
       <div style={{maxWidth:700,margin:"0 auto",padding:"80px 24px 120px"}}>
         <S><div style={{fontSize:12,color:C.teal,letterSpacing:"3px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>The Solution</div>
         <h2 style={{fontSize:38,fontWeight:800,letterSpacing:"-1.5px",lineHeight:1.15,marginBottom:24}}>One system. <span style={{color:C.teal}}>Everything connected.</span></h2>
-        <p style={{fontSize:18,color:C.muted,lineHeight:1.7,marginBottom:40}}>looper.ai replaces the fragmented stack with a single platform — then layers AI as an amplifier of coaches and fitters.</p></S>
+        <p style={{fontSize:18,color:C.muted,lineHeight:1.7,marginBottom:40}}>looper.ai replaces the fragmented stack with a single platform — then layers AI as an amplifier of coaches.</p></S>
         <S delay={0.1}>
           <BA before="6–7 disconnected tools" after="One unified platform"/>
           <BA before="Context carried in the pro's head" after="Record strings link every session"/>
           <BA before="Coaching reasoning vanishes" after="Audio AI captures the 'why'"/>
-          <BA before="Fitting rationale never recorded" after="Build sheets with full reasoning"/>
           <BA before="No outcome tracking" after="GHIN + Arccos close the loop"/>
           <BA before="New coach starts from scratch" after="Persistent record follows the golfer"/>
         </S>
@@ -170,12 +168,12 @@ export default function LooperNarrative(){
       <div style={{background:C.surface,padding:"100px 24px",borderTop:`1px solid ${C.dim}18`,borderBottom:`1px solid ${C.dim}18`}}>
         <div style={{maxWidth:700,margin:"0 auto"}}>
           <S><div style={{fontSize:12,color:C.teal,letterSpacing:"3px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>Day One Value</div>
-          <h2 style={{fontSize:34,fontWeight:800,letterSpacing:"-1.5px",lineHeight:1.15,marginBottom:12}}>The coach and fitter amplifier</h2>
-          <p style={{fontSize:17,color:C.muted,lineHeight:1.7,marginBottom:36}}>Before any prescriptive AI exists, looper.ai makes every professional faster and more effective.</p></S>
-          {[{icon:Mic,title:"Automatic Session Summaries",desc:"Audio capture transcribes the conversation. AI extracts what was identified, what was prescribed, and why. Both pro and player get a structured summary in minutes.",tag:"COACHING + FITTING"},
-            {icon:Link2,title:"Record Strings",desc:"Every session links to the last. What was worked on, what was prescribed, what changed. A coach picking up with a returning student — or a fitter seeing a golfer whose swing evolved — never starts cold.",tag:"CONTINUITY"},
-            {icon:Flag,title:"On-Course Closed Loop",desc:"GHIN tracks handicap and score trends. Arccos tracks shot-level strokes gained. Did the swing change improve on-course dispersion? Did the new driver build deliver carry gains in competition?",tag:"OUTCOMES"},
-            {icon:Search,title:"Professional-Language Diagnostics",desc:"For coaches: 'This is primarily strike variability.' For fitters: 'This delivery pattern favors a low-spin, tip-stable shaft.' Data translated into the language pros already think in.",tag:"INTELLIGENCE"}
+          <h2 style={{fontSize:34,fontWeight:800,letterSpacing:"-1.5px",lineHeight:1.15,marginBottom:12}}>The coach amplifier</h2>
+          <p style={{fontSize:17,color:C.muted,lineHeight:1.7,marginBottom:36}}>Before any prescriptive AI exists, looper.ai makes every coach faster and more effective.</p></S>
+          {[{icon:Mic,title:"Automatic Session Summaries",desc:"Audio capture transcribes the conversation. AI extracts what was identified, what was prescribed, and why. Both coach and player get a structured summary in minutes.",tag:"COACHING"},
+            {icon:Link2,title:"Record Strings",desc:"Every session links to the last. What was worked on, what was prescribed, what changed. A coach picking up with a returning student never starts cold.",tag:"CONTINUITY"},
+            {icon:Flag,title:"On-Course Closed Loop",desc:"GHIN tracks handicap and score trends. Arccos tracks shot-level strokes gained. Did the swing change improve on-course dispersion?",tag:"OUTCOMES"},
+            {icon:Search,title:"Professional-Language Diagnostics",desc:"'This is primarily strike variability.' 'Face-to-path ratio suggests an alignment issue.' Data translated into the language coaches already think in.",tag:"INTELLIGENCE"}
           ].map((item,i)=>(
             <S key={i} delay={i*0.07}><div style={{padding:"24px",background:C.card,borderRadius:14,marginBottom:14,border:`1px solid ${C.dim}22`,display:"flex",gap:18,alignItems:"flex-start"}}>
               <IconBox icon={item.icon} color={C.teal}/>
@@ -189,7 +187,7 @@ export default function LooperNarrative(){
             </div></S>
           ))}
           <S delay={0.3}><div style={{padding:"20px 24px",borderLeft:`3px solid ${C.teal}`,background:`${C.tealDim}22`,borderRadius:"0 12px 12px 0",marginTop:16}}>
-            <p style={{fontSize:15,color:C.teal,fontWeight:600,lineHeight:1.5}}>Pros use looper.ai because after every session it saves them time, makes follow-up automatic, and makes their expertise visible and persistent. The data moat happens naturally.</p>
+            <p style={{fontSize:15,color:C.teal,fontWeight:600,lineHeight:1.5}}>Coaches use looper.ai because after every session it saves them time, makes follow-up automatic, and makes their expertise visible and persistent. The data moat happens naturally.</p>
           </div></S>
         </div>
       </div>
@@ -222,7 +220,7 @@ export default function LooperNarrative(){
           <h2 style={{fontSize:34,fontWeight:800,letterSpacing:"-1.5px",marginBottom:32}}>A convergence moment</h2></S>
           <S delay={0.1}><div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:0}}>
             <Stat number="$2.0B" label="U.S. Instruction"/>
-            <Stat number="$3.5B" label="U.S. Fitting" color={C.teal}/>
+            <Stat number="$4.2B" label="Global Instruction" color={C.teal}/>
             <Stat number="$1.7B" label="Simulators" color={C.amber}/>
             <Stat number="10M" label="New Golfers" color={C.text}/>
           </div></S>
@@ -238,8 +236,8 @@ export default function LooperNarrative(){
             <div style={{fontSize:12,color:C.dim,textTransform:"uppercase",letterSpacing:"1.5px",marginBottom:14}}>Beachhead customers</div>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
               {[{icon:GraduationCap,title:"Premium Academies",desc:"3–10 instructors, already on TrackMan or Foresight"},
-                {icon:Wrench,title:"Fitting Studios",desc:"Club Champion, Cool Clubs, independents"},
-                {icon:User,title:"High-Volume Pros",desc:"50+ students, recurring lesson books"}
+                {icon:User,title:"High-Volume Pros",desc:"50+ students, recurring lesson books"},
+                {icon:Target,title:"Performance Centers",desc:"Indoor facilities with launch monitors and video"}
               ].map((b,i)=>(
                 <div key={i} style={{padding:"18px",background:C.bg,borderRadius:12,border:`1px solid ${C.dim}22`}}>
                   <IconBox icon={b.icon} color={C.accent} size={18}/>
@@ -257,12 +255,11 @@ export default function LooperNarrative(){
         <S><div style={{fontSize:12,color:C.teal,letterSpacing:"3px",textTransform:"uppercase",fontWeight:700,marginBottom:12}}>The Roadmap</div>
         <h2 style={{fontSize:34,fontWeight:800,letterSpacing:"-1.5px",marginBottom:32}}>Built in layers, each funding the next</h2></S>
         <S delay={0.1}>
-          <TL active phase="Months 1–6" title="Foundation" desc="Session schema. Audio pipeline. Coaching ontology with elite instructors. Equipment ontology MVP. Scheduling and comms. First launch monitor integration."/>
-          <TL active phase="Months 4–12" title="OS v1 — The Record" desc="Session capture, AI summaries, record strings, longitudinal profiles, coach and fitter dashboard. GHIN integration. Device calibration layer."/>
-          <TL phase="Months 10–18" title="The Amplifier" desc="Coach and fitter diagnostics. Strike maps. Uncertainty scoring. Arccos on-course integration. Surrogate prediction models."/>
-          <TL phase="Months 12–20" title="Fitting OS" desc="Full equipment ontology. Fitting session workflow. Physics-constrained build sheet generation."/>
+          <TL active phase="Months 1–6" title="Foundation" desc="Session schema. Audio pipeline. Coaching ontology with elite instructors. Scheduling and comms. First launch monitor integration."/>
+          <TL active phase="Months 4–12" title="OS v1 — The Record" desc="Session capture, AI summaries, record strings, longitudinal profiles, coach dashboard. GHIN integration. Device calibration layer."/>
+          <TL phase="Months 10–18" title="The Amplifier" desc="Coach diagnostics. Strike maps. Uncertainty scoring. Arccos on-course integration. Surrogate prediction models."/>
           <TL phase="Months 16–24" title="Learning Loop" desc="Player embeddings. Hierarchical models that learn across coaches and sites. Active learning: 'what should we test next?'"/>
-          <TL phase="Months 20–30" title="Golf's AI Engine" desc="Prescriptive recommendations for coaching and fitting. Outcome-based intelligence. Uncertainty bands on every recommendation."/>
+          <TL phase="Months 20–30" title="Golf's AI Engine" desc="Prescriptive coaching recommendations. Outcome-based intelligence. Uncertainty bands on every recommendation."/>
         </S>
       </div>
 
@@ -273,8 +270,8 @@ export default function LooperNarrative(){
           <h2 style={{fontSize:34,fontWeight:800,letterSpacing:"-1.5px",marginBottom:24}}>Four stages of value</h2>
           <div style={{fontSize:11,color:C.red,fontWeight:700,letterSpacing:"1px",textTransform:"uppercase",padding:"6px 14px",border:`1px solid ${C.red}33`,borderRadius:6,display:"inline-block",marginBottom:28}}>Preliminary — Under active refinement</div></S>
           <S delay={0.1}><div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,marginBottom:14}}>
-            {[{icon:Layers,num:"01",title:"The OS",time:"Year 1–2",price:"$500–$1,500/mo",desc:"Unified coaching and fitting platform. Connect the stack.",color:C.accent},
-              {icon:Brain,num:"02",title:"Intelligence",time:"Year 2–3",price:"+$500–$1,000/mo",desc:"AI prescriptive engine for coaching and fitting.",color:C.teal},
+            {[{icon:Layers,num:"01",title:"The OS",time:"Year 1–2",price:"$500–$1,500/mo",desc:"Unified coaching platform. Connect the stack.",color:C.accent},
+              {icon:Brain,num:"02",title:"Intelligence",time:"Year 2–3",price:"+$500–$1,000/mo",desc:"AI prescriptive engine for coaching.",color:C.teal},
               {icon:User,num:"03",title:"Consumer",time:"Year 3–5",price:"$20–$30/mo",desc:"Persistent record + AI for any golfer.",color:C.amber},
               {icon:Globe,num:"04",title:"Multi-Sport",time:"Year 4+",price:"Platform",desc:"Tennis, baseball, pitching, personal training.",color:C.muted}
             ].map((s,i)=>{const Icon=s.icon;return(
@@ -313,7 +310,7 @@ export default function LooperNarrative(){
           <div style={{marginBottom:24}}><span style={{fontSize:32,fontWeight:800,letterSpacing:"-1px",color:C.text}}>looper</span><span style={{fontSize:32,fontWeight:800,letterSpacing:"-1px",color:C.teal}}>.ai</span></div>
           <h2 style={{fontSize:38,fontWeight:800,letterSpacing:"-1.5px",lineHeight:1.2,marginBottom:20}}>Every great golfer has had a <span style={{color:C.teal}}>looper</span>.</h2>
           <p style={{fontSize:18,color:C.muted,lineHeight:1.7,maxWidth:520,margin:"0 auto 32px",fontFamily:"Inter,sans-serif",fontStyle:"italic"}}>Someone who knows your game, remembers what happened last time, and helps you make better decisions.</p>
-          <p style={{fontSize:16,color:C.muted,lineHeight:1.7,maxWidth:520,margin:"0 auto 36px"}}>looper.ai captures what great coaches and fitters know, structures it, and makes it permanent. Then it builds the AI engine that learns from it at scale.</p>
+          <p style={{fontSize:16,color:C.muted,lineHeight:1.7,maxWidth:520,margin:"0 auto 36px"}}>looper.ai captures what great coaches know, structures it, and makes it permanent. Then it builds the AI engine that learns from it at scale.</p>
           <div style={{padding:"20px 28px",borderLeft:`3px solid ${C.teal}`,background:`${C.tealDim}22`,borderRadius:"0 12px 12px 0",display:"inline-block",textAlign:"left",maxWidth:460}}>
             <p style={{fontSize:15,color:C.teal,fontWeight:600,lineHeight:1.5}}>The hook is workflow. The value is the amplifier. The endgame is golf's AI engine.</p>
           </div>

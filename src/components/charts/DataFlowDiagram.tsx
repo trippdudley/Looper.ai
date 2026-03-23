@@ -12,9 +12,8 @@ const sourceNodes = [
 
 const outputNodes = [
   'Coaching Insights',
-  'Audience Segments',
-  'Monetization',
-  'Fitting Intelligence',
+  'Player Intelligence',
+  'Practice Plans',
 ];
 
 export default function DataFlowDiagram({ className = '' }: DataFlowDiagramProps) {

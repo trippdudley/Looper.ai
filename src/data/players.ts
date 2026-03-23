@@ -1,4 +1,4 @@
-export interface Golfer {
+export interface Player {
   id: string;
   name: string;
   email: string;
@@ -22,7 +22,6 @@ export interface Golfer {
     wedges: string;
     putter: string;
     ball: string;
-    lastFittingDate: string;
   };
   connectedSystems: string[];
   goals: string[];
@@ -33,7 +32,10 @@ export interface Golfer {
   roundsPerMonth: number;
 }
 
-export const golfers: Golfer[] = [
+/** @deprecated Use Player instead */
+export type Golfer = Player;
+
+export const players: Player[] = [
   {
     id: "golfer-moe",
     name: "Moe Norman",
@@ -57,7 +59,6 @@ export const golfers: Golfer[] = [
       wedges: "TaylorMade MG4 50\u00b0, 54\u00b0, 58\u00b0",
       putter: "Odyssey White Hot OG #7",
       ball: "Titleist Pro V1",
-      lastFittingDate: "2025-04-20",
     },
     connectedSystems: ["trackman", "arccos", "ghin"],
     goals: ["Break 80", "Consistent ball striking", "Better course management"],
@@ -89,7 +90,6 @@ export const golfers: Golfer[] = [
       wedges: "Callaway Jaws 52\u00b0, 56\u00b0",
       putter: "Odyssey Eleven S",
       ball: "Callaway Chrome Soft",
-      lastFittingDate: "2025-10-15",
     },
     connectedSystems: ["trackman", "ghin"],
     goals: ["Break 100 consistently", "Learn proper grip", "Enjoy the game"],
@@ -121,7 +121,6 @@ export const golfers: Golfer[] = [
       wedges: "Titleist Vokey SM10 48\u00b0, 52\u00b0, 56\u00b0, 60\u00b0",
       putter: "Scotty Cameron Phantom X 5",
       ball: "Titleist Pro V1x",
-      lastFittingDate: "2025-08-10",
     },
     connectedSystems: ["trackman", "arccos", "ghin", "foresight"],
     goals: ["Scratch handicap", "Qualify for amateur events", "Short game mastery"],
@@ -154,7 +153,6 @@ export const golfers: Golfer[] = [
       wedges: "PING Glide 4.0 50\u00b0, 54\u00b0, 58\u00b0",
       putter: "PING Anser 2",
       ball: "Bridgestone Tour B RXS",
-      lastFittingDate: "2025-09-20",
     },
     connectedSystems: ["foresight", "ghin"],
     goals: ["Break 90", "More consistent contact", "Better putting"],
@@ -165,3 +163,6 @@ export const golfers: Golfer[] = [
     roundsPerMonth: 3,
   },
 ];
+
+/** @deprecated Use players instead */
+export const golfers = players;

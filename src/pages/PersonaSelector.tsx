@@ -1,20 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { User, GraduationCap, Wrench, Route } from 'lucide-react';
+import { GraduationCap, Route } from 'lucide-react';
 
 const personas = [
-  {
-    label: "I'm a Player",
-    icon: Route,
-    description: "Your full game on one timeline \u2014 every source, every session, one story",
-    path: "/player",
-  },
-  {
-    label: "I'm a Golfer",
-    icon: User,
-    description: "Track improvement, review lessons, practice with purpose",
-    path: "/golfer",
-  },
   {
     label: "I'm a Coach",
     icon: GraduationCap,
@@ -22,10 +10,10 @@ const personas = [
     path: "/coach",
   },
   {
-    label: "I'm a Fitter",
-    icon: Wrench,
-    description: "Fit with full context, estimate outcomes, produce auditable builds",
-    path: "/fitter",
+    label: "I'm a Player",
+    icon: Route,
+    description: "Your full game on one timeline \u2014 every source, every session, one story",
+    path: "/player",
   },
 ];
 
@@ -69,61 +57,24 @@ export default function PersonaSelector() {
             Expertise, engineered.
           </p>
           <p className="text-base text-gray-400">
-            The decision platform for golf coaching and fitting
+            The AI-native coaching copilot for golf
           </p>
           <div className="w-20 h-px bg-accent mx-auto my-6" />
         </div>
 
         {/* Vision in Action — sizzle reel entry */}
         <div ref={visionRef} className="fade-in-up max-w-3xl mx-auto mb-6 w-full">
-          <Link to="/vision" style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            background: '#E6F5F1',
-            borderLeft: '3px solid #0D7C66',
-            borderRadius: 10,
-            padding: '14px 20px',
-            textDecoration: 'none',
-          }}>
+          <Link to="/vision" className="flex items-center justify-between bg-[#E6F5F1] border-l-[3px] border-accent rounded-[10px] px-5 py-3.5 no-underline">
             <div>
-              <div style={{
-                fontFamily: "'Cabinet Grotesk', sans-serif",
-                fontSize: 16,
-                fontWeight: 700,
-                color: '#1A1F2B',
-                marginBottom: 2,
-              }}>
+              <div className="text-base font-bold text-navy mb-0.5">
                 Vision in Action
               </div>
-              <div style={{
-                fontFamily: "'Cabinet Grotesk', sans-serif",
-                fontSize: 13,
-                fontWeight: 400,
-                color: '#4B5563',
-              }}>
+              <div className="text-[13px] text-gray-600">
                 Watch the 90-second product walkthrough
               </div>
             </div>
-            <div style={{
-              width: 36,
-              height: 36,
-              borderRadius: '50%',
-              background: '#0D7C66',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-              marginLeft: 16,
-            }}>
-              <div style={{
-                width: 0,
-                height: 0,
-                borderLeft: '10px solid white',
-                borderTop: '6px solid transparent',
-                borderBottom: '6px solid transparent',
-                marginLeft: 2,
-              }} />
+            <div className="w-9 h-9 rounded-full bg-accent flex items-center justify-center shrink-0 ml-4">
+              <div className="w-0 h-0 border-l-[10px] border-l-white border-y-[6px] border-y-transparent ml-0.5" />
             </div>
           </Link>
         </div>
@@ -161,7 +112,7 @@ export default function PersonaSelector() {
             Enter the Prototype
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-3xl mx-auto">
             {personas.map((p, i) => {
               const Icon = p.icon;
               return (
@@ -185,20 +136,6 @@ export default function PersonaSelector() {
             })}
           </div>
 
-          {/* Platform Engine — below prototype cards */}
-          <div className="max-w-3xl mx-auto mt-6">
-            <Link to="/spine" className="glass-card p-6 block text-center">
-              <p className="text-[11px] uppercase tracking-wider text-data-blue font-semibold mb-2">
-                PLATFORM ENGINE
-              </p>
-              <p className="text-white font-medium text-[15px]">
-                Explore the Data Spine
-              </p>
-              <p className="text-sm text-gray-400 mt-1">
-                30 attributes, 21 integrations, 6 audience segments
-              </p>
-            </Link>
-          </div>
         </div>
 
         {/* Footer */}

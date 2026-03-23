@@ -15,7 +15,7 @@ import {
   BarChart3,
   Circle,
 } from 'lucide-react';
-import { golfers } from '../../../data/golfers';
+import { golfers } from '../../../data/players';
 import { sessions } from '../../../data/sessions';
 import { trackmanShots } from '../../../data/trackmanData';
 

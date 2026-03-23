@@ -16,7 +16,7 @@ import {
   Flag,
   Dumbbell,
 } from 'lucide-react';
-import { golfers } from '../../../data/golfers';
+import { golfers } from '../../../data/players';
 import { playerHistory } from '../../../data/coachingOSData';
 
 // ---------- helpers ----------

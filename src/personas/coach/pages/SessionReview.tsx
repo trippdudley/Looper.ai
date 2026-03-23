@@ -17,7 +17,7 @@ import {
 import { sessions } from '../../../data/sessions';
 import { drills } from '../../../data/drills';
 import { trackmanShots } from '../../../data/trackmanData';
-import { golfers } from '../../../data/golfers';
+import { golfers } from '../../../data/players';
 
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr + 'T00:00:00');

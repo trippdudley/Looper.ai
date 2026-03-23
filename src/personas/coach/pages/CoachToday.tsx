@@ -13,7 +13,7 @@ import {
   Target,
   FileText,
 } from 'lucide-react';
-import { golfers } from '../../../data/golfers';
+import { golfers } from '../../../data/players';
 import { drills } from '../../../data/drills';
 
 // ---------- mock data for today's schedule ----------

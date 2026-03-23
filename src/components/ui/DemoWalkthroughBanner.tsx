@@ -12,8 +12,7 @@ const DEMO_STEPS: Step[] = [
   { label: 'Coach reviews their schedule', path: '/coach', persona: 'Coach' },
   { label: 'Coach gets a player brief', path: '/coach/brief/golfer-james', persona: 'Coach' },
   { label: 'Coach runs a live session', path: '/coach/live', persona: 'Coach' },
-  { label: 'Golfer reviews their lesson', path: '/golfer/lessons/session-1', persona: 'Golfer' },
-  { label: 'Explore the Data Spine', path: '/spine', persona: 'Platform' },
+  { label: 'Player reviews their journey', path: '/player', persona: 'Player' },
 ];
 
 // Match current path to the most specific demo step (longest match first)
