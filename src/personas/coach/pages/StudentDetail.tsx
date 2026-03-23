@@ -4,156 +4,153 @@ import {
   ArrowLeft,
   TrendingUp,
   TrendingDown,
+  Minus,
   Lightbulb,
   Pencil,
-  CheckCircle,
-  Circle,
   X,
   Check,
 } from 'lucide-react';
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  ResponsiveContainer,
-  Area,
-  ComposedChart,
-  ReferenceArea,
-  ReferenceLine,
-} from 'recharts';
+// recharts removed — handicap ribbon replaced by HCP row in heatmap grid
 
 // ─── Mock Data ────────────────────────────────────────────────────────────────
 
 const PLAYER = {
   name: 'Moe Norman',
   handicap: 12.1,
-  handicapPrev: 14.2,
-  sessions: 14,
+  handicapPrev: 13.8,
+  sessions: 8,
   coach: 'M. Thompson',
-  coachYears: 2,
+  coachYears: 1,
   goal: 'Break 80',
   dataSources: ['Arccos', 'GHIN', 'TrackMan'],
 };
 
-const HANDICAP_TREND = [
-  { month: 'Sep 24', handicap: 14.2 },
-  { month: 'Oct 24', handicap: 14.1 },
-  { month: 'Nov 24', handicap: 14.0 },
-  { month: 'Dec 24', handicap: 13.8 },
-  { month: 'Jan 25', handicap: 13.6 },
-  { month: 'Feb 25', handicap: 13.4 },
-  { month: 'Mar 25', handicap: 13.1 },
-  { month: 'Apr 25', handicap: 13.0 },
-  { month: 'May 25', handicap: 12.9 },
-  { month: 'Jun 25', handicap: 12.8 },
-  { month: 'Jul 25', handicap: 12.7 },
-  { month: 'Aug 25', handicap: 12.6 },
-  { month: 'Sep 25', handicap: 12.5 },
-  { month: 'Oct 25', handicap: 12.4 },
-  { month: 'Nov 25', handicap: 12.4 },
-  { month: 'Dec 25', handicap: 12.3 },
-  { month: 'Jan 26', handicap: 12.2 },
-  { month: 'Feb 26', handicap: 12.1 },
-  { month: 'Mar 26', handicap: 12.1 },
+/** Individual round data — from Arccos / GHIN */
+interface RoundData {
+  date: string;
+  course: string;
+  score: number;
+  differential: number;
+  rollingHcp: number;
+  /** Month index 0-12 (Mar 25 = 0, Mar 26 = 12) */
+  monthIdx: number;
+  /** Fractional position within the month (0-1) for precise date placement */
+  monthFrac: number;
+}
+
+const ROUNDS_DATA: RoundData[] = [
+  { date: 'Mar 15, 2025', course: 'Pine Valley', score: 86, differential: 13.9, rollingHcp: 13.8, monthIdx: 0, monthFrac: 0.45 },
+  { date: 'Mar 22, 2025', course: 'Evergreen GC', score: 84, differential: 12.8, rollingHcp: 13.6, monthIdx: 0, monthFrac: 0.68 },
+  { date: 'Apr 5, 2025', course: 'Pine Valley', score: 87, differential: 14.2, rollingHcp: 13.5, monthIdx: 1, monthFrac: 0.13 },
+  { date: 'Apr 19, 2025', course: 'Evergreen GC', score: 85, differential: 13.5, rollingHcp: 13.4, monthIdx: 1, monthFrac: 0.6 },
+  { date: 'May 3, 2025', course: 'Chambers Bay', score: 88, differential: 14.1, rollingHcp: 13.3, monthIdx: 2, monthFrac: 0.06 },
+  { date: 'May 24, 2025', course: 'Evergreen GC', score: 83, differential: 12.4, rollingHcp: 13.1, monthIdx: 2, monthFrac: 0.74 },
+  { date: 'Jun 7, 2025', course: 'Pine Valley', score: 85, differential: 13.1, rollingHcp: 13.0, monthIdx: 3, monthFrac: 0.2 },
+  { date: 'Jun 21, 2025', course: 'Evergreen GC', score: 84, differential: 12.7, rollingHcp: 12.9, monthIdx: 3, monthFrac: 0.67 },
+  { date: 'Jul 12, 2025', course: 'Chambers Bay', score: 86, differential: 13.3, rollingHcp: 12.8, monthIdx: 4, monthFrac: 0.35 },
+  { date: 'Jul 26, 2025', course: 'Evergreen GC', score: 83, differential: 12.1, rollingHcp: 12.7, monthIdx: 4, monthFrac: 0.81 },
+  { date: 'Aug 9, 2025', course: 'Pine Valley', score: 84, differential: 12.5, rollingHcp: 12.6, monthIdx: 5, monthFrac: 0.26 },
+  { date: 'Aug 23, 2025', course: 'Evergreen GC', score: 82, differential: 11.8, rollingHcp: 12.5, monthIdx: 5, monthFrac: 0.71 },
+  { date: 'Sep 6, 2025', course: 'Chambers Bay', score: 85, differential: 12.6, rollingHcp: 12.5, monthIdx: 6, monthFrac: 0.17 },
+  { date: 'Sep 27, 2025', course: 'Evergreen GC', score: 83, differential: 12.3, rollingHcp: 12.4, monthIdx: 6, monthFrac: 0.87 },
+  { date: 'Oct 11, 2025', course: 'Pine Valley', score: 84, differential: 12.5, rollingHcp: 12.4, monthIdx: 7, monthFrac: 0.32 },
+  { date: 'Oct 25, 2025', course: 'Evergreen GC', score: 84, differential: 12.8, rollingHcp: 12.5, monthIdx: 7, monthFrac: 0.77 },
+  { date: 'Nov 8, 2025', course: 'Evergreen GC', score: 85, differential: 13.0, rollingHcp: 12.5, monthIdx: 8, monthFrac: 0.23 },
+  { date: 'Dec 20, 2025', course: 'Indoor Sim', score: 83, differential: 12.4, rollingHcp: 12.4, monthIdx: 9, monthFrac: 0.61 },
+  { date: 'Jan 10, 2026', course: 'Indoor Sim', score: 84, differential: 12.6, rollingHcp: 12.3, monthIdx: 10, monthFrac: 0.29 },
+  { date: 'Jan 31, 2026', course: 'Indoor Sim', score: 82, differential: 12.0, rollingHcp: 12.2, monthIdx: 10, monthFrac: 0.97 },
+  { date: 'Feb 15, 2026', course: 'Evergreen GC', score: 83, differential: 12.3, rollingHcp: 12.2, monthIdx: 11, monthFrac: 0.47 },
+  { date: 'Mar 1, 2026', course: 'Pine Valley', score: 82, differential: 11.9, rollingHcp: 12.1, monthIdx: 12, monthFrac: 0.0 },
+  { date: 'Mar 15, 2026', course: 'Evergreen GC', score: 81, differential: 11.6, rollingHcp: 12.1, monthIdx: 12, monthFrac: 0.45 },
+];
+
+/** Monthly strokes gained snapshots — from Arccos */
+interface MonthlySG {
+  month: string;
+  monthIdx: number;
+  driver: number;
+  approach: number;
+  shortGame: number;
+  putting: number;
+}
+
+const MONTHLY_SG: MonthlySG[] = [
+  { month: 'Mar 25', monthIdx: 0, driver: -1.5, approach: -0.3, shortGame: -0.7, putting: 0.1 },
+  { month: 'Apr 25', monthIdx: 1, driver: -1.6, approach: -0.3, shortGame: -0.4, putting: 0.2 },
+  { month: 'May 25', monthIdx: 2, driver: -1.7, approach: -0.2, shortGame: -0.2, putting: 0.1 },
+  { month: 'Jun 25', monthIdx: 3, driver: -1.8, approach: -0.1, shortGame: -0.1, putting: 0.2 },
+  { month: 'Jul 25', monthIdx: 4, driver: -1.9, approach: -0.1, shortGame: -0.1, putting: 0.3 },
+  { month: 'Aug 25', monthIdx: 5, driver: -1.9, approach: 0.0, shortGame: -0.1, putting: 0.2 },
+  { month: 'Sep 25', monthIdx: 6, driver: -2.0, approach: 0.0, shortGame: -0.1, putting: 0.2 },
+  { month: 'Oct 25', monthIdx: 7, driver: -2.0, approach: 0.0, shortGame: 0.0, putting: 0.3 },
+  { month: 'Nov 25', monthIdx: 8, driver: -2.0, approach: 0.0, shortGame: 0.0, putting: 0.2 },
+  { month: 'Dec 25', monthIdx: 9, driver: -2.1, approach: 0.0, shortGame: -0.1, putting: 0.3 },
+  { month: 'Jan 26', monthIdx: 10, driver: -2.2, approach: 0.1, shortGame: 0.0, putting: 0.3 },
+  { month: 'Feb 26', monthIdx: 11, driver: -2.2, approach: 0.1, shortGame: -0.1, putting: 0.3 },
+  { month: 'Mar 26', monthIdx: 12, driver: -2.3, approach: 0.2, shortGame: -0.1, putting: 0.3 },
 ];
 
 const STROKES_GAINED = [
   { category: 'Driver', value: -2.3, trend: 'down' as const, context: 'vs. 12-HCP avg' },
-  { category: 'Approach', value: 0.2, trend: 'up' as const, context: '\u2191 0.4 since Session 11' },
+  { category: 'Approach', value: 0.2, trend: 'up' as const, context: '\u2191 0.3 since Session 6' },
   { category: 'Short Game', value: -0.1, trend: 'flat' as const, context: 'vs. 12-HCP avg' },
   { category: 'Putting', value: 0.3, trend: 'up' as const, context: 'vs. 12-HCP avg' },
 ];
 
-interface CoachingArc {
-  id: string;
-  name: string;
-  label: string;
-  sessions: number[];
-  startMonth: number;
-  endMonth: number;
-  color: string;
-  borderColor: string;
-  bgOpacity: string;
-  impact: string;
-}
-
-const COACHING_ARCS: CoachingArc[] = [
-  {
-    id: 'short-game',
-    name: 'Short Game',
-    label: 'Wedge distance control',
-    sessions: [1, 2, 3, 4, 5],
-    startMonth: 0,
-    endMonth: 4,
-    color: '#D4980B',
-    borderColor: '#D4980B',
-    bgOpacity: 'rgba(212, 152, 11, 0.12)',
-    impact: 'SG Short Game: -0.8 \u2192 -0.1',
-  },
-  {
-    id: 'ball-position',
-    name: 'Ball Position',
-    label: 'Address fundamentals',
-    sessions: [6, 7, 8, 9, 10],
-    startMonth: 6,
-    endMonth: 10,
-    color: '#6B7280',
-    borderColor: '#6B7280',
-    bgOpacity: 'rgba(107, 114, 128, 0.10)',
-    impact: 'Approach SG stabilized at 0.0',
-  },
-  {
-    id: 'iron-strike',
-    name: 'Iron Strike',
-    label: 'Centering & toe bias correction',
-    sessions: [11, 12, 13, 14],
-    startMonth: 15,
-    endMonth: 18,
-    color: '#0D7C66',
-    borderColor: '#0D7C66',
-    bgOpacity: 'rgba(13, 124, 102, 0.15)',
-    impact: 'Approach SG improved +0.4',
-  },
-];
-
-interface SessionMock {
+interface SessionData {
   number: number;
   date: string;
-  arcId: string;
-  focus: string;
-  phases: [boolean, boolean, boolean, boolean];
+  focusTag: string;
+  focusDetail: string;
+  /** AI-inferred theme summary for the lesson card */
+  themeSummary: string;
+  duration: number;
+  drills: string;
+  keyData: string;
   summary: string;
-  evidence: string;
+  coachNote?: string;
+  sg: { driver: number; approach: number; shortGame: number; putting: number };
+  /** Handicap at this session point */
+  hcp: number;
+  /** Month index on the shared time axis (0 = Mar 25, 12 = Mar 26) */
+  monthIdx: number;
+  /** Fractional position within the month (0-1) */
+  monthFrac: number;
 }
 
-const SESSIONS_DATA: SessionMock[] = [
-  { number: 1, date: 'Sep 15, 2024', arcId: 'short-game', focus: 'Wedge distance control — 50-80 yard window', phases: [true, true, true, true], summary: 'Established baseline wedge distances. 60-yard carry window varied by 18 yards. Prescribed partial-swing distance ladder.', evidence: '60-yd carry spread: 18 yds (baseline)' },
-  { number: 2, date: 'Oct 3, 2024', arcId: 'short-game', focus: 'Wedge distance control — tempo focus', phases: [true, true, true, true], summary: 'Introduced 3:1 tempo ratio for partial wedges. Carry window tightened to 14 yards.', evidence: '60-yd carry spread: 14 yds (\u22124 from S1)' },
-  { number: 3, date: 'Oct 28, 2024', arcId: 'short-game', focus: 'Wedge loft and spin management', phases: [true, true, true, true], summary: 'Shifted focus to dynamic loft control. Spin rate consistency improved significantly.', evidence: 'Spin rate variance: \u221215%' },
-  { number: 4, date: 'Nov 20, 2024', arcId: 'short-game', focus: 'Short game scoring integration', phases: [true, true, true, false], summary: 'On-course application session. Up-and-down conversion improved in practice rounds.', evidence: 'Scrambling rate: 42% \u2192 51%' },
-  { number: 5, date: 'Dec 12, 2024', arcId: 'short-game', focus: 'Short game arc review', phases: [true, true, true, true], summary: 'Arc completion review. Short game SG improved from -0.8 to -0.1. Wedge distance control now within acceptable range.', evidence: 'SG Short Game: -0.1 (from -0.8)' },
-  { number: 6, date: 'Jan 15, 2025', arcId: 'ball-position', focus: 'Address position audit', phases: [true, true, true, true], summary: 'Video analysis revealed inconsistent ball position at address. 1.5" variance across iron set. Began standardization protocol.', evidence: 'Ball position variance: 1.5" across irons' },
-  { number: 7, date: 'Feb 5, 2025', arcId: 'ball-position', focus: 'Alignment rod protocol', phases: [true, true, true, true], summary: 'Alignment rod check drill introduced. Ball position standardized within 0.5" for 7-iron.', evidence: 'Ball position variance: 0.5" (7-iron)' },
-  { number: 8, date: 'Mar 1, 2025', arcId: 'ball-position', focus: 'Address fundamentals transfer', phases: [true, true, true, true], summary: 'Extended ball position protocol to 5-iron through PW. Stance width adjusted for consistency.', evidence: 'Address consistency: 88% within protocol' },
-  { number: 9, date: 'Apr 8, 2025', arcId: 'ball-position', focus: 'Address under pressure', phases: [true, true, true, false], summary: 'Pressure testing address fundamentals. Ball position held under simulated pressure conditions.', evidence: 'Pressure consistency: 82%' },
-  { number: 10, date: 'May 12, 2025', arcId: 'ball-position', focus: 'Ball position arc review', phases: [true, true, true, true], summary: 'Arc completion. Approach SG stabilized at 0.0 from -0.3. Address fundamentals now automatic.', evidence: 'SG Approach: 0.0 (from -0.3)' },
-  { number: 11, date: 'Jan 8, 2026', arcId: 'iron-strike', focus: 'Strike pattern baseline', phases: [true, true, true, true], summary: 'TrackMan face mapping revealed consistent toe bias on 7-iron and 8-iron. 0.6" average toe-side miss.', evidence: 'Strike center: +0.6" toe (7-iron avg)' },
-  { number: 12, date: 'Jan 28, 2026', arcId: 'iron-strike', focus: 'Gate drill introduction', phases: [true, true, true, true], summary: 'Gate drill prescribed for toe bias correction. Alignment rod check continued as maintenance. Initial response positive.', evidence: 'Strike center: +0.4" toe (\u22120.2" from S11)' },
-  { number: 13, date: 'Feb 25, 2026', arcId: 'iron-strike', focus: 'Strike centering progression', phases: [true, true, true, true], summary: 'Gate drill showing measurable transfer. Dispersion tightened 18% within session. Face-to-path improving.', evidence: 'Dispersion: \u221218% within session' },
-  { number: 14, date: 'Mar 18, 2026', arcId: 'iron-strike', focus: 'Toe bias correction — consolidation', phases: [true, true, true, true], summary: 'Toe bias pattern noticeably more centered by end of session. Gate drill effective. Dispersion tightened 22% within session. Face-to-path narrowed from 4\u00b0 to 2\u00b0 across Sessions 13\u201314.', evidence: 'Strike center: shifted 0.3" toward center vs. Session 12' },
+/** Thread connecting lessons by shared coaching theme */
+interface Thread {
+  name: string;
+  color: string;
+  /** Session numbers where this thread is active */
+  sessions: number[];
+  /** Whether gaps between non-adjacent sessions are inferred (dashed) */
+  hasGap?: boolean;
+}
+
+const THREADS: Thread[] = [
+  { name: 'Wedge/Short Game', color: '#D4980B', sessions: [1, 2] },
+  { name: 'Setup & Posture', color: '#6B7280', sessions: [3, 4] },
+  { name: 'Trail Arm & Rotation', color: '#8B5CF6', sessions: [4, 5] },
+  { name: 'Strike Quality', color: '#0D7C66', sessions: [6, 7, 8] },
+  { name: 'Ball Position', color: '#3B82F6', sessions: [3, 7], hasGap: true },
 ];
 
-const PRACTICE_PLAN = [
-  { name: 'Gate Drill \u2014 Strike Centering', completed: 2, total: 3, prescribed: 'Session 13' },
-  { name: 'Alignment Rod Check \u2014 Address Consistency', completed: 1, total: 2, prescribed: 'Session 12' },
-  { name: 'Tempo Drill \u2014 3:1 Ratio', completed: 0, total: 2, prescribed: 'Session 14' },
+const SESSIONS_DATA: SessionData[] = [
+  { number: 1, date: 'Mar 8, 2025', focusTag: 'Wedge', focusDetail: 'Wedge distance control \u2014 50-80 yard carry windows', themeSummary: 'Wedge distance control \u2014 50-80 yard carry windows. Focused on consistent rhythm and wrist release point.', duration: 60, drills: 'Partial-Swing Distance Ladder', keyData: '60-yd carry spread: 18 yds (baseline)', summary: 'Established baseline wedge distances. Carry window varied by 18 yards. Prescribed partial-swing distance ladder.', sg: { driver: -1.5, approach: -0.3, shortGame: -0.7, putting: 0.1 }, hcp: 13.8, monthIdx: 0, monthFrac: 0.23 },
+  { number: 2, date: 'Mar 29, 2025', focusTag: 'Wedge', focusDetail: 'Continued wedge work \u2014 partial swing ladder drill', themeSummary: 'Continued wedge work \u2014 added partial swing ladder drill. Carry gaps tightening.', duration: 60, drills: 'Tempo Drill (3:1 Ratio)', keyData: '60-yd carry spread: 12 yds (\u22126 from S1)', summary: 'Introduced 3:1 tempo ratio for partial wedges. Carry window tightened to 12 yards. Short game responding well.', sg: { driver: -1.6, approach: -0.3, shortGame: -0.4, putting: 0.2 }, hcp: 13.6, monthIdx: 0, monthFrac: 0.9 },
+  { number: 3, date: 'May 12, 2025', focusTag: 'Setup', focusDetail: 'Setup posture and ball position audit', themeSummary: 'Setup posture and ball position. Standing taller, pelvis centered. Applies to irons and driver.', duration: 60, drills: 'Video Analysis, Ball Position Stations', keyData: 'Ball position variance: 1.5" across irons', summary: 'Video analysis revealed inconsistent ball position at address. 1.5" variance across iron set. Began standardization protocol.', sg: { driver: -1.7, approach: -0.2, shortGame: -0.2, putting: 0.1 }, hcp: 13.3, monthIdx: 2, monthFrac: 0.35 },
+  { number: 4, date: 'Jul 3, 2025', focusTag: 'Trail Arm', focusDetail: 'Trail arm structure and pelvic rotation', themeSummary: 'Trail arm structure and pelvic rotation. Right arm staying in front, dialing down chest rotation for full pivot. G-Box drill introduced.', duration: 45, drills: 'G-Box Drill, Right-Arm-Only Swings', keyData: 'Pelvic rotation increased 8\u00b0. Right arm position improved at P5.', summary: 'Trail arm and rotation work addressing a connected pattern \u2014 right arm getting stuck behind creates compensations through impact. G-Box drill targets the root cause.', sg: { driver: -1.9, approach: -0.1, shortGame: -0.1, putting: 0.3 }, hcp: 12.9, monthIdx: 4, monthFrac: 0.06 },
+  { number: 5, date: 'Sep 20, 2025', focusTag: 'Trail Arm', focusDetail: 'Continued trail arm work \u2014 wrist loading and shaft plane', themeSummary: 'Continued trail arm work \u2014 wrist loading and shaft plane. Building early radial hinge, less external rotation at top.', duration: 45, drills: 'Alignment Station, Pre-Shot Routine Timer', keyData: 'Pre-shot routine standardized at 12 seconds (was variable 8-18s)', summary: 'Variable pre-shot routine was creating alignment inconsistency. Standardized routine should compound with the trail arm improvements from summer work.', coachNote: 'Discussed driver with Moe. He\u2019s aware it\u2019s a weakness but wants to lock in iron consistency first. Revisit after next block.', sg: { driver: -2.0, approach: 0.0, shortGame: -0.1, putting: 0.2 }, hcp: 12.7, monthIdx: 6, monthFrac: 0.63 },
+  { number: 6, date: 'Dec 8, 2025', focusTag: 'Iron Strike', focusDetail: 'Iron contact quality assessment', themeSummary: 'Iron contact assessment \u2014 toe bias pattern identified. Smash factor below target.', duration: 60, drills: 'Impact Tape Assessment, 9-to-3 Swings', keyData: 'Smash factor 1.32 (target 1.38). Strike pattern toe-biased.', summary: 'Toe-biased strike identified as primary iron limiter. Approach SG stalled \u2014 strike quality appears to be the bottleneck.', sg: { driver: -2.1, approach: 0.0, shortGame: -0.1, putting: 0.3 }, hcp: 12.5, monthIdx: 9, monthFrac: 0.23 },
+  { number: 7, date: 'Jan 25, 2026', focusTag: 'Iron Strike', focusDetail: 'Gate drill for strike centering', themeSummary: 'Gate drill for strike centering. Toe bias consistent across 7i and 8i \u2014 likely ball position, not path.', duration: 60, drills: 'Gate Drill (new), Impact Tape Assessment', keyData: 'Toe bias 0.4" off-center. Consistent across 7i and 8i.', summary: 'Consistent toe-biased strike confirmed. Likely related to ball position at address, not swing path. Gate drill targets lateral contact directly.', coachNote: 'Toe bias consistent across clubs. Ball position, not path.', sg: { driver: -2.2, approach: 0.1, shortGame: 0.0, putting: 0.3 }, hcp: 12.3, monthIdx: 10, monthFrac: 0.77 },
+  { number: 8, date: 'Mar 18, 2026', focusTag: 'Iron Strike', focusDetail: 'Continued gate drill \u2014 strike centering', themeSummary: 'Continued gate drill. Face-to-path narrowed. Strike pattern centering. Ready to test 6-iron transfer.', duration: 60, drills: 'Gate Drill, Alignment Rod Check', keyData: 'Face-to-path 2\u00b0 (from 4\u00b0 at S7). Strike center shifted 0.3" toward center.', summary: 'Strike pattern responding well to gate drill. Dispersion tightened 22% within session. Centering improvement holding across shot blocks. Ready to test transfer to 6-iron.', coachNote: 'Moe responding well to gate drill. Strike pattern noticeably more centered by end of session.', sg: { driver: -2.3, approach: 0.2, shortGame: -0.1, putting: 0.3 }, hcp: 12.1, monthIdx: 12, monthFrac: 0.55 },
 ];
 
 const COACH_NOTES = [
   { date: 'Mar 18', text: 'Moe responding well to gate drill. Strike pattern noticeably more centered by end of session. Ready to test transfer to 6-iron next session.' },
-  { date: 'Mar 4', text: 'Toe bias pattern consistent across 7-iron and 8-iron. Likely related to ball position at address, not swing path. Gate drill should address this directly.' },
-  { date: 'Feb 15', text: 'Discussed driver with Moe. He\u2019s aware it\u2019s a weakness but wants to \u201clock in\u201d iron consistency first. Revisit driver plan after Session 15.' },
+  { date: 'Jan 25', text: 'Toe bias consistent across 7i and 8i. Likely ball position at address, not swing path. Gate drill should address this directly.' },
+  { date: 'Sep 20', text: 'Discussed driver with Moe. He\u2019s aware it\u2019s a weakness but wants to lock in iron consistency first. Revisit driver after next block.' },
 ];
 
 // ─── Session Launch Modal ─────────────────────────────────────────────────────
@@ -164,9 +161,9 @@ interface LaunchStage {
 }
 
 const LAUNCH_STAGES: LaunchStage[] = [
-  { thinking: 'Loading persistent record...', resolved: '14 sessions captured. Last: Mar 18 \u2014 Iron strike centering' },
+  { thinking: 'Loading persistent record...', resolved: '8 sessions captured. Last: Mar 18 \u2014 Iron strike centering' },
   { thinking: 'Checking practice compliance...', resolved: 'Gate drill: 2/3 completed. Alignment check: 1/2 completed.' },
-  { thinking: 'Assembling session context...', resolved: 'Suggested focus: Continue iron strike arc or pivot to driver block (SG: \u22122.3 off tee)' },
+  { thinking: 'Assembling session context...', resolved: 'Suggested focus: Continue iron strike work or pivot to driver block (SG: \u22122.3 off tee)' },
 ];
 
 /** Session launch transition overlay — visible AI preparation */
@@ -204,7 +201,7 @@ function SessionLaunchModal({ onClose }: { onClose: () => void }): JSX.Element {
         {/* Header */}
         <div className="mb-10 text-center">
           <h2 className="text-lg font-medium mb-1" style={{ color: '#E8ECF1', fontFamily: 'DM Sans' }}>
-            Preparing Session 15
+            Preparing Session 9
           </h2>
           <p className="font-mono text-[13px]" style={{ color: '#5E6E7E' }}>
             Moe Norman &mdash; M. Thompson
@@ -255,138 +252,458 @@ function SessionLaunchModal({ onClose }: { onClose: () => void }): JSX.Element {
   );
 }
 
-// ─── Coaching Journey Timeline ────────────────────────────────────────────────
+// ─── Player Journey (Unified Section) ────────────────────────────────────────
 
-function CoachingTimeline(): JSX.Element {
-  const [selectedSession, setSelectedSession] = useState<number | null>(null);
-  const session = selectedSession !== null ? SESSIONS_DATA.find((s) => s.number === selectedSession) : null;
+/** SG heatmap cell color based on value */
+function sgCellStyle(v: number): { bg: string; text: string } {
+  if (v <= -1.5) return { bg: 'rgba(201, 59, 59, 0.25)', text: '#C93B3B' };
+  if (v <= -1.0) return { bg: 'rgba(201, 59, 59, 0.15)', text: '#C93B3B' };
+  if (v <= -0.5) return { bg: 'rgba(201, 59, 59, 0.08)', text: 'rgba(201, 59, 59, 0.8)' };
+  if (v < 0) return { bg: 'rgba(212, 152, 11, 0.08)', text: '#D4980B' };
+  if (v === 0) return { bg: 'transparent', text: '#9CA3AF' };
+  if (v <= 0.4) return { bg: 'rgba(15, 168, 122, 0.08)', text: '#0FA87A' };
+  if (v <= 0.9) return { bg: 'rgba(15, 168, 122, 0.15)', text: '#0FA87A' };
+  return { bg: 'rgba(15, 168, 122, 0.25)', text: '#0FA87A' };
+}
 
-  // Timeline spans 19 months (index 0–18)
-  const totalMonths = 19;
-  const monthLabels = ['Sep 24', '', 'Nov 24', '', 'Jan 25', '', 'Mar 25', '', 'May 25', '', 'Jul 25', '', 'Sep 25', '', 'Nov 25', '', 'Jan 26', '', 'Mar 26'];
+/** Focus tag pill badge */
+function FocusTagBadge({ tag }: { tag: string }): JSX.Element {
+  const tintMap: Record<string, { bg: string; text: string }> = {
+    'Wedge': { bg: 'rgba(212, 152, 11, 0.12)', text: '#D4980B' },
+    'Chipping': { bg: 'rgba(212, 152, 11, 0.12)', text: '#D4980B' },
+    'Iron Strike': { bg: 'rgba(13, 124, 102, 0.12)', text: '#0D7C66' },
+    'Trail Arm': { bg: 'rgba(139, 92, 246, 0.12)', text: '#8B5CF6' },
+    'Setup': { bg: 'rgba(107, 114, 128, 0.10)', text: '#6B7280' },
+    'Ball Pos': { bg: 'rgba(107, 114, 128, 0.10)', text: '#6B7280' },
+    'Alignment': { bg: 'rgba(107, 114, 128, 0.10)', text: '#6B7280' },
+  };
+  const tint = tintMap[tag] ?? { bg: 'rgba(107, 114, 128, 0.10)', text: '#6B7280' };
+  return (
+    <span
+      className="text-[11px] font-medium px-1.5 py-0.5 rounded"
+      style={{ backgroundColor: tint.bg, color: tint.text, fontFamily: 'DM Sans' }}
+    >
+      {tag}
+    </span>
+  );
+}
 
-  const getX = (monthIdx: number): string => `${(monthIdx / (totalMonths - 1)) * 100}%`;
+/** Three-layer player journey on a shared time axis */
+function PlayerJourney(): JSX.Element {
+  const [showAll, setShowAll] = useState(false);
+  const [highlightedSession, setHighlightedSession] = useState<number | null>(null);
+  const [hoveredRound, setHoveredRound] = useState<number | null>(null);
+
+  const scrollToSession = (num: number): void => {
+    setShowAll(true);
+    setHighlightedSession(num);
+    setTimeout(() => {
+      const el = document.getElementById(`lesson-card-${num}`);
+      el?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 50);
+    setTimeout(() => setHighlightedSession(null), 1500);
+  };
+
+  const recentSessions = showAll ? [...SESSIONS_DATA].reverse() : [...SESSIONS_DATA].reverse().slice(0, 5);
+  const fmtSg = (v: number): string => v > 0 ? `+${v.toFixed(1)}` : v.toFixed(1);
+
+  // Shared time axis: 13 months, ~80px per month
+  const monthW = 80;
+  const totalMonths = 13;
+  const labelW = 80; // sticky label column width
+  const ghostW = 40;
+  const contentW = totalMonths * monthW + ghostW;
+  const monthLabels = ['Mar 25', 'Apr 25', 'May 25', 'Jun 25', 'Jul 25', 'Aug 25', 'Sep 25', 'Oct 25', 'Nov 25', 'Dec 25', 'Jan 26', 'Feb 26', 'Mar 26'];
+
+  /** Convert monthIdx + monthFrac to pixel x position */
+  const toX = (mIdx: number, mFrac: number): number => (mIdx + mFrac) * monthW;
+
+  const getSessionThreads = (num: number): Thread[] =>
+    THREADS.filter((t) => t.sessions.includes(num));
+
+  // Rounds layer: y-axis scale (differential range ~11.5 to 14.5)
+  const roundsH = 80;
+  const diffMin = 11.0;
+  const diffMax = 14.5;
+  const diffToY = (diff: number): number => {
+    const ratio = (diff - diffMin) / (diffMax - diffMin);
+    return ratio * roundsH; // 0 = top (low diff = good), roundsH = bottom (high diff = bad)
+    // Actually inverted: low diff = good = bottom visually? No — spec says higher dots = worse scores
+    // So high differential = top, low = bottom. ratio 1 = top (y=0), ratio 0 = bottom (y=roundsH)
+  };
+  const diffToYInv = (diff: number): number => {
+    const ratio = 1 - (diff - diffMin) / (diffMax - diffMin);
+    return ratio * roundsH;
+  };
+
+  /** Round dot color based on differential vs rolling handicap */
+  const roundDotColor = (r: RoundData): string => {
+    if (r.differential <= r.rollingHcp - 2) return '#0FA87A';
+    if (r.differential >= r.rollingHcp + 2) return '#C93B3B';
+    return '#9CA3AF';
+  };
+
+  // Lesson card dimensions
+  const cardW = 120;
 
   return (
     <div className="bg-white rounded-lg border border-[#DFE2E7] p-4">
-      <h2 className="text-base font-medium mb-6" style={{ color: '#1A1F2B', fontFamily: 'DM Sans' }}>
-        Coaching Journey
+      <h2 className="text-[18px] font-medium mb-3" style={{ color: '#1A1F2B', fontFamily: 'DM Sans' }}>
+        Player Journey
       </h2>
 
-      <div className="relative overflow-x-auto">
-        <div className="min-w-[700px]">
-          {/* Arc bars */}
-          <div className="relative h-14 mb-1">
-            {COACHING_ARCS.map((arc) => {
-              const left = (arc.startMonth / (totalMonths - 1)) * 100;
-              const width = ((arc.endMonth - arc.startMonth) / (totalMonths - 1)) * 100;
+      {/* ── Pinned SG Status Bar ── */}
+      <div
+        className="flex items-center justify-between pb-2 mb-3"
+        style={{ borderBottom: '1px solid #ECEEF2' }}
+      >
+        {STROKES_GAINED.map((sg) => {
+          const isNeg = sg.value < 0;
+          const isPos = sg.value > 0;
+          const valueColor = isNeg ? '#C93B3B' : isPos ? '#0FA87A' : '#4B5563';
+          return (
+            <div key={sg.category} className="flex items-center gap-1.5">
+              <span className="text-[12px]" style={{ color: '#9CA3AF', fontFamily: 'DM Sans' }}>
+                {sg.category} SG
+              </span>
+              <span className="font-mono text-[16px] font-bold" style={{ color: valueColor }}>
+                {sg.value > 0 ? '+' : ''}{sg.value.toFixed(1)}
+              </span>
+              {sg.trend === 'up' && <TrendingUp className="w-3 h-3" style={{ color: '#0FA87A' }} />}
+              {sg.trend === 'down' && <TrendingDown className="w-3 h-3" style={{ color: '#C93B3B' }} />}
+              {sg.trend === 'flat' && <Minus className="w-3 h-3" style={{ color: '#4B5563' }} />}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* ── Thread legend ── */}
+      <div className="flex items-center gap-3 mb-2">
+        {THREADS.map((t) => (
+          <div key={t.name} className="flex items-center gap-1">
+            <span className="block w-[6px] h-[6px] rounded-full" style={{ backgroundColor: t.color }} />
+            <span className="text-[9px]" style={{ color: '#9CA3AF', fontFamily: 'DM Sans' }}>{t.name}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* ── Scrollable Three-Layer Container ── */}
+      <div className="relative">
+        {/* Left fade indicator */}
+        <div className="absolute left-0 top-0 bottom-0 w-4 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, white, transparent)' }} />
+
+        <div
+          className="overflow-x-auto"
+          ref={(el) => { if (el) el.scrollLeft = el.scrollWidth; }}
+        >
+          <div className="relative" style={{ width: `${labelW + contentW}px` }}>
+
+            {/* ════ LAYER 1: Lessons + Thread Lines (integrated) ════ */}
+            {(() => {
+              const staggerOffset = 50;
+              const cardH = 90; // approximate card content height
+              const threadBandY = cardH + staggerOffset + 8; // below tallest card
+              const layerH = threadBandY + 20; // total layer height
+              /** Get stagger Y offset: odd sessions at top, even offset down */
+              const cardY = (num: number): number => num % 2 === 0 ? staggerOffset : 0;
+              /** Thread anchor Y for a session (bottom of its card area) */
+              const threadY = (num: number): number => cardY(num) + cardH + 4;
+
               return (
-                <div key={arc.id} className="absolute top-2" style={{ left: `${left}%`, width: `${width}%` }}>
-                  {/* Arc bar */}
-                  <div
-                    className="h-[10px] rounded"
-                    style={{ backgroundColor: arc.bgOpacity, borderLeft: `3px solid ${arc.borderColor}` }}
-                  >
-                    {/* Session dots */}
-                    <div className="relative h-full">
-                      {arc.sessions.map((sNum) => {
-                        const sessionData = SESSIONS_DATA.find((s) => s.number === sNum);
-                        if (!sessionData) return null;
-                        // Map session within its arc
-                        const arcSpan = arc.endMonth - arc.startMonth;
-                        const sessionIdx = arc.sessions.indexOf(sNum);
-                        const sessionPos = arcSpan > 0 ? (sessionIdx / (arc.sessions.length - 1 || 1)) * 100 : 50;
-                        const isSelected = selectedSession === sNum;
+                <div className="flex" style={{ minHeight: `${layerH}px` }}>
+                  {/* Sticky label */}
+                  <div className="shrink-0 sticky left-0 z-20 bg-white flex items-start pt-1 pr-2 justify-end" style={{ width: `${labelW}px`, borderRight: '1px solid #ECEEF2' }}>
+                    <span className="text-[11px] font-medium" style={{ color: '#4B5563', fontFamily: 'DM Sans' }}>Lessons</span>
+                  </div>
+                  {/* Lesson cards + thread curves */}
+                  <div className="relative flex-1" style={{ height: `${layerH}px` }}>
+                    {/* Cards (z-10 to sit above thread lines) */}
+                    {SESSIONS_DATA.map((s) => {
+                      const x = toX(s.monthIdx, s.monthFrac);
+                      const y = cardY(s.number);
+                      const sessionThreads = getSessionThreads(s.number);
+                      return (
+                        <button
+                          key={s.number}
+                          className="absolute text-left rounded-[6px] hover:bg-[#F6F7F9] transition-colors z-10"
+                          style={{ left: `${x}px`, top: `${y}px`, width: `${cardW}px`, padding: '6px 8px', backgroundColor: '#FFFFFF', border: '1px solid #ECEEF2' }}
+                          onClick={() => scrollToSession(s.number)}
+                        >
+                          <p className="font-mono text-[10px]" style={{ color: '#9CA3AF' }}>{s.date}</p>
+                          <p className="font-mono text-[11px] font-bold" style={{ color: '#1A1F2B' }}>S{s.number}</p>
+                          <p className="text-[11px] leading-snug mt-0.5" style={{ color: '#4B5563', fontFamily: 'DM Sans', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                            {s.themeSummary}
+                          </p>
+                          <div className="flex items-center gap-1 mt-1">
+                            {sessionThreads.map((t) => (
+                              <span key={t.name} className="block w-[6px] h-[6px] rounded-full" style={{ backgroundColor: t.color }} />
+                            ))}
+                          </div>
+                        </button>
+                      );
+                    })}
+
+                    {/* Thread bezier curves (z-0, behind cards) */}
+                    <svg className="absolute inset-0 w-full h-full pointer-events-none z-0" style={{ overflow: 'visible' }}>
+                      {THREADS.map((thread) => {
+                        const sessionNums = [...thread.sessions].sort((a, b) => a - b);
+                        if (sessionNums.length < 2) return null;
+
+                        // Build path segments between consecutive pairs
+                        const points = sessionNums.map((sNum) => {
+                          const sd = SESSIONS_DATA.find((s) => s.number === sNum);
+                          if (!sd) return null;
+                          return { x: toX(sd.monthIdx, sd.monthFrac) + cardW / 2, y: threadY(sNum) };
+                        }).filter(Boolean) as { x: number; y: number }[];
+
+                        if (points.length < 2) return null;
+
+                        // Build a smooth bezier path through all points
+                        let d = `M ${points[0].x} ${points[0].y}`;
+                        for (let i = 1; i < points.length; i++) {
+                          const p0 = points[i - 1];
+                          const p1 = points[i];
+                          const cpOffset = (p1.x - p0.x) * 0.4;
+                          d += ` C ${p0.x + cpOffset} ${p0.y}, ${p1.x - cpOffset} ${p1.y}, ${p1.x} ${p1.y}`;
+                        }
+
                         return (
-                          <button
-                            key={sNum}
-                            onClick={() => setSelectedSession(isSelected ? null : sNum)}
-                            className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 rounded-full transition-all"
-                            style={{
-                              left: `${Math.max(4, Math.min(96, sessionPos))}%`,
-                              width: isSelected ? '12px' : '7px',
-                              height: isSelected ? '12px' : '7px',
-                              backgroundColor: isSelected ? arc.color : arc.color,
-                              border: isSelected ? `2px solid ${arc.color}` : 'none',
-                              boxShadow: isSelected ? `0 0 0 3px ${arc.bgOpacity}` : 'none',
-                            }}
-                            title={`Session ${sNum}`}
-                          />
+                          <g key={thread.name}>
+                            <path
+                              d={d}
+                              fill="none"
+                              stroke={thread.color}
+                              strokeWidth={2}
+                              strokeDasharray={thread.hasGap ? '6 3' : 'none'}
+                            />
+                            {/* Nodes */}
+                            {points.map((p, i) => (
+                              <circle key={i} cx={p.x} cy={p.y} r={3} fill={thread.color} />
+                            ))}
+                          </g>
                         );
                       })}
-                    </div>
-                  </div>
-                  {/* Arc label */}
-                  <div className="mt-2">
-                    <p className="text-[11px] font-medium truncate" style={{ color: arc.color, fontFamily: 'DM Sans' }}>
-                      {arc.name} &mdash; {arc.label}
-                    </p>
-                    <p className="font-mono text-[10px] truncate" style={{ color: '#9CA3AF' }}>
-                      {arc.impact}
-                    </p>
+                    </svg>
                   </div>
                 </div>
               );
-            })}
-          </div>
+            })()}
 
-          {/* Month axis */}
-          <div className="flex justify-between mt-8 px-0">
-            {monthLabels.map((label, i) => (
-              <span key={i} className="font-mono text-[10px]" style={{ color: '#9CA3AF', width: `${100 / totalMonths}%`, textAlign: 'center' }}>
-                {label}
-              </span>
-            ))}
+            {/* Separator */}
+            <div className="flex">
+              <div className="shrink-0 sticky left-0 z-20 bg-white" style={{ width: `${labelW}px` }} />
+              <div className="flex-1" style={{ height: '1px', backgroundColor: '#ECEEF2' }} />
+            </div>
+
+            {/* ════ LAYER 2: Rounds & Handicap ════ */}
+            <div className="flex" style={{ height: `${roundsH + 8}px` }}>
+              {/* Sticky label */}
+              <div className="shrink-0 sticky left-0 z-20 bg-white flex flex-col items-end justify-start pt-1 pr-2" style={{ width: `${labelW}px`, borderRight: '1px solid #ECEEF2' }}>
+                <span className="text-[11px] font-medium" style={{ color: '#4B5563', fontFamily: 'DM Sans' }}>Rounds</span>
+                <span className="font-mono text-[11px] font-bold mt-0.5" style={{ color: '#0D7C66' }}>12.1</span>
+                <span className="font-mono text-[9px]" style={{ color: '#9CA3AF' }}>HCP</span>
+              </div>
+              {/* Round dots + handicap line */}
+              <div className="relative flex-1" style={{ height: `${roundsH}px`, marginTop: '4px' }}>
+                {/* Subtle gridlines */}
+                <svg width="100%" height={roundsH} className="absolute inset-0">
+                  {monthLabels.map((_, i) => (
+                    <line key={i} x1={i * monthW} y1={0} x2={i * monthW} y2={roundsH} stroke="#F0F2F5" strokeWidth={1} />
+                  ))}
+                </svg>
+
+                {/* Rolling handicap line */}
+                <svg width="100%" height={roundsH} className="absolute inset-0" style={{ overflow: 'visible' }}>
+                  <polyline
+                    fill="none"
+                    stroke="#0D7C66"
+                    strokeWidth={1.5}
+                    points={ROUNDS_DATA.map((r) => `${toX(r.monthIdx, r.monthFrac)},${diffToYInv(r.rollingHcp)}`).join(' ')}
+                  />
+                </svg>
+
+                {/* Round dots */}
+                {ROUNDS_DATA.map((r, i) => {
+                  const x = toX(r.monthIdx, r.monthFrac);
+                  const y = diffToYInv(r.differential);
+                  return (
+                    <div
+                      key={i}
+                      className="absolute rounded-full"
+                      style={{
+                        width: '6px', height: '6px',
+                        left: `${x - 3}px`, top: `${y - 3}px`,
+                        backgroundColor: roundDotColor(r),
+                        cursor: 'default',
+                      }}
+                      onMouseEnter={() => setHoveredRound(i)}
+                      onMouseLeave={() => setHoveredRound(null)}
+                    >
+                      {hoveredRound === i && (
+                        <div
+                          className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 rounded bg-[#1A1F2B] whitespace-nowrap z-30"
+                          style={{ pointerEvents: 'none' }}
+                        >
+                          <p className="font-mono text-[10px] text-white">{r.course}</p>
+                          <p className="font-mono text-[10px] text-white">{r.score} ({r.differential.toFixed(1)})</p>
+                          <p className="font-mono text-[9px]" style={{ color: '#9CA3AF' }}>{r.date}</p>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Separator */}
+            <div className="flex">
+              <div className="shrink-0 sticky left-0 z-20 bg-white" style={{ width: `${labelW}px` }} />
+              <div className="flex-1" style={{ height: '1px', backgroundColor: '#ECEEF2' }} />
+            </div>
+
+            {/* ════ LAYER 3: Strokes Gained Heatmap ════ */}
+            {(() => {
+              const sgRows: { label: string; key: 'driver' | 'approach' | 'shortGame' | 'putting' }[] = [
+                { label: 'Driver', key: 'driver' },
+                { label: 'Approach', key: 'approach' },
+                { label: 'Short Game', key: 'shortGame' },
+                { label: 'Putting', key: 'putting' },
+              ];
+
+              return (
+                <div>
+                  {sgRows.map((row) => (
+                    <div key={row.key} className="flex" style={{ height: '22px' }}>
+                      {/* Sticky row label */}
+                      <div
+                        className="shrink-0 sticky left-0 z-20 bg-white flex items-center justify-end pr-2"
+                        style={{ width: `${labelW}px`, borderRight: '1px solid #ECEEF2' }}
+                      >
+                        <span className="text-[11px] font-medium" style={{ color: '#4B5563', fontFamily: 'DM Sans' }}>{row.label}</span>
+                      </div>
+                      {/* Monthly SG cells */}
+                      {MONTHLY_SG.map((m) => {
+                        const v = m[row.key];
+                        const cs = sgCellStyle(v);
+                        return (
+                          <div
+                            key={m.monthIdx}
+                            className="flex items-center justify-center border-r border-b"
+                            style={{ width: `${monthW}px`, borderColor: '#ECEEF2', backgroundColor: cs.bg }}
+                          >
+                            <span className="font-mono text-[10px]" style={{ color: cs.text }}>{fmtSg(v)}</span>
+                          </div>
+                        );
+                      })}
+                      {/* Ghost column */}
+                      {row.key === 'driver' ? (
+                        <div className="flex items-center justify-center shrink-0" style={{ width: `${ghostW}px`, border: '2px dashed rgba(201, 59, 59, 0.3)', backgroundColor: 'rgba(201, 59, 59, 0.12)' }}>
+                          <span className="font-mono text-[10px]" style={{ color: '#C93B3B' }}>-2.3</span>
+                        </div>
+                      ) : (
+                        <div className="shrink-0" style={{ width: `${ghostW}px`, border: '2px dashed rgba(201, 59, 59, 0.15)' }} />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              );
+            })()}
+
+            {/* ════ Shared Time Axis ════ */}
+            <div className="flex mt-1">
+              <div className="shrink-0 sticky left-0 z-20 bg-white" style={{ width: `${labelW}px` }} />
+              {monthLabels.map((label, i) => (
+                <div key={i} className="text-center" style={{ width: `${monthW}px` }}>
+                  <span className="font-mono text-[10px]" style={{ color: '#9CA3AF' }}>{label}</span>
+                </div>
+              ))}
+              <div style={{ width: `${ghostW}px` }} />
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Selected session detail panel */}
-      {session && (
-        <div
-          className="mt-4 border border-[#DFE2E7] rounded-lg p-4 transition-all duration-200 ease-out"
-          style={{ backgroundColor: '#F6F7F9' }}
-        >
-          <div className="flex items-start justify-between mb-3">
-            <div>
-              <h3 className="text-sm font-medium" style={{ color: '#1A1F2B', fontFamily: 'DM Sans' }}>
-                Session {session.number} &mdash; {session.date}
-              </h3>
-              <p className="text-xs mt-0.5" style={{ color: '#4B5563', fontFamily: 'DM Sans' }}>
-                {session.focus}
-              </p>
-            </div>
-            <button onClick={() => setSelectedSession(null)} className="p-1 hover:bg-white rounded transition-colors">
-              <X className="w-4 h-4" style={{ color: '#9CA3AF' }} />
-            </button>
-          </div>
-
-          {/* Phase dots */}
-          <div className="flex items-center gap-2 mb-3">
-            {['Catch-up', 'Diagnosis', 'Intervention', 'Review'].map((phase, i) => (
-              <div key={phase} className="flex items-center gap-1">
-                <span
-                  className="block w-[6px] h-[6px] rounded-full"
-                  style={{ backgroundColor: session.phases[i] ? '#0FA87A' : '#DFE2E7' }}
-                />
-                <span className="font-mono text-[10px]" style={{ color: session.phases[i] ? '#4B5563' : '#9CA3AF' }}>
-                  {phase}
+      {/* ── Lesson Record List ── */}
+      <div className="mt-4 pt-4" style={{ borderTop: '1px solid #ECEEF2' }}>
+        <div className="space-y-2" style={{ maxHeight: showAll ? 'none' : '600px', overflowY: showAll ? 'visible' : 'auto' }}>
+          {recentSessions.map((s) => (
+            <div
+              key={s.number}
+              id={`lesson-card-${s.number}`}
+              className="border rounded-[6px] p-3 transition-colors duration-500"
+              style={{
+                borderColor: '#ECEEF2',
+                backgroundColor: highlightedSession === s.number ? 'rgba(13, 124, 102, 0.05)' : '#FFFFFF',
+              }}
+            >
+              {/* Row 1: Session number, date, focus tag, duration */}
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-[13px] font-bold" style={{ color: '#1A1F2B' }}>
+                    S{s.number}
+                  </span>
+                  <span className="font-mono text-[12px]" style={{ color: '#9CA3AF' }}>
+                    {s.date}
+                  </span>
+                  <FocusTagBadge tag={s.focusTag} />
+                </div>
+                <span className="font-mono text-[11px]" style={{ color: '#9CA3AF' }}>
+                  {s.duration} min
                 </span>
               </div>
-            ))}
-          </div>
 
-          {/* Summary */}
-          <p className="text-[13px] leading-relaxed mb-2" style={{ color: '#4B5563', fontFamily: 'DM Sans' }}>
-            {session.summary}
-          </p>
+              {/* Description */}
+              <p className="text-[13px] mb-1" style={{ color: '#4B5563', fontFamily: 'DM Sans' }}>
+                {s.focusDetail}
+              </p>
 
-          {/* Evidence */}
-          <p className="font-mono text-[11px]" style={{ color: '#9CA3AF' }}>
-            {session.evidence}
-          </p>
+              {/* Drills */}
+              <p className="text-[12px] mb-1" style={{ color: '#4B5563', fontFamily: 'DM Sans' }}>
+                <span className="font-medium" style={{ color: '#9CA3AF' }}>Drills:</span> {s.drills}
+              </p>
+
+              {/* Key data */}
+              <p className="font-mono text-[11px] mb-1" style={{ color: '#9CA3AF' }}>
+                {s.keyData}
+              </p>
+
+              {/* AI observation */}
+              <p className="text-[12px] leading-relaxed" style={{ color: '#4B5563', fontFamily: 'DM Sans' }}>
+                {s.summary}
+              </p>
+
+              {/* Coach note */}
+              {s.coachNote && (
+                <div className="flex items-start gap-1.5 mt-2 pt-2" style={{ borderTop: '1px solid #F0F2F5' }}>
+                  <Pencil className="w-3 h-3 mt-0.5 shrink-0" style={{ color: '#9CA3AF' }} />
+                  <p className="text-[12px] italic" style={{ color: '#4B5563', fontFamily: 'DM Sans' }}>
+                    {s.coachNote}
+                  </p>
+                </div>
+              )}
+            </div>
+          ))}
         </div>
-      )}
+
+        {!showAll && SESSIONS_DATA.length > 5 && (
+          <button
+            onClick={() => setShowAll(true)}
+            className="mt-3 text-[12px] font-medium hover:underline"
+            style={{ color: '#0D7C66', fontFamily: 'DM Sans' }}
+          >
+            Show earlier sessions ({SESSIONS_DATA.length - 5} more)
+          </button>
+        )}
+        {showAll && SESSIONS_DATA.length > 5 && (
+          <button
+            onClick={() => setShowAll(false)}
+            className="mt-3 text-[12px] font-medium hover:underline"
+            style={{ color: '#0D7C66', fontFamily: 'DM Sans' }}
+          >
+            Show recent sessions only
+          </button>
+        )}
+      </div>
     </div>
   );
 }
@@ -412,22 +729,6 @@ export default function StudentDetail(): JSX.Element {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [navigate, showLaunchModal]);
-
-  // Handicap chart arc bands — map arc months to chart index
-  const arcBands = COACHING_ARCS.map((arc) => {
-    // Map timeline months to chart data indices
-    const chartMonths = HANDICAP_TREND.map((d) => d.month);
-    // Find closest chart indices for arc start/end
-    const monthToIndex = (m: number): number => {
-      // Arc months 0-18 map to chart months Sep 24 - Mar 26
-      return Math.round((m / 18) * (chartMonths.length - 1));
-    };
-    return {
-      ...arc,
-      chartStart: monthToIndex(arc.startMonth),
-      chartEnd: monthToIndex(arc.endMonth),
-    };
-  });
 
   return (
     <div className="pb-8 space-y-6 max-w-[1200px]">
@@ -499,7 +800,7 @@ export default function StudentDetail(): JSX.Element {
               Start Lesson
             </button>
             <p className="font-mono text-[10px] mt-1" style={{ color: '#9CA3AF' }}>
-              Session 15
+              Session 9
             </p>
           </div>
         </div>
@@ -517,192 +818,23 @@ export default function StudentDetail(): JSX.Element {
               Looper Insight
             </span>
           </div>
-          <span
-            className="font-mono text-[11px] px-2.5 py-0.5 rounded"
-            style={{ backgroundColor: 'rgba(15, 168, 122, 0.12)', color: '#0FA87A' }}
-          >
-            78% confidence
-          </span>
+{/* confidence badge removed */}
         </div>
-        <p className="text-sm leading-relaxed" style={{ color: '#4B5563', fontFamily: 'DM Sans' }}>
-          Moe&apos;s Arccos data shows he&apos;s losing 2.3 strokes per round off the tee &mdash; his largest opportunity area. Recent coaching (Sessions 11&ndash;14) has focused on iron strike centering, which has been effective: approach strokes gained improved +0.4 over this period. However, driver work requires distinct biomechanical patterns &mdash; longer downswing acceleration windows and different pelvic-torso separation timing &mdash; that won&apos;t transfer from iron-focused drills. Consider opening a driver block in the next 2&ndash;3 sessions.
-        </p>
-      </div>
-
-      {/* ─── Section 3: On-Course Performance ─────────────────────────── */}
-
-      {/* Part A: Handicap Trend */}
-      <div className="bg-white rounded-lg border border-[#DFE2E7] p-4">
-        <h2 className="text-base font-medium mb-4" style={{ color: '#1A1F2B', fontFamily: 'DM Sans' }}>
-          Handicap Trend
-        </h2>
-        <ResponsiveContainer width="100%" height={300}>
-          <ComposedChart data={HANDICAP_TREND} margin={{ top: 8, right: 12, bottom: 24, left: 8 }}>
-            {/* Arc background bands */}
-            {arcBands.map((arc) => (
-              <ReferenceArea
-                key={arc.id}
-                x1={HANDICAP_TREND[arc.chartStart]?.month}
-                x2={HANDICAP_TREND[arc.chartEnd]?.month}
-                fill={arc.color}
-                fillOpacity={0.06}
-                strokeOpacity={0}
-              />
-            ))}
-
-            {/* Session marker lines (subtle) */}
-            {SESSIONS_DATA.filter((_, i) => i % 3 === 0).map((s) => {
-              // Approximate session month on chart
-              const arcData = COACHING_ARCS.find((a) => a.id === s.arcId);
-              if (!arcData) return null;
-              const sessionIdx = arcData.sessions.indexOf(s.number);
-              const arcSpan = arcData.endMonth - arcData.startMonth;
-              const monthIdx = arcData.startMonth + (arcSpan * sessionIdx / (arcData.sessions.length - 1 || 1));
-              const chartIdx = Math.round((monthIdx / 18) * (HANDICAP_TREND.length - 1));
-              const month = HANDICAP_TREND[chartIdx]?.month;
-              return month ? (
-                <ReferenceLine
-                  key={s.number}
-                  x={month}
-                  stroke="#0D7C66"
-                  strokeOpacity={0.25}
-                  strokeDasharray="2 4"
-                />
-              ) : null;
-            })}
-
-            <defs>
-              <linearGradient id="handicapGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#0D7C66" stopOpacity={0.08} />
-                <stop offset="100%" stopColor="#0D7C66" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-
-            <XAxis
-              dataKey="month"
-              tick={{ fontSize: 11, fill: '#9CA3AF', fontFamily: 'Space Mono' }}
-              axisLine={false}
-              tickLine={false}
-              interval={2}
-            />
-            <YAxis
-              domain={[11.5, 14.8]}
-              reversed
-              tick={{ fontSize: 11, fill: '#9CA3AF', fontFamily: 'Space Mono' }}
-              axisLine={false}
-              tickLine={false}
-              width={36}
-            />
-            <Area
-              type="monotone"
-              dataKey="handicap"
-              fill="url(#handicapGrad)"
-              stroke="none"
-            />
-            <Line
-              type="monotone"
-              dataKey="handicap"
-              stroke="#0D7C66"
-              strokeWidth={2}
-              dot={false}
-              activeDot={{ r: 4, fill: '#0D7C66', stroke: '#fff', strokeWidth: 2 }}
-            />
-          </ComposedChart>
-        </ResponsiveContainer>
-
-        {/* Arc legend below chart */}
-        <div className="flex items-center gap-6 mt-2 pl-10">
-          {COACHING_ARCS.map((arc) => (
-            <div key={arc.id} className="flex items-center gap-1.5">
-              <span className="block w-3 h-2 rounded-sm" style={{ backgroundColor: arc.color, opacity: 0.5 }} />
-              <span className="font-mono text-[10px]" style={{ color: '#9CA3AF' }}>{arc.name}</span>
-            </div>
-          ))}
+        <div className="text-sm leading-relaxed space-y-2" style={{ color: '#4B5563', fontFamily: 'DM Sans' }}>
+          <p>
+            <span className="font-medium" style={{ color: '#1A1F2B' }}>Last session</span> (Mar 18): Continued iron strike centering &mdash; toe bias correction with gate drill. Dispersion tightened 22% within the session.
+          </p>
+          <p>
+            <span className="font-medium" style={{ color: '#1A1F2B' }}>On the course:</span> Approach play has improved steadily &mdash; strokes gained up +0.3 over the last three sessions. However, driver remains Moe&apos;s biggest opportunity: losing 2.3 strokes per round off the tee, trending worse over the past year.
+          </p>
+          <p>
+            <span className="font-medium" style={{ color: '#1A1F2B' }}>For next session:</span> Consider pivoting to a driver block. The iron strike work is showing results and should hold &mdash; the driver gap is widening.
+          </p>
         </div>
       </div>
 
-      {/* Part B: Strokes Gained Breakdown */}
-      <div className="grid grid-cols-4 gap-3">
-        {STROKES_GAINED.map((sg) => {
-          const isNegative = sg.value < 0;
-          const isPositive = sg.value > 0;
-          const isNeutral = !isNegative && !isPositive;
-          const valueColor = isNegative ? '#C93B3B' : isPositive ? '#0FA87A' : '#4B5563';
-          return (
-            <div
-              key={sg.category}
-              className="bg-white rounded-lg border p-4"
-              style={{ borderColor: isNegative && sg.value <= -1 ? '#C93B3B30' : '#DFE2E7' }}
-            >
-              <p className="text-[13px] font-medium mb-2" style={{ color: '#4B5563', fontFamily: 'DM Sans' }}>
-                {sg.category}
-              </p>
-              <div className="flex items-center gap-1.5 mb-1">
-                <span className="font-mono text-[22px] font-bold" style={{ color: valueColor }}>
-                  {sg.value > 0 ? '+' : ''}{sg.value.toFixed(1)}
-                </span>
-                {sg.trend === 'up' && <TrendingUp className="w-3.5 h-3.5" style={{ color: '#0FA87A' }} />}
-                {sg.trend === 'down' && <TrendingDown className="w-3.5 h-3.5" style={{ color: '#C93B3B' }} />}
-              </div>
-              <p className="font-mono text-[11px]" style={{ color: '#9CA3AF' }}>
-                {sg.context}
-              </p>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* ─── Section 4: Coaching Journey Timeline ─────────────────────── */}
-      <CoachingTimeline />
-
-      {/* ─── Section 5: Active Practice Plan ──────────────────────────── */}
-      <div className="bg-white rounded-lg border border-[#DFE2E7] p-4">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-base font-medium" style={{ color: '#1A1F2B', fontFamily: 'DM Sans' }}>
-            Active Practice Plan
-          </h2>
-          <span className="font-mono text-[10px]" style={{ color: '#9CA3AF' }}>Updated Mar 18</span>
-        </div>
-
-        <div className="space-y-4">
-          {PRACTICE_PLAN.map((drill, i) => (
-            <div key={i} className="flex items-start gap-3">
-              {/* Completion indicators */}
-              <div className="flex items-center gap-1 mt-0.5 shrink-0">
-                {Array.from({ length: drill.total }).map((_, j) => (
-                  j < drill.completed
-                    ? <CheckCircle key={j} className="w-4 h-4" style={{ color: '#0FA87A' }} />
-                    : <Circle key={j} className="w-4 h-4" style={{ color: '#DFE2E7' }} />
-                ))}
-              </div>
-
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium" style={{ color: '#1A1F2B', fontFamily: 'DM Sans' }}>
-                  {drill.name}
-                </p>
-                <div className="flex items-center gap-3 mt-1">
-                  <span className="font-mono text-[11px]" style={{ color: '#9CA3AF' }}>
-                    {drill.completed} of {drill.total} practice sessions
-                  </span>
-                  <span className="font-mono text-[10px]" style={{ color: '#9CA3AF' }}>
-                    Prescribed: {drill.prescribed}
-                  </span>
-                </div>
-                {/* Progress bar */}
-                <div className="mt-2 h-1 rounded-full" style={{ backgroundColor: '#F0F2F5' }}>
-                  <div
-                    className="h-full rounded-full transition-all"
-                    style={{
-                      width: `${(drill.completed / drill.total) * 100}%`,
-                      backgroundColor: '#0FA87A',
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* ─── Section 3+4: Player Journey (Unified) ──────────────────── */}
+      <PlayerJourney />
 
       {/* ─── Section 6: Coach Notes ───────────────────────────────────── */}
       <div className="bg-white rounded-lg border border-[#DFE2E7] p-4">
