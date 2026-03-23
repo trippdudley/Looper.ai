@@ -41,10 +41,10 @@ Phase detection is automatic from audio context and data flow. No manual trigger
 - **Detailed mode (after lesson, in portal)**: Full structured session record expanded by phase. Complete data, video timestamps, intervention log, editable by coach.
 
 ## Prototypes in This Repo
-- `/src/coach-portal/` — Coach portal prototype (dashboard, roster, session history, practice plans)
-- `/src/lesson-sidebar/` — Lesson sidebar prototype (420-480px, live timeline, ambient mode)
-- `/src/player/` — Player portal prototype (mobile-first 480px)
-- `/src/sizzle/` — Investor sizzle reel (90-second self-playing demo)
+- `/src/personas/coach/` — Coach portal prototype (dashboard, roster, session history, practice plans)
+- `/src/pages/LiveSessionSideline.tsx` + `/src/components/trackman/` — Lesson sidebar prototype
+- `/src/personas/player/` — Player portal prototype (mobile-first 480px)
+- `/src/components/sizzle/` + `/src/pages/SizzleReel.tsx` — Investor sizzle reel
 - `/src/components/` — Shared component library
 
 ## Stack
