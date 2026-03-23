@@ -11,7 +11,10 @@
       "Bash(cp \"C:/Users/tripp/looper/.claude/skills/looper-ux-system/references/video-analysis-module.md\" \"C:/Users/tripp/looper/.claude/worktrees/stupefied-robinson/.claude/skills/looper-ux-system/references/video-analysis-module.md\")",
       "Bash(gh pr:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git checkout:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx vite:*)"
     ]
   }
 }
