@@ -49,6 +49,7 @@ function AppRoutes() {
           <Route path="/narrative" element={<ErrorBoundary><LooperNarrative /></ErrorBoundary>} />
           <Route path="/coaching-os" element={<Navigate to="/coach/live" replace />} />
           <Route path="/vision" element={<ErrorBoundary><SizzleReel /></ErrorBoundary>} />
+          <Route path="/trackman" element={<ErrorBoundary fallbackTitle="Trackman view error"><TrackmanIntegration /></ErrorBoundary>} />
 
           <Route path="/player" element={<ErrorBoundary fallbackTitle="Player view error"><PlayerLayout /></ErrorBoundary>} />
 

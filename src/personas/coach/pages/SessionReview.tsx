@@ -13,6 +13,10 @@ import {
   ArrowUp,
   ArrowRight,
   CheckCircle2,
+  Clock,
+  Search,
+  Wrench,
+  ClipboardCheck,
 } from 'lucide-react';
 import { sessions } from '../../../data/sessions';
 import { drills } from '../../../data/drills';
@@ -143,49 +147,95 @@ export default function SessionReview() {
                 <Sparkles className="w-4 h-4 text-accent" />
                 <h3 className="font-semibold text-navy text-sm">AI Summary</h3>
               </div>
-              <button className="text-data-blue text-sm font-medium hover:underline flex items-center gap-1">
+              <button className="text-gray-400 hover:text-data-blue transition-colors" title="Edit summary">
                 <Pencil className="w-3.5 h-3.5" />
-                Edit
               </button>
             </div>
             <p className="text-sm text-gray-700 leading-relaxed">{session.summary}</p>
           </div>
 
-          {/* Identified Faults */}
+          {/* ═══════════════════════════════════════════════════════════
+              LESSON PHASES
+              ═══════════════════════════════════════════════════════════ */}
+
+          {/* Phase 1: Catch-up */}
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <div className="flex items-center gap-2 mb-4">
-              <AlertCircle className="w-4 h-4 text-coral" />
-              <h3 className="font-semibold text-navy text-sm">Faults Identified</h3>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4 text-data-blue" />
+                <h3 className="font-semibold text-navy text-sm">Catch-up</h3>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-data-blue/10 text-data-blue font-mono font-medium">~5 min</span>
+              </div>
             </div>
             <div className="space-y-3">
-              {session.faults.map((fault, i) => (
-                <div
-                  key={i}
-                  className="flex items-start justify-between gap-3 group"
-                >
-                  <div className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-coral mt-1.5 shrink-0" />
-                    <p className="text-sm text-gray-700">{fault}</p>
+              {[
+                'Player reported practicing 3x since last session, focused on 9-to-3 drill.',
+                'Confirmed retention of ground-pressure cue from Session 3.',
+                'Player mentioned slight low-back tightness — monitor during full swings.',
+              ].map((obs, i) => (
+                <div key={i} className="flex items-start justify-between gap-3 group">
+                  <div className="flex items-start gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-data-blue mt-2 shrink-0" />
+                    <p className="text-sm text-gray-700">{obs}</p>
                   </div>
-                  <button className="text-gray-400 hover:text-coral transition-colors opacity-0 group-hover:opacity-100 shrink-0">
-                    <X className="w-4 h-4" />
+                  <button className="text-gray-400 hover:text-data-blue transition-colors opacity-0 group-hover:opacity-100 shrink-0 mt-0.5" title="Edit observation">
+                    <Pencil className="w-3.5 h-3.5" />
                   </button>
                 </div>
               ))}
             </div>
-            <button className="flex items-center gap-1.5 text-sm text-data-blue font-medium mt-4 hover:underline">
-              <Plus className="w-3.5 h-3.5" />
-              Add Fault
-            </button>
           </div>
 
-          {/* Coaching Cues */}
+          {/* Phase 2: Diagnosis */}
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <div className="flex items-center gap-2 mb-4">
-              <MessageCircle className="w-4 h-4 text-accent" />
-              <h3 className="font-semibold text-navy text-sm">Coaching Cues</h3>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <Search className="w-4 h-4 text-warm-amber" />
+                <h3 className="font-semibold text-navy text-sm">Diagnosis</h3>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-warm-amber/10 text-warm-amber font-mono font-medium">~15 min</span>
+              </div>
+            </div>
+            {/* Key metrics for this phase */}
+            <div className="grid grid-cols-3 gap-2 mb-4">
+              {session.keyMetricChanges.slice(0, 3).map((change, i) => {
+                const delta = change.after - change.before;
+                return (
+                  <div key={i} className="bg-bg-light rounded-lg px-3 py-2 text-center">
+                    <p className="text-[10px] uppercase tracking-wide text-gray-500 font-semibold">{change.metric}</p>
+                    <p className="text-sm font-bold text-navy font-mono">{change.after}{change.unit}</p>
+                    <p className={`text-[10px] font-semibold ${delta > 0 ? 'text-accent' : 'text-coral'}`}>
+                      {delta > 0 ? '+' : ''}{Number.isInteger(delta) ? delta : delta.toFixed(1)}{change.unit}
+                    </p>
+                  </div>
+                );
+              })}
             </div>
             <div className="space-y-3">
+              {session.faults.map((fault, i) => (
+                <div key={i} className="flex items-start justify-between gap-3 group">
+                  <div className="flex items-start gap-2">
+                    <AlertCircle className="w-3.5 h-3.5 text-coral mt-0.5 shrink-0" />
+                    <p className="text-sm text-gray-700">{fault}</p>
+                  </div>
+                  <button className="text-gray-400 hover:text-warm-amber transition-colors opacity-0 group-hover:opacity-100 shrink-0 mt-0.5" title="Edit observation">
+                    <Pencil className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Phase 3: Intervention */}
+          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <Wrench className="w-4 h-4 text-accent" />
+                <h3 className="font-semibold text-navy text-sm">Intervention</h3>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-accent/10 text-accent font-mono font-medium">~20 min</span>
+              </div>
+            </div>
+            {/* Coaching cues used */}
+            <div className="space-y-3 mb-4">
               {session.coachingCues.map((cue, i) => (
                 <div key={i} className="flex items-start justify-between gap-3 group">
                   <div className="bg-gray-50 rounded-lg p-3 flex-1">
@@ -194,32 +244,22 @@ export default function SessionReview() {
                       <p className="text-sm text-gray-700">{cue}</p>
                     </div>
                   </div>
-                  <button className="text-gray-400 hover:text-coral transition-colors opacity-0 group-hover:opacity-100 shrink-0 mt-3">
-                    <X className="w-4 h-4" />
+                  <button className="text-gray-400 hover:text-accent transition-colors opacity-0 group-hover:opacity-100 shrink-0 mt-3" title="Edit cue">
+                    <Pencil className="w-3.5 h-3.5" />
                   </button>
                 </div>
               ))}
             </div>
-            <button className="flex items-center gap-1.5 text-sm text-data-blue font-medium mt-4 hover:underline">
+            <button className="flex items-center gap-1.5 text-sm text-data-blue font-medium hover:underline mb-4">
               <Plus className="w-3.5 h-3.5" />
               Add Cue
             </button>
-          </div>
-
-          {/* Prescribed Drills */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <div className="flex items-center gap-2 mb-4">
-              <Target className="w-4 h-4 text-accent" />
-              <h3 className="font-semibold text-navy text-sm">Assigned Drills</h3>
-            </div>
+            {/* Drills assigned */}
             <div className="space-y-3">
               {sessionDrills.map(
                 (drill) =>
                   drill && (
-                    <div
-                      key={drill.id}
-                      className="border border-gray-100 rounded-lg p-4"
-                    >
+                    <div key={drill.id} className="border border-gray-100 rounded-lg p-4">
                       <div className="flex items-start justify-between mb-2">
                         <div>
                           <h4 className="text-sm font-semibold text-navy">{drill.name}</h4>
@@ -245,6 +285,70 @@ export default function SessionReview() {
               <Plus className="w-3.5 h-3.5" />
               Add Drill
             </button>
+            {/* Intervention observations */}
+            <div className="mt-4 space-y-3">
+              {[
+                'Ball speed improved +3 mph after switching to external focus cue.',
+                'Spin consistency stabilized after drill 2 — variance dropped from 800 to 350 rpm.',
+              ].map((obs, i) => (
+                <div key={i} className="flex items-start justify-between gap-3 group">
+                  <div className="flex items-start gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-accent mt-2 shrink-0" />
+                    <p className="text-sm text-gray-700">{obs}</p>
+                  </div>
+                  <button className="text-gray-400 hover:text-accent transition-colors opacity-0 group-hover:opacity-100 shrink-0 mt-0.5" title="Edit observation">
+                    <Pencil className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Phase 4: Review */}
+          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <ClipboardCheck className="w-4 h-4 text-accent" />
+                <h3 className="font-semibold text-navy text-sm">Review</h3>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-accent/10 text-accent font-mono font-medium">~5 min</span>
+              </div>
+            </div>
+            <div className="space-y-3 mb-4">
+              {[
+                'Session objective met — wedge distance ladder completed through 120 yards.',
+                'Ground-pressure cue retained after break; ready to extend to longer irons next session.',
+                'Recommended homework: 9-to-3 pitch shots (30 reps), alignment gate drill (10 reps per range session).',
+              ].map((obs, i) => (
+                <div key={i} className="flex items-start justify-between gap-3 group">
+                  <div className="flex items-start gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-accent mt-2 shrink-0" />
+                    <p className="text-sm text-gray-700">{obs}</p>
+                  </div>
+                  <button className="text-gray-400 hover:text-accent transition-colors opacity-0 group-hover:opacity-100 shrink-0 mt-0.5" title="Edit observation">
+                    <Pencil className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+            {/* Homework */}
+            <div className="border-t border-gray-100 pt-4">
+              <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Homework Assigned</h4>
+              <div className="space-y-2">
+                {homeworkItems.map((item, i) => (
+                  <label key={i} className="flex items-start gap-3 cursor-pointer group">
+                    <input
+                      type="checkbox"
+                      className="mt-0.5 w-4 h-4 rounded border-gray-300 text-accent focus:ring-accent"
+                    />
+                    <span className="text-sm text-gray-700">{item}</span>
+                  </label>
+                ))}
+              </div>
+              <button className="flex items-center gap-1.5 text-sm text-data-blue font-medium mt-3 hover:underline">
+                <Plus className="w-3.5 h-3.5" />
+                Add homework item
+              </button>
+            </div>
           </div>
         </div>
 
@@ -357,59 +461,8 @@ export default function SessionReview() {
             <p className="text-xs text-gray-400 mt-2">Last edited just now</p>
           </div>
 
-          {/* Student Homework */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <h3 className="font-semibold text-navy text-sm mb-4">Homework Assignments</h3>
-            <div className="space-y-3">
-              {homeworkItems.map((item, i) => (
-                <label key={i} className="flex items-start gap-3 cursor-pointer group">
-                  <input
-                    type="checkbox"
-                    className="mt-0.5 w-4 h-4 rounded border-gray-300 text-accent focus:ring-accent"
-                  />
-                  <span className="text-sm text-gray-700">{item}</span>
-                </label>
-              ))}
-            </div>
-            <button className="flex items-center gap-1.5 text-sm text-data-blue font-medium mt-4 hover:underline">
-              <Plus className="w-3.5 h-3.5" />
-              Add homework item
-            </button>
-          </div>
         </div>
 
-        {/* Cross-persona links — show how data flows to other personas */}
-        <div className="bg-accent/5 rounded-xl border border-accent/20 p-5 mt-6">
-          <p className="text-xs uppercase tracking-wider text-accent font-semibold mb-3">
-            Where this session data goes
-          </p>
-          <div className="flex flex-wrap gap-3">
-            <Link
-              to="/golfer/lessons/session-1"
-              className="inline-flex items-center gap-2 text-sm bg-white rounded-lg border border-gray-200 px-4 py-2 hover:border-accent/40 transition-colors"
-            >
-              <span className="w-5 h-5 rounded-full bg-accent/10 flex items-center justify-center text-[10px] font-bold text-accent">G</span>
-              <span className="text-gray-700">Golfer Lesson View</span>
-              <ArrowRight className="w-3.5 h-3.5 text-gray-400" />
-            </Link>
-            <Link
-              to="/fitter/brief"
-              className="inline-flex items-center gap-2 text-sm bg-white rounded-lg border border-gray-200 px-4 py-2 hover:border-accent/40 transition-colors"
-            >
-              <span className="w-5 h-5 rounded-full bg-data-blue/10 flex items-center justify-center text-[10px] font-bold text-data-blue">F</span>
-              <span className="text-gray-700">Fitter AI Brief</span>
-              <ArrowRight className="w-3.5 h-3.5 text-gray-400" />
-            </Link>
-            <Link
-              to="/spine"
-              className="inline-flex items-center gap-2 text-sm bg-white rounded-lg border border-gray-200 px-4 py-2 hover:border-accent/40 transition-colors"
-            >
-              <span className="w-5 h-5 rounded-full bg-navy/10 flex items-center justify-center text-[10px] font-bold text-navy">S</span>
-              <span className="text-gray-700">Data Spine</span>
-              <ArrowRight className="w-3.5 h-3.5 text-gray-400" />
-            </Link>
-          </div>
-        </div>
       </div>
     </div>
   );

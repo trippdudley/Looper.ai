@@ -140,12 +140,12 @@ export default function PreSessionBrief() {
             </div>
           </div>
 
-          {/* Start Session CTA */}
+          {/* Start Lesson CTA */}
           <Link
-            to="/coach/live"
+            to="/trackman"
             className="shrink-0 bg-accent text-white font-semibold text-sm px-5 py-2.5 rounded-lg hover:bg-accent-light transition flex items-center gap-2"
           >
-            Start Session
+            Start Lesson
             <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
@@ -486,18 +486,16 @@ export default function PreSessionBrief() {
         </div>
       </div>
 
-      {/* Bottom CTA */}
-      <div className="flex items-center justify-between bg-white rounded-xl border border-gray-200 p-5">
-        <div>
-          <p className="text-sm text-gray-500">Ready to begin?</p>
-          <p className="text-navy font-semibold">{brief?.todaysFocus ?? 'Session'} with {golfer.name}</p>
-        </div>
+      {/* Bottom CTA — prominent Start Lesson */}
+      <div className="bg-accent/5 border-2 border-accent/30 rounded-xl p-6 text-center">
+        <p className="text-sm text-gray-600 mb-1">Briefing complete. Looper is ready.</p>
+        <p className="text-navy font-semibold mb-4">{brief?.todaysFocus ?? 'Session'} with {golfer.name}</p>
         <Link
-          to="/coach/live"
-          className="bg-accent text-white font-semibold text-sm px-6 py-2.5 rounded-lg hover:bg-accent-light transition flex items-center gap-2"
+          to="/trackman"
+          className="inline-flex items-center gap-2 bg-accent text-white font-bold text-base px-8 py-3 rounded-lg hover:bg-accent-light transition shadow-sm"
         >
-          Start Session
-          <ChevronRight className="w-4 h-4" />
+          Start Lesson
+          <ChevronRight className="w-5 h-5" />
         </Link>
       </div>
     </div>

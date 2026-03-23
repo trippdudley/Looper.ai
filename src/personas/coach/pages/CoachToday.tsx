@@ -12,6 +12,8 @@ import {
   RotateCcw,
   Target,
   FileText,
+  Sparkles,
+  ChevronRight,
 } from 'lucide-react';
 import { golfers } from '../../../data/players';
 import { drills } from '../../../data/drills';
@@ -292,22 +294,23 @@ export default function CoachToday() {
 
         {/* Right Column (~40%) */}
         <div className="flex-1 min-w-0 space-y-6">
-          {/* Pre-Lesson Brief */}
+          {/* Next Up — Copilot Briefing Card */}
           {nextGolfer && nextSession && (
             <div className="bg-white rounded-xl border border-gray-200 p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <Clock className="w-4 h-4 text-data-blue" />
-                <h2 className="text-navy text-lg font-bold">
-                  Next Up: {nextGolfer.name}
-                </h2>
+              <div className="flex items-center gap-2 mb-1">
+                <Sparkles className="w-4 h-4 text-accent" />
+                <span className="text-[10px] uppercase tracking-wide text-accent font-bold">Briefing Ready</span>
+                <span className="text-[10px] text-gray-400 ml-auto font-mono">{nextSession.time}</span>
               </div>
-
-              <div className="text-xs text-gray-500 mb-1">
-                {nextSession.time} &middot; {nextSession.duration}
-              </div>
+              <h2 className="text-navy text-lg font-bold mb-1">
+                {nextGolfer.name}
+              </h2>
+              <p className="text-sm text-gray-500 mb-4">
+                {nextSession.duration} &middot; {nextSession.focus}
+              </p>
 
               {/* Quick stats */}
-              <div className="flex gap-4 mt-3 mb-4">
+              <div className="flex gap-4 mb-4">
                 <div className="bg-bg-light rounded-lg px-3 py-2 text-center flex-1">
                   <p className="text-xs text-gray-500">Handicap</p>
                   <p className="text-sm font-bold text-navy">
@@ -351,7 +354,7 @@ export default function CoachToday() {
               </div>
 
               {/* Suggested drills */}
-              <div className="mb-4">
+              <div className="mb-5">
                 <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
                   Suggested drills
                 </h3>
@@ -369,11 +372,19 @@ export default function CoachToday() {
                 </div>
               </div>
 
+              {/* Primary action — view full briefing */}
+              <Link
+                to={`/coach/brief/${nextGolfer.id}`}
+                className="flex items-center justify-center gap-2 w-full bg-accent text-white font-semibold text-sm px-4 py-2.5 rounded-lg hover:bg-accent-light transition"
+              >
+                View Briefing
+                <ChevronRight className="w-4 h-4" />
+              </Link>
               <Link
                 to={`/coach/students/${nextGolfer.id}`}
-                className="text-sm text-accent font-medium hover:text-accent-light transition"
+                className="block text-center text-xs text-gray-500 hover:text-accent transition mt-2"
               >
-                View full profile &rarr;
+                Full player profile
               </Link>
             </div>
           )}
