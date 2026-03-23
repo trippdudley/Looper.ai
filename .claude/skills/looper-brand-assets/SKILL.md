@@ -1,267 +1,157 @@
 ---
 name: looper-brand-assets
-description: "Generate on-brand content and assets for Looper.AI, an AI-native decision platform for golf coaching and club fitting. Use this skill whenever the user asks to create any Looper.AI branded content — including pitch decks, presentations, one-pagers, social media posts (LinkedIn), email copy, customer-facing reports, session summaries, build sheets, internal memos, blog posts, website copy, marketing materials, investor updates, or any document that should reflect Looper.AI's brand voice and visual identity. Also trigger when the user asks to write copy 'as Looper' or 'in the Looper voice,' or references the Looper brand guidelines, or asks for help with Looper-related content of any kind. If the output will be seen by a customer, investor, partner, practitioner, or posted publicly, this skill applies."
+description: "Generate on-brand content for Looper.AI. Use this skill whenever writing LinkedIn posts, pitch decks, email copy, investor updates, customer reports, session summaries, blog posts, one-pagers, or any content reflecting Looper.AI brand voice. Also trigger when writing copy 'as Looper' or 'in the Looper voice,' when creating any document seen by customers, investors, partners, or posted publicly, or when reviewing existing content against brand guidelines."
 ---
 
-# Looper.AI Brand Asset Generator
+# Looper.AI Brand Asset & Content Guidelines
 
-This skill ensures all content created for Looper.AI follows the brand's voice, tone, visual identity, and strategic positioning. Read this file completely before generating any Looper.AI branded content.
+## What Looper.AI Is (For Content Context)
 
-## Who Looper.AI Is
+Looper.AI is an AI-native coaching copilot for golf. One intelligence, two experiences: coach and player. The persistent record builds itself through ambient capture. The copilot thinks alongside the coach in real time during every lesson and helps players improve between them.
 
-Looper.AI is an AI-native decision platform for golf performance. It helps coaches and club fitters make better decisions by capturing shot/swing-level data from existing launch monitors and video, applying physics-informed machine learning with calibrated uncertainty, and recommending what to test, change, or practice next.
+The coach experience has two form factors: a full Coach Portal (the between-lesson command center — dashboard, roster, session history, practice plans) and a Lesson Sidebar (420-480px, dark mode, sits beside TrackMan on the coach's monitor during lessons). The player experience is a mobile-first Player Portal with session recaps, progress tracking, and a conversational "Ask Looper" interface.
 
-The practitioner (coach or fitter) stays in control. The AI handles measurement discipline, math, and memory.
+Core thesis: Memory enables intelligence. The record is both the product and the moat. The intelligence is the value proposition.
 
-### Two Products, One Platform
+## Brand Voice
 
-- **Coaching OS** (primary): Academy-grade system that turns every lesson into a measured experiment. Diagnoses limiting factors with confidence levels, recommends drills/cues grounded in motor learning science, tracks player progress longitudinally.
-- **Fitting Engine** (follows fast): Fitter-facing system that reframes club fitting as a sequential decision problem. Proposes next-best equipment configuration, estimates counterfactual outcomes with uncertainty bands, produces auditable build recommendations.
+### Personality
+- **Precise**: Every claim backed by data. Uncertainty stated honestly. No hand-waving.
+- **Empowering**: The coach is the hero. We say "now you have a thinking partner," never "you were doing it wrong."
+- **Quietly Confident**: We know this is better. We don't shout.
+- **Craft-Respecting**: Coaching is an engineering discipline that deserves proper tools.
+- **Clear**: Complex ideas, zero jargon unless the audience uses it naturally.
 
-### Positioning Statement
+### How We Sound
+- Like the smartest person in the lesson bay who never talks down to anyone
+- Like an engineer who plays golf and gets why feel matters
+- Like a thinking partner who shows their reasoning
 
-For golf coaches and club fitters who take their craft seriously, Looper.AI is the decision platform that turns expertise into engineering. Unlike data tools that show you numbers, Looper.AI tells you what to try next, why it should work, and how confident you should be.
+### Do / Don't
+
+**Do say:**
+- "The data suggests X with Y confidence"
+- "What to try next"
+- "Your expertise, with a thinking partner"
+- "Uncertainty is honest; false precision isn't"
+- "Built for how you actually teach"
+- "Memory enables intelligence"
+- "A thinking partner that keeps up"
+- "Engineering-grade" as an aspiration
+- Use golf language naturally: strike, dispersion, carry windows, club path, face control, limiting factor
+
+**Don't say:**
+- "Our AI determined that X"
+- "AI-powered optimization"
+- "Replacing intuition with intelligence"
+- "Guaranteed results"
+- "Revolutionary paradigm shift"
+- "Disrupting the golf industry"
+- AI jargon the audience doesn't use: embeddings, bandits, counterfactual, neural network
+- "Coaching operating system" or "decision platform" (outdated framing)
+- "Our AI" as a separate entity — the system is Looper, not "Looper's AI"
 
 ### Tagline
-
 **Expertise, engineered.**
 
----
-
-## Brand Voice Rules
-
-The voice should sound like the smartest colleague in the fitting bay who never talks down to anyone. Like an engineer who also plays golf and understands why feel matters.
-
-### Personality Traits
-
-| Trait | Meaning | What it is NOT |
-|-------|---------|----------------|
-| Precise | Every claim backed by data; uncertainty stated honestly | Clinical, sterile, or unapproachable |
-| Empowering | The practitioner is the hero, not the software | Patronizing ("you were doing it wrong") |
-| Quietly Confident | We know this is better; we don't need to shout | Arrogant, dismissive, techbro |
-| Craft-Respecting | Fitting and coaching are engineering disciplines | Nostalgic or conservative |
-| Clear | Complex ideas, zero jargon unless audience uses it | Dumbed down — practitioners are smart |
-
-### Verbal Do's and Don'ts
-
-**Always use these patterns:**
-- "The data suggests X with Y confidence" — not "Our AI determined that X"
-- "What to try next" — not "AI-powered optimization"
-- "Your expertise, systematized" — not "Replacing intuition with intelligence"
-- "Uncertainty is honest; false precision isn't" — not "Guaranteed results"
-- "Built for how you actually work" — not "Revolutionary paradigm shift"
-- "Engineering-grade" as aspiration — not "Disrupting the golf industry"
-- Golf language used naturally (strike, dispersion, carry windows, club path, face control)
-- AI/ML jargon never used in customer-facing content (embeddings, bandits, counterfactual, hierarchical Bayesian)
-
-**Never say:**
-- "Revolutionary," "game-changing," "disruptive," or "paradigm shift"
-- "Our AI" as if it's a separate entity making decisions
-- "Guaranteed" anything — use "expected," "estimated," "with X% confidence"
-- "Replaces" or "automates" the coach/fitter — always "augments," "systematizes," "empowers"
-- Generic startup phrases: "leveraging AI," "end-to-end solution," "seamless integration"
-
-### Copy Examples (Use as Calibration)
-
-These show the right tone. Reference them when writing any Looper.AI content:
-
+### Directional Copy Lines
 - "You already think this way. Now prove it."
 - "Better decisions, not more data."
-- "The fitting bay is an engineering lab. We built the OS for it."
 - "Every lesson is an experiment. Make it count."
-- "The best fitters already do this in their heads. We gave it a system."
+- "A thinking partner that keeps up."
+- "The lesson bay is an engineering lab. We built the copilot for it."
 
----
+## Visual Identity Quick Reference
 
-## Visual Identity Rules
-
-### Color Direction
-
-The palette is clinical, precise, and light-foundation — surgical instrument, not lifestyle.
-
-| Role | Specification | Avoid |
-|------|--------------|-------|
-| Foundation | Near-white (#F6F7F9), pure white cards, cool gray borders | Dark backgrounds as default (reserve for bay/dark mode only) |
-| Brand accent | Deep teal #0D7C66 — used for .AI in logo, CTAs, links, interactive elements | Royal blue (TrackMan), bright emerald (too generic), any warm tones |
-| Text | Near-black #1A1F2B for headings, slate #4B5563 for body, gray #9CA3AF for labels | Pure black (#000000), warm grays |
-| Confidence | Bright teal #0FA87A on subtle tint background #E6F5F1 | Raw green without background tint |
-| Caution | Deep gold #D4980B | Bright yellow (too alarming) |
-| Flag | Muted red #C93B3B | Bright red (too aggressive) |
-
-When generating HTML, React, or styled content, use this palette:
-
-```
-/* Foundation — clinical light base */
---color-bg: #F6F7F9;            /* Page background */
---color-surface: #FFFFFF;        /* Cards and content areas */
---color-border: #DFE2E7;        /* Borders and dividers */
---color-border-subtle: #ECEEF2; /* Card borders, subtle separation */
-
-/* Brand accent — deep teal */
---color-accent: #0D7C66;        /* Primary brand accent: CTAs, links, .AI in logo */
---color-accent-hover: #0A6352;  /* Hover state */
---color-accent-light: #E6F5F1;  /* Accent background tint (badges, rec cards) */
---color-accent-bright: #0FA87A; /* Confidence-high indicators */
-
-/* Text hierarchy */
---color-text: #1A1F2B;          /* Primary text, headings */
---color-text-body: #4B5563;     /* Body copy */
---color-text-muted: #9CA3AF;    /* Labels, captions, secondary info */
-
-/* Semantic — confidence, caution, flags */
---color-confidence: #0FA87A;    /* High confidence, positive indicators */
---color-caution: #D4980B;       /* Caution, medium confidence, warnings */
---color-flag: #C93B3B;          /* Flags, low confidence, errors */
-
-/* Dark mode (for bay/simulator environments) */
---color-bg-dark: #0C1117;
---color-surface-dark: #151D28;
---color-card-dark: #1E2A36;
---color-border-dark: #1E2A36;
---color-text-dark: #E8ECF1;
---color-text-body-dark: #8B99A8;
---color-text-muted-dark: #5E6E7E;
-```
+### Colors
+- Brand accent: #0D7C66 (deep teal) — single accent across all surfaces
+- Light mode: #F6F7F9 background, #FFFFFF cards
+- Dark mode (sidebar): #0C1117 background, #151D28 surface
+- Confidence: #0FA87A (green), #D4980B (amber), #C93B3B (red)
+- Text: #1A1F2B (headings), #4B5563 (body), #9CA3AF (muted)
 
 ### Typography
+- Brand voice: Cabinet Grotesk (headings, body text, all human-readable content)
+- Data voice: Space Mono (all numbers, metrics, confidence values, labels)
+- Editorial voice: Instrument Serif italic (taglines and pull quotes only)
+- The split is absolute: Cabinet Grotesk never renders numbers in data contexts. Space Mono never renders body paragraphs.
 
-The type system uses a split-voice architecture: one font for the brand, another for data.
-
-**Brand voice — Cabinet Grotesk (Fontshare, free for commercial use)**
-- 800 weight: Wordmark and display headings
-- 500 weight: Section headings and subheads
-- 400 weight: Body text and long-form copy
-- Letter-spacing: 0.05-0.06em for the wordmark in all-caps; normal for body
-
-**Data voice — Space Mono (Google Fonts)**
-- 700 weight: Metric values and primary data points
-- 400 weight: Labels, captions, confidence intervals, table data
-- Always used for: numbers in data cards, axis labels, confidence badges, build specs
-
-**Editorial voice — Instrument Serif italic (Google Fonts)**
-- Used sparingly for: taglines, pull quotes, editorial moments
-- Never used for body text or data
-
-**Fallback guidance:**
-- If Cabinet Grotesk is unavailable, use system sans-serif (not Inter, not Arial — ask the user to install Cabinet Grotesk from fontshare.com)
-- If Space Mono is unavailable, use any monospaced system font
-- For internal documents where custom fonts aren't practical, Arial is acceptable for body text
-
-### What to Avoid Visually
-
-- Neural network graphics, "AI brain" imagery, glowing blue anything
-- Stock golf photos (sunset fairways, celebratory poses, lifestyle imagery)
-- Consumer-tech aesthetics (rounded friendly shapes, playful illustrations)
-- Generic SaaS template layouts
-- Gaming gradients, rainbow palettes, heavy drop shadows
-
-### What to Lean Into
-
-- Data visualization as the primary visual language: strike maps, dispersion ellipses, uncertainty bands
-- Engineering/lab aesthetic: grids, coordinate systems, contour lines, measurement overlays
-- Product screenshots and UI as hero content
-- Real environments: fitting bays, lesson tees, launch monitor screens, impact tape
-
----
+### Logo
+- LOOPER in #1A1F2B + .AI in #0D7C66
+- Cabinet Grotesk 800 weight
+- Letter-spacing: 0.05-0.06em
+- ".AI" is part of the name, not a domain suffix
 
 ## Content Templates
 
-### Pitch Deck Slides
+### LinkedIn Post
+- Length: 150-300 words
+- Structure: Hook (practitioner pain point or insight) → Body (how Looper thinks about it) → Close (understated CTA or thought-provoking question)
+- Tone: Thought leadership, not product marketing. Share how we think, not what we sell.
+- Never use: hashtag spam, emoji-heavy openings, "I'm thrilled to announce"
+- Do use: specific golf examples, data points, practitioner language
 
-Structure investor-facing slides with these principles:
-- Lead with the problem ("guesswork disguised as method"), then the system
-- Show the product UI early — the product IS the proof
-- Use data and specifics, not adjectives
-- Include uncertainty language even in investor context ("expected market," "estimated improvement")
-- End with team/traction, not vision fluff
+### Investor Email / Update
+- Lead with traction or insight, not features
+- Use calibrated language: "early signal" not "massive growth"
+- Include specific numbers where possible
+- Close with clear ask or next step
+- Tone: confident, substantive, concise
 
-### LinkedIn Posts
+### Customer-Facing Report (Session Summary for Player)
+- Plain language — no jargon
+- Structure: What we worked on → What changed → What to practice → Next session focus
+- Include 2-3 specific metrics with context ("your dispersion tightened from 24 to 18 yards — that's meaningful")
+- Encouraging but honest. Don't overcelebrate noise.
+- Metrics in Space Mono. Commentary in brand voice.
 
-Format for the golf-pro and academy-owner audience:
-- Open with a concrete observation or provocation, not a question
-- Keep to 150-250 words
-- Use short paragraphs (1-2 sentences each)
-- End with a thought that makes the reader reconsider their current process
-- Never use hashtags excessively (2-3 max, relevant ones like #golfinstruction #clubfitting)
-- Never use emoji in body text
+### One-Pager (Academy Sales)
+- Lead with the practitioner's pain, not Looper's features
+- Show the product (sidebar beside TrackMan, portal dashboard) — the product IS the proof
+- Three key benefits: persistent memory across every lesson, thinking partner during lessons, structured coaching programs that retain players
+- Include one specific data point or testimonial
+- CTA: "See it in a live bay" or "Pilot with us"
 
-### Customer-Facing Reports (Session Summaries, Build Sheets)
+### Pitch Deck Slide Copy
+- Minimal text per slide. Let the visual carry.
+- Headlines: short, declarative, in brand voice
+- Data: Space Mono, prominent, with context
+- Never more than 3 bullet points per slide
+- Avoid: clip art, stock photos, generic SaaS screenshots
+- Do: show actual product UI, use the design system colors, let white space work
 
-- Header: Looper.AI branding, session metadata (date, player, coach/fitter, equipment)
-- Body: structured findings with confidence levels, not narrative
-- Use tables and data visualization, not paragraphs of interpretation
-- Always include uncertainty — "estimated carry: 265-272 yards (84% confidence)"
-- Close with clear next steps or recommendations
-- Build sheets must include full spec: length, swingweight, total weight, grip, shaft tipping, loft/lie settings
+## Brand Guardrails
 
-### Email Copy
+### Never
+- Position AI as replacing the coach. Always: thinking alongside, augmenting.
+- Promise certainty. Honest uncertainty is a brand value.
+- Use generic AI visual tropes (glowing brains, neural nets, robots, blue light)
+- Talk down to practitioners. They are experts.
+- Use emoji in professional content (occasional in very casual social posts only)
+- Reference fitting, fitter, or equipment (shelved from active positioning)
 
-- Subject lines: specific and benefit-driven, never clickbait ("How your fitting data becomes a decision system")
-- Body: short paragraphs, practitioner-respectful tone, one clear CTA
-- Never use "Dear [Name]" — use first name directly
-- Sign-off should feel like a colleague, not a sales team
+### Always
+- Make the practitioner the hero of the story
+- Show the AI's reasoning, not just its conclusions
+- Use golf language the audience actually speaks
+- Ground claims in specific, verifiable evidence
+- Design for the coach who's been burned by tech promises before
 
-### One-Pagers
+## Competitive Positioning Language
 
-- Structure: problem → approach → proof → CTA
-- Lead with the practitioner's pain point, not the technology
-- Include one product screenshot or data visualization
-- Keep to one page — density is a feature, not a bug
+**vs. TrackMan / Foresight:** "They measure. We think. TrackMan gives you 40 data points per swing. Looper tells you which one matters and what to do about it."
 
----
+**vs. CoachNow / workflow tools:** "They organize. We reason. A shared video folder isn't a coaching program. A thinking partner that remembers every lesson and prepares for the next one — that's a coaching program."
 
-## Competitive Differentiation (Use in All Content)
+**vs. YouTube / free instruction:** "Free content tells you what to change. It can't tell you what's actually limiting YOUR game, with confidence, based on YOUR data across YOUR sessions."
 
-When positioning Looper.AI against the landscape, use these frames:
+## Content Quality Checklist
 
-| Competitor Category | Their position | Our differentiation |
-|---|---|---|
-| TrackMan / Foresight | Measurement hardware — they give you numbers | We are a decision layer — we tell you what to do with the numbers |
-| TPI / fitness-tech | Physical performance and movement screens | We cover the full coaching/fitting decision workflow |
-| CoachNow / Hudl / Golf CRM | Workflow and communication tools | We are an intelligence layer, not another app |
-| Arccos / Whoop / Garmin | Consumer player-facing wearables | We are practitioner-facing first; the pro is our customer |
-
-Never directly attack competitors by name in customer-facing content. Instead, frame the gap: "Data tools show you what happened. Looper.AI shows you what to try next."
-
----
-
-## Quality Checklist
-
-Before finalizing any Looper.AI asset, verify:
-
-1. **Practitioner respect:** Does this make the coach/fitter feel like the expert, not the student?
-2. **No false precision:** Are claims stated with appropriate uncertainty?
-3. **No AI clichés:** Zero mentions of "leveraging AI," neural net imagery, or glowing brains?
-4. **Engineering tone:** Does this read like infrastructure, not a consumer app?
-5. **Competitive clarity:** Is it clear why Looper.AI is different from a launch monitor or a golf CRM?
-6. **Visual consistency:** Colors, typography, and layout match the brand direction?
-7. **Actionable:** Does the reader know what to do or think next?
-
----
-
-## Reference: Product Capabilities (For Accurate Content)
-
-When writing about what Looper.AI does, stay within these boundaries:
-
-**The Coaching OS can:**
-- Capture swing-level multimodal records (launch monitor + video + optional IMU/force data)
-- Build player embeddings (skill signature, variability, adaptation rate)
-- Diagnose limiting factors with confidence levels
-- Recommend drills/cues ranked by expected benefit and learning value
-- Track longitudinal progress across sessions
-- Support coach override at every decision point
-
-**The Fitting Engine can:**
-- Capture shot-level records with equipment metadata and build specs
-- Propose next-best equipment configuration to test
-- Estimate counterfactual outcomes with uncertainty bands
-- Produce auditable build sheets with full spec documentation
-- Normalize across launch monitor devices and sessions
-- Use equipment ontology (structured head/shaft/build specs, not just brand/model/flex)
-
-**Never claim the system:**
-- Replaces coaches or fitters
-- Guarantees outcomes
-- Works without human judgment
-- Is fully autonomous
-- Has "solved" golf instruction or fitting
+Before publishing any Looper.AI content, verify:
+- [ ] Does it sound like a practitioner wrote it, not a marketer?
+- [ ] Is every claim grounded in something specific?
+- [ ] Would a skeptical 20-year teaching pro respect the tone?
+- [ ] Does it avoid all items on the "Don't say" list?
+- [ ] Is the product described as a copilot/thinking partner, not a dashboard/platform?
+- [ ] Are metrics in Space Mono and prose in brand voice?
+- [ ] No emoji in professional contexts?

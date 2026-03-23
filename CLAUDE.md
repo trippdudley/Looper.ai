@@ -1,259 +1,106 @@
-# Think Like an Elite Golf Coach
-
-## Organizing Principle
-
-**Coaching intent organizes data.** Every screen, metric, and visualization exists to support a coaching decision — not to display information. If a data point doesn't change what the coach would do or say, it doesn't belong on screen.
-
----
-
-## Hard Rules
-
-### 1. Club Context Is Non-Negotiable
-Never show a swing metric without the club that produced it. A 94 mph swing speed means something completely different for a driver vs. a 7-iron. Every metric panel, every comparison, every trend line must carry club context.
-
-### 2. No Universal Baselines
-"Tour average" is almost always the wrong comparison. A 15-handicap's optimal numbers look nothing like a scratch player's. Baselines should be derived from the player's own history, their peer cohort, or their stated goals — never from a generic "good" number.
-
-### 3. Connection Before Prescription
-Before showing what to fix, show what you know about the player. The pre-session brief exists because the best coaches spend 5 minutes remembering the human before spending 55 minutes on the swing. Surface: What did we work on last time? What did they commit to practicing? What's happening in their game right now?
-
-### 4. Feel vs. Real Is the Central Tension
-The most important coaching data is often the gap between what the player thinks they're doing and what they're actually doing. Design for this: show the player's self-reported feel alongside the measured reality. This is where breakthroughs happen.
-
-### 5. Less Information, More Intelligence
-A coach doesn't need 47 data points. They need 3-4 that matter right now, with context for why they matter. Every dashboard should answer: "What's the one thing I should focus on in this session?" If it can't answer that, it has too much data and not enough intelligence.
-
-### 6. The Coach Controls the Player View
-Coaches are protective of what players see. A coach might know the player's path is 4 degrees out-to-in but choose not to mention it because they're working on something else first. Never auto-share data with players. The coach decides what the player sees and when.
-
-### 7. Capture the Reasoning, Not Just the Data
-The most valuable coaching artifact isn't the launch monitor numbers — it's why the coach chose a particular intervention. "Moved ball position forward because impact point was low on face" is gold. Design for capturing coaching reasoning at the moment of decision.
-
-### 8. Know What to Leave Alone
-Elite coaches know that some "problems" in a swing are actually features. A strong grip that produces a reliable draw isn't a fault — it's a strategy. The system should track what the coach has explicitly decided NOT to change and why, so future sessions don't accidentally "fix" it.
-
----
-
-## Anti-Patterns to Avoid
-
-- **Data vomit**: Showing all available metrics because you can
-- **False precision**: Displaying spin rate to 1 RPM when the measurement uncertainty is +/- 200
-- **Decontextualized trends**: "Your swing speed increased 2 mph!" (but you switched from 7-iron to 6-iron)
-- **Robot coach voice**: "Based on your metrics, consider adjusting..." — coaches don't talk like this
-- **One-size-fits-all workflows**: A 30-minute wedge tune-up and a 2-hour full bag fitting are completely different sessions
-- **Ignoring the emotional arc**: A player who just shot their best round needs celebration, not a list of things to fix
-
----
-
-## The Three Coaching Moments
-
-### 1. Before the Session (Player Brief)
-**Coach's question**: "What do I need to remember about this player?"
-- Last session recap: what we worked on, what clicked, what didn't
-- Practice compliance: did they do what we agreed on?
-- Recent rounds: are they playing better or worse?
-- Current lesson arc: where are we in the bigger plan?
-- Emotional context: anything I should know walking in?
-
-### 2. During the Session (Live Coaching)
-**Coach's question**: "What's happening right now and what should I do about it?"
-- Real-time data with immediate context
-- Comparison to the player's own baseline (not tour average)
-- Pattern detection: "This is the 3rd swing in a row with early extension"
-- Intervention suggestions based on what's worked before for this player
-- Minimal chrome — the session is about the player, not the software
-
-### 3. After the Session (Session Summary)
-**Coach's question**: "What did we accomplish and what's the plan?"
-- Key metrics that changed during the session
-- Interventions that were tried and their results
-- Coach's notes and reasoning (captured during session)
-- Homework: specific drills with specific targets
-- Next session preview: what we'll work on next
-
----
-
-## Golf Domain Knowledge
-
-### Scoring Hierarchy
-The fastest way to lower scores (in order): 1) Putting inside 10 feet, 2) Approach shot proximity, 3) Tee shot accuracy, 4) Short game up-and-down %, 5) Driving distance. Most amateurs obsess over #5. Most coaches focus on #1-3.
-
-### The Handicap System
-Handicap Index is calculated from the best 8 of last 20 rounds. A rising handicap doesn't mean the player is getting worse — it might mean they're playing harder courses, or their bad rounds are getting worse while their good rounds stay the same. Context matters.
-
-### Launch Monitor Literacy
-- **Ball speed** is the most reliable predictor of distance (not swing speed)
-- **Spin rate** varies enormously by strike quality — a single number means little
-- **Club path + face angle** = shot shape, but the relationship is non-linear
-- **Attack angle** is heavily influenced by ball position — a "steep" swing might just be a setup issue
-- **Smash factor** (ball speed / club speed) indicates strike quality — 1.45+ for driver is efficient
-
-### Session Types
-- **Assessment**: Baseline data collection, no intervention. "Let me see what you've got."
-- **Technical**: Changing a movement pattern. Requires patience and regression tolerance.
-- **Performance**: Optimizing what's already there. Stats-focused, game-context heavy.
-- **Playing lesson**: On-course coaching. Completely different skill set — strategy, mental game, course management.
-- **Club fitting**: Equipment optimization. Requires launch monitor mastery and understanding of gear-swing interaction.
-
----
----
-
-# Looper.AI — Project Reference
+# Looper.AI
 
 ## What This Is
+Looper.AI is an AI-native coaching copilot for golf. One intelligence, two experiences: coach and player. The persistent record builds itself through ambient capture agents. The copilot thinks alongside the coach in real time during lessons and helps players improve between them.
 
-Looper.AI is an AI-native decision platform for golf coaching and club fitting. It's a prototype/demo app — all data is mocked in TypeScript files, there is no backend. The app demonstrates four distinct persona experiences through a single React application.
+## Core Thesis
+Memory enables intelligence. The persistent record is the foundation — you can't have a thinking copilot without something to think about. But the experience the coach sees is intelligence: the AI actively processing, reasoning, and surfacing insights in real time. The record is both the product and the moat. The intelligence is the value proposition.
 
-## Tech Stack
+Strategic sequence: Record → Intelligence → Compounding insight. Dataset company that starts as a platform.
 
-- **React 19** + **React Router 7** (nested routes with `<Outlet />`)
-- **TypeScript 5.9** + **Vite 7** (build tool)
-- **Tailwind CSS 4** (utility-first styling, theme tokens in `index.css`)
-- **Recharts** (data visualization)
-- **Lucide React** (icon library)
-- **Playwright** + **ffmpeg-static** (sizzle reel video recording)
-- **No backend** — all data in `src/data/*.ts`
+## Product Architecture
 
-## Four Personas
+### Coach Experience — Two Form Factors
 
-| Persona | Route | Shell | UX Posture |
-|---------|-------|-------|------------|
-| **Golfer** | `/golfer` | `MobileShell` (iPhone frame + BottomTabBar) | Light, consumer, mobile-first |
-| **Coach** | `/coach` | `DesktopShell` (Sidebar + TopBar) | Professional, data-dense, desktop |
-| **Fitter** | `/fitter` | `DesktopShell` (dark theme + ambient bg) | Premium, equipment-focused, dark |
-| **Spine** | `/spine` | `DesktopShell` (dark theme + ambient bg) | Internal, data-ops, dark |
+**Coach Portal** (full web app, desktop-first, full-width):
+The between-lesson command center. Dashboard with upcoming lessons and player status. Player roster with longitudinal progress views. Session history searchable by player, date, or topic. Practice plan builder and tracker. Program design tools. Weekly digest of player activity. Post-session detailed view lives here — full lesson record expanded by phase, editable by coach.
 
-Entry point is `PersonaSelector` at `/` — each card routes to a persona.
+**Lesson Sidebar** (narrow panel, 420-480px wide, dark mode):
+The in-lesson copilot. Shares the coach's monitor with TrackMan Performance Studio (TPS) using a Windows snap layout (~75/25 split on a 1920x1080 display). Contains the live lesson timeline with auto-detected phases, visible AI reasoning, ambient insight cards, and drill suggestions. Everything that happens during a lesson must work within this width.
 
-## File Structure
+### Player Experience — One Form Factor
 
-```
-src/
-├── pages/               # App-level pages (PersonaSelector, CoachingOS, SizzleReel, ThesisPage)
-├── personas/
-│   ├── golfer/          # GolferLayout.tsx + pages/
-│   ├── coach/           # CoachLayout.tsx + pages/
-│   ├── fitter/          # FitterLayout.tsx + pages/
-│   └── spine/           # SpineLayout.tsx + pages/
-├── components/
-│   ├── layout/          # DesktopShell, MobileShell, Sidebar, TopBar, BottomTabBar
-│   ├── ui/              # Card, Badge, MetricCard, StatusDot, etc.
-│   ├── coach-session/   # VoiceAIPanel, VideoPlayer, LaunchDataPanel, etc.
-│   ├── fitter/          # FittingAIInsightCard, ShaftComparisonTable, etc.
-│   ├── trackman/        # TrackmanDataGrid, ShotRow, MetricDelta
-│   └── spine/           # DataFlowNode, AudienceSegmentCard, etc.
-├── data/                # All mock data (golfers, sessions, drills, coachingOSData, etc.)
-├── index.css            # Tailwind imports + @theme tokens + glass effects
-├── App.tsx              # All route definitions
-└── main.tsx             # React entry point
-```
+**Player Portal** (mobile-first, 480px):
+Four surfaces: Dashboard, Practice, Rounds, My Journey. The timeline IS the data model — My Journey is the full unfiltered chronological record, other tabs are filtered lenses. "Ask Looper" chat overlay for questions between lessons. Session recaps in plain language. Practice accountability.
 
-## Routing
+### Data Capture
+Agent-based ambient capture, NOT manual entry or CSV import. Vision agent reads launch monitor screens via camera. Audio agent extracts intervention labels and lesson phase context from coach-player conversation. Video agent processes swing cameras. Between-session agents monitor Arccos, WHOOP, practice activity. The record builds itself as a byproduct of the session. Coach reviews and corrects post-session (30 seconds). Every correction is an RLHF training signal.
 
-### Coach Routes (most complex)
-```
-/coach                → CoachToday (dashboard with schedule, alerts, activity)
-/coach/students       → StudentRoster
-/coach/students/:id   → StudentDetail
-/coach/brief/:id      → PreSessionBrief (pre-session player intelligence)
-/coach/live           → CoachingOS (immersive, full-bleed — no sidebar/topbar)
-/coach/capture        → SessionCapture
-/coach/review         → SessionReview
-/coach/analytics      → Analytics
-/coach/session        → CoachSession
-```
+### The Live Lesson Timeline (Sidebar)
+The signature interaction pattern, rendered within the 420-480px sidebar:
 
-### Other Personas
-```
-/golfer               → GolferHome (mobile)
-/golfer/lessons       → LessonHistory
-/golfer/lessons/:id   → LessonDetail
-/golfer/swing         → SwingProfile
-/golfer/practice      → Practice
+- **Catch-up** (~first 5 min): AI surfaces context from the persistent record — last session summary, practice activity, player goals, recent rounds
+- **Diagnosis** (~next 15 min): AI processes incoming launch monitor data and swing video, identifies patterns, flags limiting factors with evolving confidence
+- **Intervention** (~next 20 min): AI catalogs drills and cues the coach selects, tracks response data, suggests alternatives if current approach isn't working
+- **Review** (~final minutes): AI assembles session summary, highlights what changed, drafts practice plan, queues between-lesson monitoring
 
-/fitter               → GolferLookup
-/fitter/brief         → PreFittingBrief
-/fitter/session       → FittingSession
-/fitter/report        → FittingReport
-/fitter/equipment     → EquipmentProfile
+Phase detection is automatic from audio context and data flow. No manual triggers. Vertical timeline progressing in real time, with the AI's thinking visible at each phase.
 
-/spine                → DataSpine
-/spine/audience       → AudienceEngine
-/spine/integrations   → IntegrationHub
-```
+### Two Modes
+- **Ambient mode (during lesson, in sidebar)**: Compact vertical layout. Current phase highlighted, key metrics updating live, insight cards appear only when useful. Maximum 2-3 cards visible. The coach glances, doesn't study.
+- **Detailed mode (after lesson, in portal)**: Full structured session record expanded by phase. Complete data, video timestamps, intervention log, editable by coach.
 
-### Standalone
-```
-/                     → PersonaSelector
-/thesis               → ThesisPage
-/narrative            → LooperNarrative
-/vision               → SizzleReel
-/coaching-os          → Redirects to /coach/live
-```
+## Prototypes in This Repo
+- `/src/coach-portal/` — Coach portal prototype (dashboard, roster, session history, practice plans)
+- `/src/lesson-sidebar/` — Lesson sidebar prototype (420-480px, live timeline, ambient mode)
+- `/src/player/` — Player portal prototype (mobile-first 480px)
+- `/src/sizzle/` — Investor sizzle reel (90-second self-playing demo)
+- `/src/components/` — Shared component library
 
-## Architecture Patterns
+## Stack
+- Vite + React + Tailwind CSS
+- Icons: lucide-react SVG only. NO emoji anywhere in the UI.
+- Charts: recharts for standard, custom SVG for golf-specific (dispersion, strike maps)
+- Fonts: DM Sans (brand voice), Space Mono (data voice), Playfair Display (editorial moments only)
+- All prototypes use hardcoded mock data — no API calls
 
-### 1. Shell + Layout + Outlet
-Every persona has a Layout component that wraps child pages via React Router's `<Outlet />`. The Layout provides persistent chrome (sidebar, topbar); the page content swaps inside.
+## Design System
+- **Light mode (default for portals)**: bg #F6F7F9, cards #FFFFFF, accent #0D7C66 (deep teal), text #1A1F2B / #4B5563 / #9CA3AF
+- **Dark mode (lesson sidebar)**: bg #0C1117, surface #151D28, accent #10B981
+- **Semantic**: confidence #0FA87A, caution #D4980B, flag #C93B3B
+- **Typography split is absolute**: DM Sans never renders numbers in data cards. Space Mono never renders body paragraphs.
+- **Spacing**: 4px base grid. Sidebar: 8px gaps, 8-10px padding. Portal: 8-12px gaps, 12-16px padding.
 
-### 2. Immersive Mode (Coach Only)
-`CoachLayout` detects `/coach/live` via `useLocation()` and renders `<Outlet />` directly — no DesktopShell, no sidebar, no topbar. CoachingOS provides its own L1 (session bar), L2 (context bar with player/club), and L3 (6 analysis tabs). This is the critical pattern — CoachingOS is a full-screen experience that lives inside the coach route tree but bypasses the coach chrome.
+## Visible AI Reasoning Patterns
+When the AI is processing, show it — don't hide behind a spinner:
+- **Thinking indicator**: Subtle pulsing dot with brief label ("Analyzing strike pattern..." / "Detecting phase transition...")
+- **Streaming insight cards**: Content builds progressively, word by word
+- **Confidence that evolves**: Starts low during diagnosis, visibly increases as data accumulates
+- **Phase transitions**: Brief animated moment with explanation ("Coach shifted to drill work — cataloging intervention")
 
-### 3. Dark Theme with Ambient Effects
-Fitter and Spine personas use `ambient-bg` class (radial gradients + noise overlay) and pass `dark` prop to TopBar/Sidebar for inverted color schemes.
+## Sidebar-Specific Constraints
+- Width: 420-480px. Shares coach monitor with TPS (~75/25 Windows snap on 1920x1080).
+- Dark mode default (#0C1117 background) — bay environments.
+- All text must be legible. Body: 13px. Data values: 14-16px Space Mono.
+- No horizontal card layouts wider than 2 data points per row. Use vertical stacking for more.
+- Insight cards: 1-2 sentences max. Expand on tap for detail.
+- Charts: compact, vertical-scroll-friendly variants (sparklines, small dispersion, compact bar).
+- Vertical timeline as primary navigation, not horizontal tabs.
 
-### 4. Mobile vs. Desktop Shell
-Golfer uses `MobileShell` (iPhone 15 frame, 390×844px) + `BottomTabBar`. All other personas use `DesktopShell` (sidebar + responsive main area with hamburger menu on mobile).
+## Coding Conventions
+- TypeScript strict mode for all new files
+- Tailwind utility classes, no inline styles
+- Component files: PascalCase (MetricCard.tsx)
+- Shared components in /src/components/
+- Prototype-specific components in their prototype folder
+- Brief JSDoc comment on every component
+- const for all declarations unless mutation required
 
-## Design Tokens
+## Anti-Patterns (Never Do These)
+- No emoji in the UI — ever
+- No generic AI aesthetics (Inter font, purple gradients, rounded corners > 8px)
+- No "Powered by AI" badges or sparkle icons
+- No loading spinners — use skeleton screens or visible AI reasoning
+- No hero sections with stock photos
+- No gradient backgrounds on content areas
+- No neural-net graphics or "AI brain" imagery
+- Never position AI as replacing the coach. Always: thinking alongside, augmenting.
+- Never say "Our AI" as a separate entity. The system is Looper.
 
-### Colors (defined in both `index.css` @theme and `coachingOSData.ts` C constant)
-| Token | Hex | Usage |
-|-------|-----|-------|
-| `accent` | `#0D7C66` | Primary brand accent, CTAs, links |
-| `accent-light` | `#0A6352` | Hover states |
-| `accent-bright` | `#0FA87A` | Confidence-high indicators |
-| `navy` | `#1A1F2B` | Primary text, headings |
-| `data-blue` | `#4A90D9` | Data/info indicators |
-| `warm-amber` | `#D4980B` | Caution, warnings |
-| `coral` | `#C93B3B` | Errors, alerts, flags |
-| `bg-light` | `#F6F7F9` | Light mode backgrounds |
-| `bg-dark` | `#0C1117` | Dark mode backgrounds |
-| `card-dark` | `#1E2A36` | Dark mode cards |
-| `border-dark` | `#1E2A36` | Dark mode borders |
+## Git Workflow
+- main branch is stable
+- Feature branches: coach-portal, lesson-sidebar, player-app, sizzle-reel
+- Commit frequently with descriptive messages
 
-### Fonts
-| Token | Stack | Usage |
-|-------|-------|-------|
-| `sans` | DM Sans, system-ui, sans-serif | All UI text |
-| `mono` | Space Mono, Menlo, monospace | Data values, metrics |
-
-### CRITICAL: Token Sync Rule
-`src/data/coachingOSData.ts` exports `C` (colors) and `F` (fonts) constants used by CoachingOS inline styles. These **must stay in sync** with the Tailwind tokens in `index.css`. If you change a color in one place, change it in both. The canonical values are:
-- `C.accent` = `#0D7C66` = `--color-accent`
-- `C.ink` = `#1A1F2B` = `--color-navy`
-- `F.brand` = `DM Sans` = `--font-sans`
-- `F.data` = `Space Mono` = `--font-mono`
-
-## Key Data Files
-
-| File | What It Exports |
-|------|----------------|
-| `golfers.ts` | `Golfer` interface + `golfers[]` — player profiles with handicap, equipment, goals |
-| `sessions.ts` | `Session` interface + `sessions[]` — lesson records with metrics and drills |
-| `drills.ts` | `Drill` interface + `drills[]` — drill library with instructions and target faults |
-| `coachingOSData.ts` | `C`, `F` constants, `ShotData[]`, `AIInsight[]`, `Recommendation[]`, `DiagnosisFactor[]`, `InterventionCard[]`, `PlayerHistory`, formatting utils (`fmt`, `fmtDelta`, `confidenceLevel`), session context, tab definitions |
-| `trackmanData.ts` | Raw launch monitor shot data |
-| `coaches.ts` | Coach profiles |
-| `fittingComparisons.ts` | Shaft/head comparison data |
-| `fittingRecommendations.ts` | AI fitting recommendations |
-| `integrations.ts` | Connected system catalog (Trackman, Arccos, etc.) |
-
-## Build Commands
-
-```bash
-npm run dev       # Vite dev server
-npm run build     # tsc -b && vite build
-npm run lint      # ESLint
-npm run preview   # Vite preview of production build
-```
+## Key Domain Terms
+EI profile, D-plane, spin loft, smash factor, dynamic lie, carry window, dispersion ellipse, strike map, gear effect, intervention ontology, RLHF, kinematic sequence, face-to-path, limiting factor, motor learning, external focus, Challenge Point Framework
