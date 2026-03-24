@@ -122,18 +122,27 @@ export default function LiveSessionSideline() {
       <div style={{
         position: 'fixed', inset: 0,
         display: 'flex', flexDirection: 'column',
-        background: '#0C1117',
+        background: '#080C10',
         overflow: 'hidden',
       }}>
         {/* Main content row */}
         <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
-          {/* TPS Panel */}
-          <div className={`tps-reveal${tpsVisible ? ' visible' : ''}`} style={{ flex: 1, display: 'flex' }}>
+          {/* TPS Panel — full bleed, no rounding */}
+          <div className={`tps-reveal${tpsVisible ? ' visible' : ''}`} style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
             <TPSPanel />
           </div>
 
-          {/* Looper Sidebar */}
-          <div className={`sidebar-enter${sidebarVisible ? ' visible' : ''}`}>
+          {/* Looper Sidebar — floating panel with rounded corners */}
+          <div
+            className={`sidebar-enter${sidebarVisible ? ' visible' : ''}`}
+            style={{
+              margin: '6px 6px 6px 0',
+              borderRadius: 12,
+              border: '1px solid rgba(30, 42, 54, 0.8)',
+              boxShadow: '0 0 20px rgba(0,0,0,0.3), -4px 0 12px rgba(0,0,0,0.15)',
+              overflow: 'hidden',
+            }}
+          >
             <LooperSidebar
               currentStep={currentStep}
               visitedSteps={visitedSteps}

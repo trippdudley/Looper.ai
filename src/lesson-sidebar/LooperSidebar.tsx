@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+import { ChevronLeft } from 'lucide-react';
 import { CD, F, PHASES, STEPS, type Phase } from './tokens';
 import ThinkingIndicator from './ThinkingIndicator';
 import InsightCard from './InsightCard';
@@ -37,20 +39,31 @@ function PhaseIndicator({ currentPhase, visitedPhases }: { currentPhase: Phase; 
   );
 }
 
-/** Top bar with LOOPER.AI wordmark, session number, live indicator */
+/** Top bar with back arrow, LOOPER.AI wordmark, session number, live indicator */
 function TopBar() {
   return (
     <div style={{
       height: 40, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-      padding: '0 14px', borderBottom: `1px solid ${CD.border}`, background: CD.bg,
+      padding: '0 14px', borderBottom: `1px solid ${CD.border}`, background: '#0E1319',
+      borderRadius: '12px 12px 0 0',
     }}>
-      {/* Wordmark */}
-      <span style={{
-        fontFamily: F.brand, fontSize: 12, fontWeight: 800, color: CD.ink,
-        letterSpacing: '0.05em',
-      }}>
-        LOOPER<span style={{ color: CD.accent }}>.AI</span>
-      </span>
+      {/* Back + Wordmark */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <Link
+          to="/coach"
+          style={{ color: CD.muted, display: 'flex', alignItems: 'center', textDecoration: 'none', transition: 'color 0.2s' }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = CD.body; }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = CD.muted; }}
+        >
+          <ChevronLeft size={16} />
+        </Link>
+        <span style={{
+          fontFamily: F.brand, fontSize: 12, fontWeight: 800, color: CD.ink,
+          letterSpacing: '0.05em',
+        }}>
+          LOOPER<span style={{ color: CD.accent }}>.AI</span>
+        </span>
+      </div>
 
       {/* Session + Live */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -177,7 +190,6 @@ export default function LooperSidebar({
       width: 'var(--sidebar-w)',
       flexShrink: 0, display: 'flex', flexDirection: 'column',
       background: CD.bg,
-      borderLeft: `1px solid ${CD.border}`,
       overflow: 'hidden',
     }}>
       <TopBar />
