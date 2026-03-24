@@ -11,6 +11,7 @@ import PersonaSelector from './pages/PersonaSelector';
 const ThesisPage = lazy(() => import('./pages/ThesisPage'));
 const LooperNarrative = lazy(() => import('./components/looper-narrative'));
 const SizzleReel = lazy(() => import('./pages/SizzleReel'));
+const EvolutionPage = lazy(() => import('./pages/EvolutionPage'));
 const CoachingOS = lazy(() => import('./pages/LiveSessionSideline'));
 const TrackmanIntegration = lazy(() => import('./lesson-sidebar/LiveSessionSideline'));
 
@@ -48,6 +49,7 @@ function AppRoutes() {
           <Route path="/coaching-os" element={<Navigate to="/coach/live" replace />} />
           <Route path="/vision" element={<ErrorBoundary><SizzleReel /></ErrorBoundary>} />
           <Route path="/trackman" element={<ErrorBoundary fallbackTitle="Trackman view error"><TrackmanIntegration /></ErrorBoundary>} />
+          <Route path="/evolution" element={<ErrorBoundary><EvolutionPage /></ErrorBoundary>} />
 
           <Route path="/player" element={<ErrorBoundary fallbackTitle="Player view error"><PlayerLayout /></ErrorBoundary>} />
 
