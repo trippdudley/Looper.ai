@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { golfers } from '../../../data/players';
 import type { Golfer } from '../../../data/players';
+import moeNormanImg from '../../../assets/images/moe-norman.png';
 
 // ---------- helpers ----------
 function getInitials(name: string) {
@@ -146,9 +147,13 @@ export default function StudentRoster() {
                 {/* Top: avatar + name + handicap */}
                 <div className="flex items-center gap-3 mb-3">
                   <div className="relative shrink-0">
-                    <div className="w-12 h-12 rounded-full bg-navy text-white flex items-center justify-center text-base font-bold">
-                      {getInitials(golfer.name)}
-                    </div>
+                    {golfer.name === 'Moe Norman' ? (
+                      <img src={moeNormanImg} alt={golfer.name} className="w-12 h-12 rounded-full object-cover" />
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-navy text-white flex items-center justify-center text-base font-bold">
+                        {getInitials(golfer.name)}
+                      </div>
+                    )}
                     {attention && (
                       <span className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-coral border-2 border-white" />
                     )}

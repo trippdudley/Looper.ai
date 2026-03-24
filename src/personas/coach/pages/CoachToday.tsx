@@ -13,6 +13,7 @@ import {
   Target,
 } from 'lucide-react';
 import { golfers } from '../../../data/players';
+import moeNormanImg from '../../../assets/images/moe-norman.png';
 import MetricCard from '../../../components/ui/MetricCard';
 
 // ---------- mock data ----------
@@ -159,9 +160,7 @@ export default function CoachToday(): JSX.Element {
 
           <div className="flex items-start gap-5">
             {/* Avatar */}
-            <div className="w-14 h-14 rounded-full bg-navy text-white flex items-center justify-center text-lg font-bold shrink-0">
-              {getInitials(moe.name)}
-            </div>
+            <img src={moeNormanImg} alt={moe.name} className="w-14 h-14 rounded-full object-cover shrink-0" />
 
             {/* Info */}
             <div className="flex-1 min-w-0">
@@ -242,15 +241,17 @@ export default function CoachToday(): JSX.Element {
 
                 {/* Avatar */}
                 <div className="relative shrink-0">
-                  <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold ${
-                    isCompleted
-                      ? 'bg-gray-200 text-gray-400'
-                      : isMoe
-                        ? 'bg-navy text-white'
+                  {isMoe && !isCompleted ? (
+                    <img src={moeNormanImg} alt={golfer.name} className="w-9 h-9 rounded-full object-cover" />
+                  ) : (
+                    <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold ${
+                      isCompleted
+                        ? 'bg-gray-200 text-gray-400'
                         : 'bg-gray-200 text-gray-500'
-                  }`}>
-                    {getInitials(golfer.name)}
-                  </div>
+                    }`}>
+                      {getInitials(golfer.name)}
+                    </div>
+                  )}
                   {isCompleted && (
                     <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-white flex items-center justify-center">
                       <CheckCircle className="w-3.5 h-3.5 text-gray-400" />
