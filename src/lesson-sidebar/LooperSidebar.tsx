@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
-import { ChevronLeft } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ChevronLeft, FileText } from 'lucide-react';
 import { CD, F, PHASES, STEPS, type Phase } from './tokens';
 import ThinkingIndicator from './ThinkingIndicator';
 import InsightCard from './InsightCard';
@@ -106,6 +106,7 @@ function QuietContent(_props: { isActive: boolean; hasVisited: boolean }) {
 
 /** Step 7 summary content */
 function SummaryContent(_props: { isActive: boolean; hasVisited: boolean }) {
+  const navigate = useNavigate();
   const step = STEPS[6];
   return (
     <>
@@ -158,8 +159,27 @@ function SummaryContent(_props: { isActive: boolean; hasVisited: boolean }) {
         fontFamily: F.brand, fontSize: 13, fontWeight: 600,
         background: CD.accent, color: CD.bg,
         border: 'none', borderRadius: 6, cursor: 'pointer',
+        marginBottom: 8,
       }}>
         Generate Practice Plan
+      </button>
+
+      {/* Create Lesson Summary CTA */}
+      <button
+        onClick={() => navigate('/coach/review')}
+        style={{
+          width: '100%', padding: '12px 0',
+          fontFamily: F.brand, fontSize: 14, fontWeight: 500,
+          background: '#10B981', color: '#FFFFFF',
+          border: 'none', borderRadius: 8, cursor: 'pointer',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+          transition: 'background 0.2s',
+        }}
+        onMouseEnter={(e) => { e.currentTarget.style.background = '#0EA472'; }}
+        onMouseLeave={(e) => { e.currentTarget.style.background = '#10B981'; }}
+      >
+        <FileText size={16} />
+        Create Lesson Summary
       </button>
     </>
   );

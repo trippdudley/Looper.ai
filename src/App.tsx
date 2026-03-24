@@ -16,6 +16,8 @@ const CoachingOS = lazy(() => import('./pages/LiveSessionSideline'));
 const TrackmanIntegration = lazy(() => import('./lesson-sidebar/LiveSessionSideline'));
 
 const PlayerLayout = lazy(() => import('./personas/player/PlayerLayout'));
+const PlayerBrief = lazy(() => import('./pages/PlayerBrief'));
+const PlayerJourney = lazy(() => import('./pages/PlayerJourney'));
 
 const CoachLayout = lazy(() => import('./personas/coach/CoachLayout'));
 const CoachToday = lazy(() => import('./personas/coach/pages/CoachToday'));
@@ -52,6 +54,8 @@ function AppRoutes() {
           <Route path="/evolution" element={<ErrorBoundary><EvolutionPage /></ErrorBoundary>} />
 
           <Route path="/player" element={<ErrorBoundary fallbackTitle="Player view error"><PlayerLayout /></ErrorBoundary>} />
+          <Route path="/player/brief" element={<ErrorBoundary fallbackTitle="Player brief error"><PlayerBrief /></ErrorBoundary>} />
+          <Route path="/player/journey" element={<ErrorBoundary fallbackTitle="Player journey error"><PlayerJourney /></ErrorBoundary>} />
 
           <Route path="/coach" element={<ErrorBoundary fallbackTitle="Coach view error"><CoachLayout /></ErrorBoundary>}>
             <Route index element={<CoachToday />} />
