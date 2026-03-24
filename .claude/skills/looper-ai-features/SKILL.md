@@ -248,3 +248,15 @@ Use realistic ranges: ball speed 115-125 mph, launch 16-19°, spin 5800-6800 rpm
 
 ### File Location
 Store mock data as a JSON file at `.claude/skills/looper-ai-features/references/mock-responses.json` for reference, but in actual prototypes, hardcode the data directly in the components for simplicity.
+
+## 10. Coaching Thread Lines (March 23)
+
+Thread lines are AI-inferred themes connecting related lessons on the Player Journey timeline. They are NOT pre-defined categories. The AI identifies shared themes from lesson audio summaries, coach notes, and drill prescriptions. Visualized as curved bezier lines (2px) between lesson cards. Dashed lines for gap connections (themes that resurfaced after dormancy). Thread colors are distinct and muted. Each player has unique threads.
+
+## 11. Phase Taxonomy — Internal Only (March 23)
+
+The four lesson phases (Catch-up, Diagnosis, Intervention, Review) are used internally by the AI to organize ambient capture data. They are NEVER shown to coaches or players as UI elements. All user-facing lesson descriptions use natural coaching language.
+
+## 12. Looper Insight Format (March 23)
+
+Pre-lesson briefing with three parts: (1) last session summary, (2) on-course performance from Arccos/GHIN, (3) recommendation for next session. Direct, practical tone. No biomechanics jargon unless directly actionable.

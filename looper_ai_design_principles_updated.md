@@ -180,6 +180,18 @@ Dispersion maps, confidence ellipses, expected improvement bands, and strike clu
 ### 9. Surface diagnostics clearly
 Recommendations are tied to diagnosis, expected gain, and confidence level. No recommendation without reasoning. The "Why?" button is always available.
 
+### 10. Phase taxonomy is internal, not user-facing (March 23)
+The four-phase lesson model (Catch-up, Diagnosis, Intervention, Review) drives Looper's ambient capture and AI processing. It is never exposed to coaches or players as labels, indicators, or framework. Lesson records describe what happened in natural coaching language. The coach's mental model is "we worked on iron strike," not "the Diagnosis phase identified a toe bias."
+
+### 11. The Player Journey is a shared, time-centric visualization (March 23)
+The Player Journey is a horizontally scrollable three-layer timeline (Lessons, Rounds/Handicap, Strokes Gained) on a shared date-based time axis. It is a shared component rendering in both Coach Portal and Player Portal. The time axis is continuous — lessons are events on the calendar, not the calendar itself. The space between lessons shows the player's on-course life and is as informative as the lessons themselves.
+
+### 12. Coaching threads are AI-inferred narratives (March 23)
+Coaching themes that connect related lessons are visualized as curved thread lines on the Player Journey. These themes are unique per player and inferred by AI from lesson content. They are not a fixed taxonomy or pre-defined category system. The visualization shows how coaching themes evolve, branch, resurface, and merge over the life of a coaching relationship.
+
+### 13. Looper Insight is a practical briefing (March 23)
+AI insights on player profiles follow a three-part briefing format: (1) last session recap, (2) on-course status, (3) recommendation for next session. The tone is direct and practical. No academic language, no biomechanics explanations unless directly relevant to the recommendation.
+
 ## Sidebar-Specific Design Constraints
 
 - Width: 420-480px. Shares coach monitor with TPS at ~75/25 split.
@@ -225,6 +237,8 @@ It should feel like:
 - a decision system that shows its work
 - a tool built by people who respect the craft
 - a lab instrument with clinical precision
+
+The Player Journey should feel like a coaching autobiography — a continuous narrative of the player's golf evolution, with lessons, rounds, performance data, and coaching themes woven together on a single timeline. It should make the persistent record tangible and the coaching relationship visible.
 
 ## Brand Test
 Before approving any design, ask:
