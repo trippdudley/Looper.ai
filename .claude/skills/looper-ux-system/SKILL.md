@@ -224,9 +224,6 @@ Standard size: 16px in sidebar, 18-20px in portal. Stroke width: 1.5px. Color: i
 - No bounce, no spring, no overshoot. Movements are clinical and precise.
 - No animation on initial page load in the sidebar (performance in bay environment)
 
-### 10f. Companion Panel Pattern & Layout Specs
-For sidebar panel treatment (Claude-in-Chrome floating panel, border shell, dock rail) and portal vs sidebar layout comparison, read `references/sidebar-panel.md`. Load this reference when building any sidebar UI or comparing layouts across surfaces.
-
 ## Reuse Checklist
 
 Before building any component, verify:
@@ -239,22 +236,6 @@ Before building any component, verify:
 - [ ] No inline styles — Tailwind only?
 - [ ] Does it have a JSDoc comment explaining its purpose?
 - [ ] Does it use lucide-react icons (not custom SVG icons)?
-
-## Player Journey & Session Launch Components (March 23)
-
-### Player Journey Component
-Layout: Three layers in a horizontally scrollable container inside a white card.
-- **Layer 1 (Lessons)**: Staggered cards (odd up, even down, ~50px offset) with AI theme summaries. Width 120-130px per card. Thread dots (6px) at bottom of each card. Curved bezier thread lines (2px) between connected lessons.
-- **Layer 2 (Rounds)**: Scatter dots (6px, green/gray/red) + rolling handicap line (1.5px #0D7C66). Height ~80-90px.
-- **Layer 3 (Strokes Gained)**: Monthly heatmap grid. 4 rows (Driver, Approach, Short Game, Putting). Cell height 22px. Color coding: negative #C93B3B, slight negative #D4980B, positive #0FA87A, neutral #9CA3AF. Background tinting at 8-25% opacity based on magnitude.
-
-Sticky left labels (position: sticky, left: 0, white bg, z-index above scroll content). Shared time axis at bottom: month/year labels in Space Mono 10px #9CA3AF. Subtle vertical gridlines (#F0F2F5 1px) for cross-layer alignment. Initial scroll position: far right (most recent visible). Thread line colors: #D4980B (gold), #6B7280 (gray), #8B5CF6 (purple), #0D7C66 (teal), #3B82F6 (blue).
-
-### Session Launch Modal
-Full-screen overlay, bg #0C1117 at 95% opacity. Content centered, max-width 480px. Three staged loading steps (1.5s each) with pulsing 4px dot (#10B981, pulse animation) resolving to Check icon. "Launch Session" button: bg #10B981, text #0C1117, DM Sans 500. Cancel link top-right #5E6E7E.
-
-### Looper Insight Card
-White card with 4px left border #0D7C66. Header: Lightbulb icon + "LOOPER INSIGHT" in DM Sans 500 12px uppercase tracking-wide #0D7C66. Confidence badge on right. Body text in DM Sans 400 14px #4B5563. Three-part format: last session, on-course status, recommendation.
 
 ## Anti-Patterns
 
