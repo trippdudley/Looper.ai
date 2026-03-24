@@ -224,6 +224,9 @@ Standard size: 16px in sidebar, 18-20px in portal. Stroke width: 1.5px. Color: i
 - No bounce, no spring, no overshoot. Movements are clinical and precise.
 - No animation on initial page load in the sidebar (performance in bay environment)
 
+### 10f. Companion Panel Pattern & Layout Specs
+For sidebar panel treatment (Claude-in-Chrome floating panel, border shell, dock rail) and portal vs sidebar layout comparison, read `references/sidebar-panel.md`. Load this reference when building any sidebar UI or comparing layouts across surfaces.
+
 ## Reuse Checklist
 
 Before building any component, verify:
