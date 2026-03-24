@@ -10,9 +10,12 @@ interface Step {
 
 const DEMO_STEPS: Step[] = [
   { label: 'Coach reviews their schedule', path: '/coach', persona: 'Coach' },
-  { label: 'Coach gets a player brief', path: '/coach/brief/golfer-james', persona: 'Coach' },
-  { label: 'Coach runs a live session', path: '/coach/live', persona: 'Coach' },
-  { label: 'Player reviews their journey', path: '/player', persona: 'Player' },
+  { label: 'Coach views student roster', path: '/coach/students', persona: 'Coach' },
+  { label: 'Coach reviews player detail', path: '/coach/students/1', persona: 'Coach' },
+  { label: 'Coach runs a live session', path: '/trackman', persona: 'Coach' },
+  { label: 'Session review', path: '/coach/review', persona: 'Coach' },
+  { label: 'Player gets their brief', path: '/player/brief', persona: 'Player' },
+  { label: 'Player reviews their journey', path: '/player/journey', persona: 'Player' },
 ];
 
 // Match current path to the most specific demo step (longest match first)
@@ -24,9 +27,7 @@ function findCurrentStep(currentPath: string): number {
     .sort((a, b) => b.path.length - a.path.length);
 
   for (const { idx, path } of ranked) {
-    if (currentPath === path || currentPath.startsWith(path + '/') ||
-        // Match /coach/brief/:id to /coach/brief/golfer-james
-        (path.includes('/brief/') && currentPath.startsWith('/coach/brief/'))) {
+    if (currentPath === path || currentPath.startsWith(path + '/')) {
       return idx;
     }
   }

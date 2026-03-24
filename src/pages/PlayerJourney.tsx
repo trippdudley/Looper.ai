@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 
 function PhoneFrame({ children }: { children: React.ReactNode }): JSX.Element {
@@ -104,8 +103,6 @@ const handicapSteps = [
 ];
 
 export default function PlayerJourney(): JSX.Element {
-  const navigate = useNavigate();
-
   return (
     <div style={{
       minHeight: '100vh',
@@ -114,14 +111,13 @@ export default function PlayerJourney(): JSX.Element {
       position: 'relative',
     }}>
       <button
-        onClick={() => navigate('/')}
         style={{
           position: 'absolute',
           top: 16,
           left: 16,
           background: 'none',
           border: 'none',
-          cursor: 'pointer',
+          cursor: 'default',
           display: 'flex',
           alignItems: 'center',
           gap: 4,
@@ -129,10 +125,9 @@ export default function PlayerJourney(): JSX.Element {
           fontSize: 13,
           fontWeight: 400,
           color: '#9CA3AF',
-          transition: 'color 0.2s',
+          opacity: 0.4,
+          pointerEvents: 'none',
         }}
-        onMouseEnter={(e) => { e.currentTarget.style.color = '#4B5563'; }}
-        onMouseLeave={(e) => { e.currentTarget.style.color = '#9CA3AF'; }}
       >
         <ChevronLeft size={14} />
         Return to prototype

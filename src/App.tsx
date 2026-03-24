@@ -71,7 +71,7 @@ function AppRoutes() {
       </Suspense>
 
       {/* Cross-persona demo walkthrough banner (hidden on sideline demo which has its own nav) */}
-      {!location.pathname.startsWith('/coach/live') && <DemoWalkthroughBanner currentPath={location.pathname} />}
+      {!location.pathname.startsWith('/coach/live') && !location.pathname.startsWith('/trackman') && <DemoWalkthroughBanner currentPath={location.pathname} />}
     </>
   );
 }
