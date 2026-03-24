@@ -23,8 +23,6 @@ const StudentDetail = lazy(() => import('./personas/coach/pages/StudentDetail'))
 const SessionCapture = lazy(() => import('./personas/coach/pages/SessionCapture'));
 const SessionReview = lazy(() => import('./personas/coach/pages/SessionReview'));
 const PreSessionBrief = lazy(() => import('./personas/coach/pages/PreSessionBrief'));
-const Analytics = lazy(() => import('./personas/coach/pages/Analytics'));
-const CoachSession = lazy(() => import('./personas/coach/pages/CoachSession'));
 
 function LoadingFallback() {
   return (
@@ -60,8 +58,6 @@ function AppRoutes() {
             <Route path="brief/:id" element={<PreSessionBrief />} />
             <Route path="capture" element={<SessionCapture />} />
             <Route path="review" element={<SessionReview />} />
-            <Route path="analytics" element={<Analytics />} />
-            <Route path="session" element={<CoachSession />} />
             <Route path="live" element={<CoachingOS />} />
             <Route path="trackman" element={<TrackmanIntegration />} />
           </Route>

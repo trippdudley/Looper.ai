@@ -221,19 +221,21 @@ export default function CoachToday(): JSX.Element {
             const golfer = golferById(slot.golferId);
             if (!golfer) return null;
             const cfg = statusConfig[slot.status];
+            const isMoe = slot.golferId === 'golfer-moe';
             const briefSlug = golfer.name.toLowerCase().replace(/\s+/g, '-');
-            return (
-              <Link
-                key={slot.time}
-                to={`/coach/brief/${briefSlug}`}
-                className={`flex items-center gap-4 rounded-lg border p-4 transition hover:shadow-sm ${
-                  slot.status === 'completed'
-                    ? 'border-gray-100 bg-gray-50/50'
-                    : slot.status === 'in-progress'
-                      ? 'border-warm-amber/30 bg-warm-amber/5'
-                      : 'border-gray-200 bg-white hover:border-accent/30'
-                }`}
-              >
+
+            const cardClasses = `flex items-center gap-4 rounded-lg border p-4 transition ${
+              !isMoe
+                ? 'border-gray-100 bg-gray-50/50 opacity-60 cursor-default'
+                : slot.status === 'completed'
+                  ? 'border-gray-100 bg-gray-50/50 hover:shadow-sm'
+                  : slot.status === 'in-progress'
+                    ? 'border-warm-amber/30 bg-warm-amber/5 hover:shadow-sm'
+                    : 'border-gray-200 bg-white hover:border-accent/30 hover:shadow-sm'
+            }`;
+
+            const inner = (
+              <>
                 {/* Time */}
                 <div className="w-20 shrink-0 text-sm font-mono text-gray-500">
                   {slot.time}
@@ -241,7 +243,7 @@ export default function CoachToday(): JSX.Element {
 
                 {/* Avatar */}
                 <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
-                  slot.status === 'completed'
+                  slot.status === 'completed' || !isMoe
                     ? 'bg-gray-200 text-gray-500'
                     : 'bg-navy text-white'
                 }`}>
@@ -251,12 +253,15 @@ export default function CoachToday(): JSX.Element {
                 {/* Details */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className={`font-semibold text-sm ${slot.status === 'completed' ? 'text-gray-500' : 'text-navy'}`}>
+                    <span className={`font-semibold text-sm ${!isMoe || slot.status === 'completed' ? 'text-gray-500' : 'text-navy'}`}>
                       {golfer.name}
                     </span>
                     <span className="text-xs text-gray-400 font-mono">
                       HCP {golfer.handicapIndex}
                     </span>
+                    {!isMoe && (
+                      <span className="text-[10px] text-gray-400 italic">Coming soon</span>
+                    )}
                   </div>
                   {slot.status === 'completed' && slot.aiSummary ? (
                     <p className="text-xs text-gray-400 mt-0.5 truncate">
@@ -275,8 +280,18 @@ export default function CoachToday(): JSX.Element {
                 </span>
 
                 {/* Chevron */}
-                <ChevronRight className="w-4 h-4 text-gray-300 shrink-0" />
+                <ChevronRight className={`w-4 h-4 shrink-0 ${isMoe ? 'text-gray-300' : 'text-gray-200'}`} />
+              </>
+            );
+
+            return isMoe ? (
+              <Link key={slot.time} to={`/coach/brief/${briefSlug}`} className={cardClasses}>
+                {inner}
               </Link>
+            ) : (
+              <div key={slot.time} className={cardClasses}>
+                {inner}
+              </div>
             );
           })}
         </div>

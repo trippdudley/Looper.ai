@@ -1,5 +1,5 @@
 import { Outlet, useLocation } from 'react-router-dom';
-import { Calendar, Users, Radio, ClipboardCheck, BarChart3, Settings } from 'lucide-react';
+import { Calendar, Users } from 'lucide-react';
 import DesktopShell from '../../components/layout/DesktopShell';
 import Sidebar from '../../components/layout/Sidebar';
 import TopBar from '../../components/layout/TopBar';
@@ -7,10 +7,6 @@ import TopBar from '../../components/layout/TopBar';
 const navItems = [
   { label: 'Today', icon: <Calendar className="w-4 h-4" />, path: '/coach' },
   { label: 'Students', icon: <Users className="w-4 h-4" />, path: '/coach/students' },
-  { label: 'Live Session', icon: <Radio className="w-4 h-4" />, path: '/coach/live' },
-  { label: 'Review', icon: <ClipboardCheck className="w-4 h-4" />, path: '/coach/review' },
-  { label: 'Analytics', icon: <BarChart3 className="w-4 h-4" />, path: '/coach/analytics' },
-  { label: 'Settings', icon: <Settings className="w-4 h-4" />, path: '/coach/settings' },
 ];
 
 const integrationStatus = [

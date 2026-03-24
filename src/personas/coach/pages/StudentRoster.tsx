@@ -2,7 +2,6 @@ import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Search,
-  UserPlus,
   TrendingDown,
   TrendingUp,
   Wifi,
@@ -103,11 +102,6 @@ export default function StudentRoster() {
               className="border border-gray-300 rounded-lg pl-9 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent w-56"
             />
           </div>
-          {/* Add Student button */}
-          <button className="flex items-center gap-1.5 bg-accent text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-accent-light transition">
-            <UserPlus className="w-4 h-4" />
-            Add Student
-          </button>
         </div>
       </div>
 
@@ -249,18 +243,18 @@ export default function StudentRoster() {
 
                 {/* Actions */}
                 <div className="flex items-center gap-2 mt-auto">
-                  <Link
-                    to={`/coach/students/${golfer.id}`}
-                    className="flex-1 text-center text-sm font-medium text-accent border border-accent rounded-lg py-1.5 hover:bg-accent/5 transition"
-                  >
-                    View Profile
-                  </Link>
-                  <Link
-                    to="/coach/capture"
-                    className="flex-1 text-center text-sm font-medium bg-accent text-white rounded-lg py-1.5 hover:bg-accent-light transition"
-                  >
-                    Start Session
-                  </Link>
+                  {golfer.id === 'golfer-moe' ? (
+                    <Link
+                      to="/coach/students/1"
+                      className="flex-1 text-center text-sm font-medium text-accent border border-accent rounded-lg py-1.5 hover:bg-accent/5 transition"
+                    >
+                      View Profile
+                    </Link>
+                  ) : (
+                    <span className="flex-1 text-center text-sm font-medium text-gray-400 border border-gray-200 rounded-lg py-1.5 cursor-default">
+                      View Profile
+                    </span>
+                  )}
                 </div>
               </div>
             );
