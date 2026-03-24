@@ -20,18 +20,18 @@ import MetricCard from '../../../components/ui/MetricCard';
 const todaySchedule = [
   {
     time: '9:00 AM',
-    golferId: 'golfer-moe',
-    focus: 'Driver Consistency Tune-Up',
-    duration: '60 min',
-    status: 'completed' as const,
-    aiSummary: 'Face-to-path improved from 4.2 to 2.1 avg. Spin loft down 300 rpm on driver.',
-  },
-  {
-    time: '10:30 AM',
     golferId: 'golfer-sarah-c',
     focus: 'Initial Full Swing Baseline',
     duration: '60 min',
-    status: 'in-progress' as const,
+    status: 'completed' as const,
+    aiSummary: 'Established baseline numbers across full bag. Grip pressure and takeaway path identified as primary focus areas.',
+  },
+  {
+    time: '10:30 AM',
+    golferId: 'golfer-moe',
+    focus: 'Driver Consistency Tune-Up',
+    duration: '60 min',
+    status: 'briefing-ready' as const,
     aiSummary: null,
   },
   {
@@ -222,53 +222,61 @@ export default function CoachToday(): JSX.Element {
             if (!golfer) return null;
             const cfg = statusConfig[slot.status];
             const isMoe = slot.golferId === 'golfer-moe';
-            const briefSlug = golfer.name.toLowerCase().replace(/\s+/g, '-');
+            const isCompleted = slot.status === 'completed';
+            const isUpcoming = slot.status === 'briefing-ready';
 
             const cardClasses = `flex items-center gap-4 rounded-lg border p-4 transition ${
-              !isMoe
-                ? 'border-gray-100 bg-gray-50/50 opacity-60 cursor-default'
-                : slot.status === 'completed'
-                  ? 'border-gray-100 bg-gray-50/50 hover:shadow-sm'
-                  : slot.status === 'in-progress'
-                    ? 'border-warm-amber/30 bg-warm-amber/5 hover:shadow-sm'
-                    : 'border-gray-200 bg-white hover:border-accent/30 hover:shadow-sm'
+              isCompleted
+                ? 'border-gray-100 bg-gray-50/60'
+                : isMoe && isUpcoming
+                  ? 'border-accent/30 bg-accent/[0.03] hover:border-accent/50 hover:shadow-sm'
+                  : 'border-gray-200 bg-white opacity-60 cursor-default'
             }`;
 
             const inner = (
               <>
                 {/* Time */}
-                <div className="w-20 shrink-0 text-sm font-mono text-gray-500">
+                <div className={`w-20 shrink-0 text-sm font-mono ${isCompleted ? 'text-gray-400 line-through decoration-gray-300' : 'text-gray-500'}`}>
                   {slot.time}
                 </div>
 
                 {/* Avatar */}
-                <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
-                  slot.status === 'completed' || !isMoe
-                    ? 'bg-gray-200 text-gray-500'
-                    : 'bg-navy text-white'
-                }`}>
-                  {getInitials(golfer.name)}
+                <div className="relative shrink-0">
+                  <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold ${
+                    isCompleted
+                      ? 'bg-gray-200 text-gray-400'
+                      : isMoe
+                        ? 'bg-navy text-white'
+                        : 'bg-gray-200 text-gray-500'
+                  }`}>
+                    {getInitials(golfer.name)}
+                  </div>
+                  {isCompleted && (
+                    <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-white flex items-center justify-center">
+                      <CheckCircle className="w-3.5 h-3.5 text-gray-400" />
+                    </div>
+                  )}
                 </div>
 
                 {/* Details */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className={`font-semibold text-sm ${!isMoe || slot.status === 'completed' ? 'text-gray-500' : 'text-navy'}`}>
+                    <span className={`font-semibold text-sm ${isCompleted ? 'text-gray-400' : isMoe ? 'text-navy' : 'text-gray-500'}`}>
                       {golfer.name}
                     </span>
-                    <span className="text-xs text-gray-400 font-mono">
+                    <span className={`text-xs font-mono ${isCompleted ? 'text-gray-300' : 'text-gray-400'}`}>
                       HCP {golfer.handicapIndex}
                     </span>
-                    {!isMoe && (
+                    {!isMoe && !isCompleted && (
                       <span className="text-[10px] text-gray-400 italic">Coming soon</span>
                     )}
                   </div>
-                  {slot.status === 'completed' && slot.aiSummary ? (
+                  {isCompleted && slot.aiSummary ? (
                     <p className="text-xs text-gray-400 mt-0.5 truncate">
                       {slot.aiSummary}
                     </p>
                   ) : (
-                    <p className="text-xs text-gray-500 mt-0.5 truncate">
+                    <p className={`text-xs mt-0.5 truncate ${isCompleted ? 'text-gray-400' : 'text-gray-500'}`}>
                       {slot.focus}
                     </p>
                   )}
@@ -279,13 +287,15 @@ export default function CoachToday(): JSX.Element {
                   {cfg.label}
                 </span>
 
-                {/* Chevron */}
-                <ChevronRight className={`w-4 h-4 shrink-0 ${isMoe ? 'text-gray-300' : 'text-gray-200'}`} />
+                {/* Chevron (only for clickable rows) */}
+                {isMoe && !isCompleted && (
+                  <ChevronRight className="w-4 h-4 shrink-0 text-gray-300" />
+                )}
               </>
             );
 
-            return isMoe ? (
-              <Link key={slot.time} to={`/coach/brief/${briefSlug}`} className={cardClasses}>
+            return isMoe && !isCompleted ? (
+              <Link key={slot.time} to="/coach/students/1" className={cardClasses}>
                 {inner}
               </Link>
             ) : (
