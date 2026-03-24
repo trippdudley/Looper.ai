@@ -16,10 +16,9 @@ describe('Smoke tests — key components render without crashing', () => {
         <PersonaSelector />
       </MemoryRouter>
     );
-    expect(screen.getByText('Looper.AI')).toBeInTheDocument();
-    expect(screen.getByText("I'm a Golfer")).toBeInTheDocument();
-    expect(screen.getByText("I'm a Coach")).toBeInTheDocument();
-    expect(screen.getByText("I'm a Fitter")).toBeInTheDocument();
+    expect(screen.getByText(/Expertise, engineered\./i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Player/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Coach/).length).toBeGreaterThan(0);
   });
 
   it('renders Skeleton component', () => {

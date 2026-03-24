@@ -24,6 +24,7 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-bg-dark);
 }
 
 * {
@@ -279,4 +280,45 @@ button:not(:disabled):active, a.btn:active {
 
 .animate-toast-in {
   animation: toast-in 300ms ease-out both;
+}
+
+/* ── Landing page: subtle device float ───────────────────── */
+@keyframes float-subtle {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-3px); }
+}
+
+.animate-float {
+  animation: float-subtle 6s ease-in-out infinite alternate;
+}
+
+/* ── Landing page: blinking cursor ───────────────────────── */
+@keyframes blink-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.animate-blink {
+  animation: blink-cursor 1.06s step-end infinite;
+}
+
+/* ── Landing page: horizontal data stream ────────────────── */
+@keyframes data-stream {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-data-stream {
+  animation: data-stream 30s linear infinite;
+}
+
+/* ── Landing page: timeline grow ─────────────────────────── */
+@keyframes timeline-grow {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+
+.animate-timeline-grow {
+  animation: timeline-grow 4s ease-out forwards;
+  transform-origin: top;
 }
