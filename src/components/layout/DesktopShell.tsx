@@ -45,7 +45,7 @@ export default function DesktopShell({ sidebar, topBar, children }: DesktopShell
           {/* Hamburger — visible below md */}
           <button
             onClick={() => setSidebarOpen(true)}
-            className="md:hidden ml-4 p-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+            className="md:hidden ml-2 p-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
             aria-label="Open menu"
           >
             <Menu className="w-5 h-5" />
