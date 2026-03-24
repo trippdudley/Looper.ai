@@ -122,7 +122,7 @@ export default function LiveSessionSideline() {
       <div style={{
         position: 'fixed', inset: 0,
         display: 'flex', flexDirection: 'column',
-        background: '#080C10',
+        background: '#060A0F',
         overflow: 'hidden',
       }}>
         {/* Main content row */}
@@ -136,10 +136,10 @@ export default function LiveSessionSideline() {
           <div
             className={`sidebar-enter${sidebarVisible ? ' visible' : ''}`}
             style={{
-              margin: '6px 6px 6px 0',
-              borderRadius: 12,
-              border: '1px solid rgba(30, 42, 54, 0.8)',
-              boxShadow: '0 0 20px rgba(0,0,0,0.3), -4px 0 12px rgba(0,0,0,0.15)',
+              margin: '8px 8px 8px 4px',
+              borderRadius: 16,
+              border: '2px solid #3A4856',
+              boxShadow: '0 2px 16px rgba(0,0,0,0.4)',
               overflow: 'hidden',
             }}
           >

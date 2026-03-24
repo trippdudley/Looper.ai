@@ -116,7 +116,7 @@ export default function ChatPanel({
         height: 56, padding: '8px 12px',
         borderTop: `1px solid ${CD.border}`,
         background: CD.bg,
-        borderRadius: '0 0 12px 12px',
+        borderRadius: '0 0 16px 16px',
         display: 'flex', alignItems: 'center', gap: 8,
       }}>
         <input

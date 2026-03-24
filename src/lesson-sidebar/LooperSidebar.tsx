@@ -45,7 +45,7 @@ function TopBar() {
     <div style={{
       height: 40, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       padding: '0 14px', borderBottom: `1px solid ${CD.border}`, background: '#0E1319',
-      borderRadius: '12px 12px 0 0',
+      borderRadius: '16px 16px 0 0',
     }}>
       {/* Back + Wordmark */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
