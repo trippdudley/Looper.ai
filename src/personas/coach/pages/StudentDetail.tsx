@@ -8,7 +8,6 @@ import {
   Lightbulb,
   Pencil,
   X,
-  Check,
 } from 'lucide-react';
 // recharts removed — handicap ribbon replaced by HCP row in heatmap grid
 
@@ -153,104 +152,8 @@ const COACH_NOTES = [
   { date: 'Sep 20', text: 'Discussed driver with Moe. He\u2019s aware it\u2019s a weakness but wants to lock in iron consistency first. Revisit driver after next block.' },
 ];
 
-// ─── Session Launch Modal ─────────────────────────────────────────────────────
 
-interface LaunchStage {
-  thinking: string;
-  resolved: string;
-}
 
-const LAUNCH_STAGES: LaunchStage[] = [
-  { thinking: 'Loading persistent record...', resolved: '8 sessions captured. Last: Mar 18 \u2014 Iron strike centering' },
-  { thinking: 'Checking practice compliance...', resolved: 'Gate drill: 2/3 completed. Alignment check: 1/2 completed.' },
-  { thinking: 'Assembling session context...', resolved: 'Suggested focus: Continue iron strike work or pivot to driver block (SG: \u22122.3 off tee)' },
-];
-
-/** Session launch transition overlay — visible AI preparation */
-function SessionLaunchModal({ onClose }: { onClose: () => void }): JSX.Element {
-  const navigate = useNavigate();
-  const [stages, setStages] = useState<('thinking' | 'resolved')[]>([]);
-
-  useEffect(() => {
-    const timers: ReturnType<typeof setTimeout>[] = [];
-    // Stage 1: appear immediately as thinking
-    setStages(['thinking']);
-    // Stage 1: resolve after 1.5s
-    timers.push(setTimeout(() => setStages(['resolved', 'thinking']), 1500));
-    // Stage 2: resolve after 3s
-    timers.push(setTimeout(() => setStages(['resolved', 'resolved', 'thinking']), 3000));
-    // Stage 3: resolve after 4.5s
-    timers.push(setTimeout(() => setStages(['resolved', 'resolved', 'resolved']), 4500));
-    return () => timers.forEach(clearTimeout);
-  }, []);
-
-  const allResolved = stages.length === 3 && stages.every((s) => s === 'resolved');
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(12, 17, 23, 0.95)' }}>
-      {/* Cancel */}
-      <button
-        onClick={onClose}
-        className="absolute top-6 right-6 text-sm hover:text-[#8B99A8] transition-colors"
-        style={{ color: '#5E6E7E', fontFamily: 'DM Sans' }}
-      >
-        Cancel
-      </button>
-
-      <div className="max-w-[480px] w-full px-8">
-        {/* Header */}
-        <div className="mb-10 text-center">
-          <h2 className="text-lg font-medium mb-1" style={{ color: '#E8ECF1', fontFamily: 'DM Sans' }}>
-            Preparing Session 9
-          </h2>
-          <p className="font-mono text-[13px]" style={{ color: '#5E6E7E' }}>
-            Moe Norman &mdash; M. Thompson
-          </p>
-        </div>
-
-        {/* Stages */}
-        <div className="space-y-6">
-          {stages.map((status, i) => (
-            <div key={i} className="flex items-start gap-3">
-              {status === 'thinking' ? (
-                <span className="mt-1 block w-[10px] h-[10px] rounded-full shrink-0" style={{ backgroundColor: '#10B981', animation: 'pulse-dot 1.5s ease-in-out infinite' }} />
-              ) : (
-                <Check className="w-[14px] h-[14px] mt-0.5 shrink-0" style={{ color: '#10B981' }} />
-              )}
-              <span className="font-mono text-xs leading-relaxed" style={{ color: status === 'thinking' ? '#5E6E7E' : '#8B99A8' }}>
-                {status === 'thinking' ? LAUNCH_STAGES[i].thinking : LAUNCH_STAGES[i].resolved}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        {/* Launch button */}
-        {allResolved && (
-          <div className="mt-10 text-center animate-fade-in">
-            <button
-              onClick={() => navigate('/trackman')}
-              className="px-6 py-3 rounded-[6px] text-sm font-medium transition-colors hover:brightness-110"
-              style={{ backgroundColor: '#10B981', color: '#0C1117', fontFamily: 'DM Sans' }}
-            >
-              Launch Session
-            </button>
-            <p className="font-mono text-[10px] mt-3" style={{ color: '#5E6E7E' }}>
-              TrackMan Performance Studio will open alongside Looper
-            </p>
-          </div>
-        )}
-      </div>
-
-      {/* Pulse animation keyframes */}
-      <style>{`
-        @keyframes pulse-dot {
-          0%, 100% { opacity: 0.4; }
-          50% { opacity: 1; }
-        }
-      `}</style>
-    </div>
-  );
-}
 
 // ─── Player Journey (Unified Section) ────────────────────────────────────────
 
@@ -714,21 +617,15 @@ function PlayerJourney(): JSX.Element {
 export default function StudentDetail(): JSX.Element {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [showLaunchModal, setShowLaunchModal] = useState(false);
-
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent): void => {
       if (e.key === 'Escape') {
-        if (showLaunchModal) {
-          setShowLaunchModal(false);
-        } else {
-          navigate('/coach/students');
-        }
+        navigate('/coach/students');
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [navigate, showLaunchModal]);
+  }, [navigate]);
 
   return (
     <div className="pb-8 space-y-6 max-w-[1200px]">
@@ -793,7 +690,7 @@ export default function StudentDetail(): JSX.Element {
           {/* Right: Start Lesson */}
           <div className="text-right shrink-0">
             <button
-              onClick={() => setShowLaunchModal(true)}
+              onClick={() => navigate('/trackman')}
               className="px-4 py-2 rounded-[6px] text-sm font-medium text-white transition-colors hover:brightness-110"
               style={{ backgroundColor: '#0D7C66', fontFamily: 'DM Sans' }}
             >
@@ -857,8 +754,6 @@ export default function StudentDetail(): JSX.Element {
         </div>
       </div>
 
-      {/* ─── Section 7: Session Launch Modal ──────────────────────────── */}
-      {showLaunchModal && <SessionLaunchModal onClose={() => setShowLaunchModal(false)} />}
     </div>
   );
 }
