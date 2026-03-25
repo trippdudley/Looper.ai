@@ -3,6 +3,7 @@ import { Calendar, Users } from 'lucide-react';
 import DesktopShell from '../../components/layout/DesktopShell';
 import Sidebar from '../../components/layout/Sidebar';
 import TopBar from '../../components/layout/TopBar';
+import ExitDemoButton from '../../components/ui/ExitDemoButton';
 
 const navItems = [
   { label: 'Today', icon: <Calendar className="w-4 h-4" />, path: '/coach' },
@@ -23,6 +24,8 @@ export default function CoachLayout() {
   }
 
   return (
+    <>
+    <ExitDemoButton variant="light" />
     <DesktopShell
       sidebar={
         <Sidebar
@@ -42,5 +45,6 @@ export default function CoachLayout() {
         <Outlet />
       </div>
     </DesktopShell>
+    </>
   );
 }

@@ -1,4 +1,5 @@
 import { ChevronLeft } from 'lucide-react';
+import ExitDemoButton from '../components/ui/ExitDemoButton';
 
 function PhoneFrame({ children }: { children: React.ReactNode }): React.JSX.Element {
   return (
@@ -104,34 +105,14 @@ const handicapSteps = [
 
 export default function PlayerJourney(): React.JSX.Element {
   return (
+    <>
+    <ExitDemoButton variant="light" />
     <div style={{
       minHeight: '100vh',
       background: '#F6F7F9',
       padding: '40px 20px',
       position: 'relative',
     }}>
-      <button
-        style={{
-          position: 'absolute',
-          top: 16,
-          left: 16,
-          background: 'none',
-          border: 'none',
-          cursor: 'default',
-          display: 'flex',
-          alignItems: 'center',
-          gap: 4,
-          fontFamily: "'DM Sans', sans-serif",
-          fontSize: 13,
-          fontWeight: 400,
-          color: '#9CA3AF',
-          opacity: 0.4,
-          pointerEvents: 'none',
-        }}
-      >
-        <ChevronLeft size={14} />
-        Return to prototype
-      </button>
       <PhoneFrame>
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: 12 }}>
@@ -393,5 +374,6 @@ export default function PlayerJourney(): React.JSX.Element {
         The player&rsquo;s journey updates automatically after every session. No manual entry. The record builds itself.
       </div>
     </div>
+    </>
   );
 }

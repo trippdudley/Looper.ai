@@ -5,6 +5,7 @@ import TPSPanel from './TPSPanel';
 import LooperSidebar from './LooperSidebar';
 import SessionLaunchTransition from './SessionLaunchTransition';
 import DemoNav from './DemoNav';
+import ExitDemoButton from '../components/ui/ExitDemoButton';
 
 /** CSS keyframes injected once */
 const KEYFRAMES = `
@@ -108,6 +109,7 @@ export default function LiveSessionSideline() {
     return (
       <>
         <style>{KEYFRAMES}</style>
+        <ExitDemoButton />
         <SessionLaunchTransition onLaunch={handleLaunch} />
       </>
     );
@@ -119,6 +121,7 @@ export default function LiveSessionSideline() {
   return (
     <>
       <style>{KEYFRAMES}</style>
+      <ExitDemoButton />
       <div style={{
         position: 'fixed', inset: 0,
         display: 'flex', flexDirection: 'column',
