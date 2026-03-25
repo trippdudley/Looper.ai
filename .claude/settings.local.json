@@ -19,7 +19,14 @@
       "Bash(npx tsc:*)",
       "Bash(npx vite:*)",
       "Bash(lsof -ti:5173 -ti:5174)",
-      "Bash(xargs kill:*)"
+      "Bash(xargs kill:*)",
+      "Bash(python3 .claude/skills/ui-ux-pro-max/scripts/search.py \"SaaS coaching platform enterprise landing page premium investor\" --design-system -p \"Looper.AI\")",
+      "Bash(python3 .claude/skills/ui-ux-pro-max/scripts/search.py \"hero social-proof testimonial pricing\" --domain landing)",
+      "Bash(grep -r \"import.*\\\\\\(png\\\\|jpg\\\\|webp\\\\|svg\\\\\\)\" /Users/trippdudley/looper/.claude/worktrees/stoic-hopper/src --include=*.tsx --include=*.ts)",
+      "Bash(grep -r \"TrackMan\\\\|TPS\\\\|wireframe\" /Users/trippdudley/looper/.claude/worktrees/stoic-hopper --include=*.tsx --include=*.ts --include=*.md)",
+      "Bash(find /Users/trippdudley/looper/.claude/worktrees/stoic-hopper/src -name *TPS* -o -name *trackman*)",
+      "Bash(find /Users/trippdudley/looper/.claude/worktrees/stoic-hopper/.claude -type f -name *.md)",
+      "Bash(find /Users/trippdudley/looper/.claude/worktrees/stoic-hopper/src -type f -name *Review* -o -name *review* -o -name *Summary* -o -name *summary*)"
     ]
   }
 }

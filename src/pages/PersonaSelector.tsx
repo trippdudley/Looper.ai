@@ -23,6 +23,26 @@ import {
   MapPin,
   Heart,
   Layers,
+  Zap,
+  Shield,
+  Target,
+  Activity,
+  MessageCircle,
+  Gauge,
+  Award,
+  Crosshair,
+  Wrench,
+  Navigation,
+  Smile,
+  ClipboardList,
+  PersonStanding,
+  CalendarCheck,
+  Send,
+  ChevronLeft,
+  ChevronRight,
+  Search,
+  Repeat,
+  AlertTriangle,
 } from 'lucide-react';
 import { useCountUp } from '../hooks/useCountUp';
 import { useTypewriter } from '../hooks/useTypewriter';
@@ -30,7 +50,6 @@ import { useStaggeredReveal } from '../hooks/useStaggeredReveal';
 
 /* ─── Hooks ────────────────────────────────────────────────── */
 
-/** IntersectionObserver-based scroll reveal for multiple sections */
 function useScrollReveal(count: number): (index: number) => (el: HTMLDivElement | null) => void {
   const refs = useRef<(HTMLDivElement | null)[]>(new Array(count).fill(null));
 
@@ -63,7 +82,6 @@ function useScrollReveal(count: number): (index: number) => (el: HTMLDivElement 
   return setRef;
 }
 
-/** Returns [ref, isInView] — triggers once when element enters viewport */
 function useInViewTrigger(threshold = 0.2): [React.RefCallback<HTMLDivElement>, boolean] {
   const [isInView, setIsInView] = useState(false);
   const elRef = useRef<HTMLDivElement | null>(null);
@@ -96,37 +114,24 @@ function useInViewTrigger(threshold = 0.2): [React.RefCallback<HTMLDivElement>, 
 
 /* ─── Data ─────────────────────────────────────────────────── */
 
-const DATA_STREAM_ITEMS = [
-  'Ball Speed 132.4',
-  'Spin Rate 6,240',
-  'Carry 172.3',
-  'Confidence 78%',
-  'Face-to-Path -2.1',
-  'Launch 14.8',
-  'Smash 1.48',
-  'Spin Loft 22.4',
-  'D-Plane OK',
-  'Phase: Diagnosis',
-  'Apex 31.2',
-  'Descent 42.1',
-  'Strike: Center',
-  'Confidence 84%',
-  'Dynamic Lie -0.8',
-  'Club Path 1.2',
+const COACH_TOOLS = [
+  { name: 'Session Record', icon: ClipboardList, data: 'Interventions + cues' },
+  { name: 'Launch Monitor', icon: Target, data: 'TrackMan / Foresight' },
+  { name: 'Swing Video', icon: Video, data: 'V1 / CoachNow / Onform' },
+  { name: '3D Motion', icon: Activity, data: 'Sportsbox / K-Motion' },
+  { name: 'Force Plates', icon: Crosshair, data: 'Swing Catalyst' },
+  { name: 'TPI Screening', icon: PersonStanding, data: 'Movement assessments' },
+  { name: 'Practice Behavior', icon: CalendarCheck, data: 'Facility booking + check-in' },
 ];
 
-const BEFORE_ITEMS = [
-  'Notes scattered across spreadsheets and texts',
-  'No record of what worked or why',
-  'Insights locked in one coach\'s head',
-  'Player progress invisible between sessions',
-];
-
-const AFTER_ITEMS = [
-  'Sessions capture themselves automatically',
-  'Every intervention tracked and measured',
-  'Intelligence compounds across the roster',
-  'Players see their progress in real time',
+const PLAYER_TOOLS = [
+  { name: 'GHIN', icon: Award, data: 'Handicap + scoring history' },
+  { name: 'Arccos', icon: MapPin, data: 'Strokes gained by category' },
+  { name: 'WHOOP / Garmin', icon: Heart, data: 'Recovery + sleep' },
+  { name: 'Personal LM', icon: Gauge, data: 'Unsupervised practice data' },
+  { name: 'Equipment History', icon: Wrench, data: 'Fitting records + build specs' },
+  { name: 'Course GPS', icon: Navigation, data: 'Shot Scope / Garmin Golf' },
+  { name: 'Self-Reported State', icon: Smile, data: 'Confidence + intentions' },
 ];
 
 const AGENTS = [
@@ -165,28 +170,65 @@ const TIMELINE_PHASES = [
 ];
 
 const PROTOTYPES = [
-  { label: 'Player', icon: Route, path: '/player' },
-  { label: 'Coach', icon: GraduationCap, path: '/coach' },
+  { label: 'Player Portal', icon: Route, path: '/player', desc: 'Mobile-first player experience' },
+  { label: 'Coach Portal', icon: GraduationCap, path: '/coach', desc: 'Desktop coaching command center' },
+];
+
+const VALUE_PROPS = [
+  { icon: Zap, title: 'Zero Manual Input', desc: 'Every data point captured automatically. Coaches coach, the record builds itself.' },
+  { icon: Shield, title: 'Persistent Memory', desc: 'Nothing is lost. Every session, every correction, every breakthrough \u2014 compounding over time.' },
+  { icon: Target, title: 'Real-Time Intelligence', desc: 'AI that watches, reasons, and assists alongside the coach during every lesson.' },
 ];
 
 /* ─── Sub-components ───────────────────────────────────────── */
 
-/** Scrolling data stream in the hero */
-function HeroDataStream(): React.JSX.Element {
-  const doubled = [...DATA_STREAM_ITEMS, ...DATA_STREAM_ITEMS];
+/** Floating navigation bar */
+function FloatingNav(): React.JSX.Element {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = (): void => {
+      setScrolled(window.scrollY > 60);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <div className="relative max-w-2xl mx-auto mt-8 h-5 overflow-hidden hidden sm:block">
-      {/* Gradient edge masks */}
-      <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-[#0C1117] to-transparent z-10" />
-      <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-[#0C1117] to-transparent z-10" />
-      <div className="animate-data-stream flex items-center gap-8 whitespace-nowrap">
-        {doubled.map((item, i) => (
-          <span key={i} className="font-mono text-[10px] text-accent-bright/30 tracking-wider">
-            {item}
-          </span>
-        ))}
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        scrolled ? 'py-3' : 'py-5'
+      }`}
+    >
+      <div
+        className={`max-w-6xl mx-auto px-6 flex items-center justify-between transition-all duration-500 ${
+          scrolled ? 'nav-glass rounded-2xl mx-4 sm:mx-6 lg:mx-auto py-3 px-6' : ''
+        }`}
+      >
+        <span className="font-display font-bold text-white text-lg tracking-wide">
+          LOOPER<span className="text-gradient-brand">.AI</span>
+        </span>
+
+        <div className="hidden sm:flex items-center gap-8">
+          <a href="#product" className="text-sm text-gray-400 hover:text-white transition-colors duration-200">
+            Product
+          </a>
+          <a href="#how-it-works" className="text-sm text-gray-400 hover:text-white transition-colors duration-200">
+            How It Works
+          </a>
+          <a href="#explore" className="text-sm text-gray-400 hover:text-white transition-colors duration-200">
+            Explore
+          </a>
+        </div>
+
+        <Link
+          to="/coach"
+          className="text-sm font-medium text-accent-bright hover:text-white bg-accent-bright/10 hover:bg-accent-bright/20 px-4 py-2 rounded-lg transition-all duration-200"
+        >
+          View Demo
+        </Link>
       </div>
-    </div>
+    </nav>
   );
 }
 
@@ -194,48 +236,366 @@ function HeroDataStream(): React.JSX.Element {
 function HeroConfidence(): React.JSX.Element {
   const value = useCountUp(94, 2400);
   return (
-    <div className="flex items-center justify-center gap-3 mt-6">
-      <div className="w-2 h-2 rounded-full bg-accent-bright animate-ai-pulse" />
-      <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider">Session Confidence</p>
-      <p className="font-mono text-2xl text-accent-bright font-bold tabular-nums">
+    <div className="flex items-center justify-center gap-4 mt-8">
+      <div className="w-2.5 h-2.5 rounded-full bg-accent-bright animate-ai-pulse" />
+      <p className="font-mono text-[11px] text-gray-500 uppercase tracking-[0.15em]">Session Confidence</p>
+      <p className="font-mono text-3xl text-accent-bright font-bold tabular-nums">
         {Math.round(value)}%
       </p>
     </div>
   );
 }
 
-/** Before/After comparison card */
-function ComparisonCard({
-  mode,
-  items,
+/** Lemniscate parametric point */
+function lemniscatePoint(t: number, a: number): { x: number; y: number } {
+  const sinT = Math.sin(t);
+  const cosT = Math.cos(t);
+  const denom = 1 + sinT * sinT;
+  return {
+    x: (a * cosT) / denom,
+    y: (a * sinT * cosT) / denom,
+  };
+}
+
+/** Generate SVG path string from lemniscate parametric sampling */
+function lemniscatePath(a: number, samples = 200): string {
+  const points: string[] = [];
+  for (let i = 0; i <= samples; i++) {
+    const t = (i / samples) * 2 * Math.PI;
+    const { x, y } = lemniscatePoint(t, a);
+    points.push(`${i === 0 ? 'M' : 'L'} ${x.toFixed(2)},${y.toFixed(2)}`);
+  }
+  return points.join(' ') + ' Z';
+}
+
+/** Compact orbit card rendered at absolute position */
+function OrbitCard({
+  name,
+  icon: Icon,
+  data,
+  side,
+  x,
+  y,
+  rotation,
+  scale,
+  opacity,
 }: {
-  mode: 'before' | 'after';
-  items: string[];
+  name: string;
+  icon: React.ComponentType<{ className?: string }>;
+  data: string;
+  side: 'coach' | 'player';
+  x: number;
+  y: number;
+  rotation: number;
+  scale: number;
+  opacity: number;
 }): React.JSX.Element {
-  const isBefore = mode === 'before';
+  const isCoach = side === 'coach';
   return (
     <div
-      className={`glass-card p-8 border-t-2 ${
-        isBefore ? 'border-t-coral/50' : 'border-t-accent-bright/50'
-      }`}
+      className="absolute pointer-events-none"
+      style={{
+        left: `${x}px`,
+        top: `${y}px`,
+        transform: `translate(-50%, -50%) scale(${scale})`,
+        opacity,
+        willChange: 'transform, opacity',
+      }}
     >
-      <p className={`font-display text-base font-semibold mb-5 ${isBefore ? 'text-gray-400' : 'text-white'}`}>
-        {isBefore ? 'Today' : 'With Looper'}
-      </p>
-      <ul className="space-y-3">
-        {items.map((item) => (
-          <li key={item} className="flex items-start gap-3">
-            {isBefore ? (
-              <X className="w-4 h-4 text-coral/60 shrink-0 mt-0.5" />
-            ) : (
-              <CheckCircle className="w-4 h-4 text-accent-bright shrink-0 mt-0.5" />
-            )}
-            <span className={`text-sm leading-relaxed ${isBefore ? 'text-gray-500' : 'text-gray-300'}`}>
-              {item}
-            </span>
-          </li>
-        ))}
-      </ul>
+      <div className="flex flex-col items-center gap-1" style={{ transform: `rotate(0deg)` }}>
+        {/* Icon dot */}
+        <div
+          className={`w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center ${
+            isCoach
+              ? 'bg-accent-bright/10 border border-accent-bright/25'
+              : 'bg-data-blue/10 border border-data-blue/25'
+          }`}
+          style={{ backdropFilter: 'blur(8px)' }}
+        >
+          <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${isCoach ? 'text-accent-bright' : 'text-data-blue'}`} />
+        </div>
+        {/* Name label — only shows when card is prominent */}
+        <p
+          className={`font-display text-[9px] sm:text-[10px] font-medium whitespace-nowrap text-center leading-none ${
+            isCoach ? 'text-accent-bright/70' : 'text-data-blue/70'
+          }`}
+          style={{ opacity: Math.min(1, opacity * 1.5) }}
+        >
+          {name}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/** The Infinity Loop — animated lemniscate visualization */
+function InfinityLoop(): React.JSX.Element {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isInView, setIsInView] = useState(false);
+  const animRef = useRef<number>(0);
+  const accumRef = useRef(0);
+  const lastFrameRef = useRef(0);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [containerSize, setContainerSize] = useState({ w: 900, h: 320 });
+
+  // IntersectionObserver to trigger animation when visible
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || isInView) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.2 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [isInView]);
+
+  // Measure container
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const measure = (): void => {
+      const rect = el.getBoundingClientRect();
+      const isMobile = rect.width < 640;
+      setContainerSize({ w: rect.width, h: isMobile ? 220 : 320 });
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  // Animation: update card positions every frame using direct DOM manipulation
+  // to avoid React re-render overhead and stale closure issues.
+  useEffect(() => {
+    if (!isInView) return;
+
+    const PI = Math.PI;
+    const SAMPLES = 200;
+    const speed = 0.00035;
+
+    const w = containerSize.w;
+    const h = containerSize.h;
+    const a = w * 0.42;
+    const cx = w / 2;
+    const cy = h / 2;
+
+    // Build arc-length table for a lobe (once per effect)
+    const buildArcTable = (lobeStart: number): { ts: Float64Array; cumLen: Float64Array } => {
+      const ts = new Float64Array(SAMPLES + 1);
+      const cumLen = new Float64Array(SAMPLES + 1);
+      let totalLen = 0;
+      let prev = lemniscatePoint(lobeStart, a);
+      for (let s = 0; s <= SAMPLES; s++) {
+        const t = lobeStart + (s / SAMPLES) * PI;
+        const pt = lemniscatePoint(t, a);
+        if (s > 0) {
+          totalLen += Math.sqrt((pt.x - prev.x) ** 2 + (pt.y - prev.y) ** 2);
+        }
+        ts[s] = t;
+        cumLen[s] = totalLen;
+        prev = pt;
+      }
+      return { ts, cumLen };
+    };
+
+    const tAtFraction = (frac: number, table: { ts: Float64Array; cumLen: Float64Array }): number => {
+      const target = frac * table.cumLen[SAMPLES];
+      for (let i = 1; i <= SAMPLES; i++) {
+        if (table.cumLen[i] >= target) {
+          const segFrac = (target - table.cumLen[i - 1]) / (table.cumLen[i] - table.cumLen[i - 1] || 1);
+          return table.ts[i - 1] + segFrac * (table.ts[i] - table.ts[i - 1]);
+        }
+      }
+      return table.ts[SAMPLES];
+    };
+
+    const rightTable = buildArcTable(-PI / 2);
+    const leftTable = buildArcTable(PI / 2);
+    const totalCards = COACH_TOOLS.length + PLAYER_TOOLS.length;
+
+    const moveCard = (
+      el: HTMLDivElement | null,
+      index: number,
+      count: number,
+      table: { ts: Float64Array; cumLen: Float64Array },
+      time: number,
+    ): void => {
+      if (!el) return;
+      const phase = index / count;
+      const frac = ((phase + time * 0.12) % 1 + 1) % 1;
+      const lobeT = tAtFraction(frac, table);
+      const pt = lemniscatePoint(lobeT, a);
+      const dist = Math.sqrt(pt.x * pt.x + pt.y * pt.y) / a;
+      const fadeT = 0.35;
+      const op = dist < fadeT ? 0 : Math.min(1, ((dist - fadeT) / (1 - fadeT)) ** 0.5);
+      const sc = 0.75 + 0.25 * dist;
+      el.style.left = `${cx + pt.x}px`;
+      el.style.top = `${cy + pt.y}px`;
+      el.style.opacity = String(op);
+      el.style.transform = `translate(-50%, -50%) scale(${sc})`;
+      el.style.display = op < 0.05 ? 'none' : '';
+    };
+
+    const animate = (timestamp: number): void => {
+      if (!lastFrameRef.current) lastFrameRef.current = timestamp;
+      const delta = timestamp - lastFrameRef.current;
+      lastFrameRef.current = timestamp;
+      accumRef.current += delta * speed;
+      const time = accumRef.current;
+
+      for (let i = 0; i < COACH_TOOLS.length; i++) {
+        moveCard(cardRefs.current[i], i, COACH_TOOLS.length, rightTable, time);
+      }
+      for (let i = 0; i < PLAYER_TOOLS.length; i++) {
+        moveCard(cardRefs.current[COACH_TOOLS.length + i], i, PLAYER_TOOLS.length, leftTable, time);
+      }
+
+      animRef.current = requestAnimationFrame(animate);
+    };
+
+    animRef.current = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animRef.current);
+  }, [isInView, containerSize]);
+
+  const a = containerSize.w * 0.42;
+  const cx = containerSize.w / 2;
+  const cy = containerSize.h / 2;
+  const svgPath = lemniscatePath(a);
+
+  // Label positions at lobe apexes
+  const rightApex = lemniscatePoint(0, a);
+  const leftApex = lemniscatePoint(Math.PI, a);
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative mx-auto"
+      style={{ maxWidth: '960px', height: `${containerSize.h}px`, minHeight: '200px' }}
+    >
+      {/* SVG lemniscate track */}
+      <svg
+        className="absolute inset-0 w-full h-full"
+        viewBox={`0 0 ${containerSize.w} ${containerSize.h}`}
+        preserveAspectRatio="xMidYMid meet"
+        fill="none"
+        aria-hidden="true"
+      >
+        <defs>
+          <filter id="lemniscate-glow">
+            <feGaussianBlur stdDeviation="6" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+        {/* Glow layer */}
+        <g transform={`translate(${cx}, ${cy})`}>
+          <path
+            d={svgPath}
+            stroke="rgba(15,168,122,0.08)"
+            strokeWidth="12"
+            filter="url(#lemniscate-glow)"
+          />
+        </g>
+        {/* Main track */}
+        <g transform={`translate(${cx}, ${cy})`}>
+          <path
+            d={svgPath}
+            stroke="rgba(15,168,122,0.15)"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+        </g>
+      </svg>
+
+      {/* Lobe labels */}
+      <div
+        className="absolute pointer-events-none flex items-center gap-1.5"
+        style={{
+          left: `${cx + rightApex.x}px`,
+          top: `${cy + rightApex.y - 50}px`,
+          transform: 'translateX(-50%)',
+        }}
+      >
+        <GraduationCap className="w-3 h-3 text-accent-bright/40" />
+        <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-accent-bright/40">Coach</span>
+      </div>
+      <div
+        className="absolute pointer-events-none flex items-center gap-1.5"
+        style={{
+          left: `${cx + leftApex.x}px`,
+          top: `${cy + leftApex.y - 50}px`,
+          transform: 'translateX(-50%)',
+        }}
+      >
+        <User className="w-3 h-3 text-data-blue/40" />
+        <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-data-blue/40">Player</span>
+      </div>
+
+      {/* Orbiting cards — positioned via direct DOM in rAF */}
+      {COACH_TOOLS.map((tool, i) => {
+        const Icon = tool.icon;
+        return (
+          <div
+            key={tool.name}
+            ref={(el) => { cardRefs.current[i] = el; }}
+            className="absolute pointer-events-none"
+            style={{ display: 'none', willChange: 'transform, opacity, left, top' }}
+          >
+            <div className="flex flex-col items-center gap-1">
+              <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center bg-accent-bright/10 border border-accent-bright/25" style={{ backdropFilter: 'blur(8px)' }}>
+                <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-accent-bright" />
+              </div>
+              <p className="font-display text-[9px] sm:text-[10px] font-medium whitespace-nowrap text-center leading-none text-accent-bright/70">{tool.name}</p>
+            </div>
+          </div>
+        );
+      })}
+      {PLAYER_TOOLS.map((tool, i) => {
+        const Icon = tool.icon;
+        return (
+          <div
+            key={tool.name}
+            ref={(el) => { cardRefs.current[COACH_TOOLS.length + i] = el; }}
+            className="absolute pointer-events-none"
+            style={{ display: 'none', willChange: 'transform, opacity, left, top' }}
+          >
+            <div className="flex flex-col items-center gap-1">
+              <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center bg-data-blue/10 border border-data-blue/25" style={{ backdropFilter: 'blur(8px)' }}>
+                <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-data-blue" />
+              </div>
+              <p className="font-display text-[9px] sm:text-[10px] font-medium whitespace-nowrap text-center leading-none text-data-blue/70">{tool.name}</p>
+            </div>
+          </div>
+        );
+      })}
+
+      {/* Center Looper hub */}
+      <div
+        className="absolute z-10"
+        style={{
+          left: `${cx}px`,
+          top: `${cy}px`,
+          transform: 'translate(-50%, -50%)',
+        }}
+      >
+        <div className="relative">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-bg-dark/90 border border-accent-bright/30 flex items-center justify-center animate-ai-pulse">
+            <div className="text-center">
+              <Brain className="w-5 h-5 sm:w-6 sm:h-6 text-accent-bright mx-auto" />
+              <p className="font-display text-[7px] sm:text-[8px] font-bold text-accent-bright mt-0.5 tracking-wide">LOOPER.AI</p>
+            </div>
+          </div>
+          <div className="absolute inset-[-8px] rounded-3xl bg-accent-bright/8 blur-xl -z-10" />
+        </div>
+      </div>
     </div>
   );
 }
@@ -252,18 +612,16 @@ function DeviceFrame({
 }): React.JSX.Element {
   if (type === 'laptop') {
     return (
-      <div className={`${className}`}>
-        <div className="bg-gray-800 rounded-lg p-1.5 shadow-2xl border border-white/10">
-          {/* Top bar dots */}
-          <div className="flex items-center gap-1.5 px-2 pb-1.5">
+      <div className={className}>
+        <div className="bg-gray-800/80 rounded-xl p-2 shadow-2xl shadow-black/40 border border-white/[0.08]">
+          <div className="flex items-center gap-1.5 px-3 pb-2">
             <div className="w-2 h-2 rounded-full bg-white/10" />
             <div className="w-2 h-2 rounded-full bg-white/10" />
             <div className="w-2 h-2 rounded-full bg-white/10" />
           </div>
-          <div className="rounded-md overflow-hidden bg-bg-light">{children}</div>
+          <div className="rounded-lg overflow-hidden bg-bg-light">{children}</div>
         </div>
-        {/* Base */}
-        <div className="w-1/3 h-2 bg-gray-800 rounded-b-lg mx-auto border-x border-b border-white/10" />
+        <div className="w-1/3 h-2.5 bg-gray-800/80 rounded-b-xl mx-auto border-x border-b border-white/[0.08]" />
       </div>
     );
   }
@@ -276,106 +634,84 @@ function DeviceFrame({
     );
   }
 
-  // sidebar
   return (
-    <div className={`bg-gray-900 rounded-lg border border-white/10 shadow-xl overflow-hidden ${className}`}>
+    <div className={`bg-gray-900/80 rounded-xl border border-white/[0.08] shadow-xl shadow-black/30 overflow-hidden ${className}`}>
       {children}
     </div>
   );
 }
 
-/** Mock coach portal content for laptop frame */
+/** Mock coach portal content — mirrors real Coach Portal dashboard */
 function CoachPortalMock(): React.JSX.Element {
   return (
-    <div className="h-[260px] sm:h-[300px] p-3 text-[10px]">
-      {/* Nav bar */}
-      <div className="flex items-center justify-between mb-3 pb-2 border-b border-gray-200">
-        <span className="font-display font-bold text-navy text-xs tracking-wide">
-          LOOPER<span className="text-accent">.AI</span>
-        </span>
-        <div className="flex gap-2">
-          <span className="text-gray-400">Today</span>
-          <span className="text-gray-400">Students</span>
-          <span className="text-gray-400">Analytics</span>
+    <div className="h-[260px] sm:h-[300px] p-3 text-[10px] overflow-hidden">
+      {/* Top bar */}
+      <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-gray-200">
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-3 flex flex-col justify-between">
+            <div className="w-full h-[1.5px] bg-gray-400 rounded" />
+            <div className="w-3 h-[1.5px] bg-gray-400 rounded" />
+            <div className="w-full h-[1.5px] bg-gray-400 rounded" />
+          </div>
+          <div className="bg-gray-100 rounded-full px-2 py-0.5 flex items-center gap-1">
+            <Search className="w-2.5 h-2.5 text-gray-400" />
+            <span className="text-gray-400 text-[8px]">Search students, sessions...</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span className="text-gray-600 text-[9px]">Austin Reed, PGA</span>
+          <div className="w-4 h-4 rounded-full bg-accent flex items-center justify-center">
+            <span className="text-white text-[6px] font-bold">AR</span>
+          </div>
         </div>
       </div>
-      {/* Content grid */}
-      <div className="grid grid-cols-3 gap-2">
-        {/* Schedule */}
-        <div className="col-span-2 space-y-1.5">
-          <p className="font-display font-semibold text-navy text-[11px] mb-2">Today's Sessions</p>
-          {['Jake M. — 9:00 AM', 'Sarah K. — 10:30 AM', 'Tom R. — 1:00 PM'].map((s) => (
-            <div key={s} className="flex items-center gap-2 p-1.5 bg-white rounded border border-gray-100">
-              <div className="w-5 h-5 rounded-full bg-accent/10 flex items-center justify-center">
-                <User className="w-3 h-3 text-accent" />
-              </div>
-              <span className="text-gray-600">{s}</span>
+      {/* Greeting */}
+      <p className="font-display text-navy text-[13px] font-semibold leading-tight">Good afternoon, Coach Thompson</p>
+      <p className="font-mono text-[8px] text-gray-400 mb-1.5">3 lessons today · 12 active students · 2 briefings ready</p>
+      {/* Up Next card */}
+      <div className="bg-white rounded-lg border border-accent/20 p-2 mb-2 shadow-sm">
+        <div className="flex items-center gap-1 mb-1">
+          <div className="w-1.5 h-1.5 rounded-full bg-accent" />
+          <span className="font-mono text-accent text-[8px] font-semibold uppercase tracking-wider">Up Next</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
+            <div className="w-full h-full bg-accent/20 flex items-center justify-center">
+              <User className="w-3.5 h-3.5 text-accent/60" />
             </div>
-          ))}
-        </div>
-        {/* Sparkline */}
-        <div className="space-y-2">
-          <p className="font-display font-semibold text-navy text-[11px] mb-2">Roster Trend</p>
-          <div className="bg-white rounded border border-gray-100 p-2">
-            <svg viewBox="0 0 80 32" className="w-full" fill="none">
-              <polyline
-                points="0,28 10,24 20,26 30,18 40,20 50,12 60,14 70,8 80,6"
-                stroke="#0D7C66"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <p className="font-mono text-accent font-bold text-[11px] mt-1">+12% avg</p>
           </div>
-          <div className="bg-white rounded border border-gray-100 p-2 text-center">
-            <p className="font-mono text-navy font-bold text-base">24</p>
-            <p className="text-gray-400">active students</p>
+          <div className="flex-1 min-w-0">
+            <p className="font-display text-navy text-[11px] font-semibold">Moe Norman</p>
+            <p className="font-mono text-[8px] text-gray-400">HCP 15.2 · Session 14</p>
+            <p className="text-gray-500 text-[8px] mt-0.5">Iron strike consistency — continue from last session</p>
+          </div>
+          <div className="text-right flex-shrink-0">
+            <p className="font-mono text-navy text-[10px] font-bold">2:00 PM</p>
+            <p className="font-mono text-gray-400 text-[7px]">45 min</p>
           </div>
         </div>
+        <div className="flex items-center gap-1 mt-1.5">
+          <div className="w-1.5 h-1.5 rounded-full bg-accent" />
+          <span className="font-mono text-accent text-[8px]">87% confidence</span>
+        </div>
       </div>
-    </div>
-  );
-}
-
-/** Mock lesson sidebar content */
-function SidebarMock(): React.JSX.Element {
-  return (
-    <div className="h-[280px] sm:h-[320px] bg-bg-dark p-3 text-[10px]">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-3 pb-2 border-b border-white/10">
-        <span className="font-display font-bold text-white text-[11px] tracking-wide">
-          LOOPER<span className="text-accent-bright">.AI</span>
-        </span>
-        <span className="font-mono text-accent-bright text-[9px]">LIVE</span>
-      </div>
-      {/* Phase */}
-      <div className="flex items-center gap-2 mb-3">
-        <div className="w-2 h-2 rounded-full bg-accent-bright animate-ai-pulse" />
-        <span className="font-mono text-accent-bright text-[9px] uppercase tracking-wider">Diagnosis</span>
-        <span className="font-mono text-gray-600 text-[9px] ml-auto">12:34</span>
-      </div>
-      {/* Confidence badge */}
-      <div className="bg-accent-bright/10 rounded-md p-2 mb-3">
-        <p className="font-mono text-[9px] text-gray-500 uppercase tracking-wider">Pattern Confidence</p>
-        <p className="font-mono text-xl text-accent-bright font-bold">72%</p>
-      </div>
-      {/* Insight card */}
-      <div className="border-l-2 border-accent-bright bg-white/5 rounded-r-md p-2 mb-3">
-        <p className="text-gray-300 text-[10px] leading-relaxed">
-          Face angle trending 2.1 open at impact. Correlates with grip pressure pattern from audio.
-        </p>
-      </div>
-      {/* Data row */}
-      <div className="grid grid-cols-3 gap-1.5">
+      {/* Schedule */}
+      <div className="space-y-1">
         {[
-          ['Speed', '132.4'],
-          ['Spin', '6,240'],
-          ['Carry', '172'],
-        ].map(([label, val]) => (
-          <div key={label} className="bg-white/5 rounded p-1.5 text-center">
-            <p className="font-mono text-[8px] text-gray-500">{label}</p>
-            <p className="font-mono text-[11px] text-white font-bold">{val}</p>
+          { time: '9:00 AM', name: 'Sarah Chen', hcp: '22', status: 'Completed', done: true },
+          { time: '10:30 AM', name: 'Moe Norman', hcp: '15.2', status: 'Briefing Ready', done: false },
+          { time: '2:00 PM', name: 'James Okafor', hcp: '9.1', status: 'Briefing Ready', done: false },
+        ].map((s) => (
+          <div key={s.time} className={`flex items-center gap-2 p-1 rounded border ${s.done ? 'border-gray-100 opacity-60' : 'border-accent/15 bg-accent/[0.03]'}`}>
+            <span className="font-mono text-[8px] text-gray-400 w-10 flex-shrink-0">{s.time}</span>
+            <div className="w-4 h-4 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
+              {s.done ? <CheckCircle className="w-3 h-3 text-accent/50" /> : <User className="w-2.5 h-2.5 text-gray-400" />}
+            </div>
+            <div className="flex-1 min-w-0">
+              <span className="text-navy text-[9px] font-medium">{s.name}</span>
+              <span className="font-mono text-[7px] text-gray-400 ml-1">HCP {s.hcp}</span>
+            </div>
+            <span className={`font-mono text-[7px] px-1.5 py-0.5 rounded-full ${s.done ? 'bg-gray-100 text-gray-400' : 'bg-accent/10 text-accent'}`}>{s.status}</span>
           </div>
         ))}
       </div>
@@ -383,40 +719,251 @@ function SidebarMock(): React.JSX.Element {
   );
 }
 
-/** Mock player app content */
+/** Mock lesson sidebar — mirrors real Analysis phase with streaming insights */
+function SidebarMock(): React.JSX.Element {
+  return (
+    <div className="h-[280px] sm:h-[320px] bg-bg-dark p-3 text-[10px] overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-white/10">
+        <div className="flex items-center gap-1.5">
+          <ChevronLeft className="w-3 h-3 text-gray-500" />
+          <span className="font-display font-bold text-white text-[11px] tracking-wide">
+            LOOPER<span className="text-accent-bright">.AI</span>
+          </span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span className="font-mono text-gray-500 text-[9px]">S9</span>
+          <div className="flex items-center gap-1">
+            <div className="w-1.5 h-1.5 rounded-full bg-accent-bright animate-ai-pulse" />
+            <span className="font-mono text-accent-bright text-[8px] uppercase tracking-wider">Live</span>
+          </div>
+        </div>
+      </div>
+      {/* Phase navigation */}
+      <div className="flex items-center gap-2 mb-3">
+        {['Context', 'Analysis', 'Working', 'Summary'].map((phase, i) => (
+          <div key={phase} className="flex items-center gap-1">
+            <div className={`w-1.5 h-1.5 rounded-full ${i === 0 ? 'bg-accent-bright' : i === 1 ? 'bg-accent-bright/60' : 'bg-gray-600'}`} />
+            <span className={`font-mono text-[8px] ${i <= 1 ? 'text-accent-bright' : 'text-gray-600'}`}>{phase}</span>
+          </div>
+        ))}
+      </div>
+      {/* Streaming status */}
+      <div className="flex items-center gap-1.5 mb-2">
+        <div className="w-1.5 h-1.5 rounded-full bg-accent-bright animate-ai-pulse" />
+        <span className="font-mono text-accent-bright/80 text-[9px]">Cross-referencing session history...</span>
+      </div>
+      {/* Insight card with confidence */}
+      <div className="bg-[#1a1215] border border-[#c93b3b]/20 rounded-md p-2 mb-2">
+        <div className="flex items-center justify-between mb-1">
+          <div className="w-full" />
+          <div className="flex items-center gap-1 flex-shrink-0">
+            <svg viewBox="0 0 20 20" className="w-4 h-4">
+              <circle cx="10" cy="10" r="8" fill="none" stroke="#333" strokeWidth="2" />
+              <circle cx="10" cy="10" r="8" fill="none" stroke="#c93b3b" strokeWidth="2" strokeDasharray={`${0.52 * 50.3} ${50.3}`} strokeDashoffset="12.6" strokeLinecap="round" transform="rotate(-90 10 10)" />
+            </svg>
+            <span className="font-mono text-[10px] text-[#c93b3b] font-bold">52%</span>
+          </div>
+        </div>
+        <p className="text-gray-300 text-[9px] leading-relaxed">
+          Face-to-path volatility: sigma = 3.8 across 6 shots. Strike location clustering 0.3" toe-side.
+        </p>
+      </div>
+      {/* Second insight streaming */}
+      <div className="bg-white/[0.03] border border-[#d4980b]/20 rounded-md p-2 mb-2">
+        <p className="font-mono text-[9px] text-[#d4980b]/80 mb-1">Driver face angle trending open...</p>
+        <div className="flex items-center gap-1">
+          <span className="font-mono text-[9px] text-gray-500">Building confidence...</span>
+          <span className="font-mono text-[10px] text-[#d4980b] font-bold">71%</span>
+        </div>
+      </div>
+      {/* Quick prompts */}
+      <div className="flex gap-1 mb-2">
+        <div className="bg-white/5 border border-white/10 rounded-full px-2 py-0.5">
+          <span className="text-gray-400 text-[8px]">How does his strike compare to S8?</span>
+        </div>
+        <div className="bg-white/5 border border-white/10 rounded-full px-2 py-0.5">
+          <span className="text-gray-400 text-[8px]">What cue type works best?</span>
+        </div>
+      </div>
+      {/* Input */}
+      <div className="bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 flex items-center justify-between">
+        <span className="text-gray-600 text-[9px]">Ask Looper...</span>
+        <Send className="w-3 h-3 text-gray-600" />
+      </div>
+    </div>
+  );
+}
+
+/** Mock player brief — the lesson summary sent to the player after each session */
 function PlayerMock(): React.JSX.Element {
   return (
-    <div className="h-[260px] sm:h-[300px] text-[10px]">
-      {/* Status bar */}
-      <div className="flex items-center justify-between mb-2">
+    <div className="h-[260px] sm:h-[300px] text-[10px] overflow-hidden">
+      {/* Status bar + header */}
+      <div className="flex items-center justify-between mb-1">
         <span className="font-mono text-[9px] text-gray-400">9:41</span>
         <span className="font-display font-bold text-navy text-[11px]">
           LOOPER<span className="text-accent">.AI</span>
         </span>
         <div className="w-6" />
       </div>
-      {/* Welcome */}
-      <p className="font-display text-navy text-xs font-semibold mb-2">Hi Jake</p>
-      {/* Timeline */}
-      <div className="space-y-2">
-        {[
-          { date: 'Mar 21', title: 'Lesson with Coach Mike', tag: 'Path improved +2.1\u00b0' },
-          { date: 'Mar 19', title: 'Practice Session', tag: '47 balls, strike focus' },
-          { date: 'Mar 16', title: 'Round at Bethpage', tag: '82 \u2014 3 over career best' },
-        ].map((e) => (
-          <div key={e.date} className="bg-white rounded-lg border border-gray-100 p-2">
-            <div className="flex items-center justify-between mb-1">
-              <span className="font-mono text-[9px] text-gray-400">{e.date}</span>
-            </div>
-            <p className="text-navy font-medium text-[10px]">{e.title}</p>
-            <p className="text-accent font-mono text-[9px] mt-0.5">{e.tag}</p>
-          </div>
-        ))}
+      <div className="text-center mb-2 pb-1.5 border-b border-gray-200">
+        <p className="font-display text-navy text-[12px] font-semibold">Lesson Summary</p>
+        <p className="font-mono text-[8px] text-gray-400">March 24, 2026 · Coach Thompson</p>
       </div>
-      {/* Ask Looper */}
-      <div className="mt-2 bg-accent/10 rounded-full px-3 py-1.5 flex items-center gap-2">
-        <Brain className="w-3 h-3 text-accent" />
-        <span className="text-gray-400 text-[10px]">Ask Looper anything...</span>
+      {/* What We Worked On */}
+      <div className="mb-2">
+        <p className="font-mono text-[7px] text-gray-400 uppercase tracking-wider mb-0.5">What We Worked On</p>
+        <p className="text-navy text-[9px] leading-relaxed">
+          We focused on your iron contact today. The strike pattern moved from toe-heavy to center, and your carry numbers responded.
+        </p>
+      </div>
+      {/* What Clicked */}
+      <div className="mb-2">
+        <p className="font-mono text-[7px] text-gray-400 uppercase tracking-wider mb-0.5">What Clicked</p>
+        <p className="text-navy text-[9px] leading-relaxed mb-1">
+          The gate drill unlocked center strike. Your dispersion tightened by 40%.
+        </p>
+        <div className="flex items-center gap-2 bg-gray-50 rounded p-1.5">
+          <span className="font-mono text-[8px] text-gray-500 w-14 flex-shrink-0">Strike quality</span>
+          <div className="flex-1 bg-gray-200 rounded-full h-1.5 overflow-hidden">
+            <div className="bg-accent h-full rounded-full" style={{ width: '71%' }} />
+          </div>
+          <span className="font-mono text-[9px] text-accent font-bold">71%</span>
+        </div>
+      </div>
+      {/* Practice Plan */}
+      <div className="mb-2">
+        <p className="font-mono text-[7px] text-gray-400 uppercase tracking-wider mb-0.5">Your Practice Plan</p>
+        <div className="space-y-1">
+          {[
+            { drill: 'Gate drill — 7 iron', freq: '3 sets of 10, 3x this week' },
+            { drill: 'Tempo ladder — 7 iron', freq: '5-5-5 at 60/80/100%, 2x this week' },
+          ].map((d) => (
+            <div key={d.drill} className="bg-gray-50 rounded p-1.5 flex items-start gap-1.5">
+              <Repeat className="w-2.5 h-2.5 text-accent mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="text-navy text-[9px] font-medium">{d.drill}</p>
+                <p className="font-mono text-[7px] text-gray-400">{d.freq}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* CTA */}
+      <div className="bg-accent rounded-lg py-1.5 text-center">
+        <span className="text-white text-[10px] font-display font-semibold">View My Journey</span>
+      </div>
+    </div>
+  );
+}
+
+/** Mock pre-session brief — the coach's intel view before a lesson */
+function PreSessionBriefMock(): React.JSX.Element {
+  return (
+    <div className="h-[260px] sm:h-[300px] p-3 text-[10px] overflow-hidden">
+      {/* Back nav */}
+      <div className="flex items-center gap-1.5 mb-2 pb-1.5 border-b border-gray-200">
+        <ChevronLeft className="w-3 h-3 text-gray-400" />
+        <span className="text-gray-400 text-[9px]">Back to Dashboard</span>
+      </div>
+      {/* Player header */}
+      <div className="bg-white rounded-lg border border-gray-100 p-2 mb-2">
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-full bg-navy text-white flex items-center justify-center flex-shrink-0">
+            <span className="text-[7px] font-bold">MN</span>
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-1.5">
+              <span className="font-display text-navy text-[11px] font-semibold">James Okafor</span>
+              <span className="text-[7px] px-1.5 py-0.5 rounded-full bg-accent/10 text-accent font-semibold">Short Game</span>
+            </div>
+            <p className="font-mono text-[8px] text-gray-400">2:00 PM · 45 min · Wedge Distance Control</p>
+          </div>
+          <div className="bg-accent text-white text-[8px] font-semibold px-2 py-1 rounded flex-shrink-0 flex items-center gap-0.5">
+            Start Lesson <ChevronRight className="w-2.5 h-2.5" />
+          </div>
+        </div>
+        {/* Quick stats */}
+        <div className="flex gap-2 mt-2">
+          {[
+            { label: 'Handicap', value: '9.1', delta: '-1.2' },
+            { label: 'Last Session', value: 'Mar 18' },
+            { label: 'Connected', tags: ['Arccos', 'GHIN'] },
+          ].map((s) => (
+            <div key={s.label} className="bg-gray-50 rounded px-2 py-1 text-center flex-1">
+              <p className="font-mono text-[7px] text-gray-400 uppercase">{s.label}</p>
+              {'value' in s && (
+                <div className="flex items-baseline justify-center gap-0.5 mt-0.5">
+                  <span className="font-mono text-[10px] text-navy font-bold">{s.value}</span>
+                  {'delta' in s && <span className="font-mono text-[7px] text-accent font-semibold">{s.delta}</span>}
+                </div>
+              )}
+              {'tags' in s && (
+                <div className="flex gap-0.5 justify-center mt-0.5">
+                  {s.tags?.map((t) => (
+                    <span key={t} className="text-[6px] px-1 py-0.5 rounded bg-blue-50 text-blue-600 font-semibold">{t}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* Last session card */}
+      <div className="bg-gray-50 rounded-lg border border-gray-100 p-2 mb-1.5">
+        <div className="flex items-center gap-1 mb-1">
+          <FileText className="w-2.5 h-2.5 text-blue-500" />
+          <span className="font-mono text-[7px] text-blue-500 uppercase font-bold">Last Session</span>
+          <span className="font-mono text-[7px] text-gray-400 ml-auto">Mar 18, 2026</span>
+        </div>
+        <p className="text-navy text-[9px] font-medium mb-1">Session 8: Ground Pressure Gate Drill</p>
+        <div className="grid grid-cols-4 gap-1 mb-1">
+          {[
+            { label: 'Strike', val: '71%', from: '54%', good: true },
+            { label: 'Carry Var', val: '4.2yd', from: '8.1yd', good: true },
+            { label: 'GIR sim', val: '44%', from: '33%', good: true },
+            { label: 'Face-Path', val: '2.1°', from: '4.8°', good: true },
+          ].map((m) => (
+            <div key={m.label} className="bg-white rounded px-1 py-0.5 text-center">
+              <p className="font-mono text-[6px] text-gray-400 uppercase">{m.label}</p>
+              <p className="font-mono text-[9px] text-navy font-bold">{m.val}</p>
+              <p className="font-mono text-[6px] text-accent">from {m.from}</p>
+            </div>
+          ))}
+        </div>
+        <div className="border-l-2 border-accent pl-1.5 py-0.5">
+          <p className="text-[7px] text-gray-400 uppercase font-semibold">Where We Left Off</p>
+          <p className="text-[8px] text-navy">Pressure shift retained. Ready to extend to wedge distance ladder.</p>
+        </div>
+      </div>
+      {/* On-course card */}
+      <div className="bg-gray-50 rounded-lg border border-gray-100 p-2 mb-1.5">
+        <div className="flex items-center gap-1 mb-1">
+          <MapPin className="w-2.5 h-2.5 text-amber-500" />
+          <span className="font-mono text-[7px] text-amber-500 uppercase font-bold">On the Course</span>
+          <span className="font-mono text-[7px] text-gray-400 ml-auto">Bethpage Black</span>
+        </div>
+        <div className="flex items-center gap-2 mb-1">
+          <span className="font-mono text-[12px] font-bold text-navy">82</span>
+          <span className="font-mono text-[8px] text-red-400 font-semibold">+10</span>
+          <div className="h-3 w-px bg-gray-200" />
+          <span className="text-[8px] text-red-400 font-semibold">GIR 33%</span>
+          <span className="text-[8px] text-gray-500">FW 57%</span>
+          <span className="text-[8px] text-red-400 font-semibold">31 putts</span>
+        </div>
+        <div className="flex items-start gap-1">
+          <AlertTriangle className="w-2.5 h-2.5 text-amber-500 mt-0.5 flex-shrink-0" />
+          <p className="text-[8px] text-gray-600"><strong className="text-navy">GIR below 40%</strong> — approach shots are the biggest scoring leak.</p>
+        </div>
+      </div>
+      {/* AI recommendation */}
+      <div className="bg-accent/5 border border-accent/15 rounded-lg p-2">
+        <div className="flex items-center gap-1 mb-0.5">
+          <Zap className="w-2.5 h-2.5 text-accent" />
+          <span className="font-mono text-[7px] text-accent uppercase font-bold">AI Recommendation</span>
+        </div>
+        <p className="text-[8px] text-gray-600 leading-relaxed">Confirm ground-pressure cue retention, then extend to wedge distance ladder (80/100/120 yds).</p>
       </div>
     </div>
   );
@@ -437,17 +984,17 @@ function FlywheelPhase({
   pulse?: boolean;
 }): React.JSX.Element {
   return (
-    <div className="glass-card p-6 flex-1 min-w-0">
+    <div className="glass-premium p-6 flex-1 min-w-0">
       <div
-        className={`w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-3 ${
+        className={`w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mx-auto mb-4 ${
           pulse ? 'animate-ai-pulse' : ''
         }`}
       >
         {icon}
       </div>
       <p className="font-display text-base font-semibold text-white text-center">{label}</p>
-      <p className="text-xs text-gray-500 mt-1 text-center">{sublabel}</p>
-      {children && <div className="mt-4">{children}</div>}
+      <p className="text-xs text-gray-500 mt-1.5 text-center">{sublabel}</p>
+      {children && <div className="mt-5">{children}</div>}
     </div>
   );
 }
@@ -465,9 +1012,9 @@ function MiniDataTable({ active }: { active: boolean }): React.JSX.Element {
   ];
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-1.5">
       {rows.map((r) => (
-        <div key={r.label} className="flex items-center justify-between px-2 py-1 bg-white/5 rounded">
+        <div key={r.label} className="flex items-center justify-between px-3 py-1.5 bg-white/5 rounded-lg">
           <span className="font-mono text-[10px] text-gray-500">{r.label}</span>
           <span className="font-mono text-[11px] text-accent-bright font-bold tabular-nums">{r.value}</span>
         </div>
@@ -485,7 +1032,7 @@ function MiniInsight({ active }: { active: boolean }): React.JSX.Element {
   );
 
   return (
-    <div className="border-l-2 border-accent-bright bg-accent/5 p-2 rounded-r-md">
+    <div className="border-l-2 border-accent-bright bg-accent/5 p-3 rounded-r-lg">
       <p className="font-mono text-[10px] text-gray-300 leading-relaxed">
         {displayText}
         {!isDone && <span className="animate-blink text-accent-bright ml-0.5">|</span>}
@@ -538,13 +1085,12 @@ function TimelinePhaseNode({
 
   return (
     <div
-      className={`relative pl-14 pb-10 transition-all duration-700 ${
+      className={`relative pl-16 pb-12 transition-all duration-700 ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
       }`}
     >
-      {/* Dot on the timeline line */}
       <div
-        className={`absolute left-[22px] top-1 w-3 h-3 rounded-full border-2 transition-colors duration-500 ${
+        className={`absolute left-[22px] top-1 w-4 h-4 rounded-full border-2 transition-colors duration-500 ${
           isActive
             ? 'bg-accent-bright border-accent-bright animate-ai-pulse'
             : isVisible
@@ -553,25 +1099,23 @@ function TimelinePhaseNode({
         }`}
       />
 
-      {/* Card */}
-      <div className="glass-card p-5">
-        <div className="flex items-center gap-3 mb-2">
-          <span className="font-mono text-[10px] uppercase tracking-wider text-accent-bright">
+      <div className="glass-premium p-6">
+        <div className="flex items-center gap-3 mb-3">
+          <span className="font-mono text-[11px] uppercase tracking-[0.15em] text-accent-bright font-medium">
             {phase.label}
           </span>
-          <span className="font-mono text-[10px] text-gray-600">{phase.time}</span>
+          <span className="font-mono text-[10px] text-gray-600 bg-white/5 px-2 py-0.5 rounded-full">{phase.time}</span>
         </div>
         <p className="text-sm text-gray-400 leading-relaxed">{phase.desc}</p>
 
-        {/* Phase-specific detail */}
-        <div className="mt-3">
+        <div className="mt-4">
           {index === 0 && (
-            <div className="bg-white/5 rounded p-2">
+            <div className="bg-white/5 rounded-lg p-3 border border-white/5">
               <p className="font-mono text-[10px] text-gray-400 leading-relaxed">{phase.detail}</p>
             </div>
           )}
           {index === 1 && (
-            <div className="bg-accent-bright/10 rounded p-2 flex items-center gap-3">
+            <div className="bg-accent-bright/10 rounded-lg p-3 flex items-center gap-3 border border-accent-bright/10">
               <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider">
                 Pattern confidence
               </p>
@@ -581,13 +1125,13 @@ function TimelinePhaseNode({
             </div>
           )}
           {index === 2 && (
-            <span className="inline-block bg-white/5 rounded px-2 py-1 font-mono text-[11px] text-accent-bright">
+            <span className="inline-block bg-white/5 rounded-lg px-3 py-1.5 font-mono text-[11px] text-accent-bright border border-white/5">
               {phase.detail}
             </span>
           )}
           {index === 3 && (
             <div className="flex items-center gap-2">
-              <CheckCircle className="w-3.5 h-3.5 text-accent-bright" />
+              <CheckCircle className="w-4 h-4 text-accent-bright" />
               <span className="font-mono text-[11px] text-gray-300">{phase.detail}</span>
             </div>
           )}
@@ -604,9 +1148,7 @@ function LiveTimelineDemo(): React.JSX.Element {
 
   return (
     <div ref={triggerRef} className="max-w-2xl mx-auto relative">
-      {/* Timeline line */}
       <div className="absolute left-7 top-0 bottom-0 w-px bg-white/10" />
-      {/* Progress overlay */}
       <div
         className="absolute left-7 top-0 w-px bg-accent-bright transition-all duration-1000 ease-out"
         style={{ height: `${(visible / 4) * 100}%` }}
@@ -639,45 +1181,60 @@ function StatCard({
 }): React.JSX.Element {
   const value = useCountUp(end, 1600, active);
   return (
-    <div className="glass-card p-8 text-center">
-      <p className="font-mono text-4xl sm:text-5xl font-bold text-accent-bright tabular-nums">
+    <div className="glass-premium metric-highlight p-10 text-center">
+      <p className="font-mono text-5xl sm:text-6xl font-bold text-accent-bright tabular-nums">
         {end === 0 ? '0' : Math.round(value).toLocaleString()}
-        {suffix && <span className="text-2xl sm:text-3xl ml-1">{suffix}</span>}
+        {suffix && <span className="text-3xl sm:text-4xl ml-1">{suffix}</span>}
       </p>
-      <p className="font-display text-sm text-gray-400 mt-3">{label}</p>
+      <p className="font-display text-sm text-gray-400 mt-4">{label}</p>
     </div>
+  );
+}
+
+/* ─── Section Label ────────────────────────────────────────── */
+
+function SectionLabel({ children }: { children: React.ReactNode }): React.JSX.Element {
+  return (
+    <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-bright font-medium text-center mb-4 badge-shimmer inline-block px-4 py-1.5 rounded-full mx-auto">
+      {children}
+    </p>
   );
 }
 
 /* ─── Main Component ───────────────────────────────────────── */
 
-/** Investor-facing landing page for Looper.AI */
 export default function PersonaSelector(): React.JSX.Element {
-  const setRef = useScrollReveal(9);
+  const setRef = useScrollReveal(11);
   const [flywheelRef, flywheelInView] = useInViewTrigger(0.2);
   const [metricsRef, metricsInView] = useInViewTrigger(0.2);
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      <div className="ambient-bg" />
+      <div className="aurora-bg" />
+      <FloatingNav />
 
       <div className="relative z-10">
         {/* ── Section 1: Hero ──────────────────────────────── */}
         <section
           ref={setRef(0)}
-          className="fade-in-up min-h-screen flex flex-col items-center justify-center text-center px-6 relative"
+          className="fade-in-up min-h-screen flex flex-col items-center justify-center text-center px-6 relative pt-20"
         >
+          {/* Floating orbs */}
+          <div className="hero-orb w-[500px] h-[500px] bg-accent-bright/[0.04] top-[10%] left-[10%]" aria-hidden="true" />
+          <div className="hero-orb w-[400px] h-[400px] bg-data-blue/[0.03] top-[20%] right-[10%]" style={{ animationDelay: '-5s' }} aria-hidden="true" />
+          <div className="hero-orb w-[300px] h-[300px] bg-accent/[0.05] bottom-[20%] left-[30%]" style={{ animationDelay: '-10s' }} aria-hidden="true" />
+
           {/* Atmospheric SVG background */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
             <svg
-              className="absolute inset-0 w-full h-full"
+              className="absolute inset-0 w-full h-full opacity-60"
               viewBox="0 0 1200 800"
               preserveAspectRatio="xMidYMid slice"
               xmlns="http://www.w3.org/2000/svg"
             >
               <defs>
                 <pattern id="sim-grid" width="60" height="60" patternUnits="userSpaceOnUse">
-                  <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(13,124,102,0.12)" strokeWidth="0.5" />
+                  <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(13,124,102,0.08)" strokeWidth="0.5" />
                 </pattern>
                 <linearGradient id="grid-fade" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="white" stopOpacity="0" />
@@ -696,174 +1253,230 @@ export default function PersonaSelector(): React.JSX.Element {
                 </filter>
               </defs>
               <rect width="1200" height="800" fill="url(#sim-grid)" mask="url(#grid-mask)" />
-              <g opacity="0.08" stroke="rgba(15,168,122,1)" strokeWidth="0.5">
-                <line x1="600" y1="300" x2="0" y2="800" />
-                <line x1="600" y1="300" x2="200" y2="800" />
-                <line x1="600" y1="300" x2="400" y2="800" />
-                <line x1="600" y1="300" x2="600" y2="800" />
-                <line x1="600" y1="300" x2="800" y2="800" />
-                <line x1="600" y1="300" x2="1000" y2="800" />
-                <line x1="600" y1="300" x2="1200" y2="800" />
-              </g>
               <g fill="none" strokeWidth="0.6">
-                <path d="M -100 500 Q 200 420 400 460 Q 600 500 800 440 Q 1000 380 1300 430" stroke="rgba(13,124,102,0.14)" />
-                <path d="M -100 540 Q 250 470 450 510 Q 650 550 850 480 Q 1050 410 1300 470" stroke="rgba(13,124,102,0.11)" />
-                <path d="M -100 580 Q 300 520 500 560 Q 700 600 900 530 Q 1100 460 1300 520" stroke="rgba(13,124,102,0.09)" />
-                <path d="M -100 620 Q 200 570 450 600 Q 700 640 900 580 Q 1100 520 1300 560" stroke="rgba(13,124,102,0.07)" />
-                <path d="M -100 660 Q 250 620 500 650 Q 750 680 950 630 Q 1150 580 1300 610" stroke="rgba(13,124,102,0.05)" />
+                <path d="M -100 500 Q 200 420 400 460 Q 600 500 800 440 Q 1000 380 1300 430" stroke="rgba(13,124,102,0.10)" />
+                <path d="M -100 540 Q 250 470 450 510 Q 650 550 850 480 Q 1050 410 1300 470" stroke="rgba(13,124,102,0.08)" />
+                <path d="M -100 580 Q 300 520 500 560 Q 700 600 900 530 Q 1100 460 1300 520" stroke="rgba(13,124,102,0.06)" />
               </g>
               <path
                 d="M -100 470 Q 200 390 400 430 Q 600 470 800 400 Q 1000 340 1300 390"
                 fill="none"
-                stroke="rgba(15,168,122,0.18)"
+                stroke="rgba(15,168,122,0.14)"
                 strokeWidth="1.2"
                 filter="url(#contour-glow)"
               />
             </svg>
           </div>
 
-          <h1 className="font-display text-5xl sm:text-7xl lg:text-8xl font-bold text-white tracking-tight">
-            LOOPER<span className="text-accent-bright">.AI</span>
-          </h1>
-          <p className="text-xs uppercase tracking-[0.25em] text-accent-bright font-medium mt-5">
-            Expertise, engineered.
-          </p>
-          <p className="text-lg text-gray-400 mt-3 max-w-lg mx-auto leading-relaxed">
-            The intelligence layer for golf coaching. One record. One copilot.
-            Compounding insight.
-          </p>
+          <div className="relative z-10">
+            <div className="badge-shimmer rounded-full px-4 py-1.5 mb-8 inline-flex items-center gap-2 border border-accent-bright/20">
+              <div className="w-1.5 h-1.5 rounded-full bg-accent-bright" />
+              <span className="font-mono text-[11px] text-accent-bright/80 tracking-wider">AI-NATIVE COACHING OS</span>
+            </div>
 
-          <HeroDataStream />
-          <HeroConfidence />
+            <h1 className="font-display text-6xl sm:text-8xl lg:text-9xl font-bold tracking-tight leading-[0.9]">
+              <span className="text-gradient-hero">LOOPER</span>
+              <span className="text-gradient-brand">.AI</span>
+            </h1>
 
-          <div className="absolute bottom-10 animate-bounce text-gray-600">
+            <p className="font-display text-xl sm:text-2xl text-gray-300 mt-6 max-w-2xl mx-auto leading-relaxed font-light">
+              The intelligence layer for golf coaching.
+              <br className="hidden sm:block" />
+              <span className="text-white font-normal">One record. One copilot. Compounding insight.</span>
+            </p>
+
+            <HeroConfidence />
+
+            <div className="flex flex-col sm:flex-row items-center gap-4 mt-12">
+              <Link
+                to="/vision"
+                className="group flex items-center gap-3 bg-accent-bright hover:bg-accent-bright/90 text-white font-medium px-8 py-3.5 rounded-xl transition-all duration-300 shadow-lg shadow-accent-bright/20 hover:shadow-accent-bright/30 hover:-translate-y-0.5"
+              >
+                <Play className="w-4 h-4" />
+                <span>Watch the Vision</span>
+                <ArrowRight className="w-4 h-4 opacity-0 -ml-2 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
+              </Link>
+              <Link
+                to="/coach"
+                className="flex items-center gap-2 text-gray-400 hover:text-white font-medium px-8 py-3.5 rounded-xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:-translate-y-0.5"
+              >
+                <span>Explore the Demo</span>
+              </Link>
+            </div>
+          </div>
+
+          <div className="absolute bottom-10 scroll-indicator text-gray-600">
             <ChevronDown className="w-5 h-5" />
           </div>
         </section>
 
-        {/* ── Section 2: The Gap ───────────────────────────── */}
-        <section ref={setRef(1)} className="fade-in-up py-24 sm:py-32 px-6">
-          <p className="text-[11px] uppercase tracking-[0.2em] text-accent-bright font-semibold text-center mb-10">
-            The Gap
-          </p>
-          <p className="font-display text-2xl sm:text-3xl text-white font-medium leading-snug max-w-2xl mx-auto text-center">
-            Every coach carries years of knowledge. None of it{' '}
-            <span className="font-['Instrument_Serif'] italic text-accent-bright">
-              compounds
-            </span>
-            . Sessions vanish. Patterns go unnoticed. The best coaching
-            intelligence stays locked in one person&apos;s memory.
-          </p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-16 max-w-3xl mx-auto">
-            <ComparisonCard mode="before" items={BEFORE_ITEMS} />
-            <ComparisonCard mode="after" items={AFTER_ITEMS} />
+        {/* ── Section 2: Value Propositions ────────────────── */}
+        <section ref={setRef(1)} className="fade-in-up py-24 sm:py-32 px-6 section-glow">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {VALUE_PROPS.map((prop) => {
+              const Icon = prop.icon;
+              return (
+                <div key={prop.title} className="glass-premium p-8 text-center group">
+                  <div className="w-14 h-14 rounded-2xl bg-accent-bright/10 flex items-center justify-center mx-auto mb-5 group-hover:bg-accent-bright/15 transition-colors duration-300">
+                    <Icon className="w-6 h-6 text-accent-bright" />
+                  </div>
+                  <p className="font-display text-lg font-semibold text-white mb-3">{prop.title}</p>
+                  <p className="text-sm text-gray-400 leading-relaxed">{prop.desc}</p>
+                </div>
+              );
+            })}
           </div>
         </section>
 
-        {/* ── Section 3: Product Showcase ──────────────────── */}
-        <section ref={setRef(2)} className="fade-in-up py-24 sm:py-32 px-6">
-          <p className="text-[11px] uppercase tracking-[0.2em] text-accent-bright font-semibold text-center mb-4">
-            The Product
-          </p>
-          <p className="font-['Instrument_Serif'] italic text-accent-bright text-lg text-center mb-16">
-            One intelligence, two experiences.
-          </p>
-
-          {/* Desktop: overlapping composition */}
-          <div className="hidden lg:block max-w-5xl mx-auto relative h-[420px]">
-            {/* Laptop — center */}
-            <DeviceFrame
-              type="laptop"
-              className="absolute left-1/2 -translate-x-1/2 top-0 w-[680px] animate-float z-10"
-            >
-              <CoachPortalMock />
-            </DeviceFrame>
-
-            {/* Sidebar — right, overlapping */}
-            <DeviceFrame
-              type="sidebar"
-              className="absolute right-0 top-8 w-[220px] animate-float z-20"
-              // slight delay via inline style for parallax
-            >
-              <SidebarMock />
-            </DeviceFrame>
-
-            {/* Phone — left, overlapping */}
-            <DeviceFrame
-              type="phone"
-              className="absolute left-0 top-12 w-[180px] animate-float z-20"
-            >
-              <PlayerMock />
-            </DeviceFrame>
+        {/* ── Section 3: The Gap ───────────────────────────── */}
+        <section ref={setRef(2)} className="fade-in-up py-24 sm:py-32 px-6 section-glow">
+          <div className="text-center mb-16">
+            <SectionLabel>The Gap</SectionLabel>
+            <p className="font-display text-2xl sm:text-4xl text-white font-medium leading-snug max-w-3xl mx-auto mt-4">
+              Golf&apos;s data is everywhere.{' '}
+              <span className="text-gradient-brand">Connected nowhere.</span>
+            </p>
+            <p className="text-gray-400 mt-4 max-w-2xl mx-auto leading-relaxed">
+              Coaches run 5-6 tools that don&apos;t talk to each other. Players track data the coach never sees. And the most valuable coaching intelligence &mdash; spoken out loud during lessons &mdash; simply evaporates.
+            </p>
           </div>
 
-          {/* Labels under desktop layout */}
-          <div className="hidden lg:flex justify-between max-w-5xl mx-auto mt-8 px-8">
-            <div className="text-center w-[180px]">
-              <div className="flex items-center justify-center gap-2 mb-1">
-                <Smartphone className="w-3.5 h-3.5 text-accent-bright" />
-                <p className="font-display text-sm font-semibold text-white">Player App</p>
+          <InfinityLoop />
+        </section>
+
+        {/* ── Section 4: Product Showcase ──────────────────── */}
+        <section id="product" ref={setRef(3)} className="fade-in-up py-24 sm:py-32 px-6 section-glow">
+          <div className="text-center mb-16">
+            <SectionLabel>The Product</SectionLabel>
+            <p className="font-display text-2xl sm:text-4xl text-white font-medium mt-4">
+              One intelligence, <span className="text-gradient-brand">two experiences.</span>
+            </p>
+          </div>
+
+          {/* Desktop: two-row showcase */}
+          <div className="hidden lg:block max-w-5xl mx-auto space-y-10">
+            {/* Row 1 labels */}
+            <div className="flex justify-between px-8">
+              <div className="text-center flex-1">
+                <div className="flex items-center justify-center gap-2 mb-1.5">
+                  <Monitor className="w-4 h-4 text-accent-bright" />
+                  <p className="font-display text-sm font-semibold text-white">Coach Portal</p>
+                </div>
+                <p className="text-xs text-gray-500">Desktop command center</p>
               </div>
-              <p className="text-xs text-gray-500">Mobile-first, 480px</p>
+              <div className="text-center w-[240px]">
+                <div className="flex items-center justify-center gap-2 mb-1.5">
+                  <Brain className="w-4 h-4 text-accent-bright" />
+                  <p className="font-display text-sm font-semibold text-white">Lesson Sidebar</p>
+                </div>
+                <p className="text-xs text-gray-500">420-480px, dark mode</p>
+              </div>
             </div>
-            <div className="text-center flex-1">
-              <div className="flex items-center justify-center gap-2 mb-1">
-                <Monitor className="w-3.5 h-3.5 text-accent-bright" />
-                <p className="font-display text-sm font-semibold text-white">Coach Portal</p>
-              </div>
-              <p className="text-xs text-gray-500">Desktop command center</p>
+            {/* Row 1: Coach Portal (large) + Lesson Sidebar */}
+            <div className="relative h-[440px]">
+              <DeviceFrame
+                type="laptop"
+                className="absolute left-1/2 -translate-x-[60%] top-0 w-[660px] animate-float z-10"
+              >
+                <CoachPortalMock />
+              </DeviceFrame>
+              <DeviceFrame
+                type="sidebar"
+                className="absolute right-0 top-8 w-[240px] animate-float z-20"
+              >
+                <SidebarMock />
+              </DeviceFrame>
             </div>
-            <div className="text-center w-[220px]">
-              <div className="flex items-center justify-center gap-2 mb-1">
-                <Brain className="w-3.5 h-3.5 text-accent-bright" />
-                <p className="font-display text-sm font-semibold text-white">Lesson Sidebar</p>
+            {/* Row 2 labels */}
+            <div className="flex justify-between px-8">
+              <div className="text-center flex-1">
+                <div className="flex items-center justify-center gap-2 mb-1.5">
+                  <FileText className="w-4 h-4 text-accent-bright" />
+                  <p className="font-display text-sm font-semibold text-white">Pre-Session Brief</p>
+                </div>
+                <p className="text-xs text-gray-500">Full player intel before every lesson</p>
               </div>
-              <p className="text-xs text-gray-500">420-480px, dark mode</p>
+              <div className="text-center w-[180px]">
+                <div className="flex items-center justify-center gap-2 mb-1.5">
+                  <Smartphone className="w-4 h-4 text-accent-bright" />
+                  <p className="font-display text-sm font-semibold text-white">Player Brief</p>
+                </div>
+                <p className="text-xs text-gray-500">Mobile-first, 480px</p>
+              </div>
+            </div>
+            {/* Row 2: Pre-Session Brief (laptop) + Player Brief (phone) */}
+            <div className="relative h-[440px]">
+              <DeviceFrame
+                type="laptop"
+                className="absolute left-1/2 -translate-x-[60%] top-0 w-[660px] animate-float z-10"
+              >
+                <PreSessionBriefMock />
+              </DeviceFrame>
+              <DeviceFrame
+                type="phone"
+                className="absolute right-4 top-12 w-[180px] animate-float z-20"
+              >
+                <PlayerMock />
+              </DeviceFrame>
             </div>
           </div>
 
           {/* Tablet & mobile: vertical stack */}
-          <div className="lg:hidden space-y-8 max-w-sm mx-auto">
+          <div className="lg:hidden space-y-10 max-w-sm mx-auto">
             <div>
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <Monitor className="w-4 h-4 text-accent-bright" />
+                <p className="font-display text-sm font-semibold text-white">Coach Portal</p>
+              </div>
               <DeviceFrame type="laptop" className="animate-float">
                 <CoachPortalMock />
               </DeviceFrame>
-              <div className="flex items-center justify-center gap-2 mt-3">
-                <Monitor className="w-3.5 h-3.5 text-accent-bright" />
-                <p className="font-display text-sm font-semibold text-white">Coach Portal</p>
-              </div>
             </div>
             <div>
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <FileText className="w-4 h-4 text-accent-bright" />
+                <p className="font-display text-sm font-semibold text-white">Pre-Session Brief</p>
+              </div>
+              <DeviceFrame type="laptop" className="animate-float">
+                <PreSessionBriefMock />
+              </DeviceFrame>
+            </div>
+            <div>
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <Brain className="w-4 h-4 text-accent-bright" />
+                <p className="font-display text-sm font-semibold text-white">Lesson Sidebar</p>
+              </div>
               <DeviceFrame type="sidebar" className="mx-auto w-[280px] animate-float">
                 <SidebarMock />
               </DeviceFrame>
-              <div className="flex items-center justify-center gap-2 mt-3">
-                <Brain className="w-3.5 h-3.5 text-accent-bright" />
-                <p className="font-display text-sm font-semibold text-white">Lesson Sidebar</p>
-              </div>
             </div>
             <div>
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <Smartphone className="w-4 h-4 text-accent-bright" />
+                <p className="font-display text-sm font-semibold text-white">Player Brief</p>
+              </div>
               <DeviceFrame type="phone" className="mx-auto w-[200px] animate-float">
                 <PlayerMock />
               </DeviceFrame>
-              <div className="flex items-center justify-center gap-2 mt-3">
-                <Smartphone className="w-3.5 h-3.5 text-accent-bright" />
-                <p className="font-display text-sm font-semibold text-white">Player App</p>
-              </div>
             </div>
           </div>
         </section>
 
-        {/* ── Section 4: How It Works ─────────────────────── */}
-        <section ref={setRef(3)} className="fade-in-up py-24 sm:py-32 px-6">
-          <p className="text-[11px] uppercase tracking-[0.2em] text-accent-bright font-semibold text-center mb-10">
-            How It Works
-          </p>
+        {/* ── Section 5: How It Works ─────────────────────── */}
+        <section id="how-it-works" ref={setRef(4)} className="fade-in-up py-24 sm:py-32 px-6 section-glow">
+          <div className="text-center mb-16">
+            <SectionLabel>How It Works</SectionLabel>
+            <p className="font-display text-2xl sm:text-4xl text-white font-medium mt-4">
+              Record. Reason. <span className="text-gradient-brand">Compound.</span>
+            </p>
+            <p className="text-sm text-gray-500 mt-3 font-mono">
+              A dataset company that starts as a platform.
+            </p>
+          </div>
 
-          <div ref={flywheelRef} className="max-w-4xl mx-auto">
+          <div ref={flywheelRef} className="max-w-5xl mx-auto">
             {/* Desktop: horizontal */}
-            <div className="hidden sm:flex items-stretch gap-4">
+            <div className="hidden sm:flex items-stretch gap-5">
               <FlywheelPhase
                 icon={<Database className="w-5 h-5 text-accent-bright" />}
                 label="Record"
@@ -873,7 +1486,8 @@ export default function PersonaSelector(): React.JSX.Element {
               </FlywheelPhase>
 
               <div className="flex items-center shrink-0">
-                <ArrowRight className="w-5 h-5 text-accent-bright/50" />
+                <div className="w-10 h-px bg-gradient-to-r from-accent-bright/40 to-accent-bright/10" />
+                <ArrowRight className="w-4 h-4 text-accent-bright/40 -ml-1" />
               </div>
 
               <FlywheelPhase
@@ -886,7 +1500,8 @@ export default function PersonaSelector(): React.JSX.Element {
               </FlywheelPhase>
 
               <div className="flex items-center shrink-0">
-                <ArrowRight className="w-5 h-5 text-accent-bright/50" />
+                <div className="w-10 h-px bg-gradient-to-r from-accent-bright/40 to-accent-bright/10" />
+                <ArrowRight className="w-4 h-4 text-accent-bright/40 -ml-1" />
               </div>
 
               <FlywheelPhase
@@ -899,7 +1514,7 @@ export default function PersonaSelector(): React.JSX.Element {
             </div>
 
             {/* Mobile: vertical */}
-            <div className="flex sm:hidden flex-col items-center gap-3">
+            <div className="flex sm:hidden flex-col items-center gap-4">
               <FlywheelPhase
                 icon={<Database className="w-5 h-5 text-accent-bright" />}
                 label="Record"
@@ -907,7 +1522,7 @@ export default function PersonaSelector(): React.JSX.Element {
               >
                 <MiniDataTable active={flywheelInView} />
               </FlywheelPhase>
-              <ArrowDown className="w-4 h-4 text-accent-bright/50" />
+              <ArrowDown className="w-4 h-4 text-accent-bright/40" />
               <FlywheelPhase
                 icon={<Brain className="w-5 h-5 text-accent-bright" />}
                 label="Intelligence"
@@ -916,7 +1531,7 @@ export default function PersonaSelector(): React.JSX.Element {
               >
                 <MiniInsight active={flywheelInView} />
               </FlywheelPhase>
-              <ArrowDown className="w-4 h-4 text-accent-bright/50" />
+              <ArrowDown className="w-4 h-4 text-accent-bright/40" />
               <FlywheelPhase
                 icon={<TrendingUp className="w-5 h-5 text-accent-bright" />}
                 label="Compounding Insight"
@@ -926,168 +1541,203 @@ export default function PersonaSelector(): React.JSX.Element {
               </FlywheelPhase>
             </div>
           </div>
-
-          <p className="text-sm text-gray-500 mt-10 text-center font-mono">
-            A dataset company that starts as a platform.
-          </p>
         </section>
 
-        {/* ── Section 5: Live Lesson Timeline ─────────────── */}
-        <section ref={setRef(4)} className="fade-in-up py-24 sm:py-32 px-6">
-          <p className="text-[11px] uppercase tracking-[0.2em] text-accent-bright font-semibold text-center mb-4">
-            The Live Lesson
-          </p>
-          <p className="font-display text-xl sm:text-2xl text-white font-medium text-center max-w-xl mx-auto mb-16 leading-snug">
-            Four phases. Zero manual input. The AI watches, reasons, and assists
-            in real time.
-          </p>
+        {/* ── Section 6: Live Lesson Timeline ─────────────── */}
+        <section ref={setRef(5)} className="fade-in-up py-24 sm:py-32 px-6 section-glow">
+          <div className="text-center mb-16">
+            <SectionLabel>The Live Lesson</SectionLabel>
+            <p className="font-display text-2xl sm:text-4xl text-white font-medium max-w-2xl mx-auto leading-snug mt-4">
+              Four phases. Zero manual input.
+            </p>
+            <p className="text-gray-400 mt-3 max-w-lg mx-auto">
+              The AI watches, reasons, and assists alongside the coach in real time.
+            </p>
+          </div>
 
           <LiveTimelineDemo />
         </section>
 
-        {/* ── Section 6: Ambient Capture ──────────────────── */}
-        <section ref={setRef(5)} className="fade-in-up py-24 sm:py-32 px-6">
-          <p className="text-[11px] uppercase tracking-[0.2em] text-accent-bright font-semibold text-center mb-4">
-            Ambient Capture
-          </p>
-          <p className="font-display text-xl sm:text-2xl text-white font-medium text-center max-w-lg mx-auto mb-12 leading-snug">
-            The record builds itself. Five agents, zero manual entry.
-          </p>
+        {/* ── Section 7: Ambient Capture ──────────────────── */}
+        <section ref={setRef(6)} className="fade-in-up py-24 sm:py-32 px-6 section-glow">
+          <div className="text-center mb-16">
+            <SectionLabel>Ambient Capture</SectionLabel>
+            <p className="font-display text-2xl sm:text-4xl text-white font-medium max-w-2xl mx-auto leading-snug mt-4">
+              The record builds itself.
+            </p>
+            <p className="text-gray-400 mt-3">Five agents, zero manual entry.</p>
+          </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 max-w-4xl mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5 max-w-5xl mx-auto">
             {AGENTS.map((agent, i) => {
               const Icon = agent.icon;
               return (
                 <div
                   key={agent.name}
-                  className="glass-card p-5 text-center animate-stagger-in"
+                  className="glass-premium p-6 text-center group animate-stagger-in"
                   style={{ animationDelay: `${200 + i * 100}ms` }}
                 >
-                  <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center mx-auto mb-3">
+                  <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mx-auto mb-4 group-hover:bg-accent/15 transition-colors duration-300">
                     <Icon className="w-5 h-5 text-accent-bright" />
                   </div>
                   <p className="font-display text-sm font-semibold text-white">{agent.name}</p>
-                  <p className="font-mono text-[10px] text-gray-500 mt-1">{agent.source}</p>
-                  <p className="text-xs text-gray-400 mt-2 leading-relaxed">{agent.desc}</p>
+                  <p className="font-mono text-[10px] text-accent-bright/60 mt-1">{agent.source}</p>
+                  <p className="text-xs text-gray-400 mt-3 leading-relaxed">{agent.desc}</p>
                 </div>
               );
             })}
           </div>
         </section>
 
-        {/* ── Section 7: Key Metrics ──────────────────────── */}
-        <section ref={setRef(6)} className="fade-in-up py-24 sm:py-32 px-6">
-          <p className="text-[11px] uppercase tracking-[0.2em] text-accent-bright font-semibold text-center mb-10">
-            By The Numbers
-          </p>
+        {/* ── Section 8: Key Metrics ──────────────────────── */}
+        <section ref={setRef(7)} className="fade-in-up py-24 sm:py-32 px-6 section-glow">
+          <div className="text-center mb-16">
+            <SectionLabel>By The Numbers</SectionLabel>
+          </div>
 
-          <div ref={metricsRef} className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto">
+          <div ref={metricsRef} className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
             <StatCard end={30} suffix="sec" label="Post-session review" active={metricsInView} />
             <StatCard end={0} label="Manual data entry points" active={metricsInView} />
-            <div className="glass-card p-8 text-center">
-              <p className="font-mono text-4xl sm:text-5xl font-bold text-accent-bright tabular-nums">
-                12,000<span className="text-2xl sm:text-3xl">+</span>
+            <div className="glass-premium metric-highlight p-10 text-center">
+              <p className="font-mono text-5xl sm:text-6xl font-bold text-accent-bright tabular-nums">
+                12,000<span className="text-3xl sm:text-4xl">+</span>
               </p>
-              <p className="font-display text-sm text-gray-400 mt-3">Data points per lesson</p>
+              <p className="font-display text-sm text-gray-400 mt-4">Data points per lesson</p>
             </div>
           </div>
         </section>
 
-        {/* ── Section 8: See It Live ──────────────────────── */}
-        <section ref={setRef(7)} className="fade-in-up py-24 sm:py-32 px-6">
-          <p className="text-[11px] uppercase tracking-[0.2em] text-accent-bright font-semibold text-center mb-10">
-            See It Live
-          </p>
+        {/* ── Section 9: See It Live ──────────────────────── */}
+        <section id="explore" ref={setRef(8)} className="fade-in-up py-24 sm:py-32 px-6 section-glow">
+          <div className="text-center mb-16">
+            <SectionLabel>See It Live</SectionLabel>
+            <p className="font-display text-2xl sm:text-4xl text-white font-medium mt-4">
+              Explore the full <span className="text-gradient-brand">experience.</span>
+            </p>
+          </div>
 
-          {/* Sizzle reel */}
+          {/* Sizzle reel - hero CTA */}
           <Link
             to="/vision"
-            className="glass-card border-l-2 border-l-accent-bright flex items-center justify-between p-6 max-w-2xl mx-auto mb-4"
+            className="group glass-premium animated-border flex items-center justify-between p-8 max-w-3xl mx-auto mb-8"
           >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-accent flex items-center justify-center shrink-0">
-                <Play className="w-5 h-5 text-white ml-0.5" />
+            <div className="flex items-center gap-5">
+              <div className="w-14 h-14 rounded-2xl bg-accent-bright/20 flex items-center justify-center shrink-0 group-hover:bg-accent-bright/30 transition-colors duration-300">
+                <Play className="w-6 h-6 text-accent-bright ml-0.5" />
               </div>
               <div>
-                <p className="font-display text-[15px] font-semibold text-white">
+                <p className="font-display text-lg font-semibold text-white">
                   Watch the 90-Second Vision
                 </p>
-                <p className="text-sm text-gray-400 mt-0.5">
+                <p className="text-sm text-gray-400 mt-1">
                   Product walkthrough from record to insight
                 </p>
               </div>
             </div>
-            <ArrowRight className="w-4 h-4 text-gray-500 shrink-0" />
+            <ArrowRight className="w-5 h-5 text-gray-500 group-hover:text-accent-bright group-hover:translate-x-1 transition-all duration-300 shrink-0" />
           </Link>
 
           {/* Documents */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto mb-4">
-            <Link to="/narrative" className="glass-card p-6 block">
-              <div className="flex items-center gap-3 mb-2">
-                <FileText className="w-4 h-4 text-accent-bright" />
-                <p className="text-[11px] uppercase tracking-wider text-accent-bright font-semibold">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-3xl mx-auto mb-8">
+            <Link to="/narrative" className="glass-premium p-7 block group">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-8 h-8 rounded-lg bg-accent-bright/10 flex items-center justify-center">
+                  <FileText className="w-4 h-4 text-accent-bright" />
+                </div>
+                <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-accent-bright/70">
                   The Narrative
                 </p>
               </div>
-              <p className="text-white font-medium text-[15px]">Read the Full Story</p>
-              <p className="text-sm text-gray-400 mt-1">
+              <p className="text-white font-display font-semibold text-[15px] group-hover:text-accent-bright transition-colors duration-200">Read the Full Story</p>
+              <p className="text-sm text-gray-400 mt-2 leading-relaxed">
                 Thesis, problem, solution, flywheel, and roadmap
               </p>
             </Link>
 
-            <Link to="/thesis" className="glass-card p-6 block">
-              <div className="flex items-center gap-3 mb-2">
-                <BarChart3 className="w-4 h-4 text-accent-bright" />
-                <p className="text-[11px] uppercase tracking-wider text-accent-bright font-semibold">
+            <Link to="/thesis" className="glass-premium p-7 block group">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-8 h-8 rounded-lg bg-accent-bright/10 flex items-center justify-center">
+                  <BarChart3 className="w-4 h-4 text-accent-bright" />
+                </div>
+                <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-accent-bright/70">
                   The Business Case
                 </p>
               </div>
-              <p className="text-white font-medium text-[15px]">Read the Thesis</p>
-              <p className="text-sm text-gray-400 mt-1">
+              <p className="text-white font-display font-semibold text-[15px] group-hover:text-accent-bright transition-colors duration-200">Read the Thesis</p>
+              <p className="text-sm text-gray-400 mt-2 leading-relaxed">
                 Five-year model, moat analysis, and market sizing
               </p>
             </Link>
 
-            <Link to="/evolution" className="glass-card p-6 block">
-              <div className="flex items-center gap-3 mb-2">
-                <Layers className="w-4 h-4 text-accent-bright" />
-                <p className="text-[11px] uppercase tracking-wider text-accent-bright font-semibold">
+            <Link to="/evolution" className="glass-premium p-7 block group">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-8 h-8 rounded-lg bg-accent-bright/10 flex items-center justify-center">
+                  <Layers className="w-4 h-4 text-accent-bright" />
+                </div>
+                <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-accent-bright/70">
                   Product Evolution
                 </p>
               </div>
-              <p className="text-white font-medium text-[15px]">See the Roadmap</p>
-              <p className="text-sm text-gray-400 mt-1">
+              <p className="text-white font-display font-semibold text-[15px] group-hover:text-accent-bright transition-colors duration-200">See the Roadmap</p>
+              <p className="text-sm text-gray-400 mt-2 leading-relaxed">
                 Four stages from record to intelligence
               </p>
             </Link>
           </div>
 
           {/* Prototypes */}
-          <div className="grid grid-cols-2 gap-3 max-w-sm mx-auto">
+          <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
             {PROTOTYPES.map((p, i) => {
               const Icon = p.icon;
               return (
                 <Link
                   key={p.path}
                   to={p.path}
-                  className="glass-card p-4 text-center block animate-stagger-in"
+                  className="glass-premium p-6 text-center block group animate-stagger-in"
                   style={{ animationDelay: `${300 + i * 100}ms` }}
                 >
-                  <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-2">
-                    <Icon className="w-4 h-4 text-accent-bright" />
+                  <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mx-auto mb-3 group-hover:bg-accent-bright/10 transition-colors duration-300">
+                    <Icon className="w-5 h-5 text-accent-bright" />
                   </div>
-                  <p className="text-sm text-white font-medium">{p.label}</p>
+                  <p className="text-sm text-white font-display font-semibold">{p.label}</p>
+                  <p className="text-xs text-gray-500 mt-1">{p.desc}</p>
                 </Link>
               );
             })}
           </div>
         </section>
 
-        {/* ── Section 9: Footer ───────────────────────────── */}
-        <footer ref={setRef(8)} className="fade-in-up py-12 px-6 text-center">
-          <p className="text-xs text-gray-600">
-            Confidential &mdash; Looper.AI &mdash; March 2026
-          </p>
+        {/* ── Section 10: Closing Statement ───────────────── */}
+        <section ref={setRef(9)} className="fade-in-up py-24 sm:py-32 px-6">
+          <div className="max-w-3xl mx-auto text-center">
+            <p className="font-display text-3xl sm:text-5xl text-white font-medium leading-tight">
+              Memory enables intelligence.
+            </p>
+            <p className="font-display text-3xl sm:text-5xl text-gradient-brand font-medium leading-tight mt-2">
+              Intelligence enables coaching.
+            </p>
+            <div className="mt-12">
+              <Link
+                to="/coach"
+                className="inline-flex items-center gap-3 bg-accent-bright hover:bg-accent-bright/90 text-white font-medium px-10 py-4 rounded-xl transition-all duration-300 shadow-lg shadow-accent-bright/20 hover:shadow-accent-bright/30 hover:-translate-y-0.5 text-lg"
+              >
+                <span>Experience the Demo</span>
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Footer ──────────────────────────────────────── */}
+        <footer ref={setRef(10)} className="fade-in-up py-16 px-6">
+          <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <span className="font-display font-bold text-gray-600 text-sm tracking-wide">
+              LOOPER<span className="text-accent-bright/40">.AI</span>
+            </span>
+            <p className="text-xs text-gray-600">
+              Confidential &mdash; Looper.AI &mdash; March 2026
+            </p>
+          </div>
         </footer>
       </div>
     </div>
