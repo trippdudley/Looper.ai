@@ -1,4 +1,3 @@
-import { ChevronLeft } from 'lucide-react';
 import ExitDemoButton from '../components/ui/ExitDemoButton';
 
 function PhoneFrame({ children }: { children: React.ReactNode }): React.JSX.Element {
