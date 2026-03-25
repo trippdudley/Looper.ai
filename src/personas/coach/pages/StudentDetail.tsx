@@ -7,7 +7,6 @@ import {
   Minus,
   Lightbulb,
   Pencil,
-  X,
 } from 'lucide-react';
 // recharts removed — handicap ribbon replaced by HCP row in heatmap grid
 
@@ -170,7 +169,7 @@ function sgCellStyle(v: number): { bg: string; text: string } {
 }
 
 /** Focus tag pill badge */
-function FocusTagBadge({ tag }: { tag: string }): JSX.Element {
+function FocusTagBadge({ tag }: { tag: string }): React.JSX.Element {
   const tintMap: Record<string, { bg: string; text: string }> = {
     'Wedge': { bg: 'rgba(212, 152, 11, 0.12)', text: '#D4980B' },
     'Chipping': { bg: 'rgba(212, 152, 11, 0.12)', text: '#D4980B' },
@@ -192,7 +191,7 @@ function FocusTagBadge({ tag }: { tag: string }): JSX.Element {
 }
 
 /** Three-layer player journey on a shared time axis */
-function PlayerJourney(): JSX.Element {
+function PlayerJourney(): React.JSX.Element {
   const [showAll, setShowAll] = useState(false);
   const [highlightedSession, setHighlightedSession] = useState<number | null>(null);
   const [hoveredRound, setHoveredRound] = useState<number | null>(null);
@@ -228,12 +227,6 @@ function PlayerJourney(): JSX.Element {
   const roundsH = 80;
   const diffMin = 11.0;
   const diffMax = 14.5;
-  const diffToY = (diff: number): number => {
-    const ratio = (diff - diffMin) / (diffMax - diffMin);
-    return ratio * roundsH; // 0 = top (low diff = good), roundsH = bottom (high diff = bad)
-    // Actually inverted: low diff = good = bottom visually? No — spec says higher dots = worse scores
-    // So high differential = top, low = bottom. ratio 1 = top (y=0), ratio 0 = bottom (y=roundsH)
-  };
   const diffToYInv = (diff: number): number => {
     const ratio = 1 - (diff - diffMin) / (diffMax - diffMin);
     return ratio * roundsH;
@@ -614,8 +607,8 @@ function PlayerJourney(): JSX.Element {
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 /** Player longitudinal profile — the coach's view of an ongoing coaching relationship */
-export default function StudentDetail(): JSX.Element {
-  const { id } = useParams<{ id: string }>();
+export default function StudentDetail(): React.JSX.Element {
+  useParams<{ id: string }>();
   const navigate = useNavigate();
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent): void => {

@@ -1,6 +1,6 @@
 import { ChevronLeft } from 'lucide-react';
 
-function PhoneFrame({ children }: { children: React.ReactNode }): JSX.Element {
+function PhoneFrame({ children }: { children: React.ReactNode }): React.JSX.Element {
   return (
     <div style={{
       maxWidth: 375,
@@ -102,7 +102,7 @@ const handicapSteps = [
   { value: '12.4', date: 'Mar \'26' },
 ];
 
-export default function PlayerJourney(): JSX.Element {
+export default function PlayerJourney(): React.JSX.Element {
   return (
     <div style={{
       minHeight: '100vh',

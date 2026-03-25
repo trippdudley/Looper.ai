@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Repeat } from 'lucide-react';
 
-function PhoneFrame({ children }: { children: React.ReactNode }): JSX.Element {
+function PhoneFrame({ children }: { children: React.ReactNode }): React.JSX.Element {
   return (
     <div style={{
       maxWidth: 375,
@@ -60,7 +60,7 @@ function PhoneFrame({ children }: { children: React.ReactNode }): JSX.Element {
   );
 }
 
-export default function PlayerBrief(): JSX.Element {
+export default function PlayerBrief(): React.JSX.Element {
   const navigate = useNavigate();
 
   return (

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, Send, ArrowUp } from 'lucide-react';
 
-function InfinityLoader(): JSX.Element {
+function InfinityLoader(): React.JSX.Element {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
       <div style={{
@@ -43,7 +43,7 @@ function InfinityLoader(): JSX.Element {
   );
 }
 
-export default function SessionReview(): JSX.Element {
+export default function SessionReview(): React.JSX.Element {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 

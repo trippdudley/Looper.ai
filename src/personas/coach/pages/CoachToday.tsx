@@ -1,10 +1,7 @@
 import { Link } from 'react-router-dom';
 import {
-  Clock,
   CheckCircle,
   ChevronRight,
-  Users,
-  Calendar,
   TrendingUp,
   ArrowUpRight,
   FileText,
@@ -125,7 +122,7 @@ function ConfidenceIndicator({ value }: { value: number }) {
 // ---------- main component ----------
 
 /** Coach's daily command center — the first thing they see when they open Looper. */
-export default function CoachToday(): JSX.Element {
+export default function CoachToday(): React.JSX.Element {
   const moe = golferById('golfer-moe');
 
   return (

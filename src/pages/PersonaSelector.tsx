@@ -2,14 +2,11 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ChevronDown,
-  Monitor,
-  Smartphone,
   Database,
   Brain,
   TrendingUp,
   ArrowRight,
   ArrowDown,
-  Play,
   FileText,
   BarChart3,
   User,
@@ -27,7 +24,6 @@ import {
   Shield,
   Target,
   Activity,
-  MessageCircle,
   Gauge,
   Award,
   Crosshair,
@@ -43,18 +39,7 @@ import {
   Search,
   Repeat,
   AlertTriangle,
-  Building2,
-  Globe,
-  DollarSign,
-  Sparkles,
   Users,
-  Mail,
-  Download,
-  Clock,
-  Megaphone,
-  UserPlus,
-  Lock,
-  Bot,
 } from 'lucide-react';
 import { useCountUp } from '../hooks/useCountUp';
 import { useTypewriter } from '../hooks/useTypewriter';
@@ -146,7 +131,7 @@ const PLAYER_TOOLS = [
   { name: 'Self-Reported State', icon: Smile, data: 'Confidence + intentions' },
 ];
 
-const AGENTS = [
+export const _AGENTS = [
   { name: 'Vision', icon: Camera, source: 'Launch Monitor', desc: 'Reads ball flight and club data from any launch monitor screen' },
   { name: 'Audio', icon: Mic, source: 'Conversation', desc: 'Extracts coaching cues, drill names, and phase transitions' },
   { name: 'Video', icon: Video, source: 'Swing Cameras', desc: 'Processes DTL and face-on angles, maps positions P1\u2013P10' },
@@ -181,12 +166,12 @@ const TIMELINE_PHASES = [
   },
 ];
 
-const PROTOTYPES = [
+export const _PROTOTYPES = [
   { label: 'Player Portal', icon: Route, path: '/player', desc: 'Mobile-first player experience' },
   { label: 'Coach Portal', icon: GraduationCap, path: '/coach', desc: 'Desktop coaching command center' },
 ];
 
-const VALUE_PROPS = [
+export const _VALUE_PROPS = [
   { icon: Zap, title: 'Zero Manual Input', desc: 'The record builds itself. Coaches coach. Nothing to type, nothing to upload.' },
   { icon: Shield, title: 'Persistent Memory', desc: 'Sessions, corrections, breakthroughs. Nothing gets lost, and it all compounds over time.' },
   { icon: Target, title: 'Real-Time Intelligence', desc: 'An AI copilot that sits alongside the coach during every lesson, processing data as it arrives.' },
@@ -264,7 +249,7 @@ const SOCIAL_PROOF = [
 /* ─── Sub-components ───────────────────────────────────────── */
 
 /** Floating navigation bar */
-function FloatingNav(): React.JSX.Element {
+export function _FloatingNav(): React.JSX.Element {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -314,7 +299,7 @@ function FloatingNav(): React.JSX.Element {
 }
 
 /** Animated confidence counter in hero */
-function HeroConfidence(): React.JSX.Element {
+export function _HeroConfidence(): React.JSX.Element {
   const value = useCountUp(94, 2400);
   return (
     <div className="flex items-center justify-center gap-4 mt-8">
@@ -350,14 +335,14 @@ function lemniscatePath(a: number, samples = 200): string {
 }
 
 /** Compact orbit card rendered at absolute position */
-function OrbitCard({
+export function _OrbitCard({
   name,
   icon: Icon,
-  data,
+  data: _data,
   side,
   x,
   y,
-  rotation,
+  rotation: _rotation,
   scale,
   opacity,
 }: {
@@ -498,8 +483,6 @@ function InfinityLoop(): React.JSX.Element {
 
     const rightTable = buildArcTable(-PI / 2);
     const leftTable = buildArcTable(PI / 2);
-    const totalCards = COACH_TOOLS.length + PLAYER_TOOLS.length;
-
     const moveCard = (
       el: HTMLDivElement | null,
       index: number,
@@ -723,7 +706,7 @@ function DeviceFrame({
 }
 
 /** Mock coach portal content — mirrors real Coach Portal dashboard */
-function CoachPortalMock(): React.JSX.Element {
+export function _CoachPortalMock(): React.JSX.Element {
   return (
     <div className="h-[260px] sm:h-[300px] p-3 text-[10px] overflow-hidden">
       {/* Top bar */}
@@ -877,7 +860,7 @@ function SidebarMock(): React.JSX.Element {
 }
 
 /** Mock player brief — the lesson summary sent to the player after each session */
-function PlayerMock(): React.JSX.Element {
+export function _PlayerMock(): React.JSX.Element {
   return (
     <div className="h-[260px] sm:h-[300px] text-[10px] overflow-hidden">
       {/* Status bar + header */}
@@ -1143,7 +1126,7 @@ function PlayerProfileMock(): React.JSX.Element {
 }
 
 /** Enhanced flywheel phase card */
-function FlywheelPhase({
+export function _FlywheelPhase({
   icon,
   label,
   sublabel,
@@ -1173,7 +1156,7 @@ function FlywheelPhase({
 }
 
 /** Mini data table for the Record flywheel phase */
-function MiniDataTable({ active }: { active: boolean }): React.JSX.Element {
+export function _MiniDataTable({ active }: { active: boolean }): React.JSX.Element {
   const speed = useCountUp(132.4, 1800, active);
   const spin = useCountUp(6240, 1800, active);
   const carry = useCountUp(172, 1800, active);
@@ -1197,7 +1180,7 @@ function MiniDataTable({ active }: { active: boolean }): React.JSX.Element {
 }
 
 /** AI reasoning text for the Intelligence flywheel phase */
-function MiniInsight({ active }: { active: boolean }): React.JSX.Element {
+export function _MiniInsight({ active }: { active: boolean }): React.JSX.Element {
   const { displayText, isDone } = useTypewriter(
     'Face angle trending open. Correlating with grip pressure...',
     30,
@@ -1215,7 +1198,7 @@ function MiniInsight({ active }: { active: boolean }): React.JSX.Element {
 }
 
 /** Mini sparkline for the Compounding flywheel phase */
-function MiniSparkline(): React.JSX.Element {
+export function _MiniSparkline(): React.JSX.Element {
   return (
     <svg viewBox="0 0 120 40" className="w-full" fill="none">
       <polyline
@@ -1315,7 +1298,7 @@ function TimelinePhaseNode({
 }
 
 /** Animated 4-phase lesson timeline */
-function LiveTimelineDemo(): React.JSX.Element {
+export function _LiveTimelineDemo(): React.JSX.Element {
   const [triggerRef, isInView] = useInViewTrigger(0.15);
   const visible = useStaggeredReveal(isInView ? 4 : 0, 2000, 500);
 
@@ -1341,7 +1324,7 @@ function LiveTimelineDemo(): React.JSX.Element {
 }
 
 /** Stat card with animated counter */
-function StatCard({
+export function _StatCard({
   end,
   suffix,
   label,
