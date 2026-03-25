@@ -194,32 +194,19 @@ const VALUE_PROPS = [
 
 const EVOLUTION_STAGES = [
   {
-    stage: 'Today',
-    desc: 'What coaches get on day one.',
-    items: [
-      { icon: Zap, title: 'Zero Manual Input', desc: 'The record builds itself. Coaches coach. Nothing to type, nothing to upload.' },
-      { icon: Shield, title: 'Persistent Memory', desc: 'Sessions, corrections, breakthroughs. Nothing gets lost, and it all compounds over time.' },
-      { icon: Target, title: 'Real-Time Copilot', desc: 'An AI that sits alongside the coach during every lesson, processing data as it arrives.' },
-      { icon: Users, title: 'Players Stick Around', desc: 'When players can see their own progress, they stick around. That changes the economics of a practice.' },
-      { icon: Clock, title: 'Less Admin', desc: 'Practice plans generate themselves. Post-session review takes 30 seconds. The paperwork disappears.' },
-    ],
+    stage: 'Record',
+    outcome: 'Coaches stop losing context.',
+    supporting: 'Pre-session briefs and post-session summaries. Ambient capture \u2014 nothing to type. Every lesson has a before and after.',
   },
   {
-    stage: 'Next',
-    desc: 'What becomes possible with the data.',
-    items: [
-      { icon: Sparkles, title: 'Predictive Development', desc: 'The system starts predicting plateaus and breakthroughs before they happen. Each correction makes the model smarter.' },
-      { icon: Globe, title: 'Industry Benchmarks', desc: 'Anonymized coaching data, aggregated across academies. What actually works, measured at scale.' },
-      { icon: Megaphone, title: 'Built-In Marketing', desc: 'Session briefs and player journeys are shareable. Results become referrals without anyone writing a post.' },
-    ],
+    stage: 'Reason',
+    outcome: 'Blind spots surface before they compound.',
+    supporting: 'Real-time insights during the lesson. Pattern detection across sessions. The AI catches what the coach missed.',
   },
   {
-    stage: 'The Long Arc',
-    desc: 'Where the dataset takes us.',
-    items: [
-      { icon: Bot, title: 'Digital Coaching Twins', desc: 'An AI trained on how you coach. Available to your players between lessons. Your methodology, licensable as a product.' },
-      { icon: DollarSign, title: 'New Revenue', desc: 'Coaching IP licensing. Academy-branded AI assistants. Ways to earn from your methodology that don\u2019t require you in the room.' },
-    ],
+    stage: 'Compound',
+    outcome: 'Retention climbs. Coaching scales.',
+    supporting: 'Predictive development plans. Benchmarks across the academy. Coaching IP becomes a product, not just a service.',
   },
 ];
 
@@ -244,6 +231,33 @@ const ANALOGS = [
     desc: 'Showed that fragmented, trust-based, relationship-heavy industries are exactly where vertical software wins. Sound familiar?',
     metric: '$9.5B valuation',
     icon: Wrench,
+  },
+];
+
+const SOCIAL_PROOF = [
+  {
+    quote: 'I use 5\u20136 different tools, it would be better if they were connected.',
+    attribution: 'Patrick',
+    role: 'PGA Teaching Professional',
+    type: 'quote' as const,
+  },
+  {
+    quote: 'I used to see a teacher who knew a lot about the golf swing but each time I saw him, it was clear that he had no memory of what we\u2019d worked on two weeks before.',
+    attribution: 'PGA Magazine',
+    role: 'Psychotherapist & Golfer',
+    type: 'quote' as const,
+  },
+  {
+    quote: 'PGA Section Teacher of the Year Randy Dietz spends 30\u201360 minutes each night responding to student emails, his lesson book is permanently full, and his wait list is two dozen deep.',
+    attribution: 'Randy Dietz',
+    role: 'PGA Section Teacher of the Year',
+    type: 'fact' as const,
+  },
+  {
+    quote: 'I think lessons are a useless waste of time and money. A coaching program is far better as it provides ongoing support and development on all parts of the game.',
+    attribution: 'GolfWRX Forum',
+    role: 'Player',
+    type: 'quote' as const,
   },
 ];
 
@@ -1036,6 +1050,98 @@ function PreSessionBriefMock(): React.JSX.Element {
   );
 }
 
+/** Player profile mock — player database pillar */
+function PlayerProfileMock(): React.JSX.Element {
+  return (
+    <div className="h-[260px] sm:h-[300px] text-[10px] overflow-hidden">
+      {/* Status bar */}
+      <div className="flex items-center justify-between mb-1">
+        <span className="font-mono text-[9px] text-gray-400">9:41</span>
+        <span className="font-display font-bold text-navy text-[11px]">
+          LOOPER<span className="text-accent">.AI</span>
+        </span>
+        <div className="w-6" />
+      </div>
+      {/* Player header */}
+      <div className="text-center mb-2 pb-1.5 border-b border-gray-200">
+        <div className="w-10 h-10 rounded-full bg-navy text-white flex items-center justify-center mx-auto mb-1">
+          <span className="text-[8px] font-bold">MN</span>
+        </div>
+        <p className="font-display text-navy text-[13px] font-semibold">Moe Norman</p>
+        <p className="font-mono text-[8px] text-gray-400">Goal: Break 80</p>
+      </div>
+      {/* Quick stats */}
+      <div className="grid grid-cols-3 gap-1.5 mb-2">
+        {[
+          { label: 'Handicap', value: '12.1', sub: 'from 13.8' },
+          { label: 'Sessions', value: '9', sub: 'with Coach T' },
+          { label: 'Last Lesson', value: 'Mar 24', sub: '' },
+        ].map((s) => (
+          <div key={s.label} className="bg-gray-50 rounded px-1.5 py-1 text-center">
+            <p className="font-mono text-[6px] text-gray-400 uppercase">{s.label}</p>
+            <p className="font-mono text-[11px] text-navy font-bold">{s.value}</p>
+            {s.sub && <p className="font-mono text-[6px] text-accent">{s.sub}</p>}
+          </div>
+        ))}
+      </div>
+      {/* Connected sources */}
+      <div className="mb-2">
+        <p className="font-mono text-[7px] text-gray-400 uppercase tracking-wider mb-1">Connected</p>
+        <div className="flex gap-1">
+          {['Arccos', 'GHIN', 'TrackMan', 'WHOOP'].map((s) => (
+            <span key={s} className="text-[7px] px-1.5 py-0.5 rounded-full bg-accent/10 text-accent font-semibold">{s}</span>
+          ))}
+        </div>
+      </div>
+      {/* Handicap trend */}
+      <div className="mb-2">
+        <p className="font-mono text-[7px] text-gray-400 uppercase tracking-wider mb-1">Handicap Trend</p>
+        <svg viewBox="0 0 140 28" className="w-full" fill="none">
+          <polyline
+            points="0,24 20,22 40,20 60,18 80,16 100,12 120,10 140,6"
+            stroke="#0D7C66"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <polyline
+            points="0,24 20,22 40,20 60,18 80,16 100,12 120,10 140,6"
+            fill="url(#profile-grad)"
+            opacity="0.15"
+          />
+          <defs>
+            <linearGradient id="profile-grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#0D7C66" />
+              <stop offset="100%" stopColor="#0D7C66" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      {/* Strokes gained */}
+      <div className="mb-2">
+        <p className="font-mono text-[7px] text-gray-400 uppercase tracking-wider mb-1">Strokes Gained</p>
+        <div className="grid grid-cols-4 gap-1">
+          {[
+            { cat: 'Drive', val: '-2.3', bad: true },
+            { cat: 'Appr', val: '+0.8', bad: false },
+            { cat: 'Short', val: '+1.1', bad: false },
+            { cat: 'Putt', val: '+0.2', bad: false },
+          ].map((sg) => (
+            <div key={sg.cat} className="bg-gray-50 rounded px-1 py-0.5 text-center">
+              <p className="font-mono text-[6px] text-gray-400">{sg.cat}</p>
+              <p className={`font-mono text-[9px] font-bold ${sg.bad ? 'text-red-500' : 'text-accent'}`}>{sg.val}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* CTA */}
+      <div className="bg-accent rounded-lg py-1.5 text-center">
+        <span className="text-white text-[10px] font-display font-semibold">View Full Journey</span>
+      </div>
+    </div>
+  );
+}
+
 /** Enhanced flywheel phase card */
 function FlywheelPhase({
   icon,
@@ -1338,14 +1444,8 @@ export default function PersonaSelector(): React.JSX.Element {
               <span className="text-accent-bright">.AI</span>
             </h1>
 
-            <p className="font-editorial italic text-2xl sm:text-3xl lg:text-4xl text-white mt-8 tracking-tight">
-              Expertise, engineered.
-            </p>
-
-            <p className="font-display text-lg sm:text-xl text-gray-400 mt-5 max-w-2xl mx-auto leading-relaxed font-light">
-              Powering golf in the age of AI.
-              <br className="hidden sm:block" />
-              Starting with coaching. Built to connect everything.
+            <p className="font-display text-lg sm:text-xl text-gray-400 mt-8 max-w-2xl mx-auto leading-relaxed font-light">
+              The golf coaching Operating System for AI.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12">
@@ -1353,8 +1453,8 @@ export default function PersonaSelector(): React.JSX.Element {
                 to="/vision"
                 className="flex items-center justify-center gap-2 text-gray-400 hover:text-white font-medium w-56 py-3.5 rounded-xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:-translate-y-0.5"
               >
-                <Play className="w-4 h-4" />
-                <span>Watch the Vision</span>
+                <FileText className="w-4 h-4" />
+                <span>Read the Thesis</span>
               </Link>
               <Link
                 to="/coach"
@@ -1409,120 +1509,157 @@ export default function PersonaSelector(): React.JSX.Element {
           </div>
         </section>
 
-        {/* ── Section 3: Product — Show the UI ─────────── */}
+        {/* ── Social Proof — Voices from the Field ──────── */}
+        <section className="py-16 sm:py-20 px-6">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <SectionLabel>From the Field</SectionLabel>
+            </div>
+            <div className="space-y-10">
+              {SOCIAL_PROOF.map((item) => (
+                <div key={item.attribution} className="max-w-3xl mx-auto border-l-2 border-accent-bright/20 pl-6 sm:pl-10">
+                  <p className={`font-display text-lg sm:text-xl leading-relaxed ${item.type === 'quote' ? 'text-gray-200 italic' : 'text-gray-300'}`}>
+                    {item.type === 'quote' ? '\u201C' : ''}{item.quote}{item.type === 'quote' ? '\u201D' : ''}
+                  </p>
+                  <div className="mt-4 flex items-center gap-2">
+                    <p className="font-display text-sm font-semibold text-white">{item.attribution}</p>
+                    <span className="text-gray-600">/</span>
+                    <p className="font-mono text-xs text-gray-500">{item.role}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Section 3: The Product — Three Pillars ──────── */}
         <section id="product" ref={setRef(2)} className="fade-in-up py-24 sm:py-32 px-6 section-glow">
           <div className="text-center mb-16">
             <SectionLabel>The Product</SectionLabel>
-            <p className="font-display text-2xl sm:text-4xl text-white font-medium mt-4">
-              One intelligence, <span className="text-accent-bright">two experiences.</span>
+            <p className="font-display text-2xl sm:text-4xl text-white font-medium leading-snug max-w-3xl mx-auto mt-4">
+              Three tools. <span className="text-accent-bright">One intelligence.</span>
             </p>
           </div>
 
-          {/* Desktop: two-row showcase */}
-          <div className="hidden lg:block max-w-5xl mx-auto space-y-10">
-            {/* Row 1 labels */}
-            <div className="flex justify-between px-8">
-              <div className="text-center flex-1">
-                <div className="flex items-center justify-center gap-2 mb-1.5">
-                  <Monitor className="w-4 h-4 text-accent-bright" />
-                  <p className="font-display text-sm font-semibold text-white">Coach Portal</p>
-                </div>
-                <p className="text-xs text-gray-500">Desktop command center</p>
+          {/* Three pillar wireframes — desktop */}
+          <div className="hidden lg:grid grid-cols-3 gap-8 max-w-6xl mx-auto items-start mb-16">
+            {/* Player Database */}
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-2 mb-1.5">
+                <Database className="w-4 h-4 text-accent-bright" />
+                <p className="font-display text-sm font-semibold text-white">Player Database</p>
               </div>
-              <div className="text-center w-[240px]">
-                <div className="flex items-center justify-center gap-2 mb-1.5">
-                  <Brain className="w-4 h-4 text-accent-bright" />
-                  <p className="font-display text-sm font-semibold text-white">Lesson Sidebar</p>
-                </div>
-                <p className="text-xs text-gray-500">420-480px, dark mode</p>
-              </div>
-            </div>
-            {/* Row 1: Coach Portal (large) + Lesson Sidebar */}
-            <div className="relative h-[440px]">
-              <DeviceFrame
-                type="laptop"
-                className="absolute left-1/2 -translate-x-[60%] top-0 w-[660px] animate-float z-10"
-              >
-                <CoachPortalMock />
-              </DeviceFrame>
-              <DeviceFrame
-                type="sidebar"
-                className="absolute right-0 top-8 w-[240px] animate-float z-20"
-              >
-                <SidebarMock />
+              <p className="text-xs text-gray-500 mb-4">Every player&apos;s history, connected and visible.</p>
+              <DeviceFrame type="phone" className="mx-auto w-[200px] animate-float">
+                <PlayerProfileMock />
               </DeviceFrame>
             </div>
-            {/* Row 2 labels */}
-            <div className="flex justify-between px-8">
-              <div className="text-center flex-1">
-                <div className="flex items-center justify-center gap-2 mb-1.5">
-                  <FileText className="w-4 h-4 text-accent-bright" />
-                  <p className="font-display text-sm font-semibold text-white">Pre-Session Brief</p>
-                </div>
-                <p className="text-xs text-gray-500">Full player intel before every lesson</p>
+
+            {/* Session Briefs */}
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-2 mb-1.5">
+                <FileText className="w-4 h-4 text-accent-bright" />
+                <p className="font-display text-sm font-semibold text-white">Session Briefs</p>
               </div>
-              <div className="text-center w-[180px]">
-                <div className="flex items-center justify-center gap-2 mb-1.5">
-                  <Smartphone className="w-4 h-4 text-accent-bright" />
-                  <p className="font-display text-sm font-semibold text-white">Player Brief</p>
-                </div>
-                <p className="text-xs text-gray-500">Mobile-first, 480px</p>
-              </div>
-            </div>
-            {/* Row 2: Pre-Session Brief (laptop) + Player Brief (phone) */}
-            <div className="relative h-[440px]">
-              <DeviceFrame
-                type="laptop"
-                className="absolute left-1/2 -translate-x-[60%] top-0 w-[660px] animate-float z-10"
-              >
+              <p className="text-xs text-gray-500 mb-4">AI-generated intel before every lesson. Automatic summary after.</p>
+              <DeviceFrame type="laptop" className="animate-float">
                 <PreSessionBriefMock />
               </DeviceFrame>
-              <DeviceFrame
-                type="phone"
-                className="absolute right-4 top-12 w-[180px] animate-float z-20"
-              >
-                <PlayerMock />
+            </div>
+
+            {/* AI Copilot */}
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-2 mb-1.5">
+                <Brain className="w-4 h-4 text-accent-bright" />
+                <p className="font-display text-sm font-semibold text-white">AI Copilot</p>
+              </div>
+              <p className="text-xs text-gray-500 mb-4">Real-time reasoning alongside TrackMan. Confidence builds as data arrives.</p>
+              <DeviceFrame type="sidebar" className="mx-auto w-[260px] animate-float">
+                <SidebarMock />
               </DeviceFrame>
             </div>
           </div>
 
-          {/* Tablet & mobile: vertical stack */}
-          <div className="lg:hidden space-y-10 max-w-sm mx-auto">
-            <div>
-              <div className="flex items-center justify-center gap-2 mb-4">
-                <Monitor className="w-4 h-4 text-accent-bright" />
-                <p className="font-display text-sm font-semibold text-white">Coach Portal</p>
+          {/* Three pillar wireframes — mobile/tablet */}
+          <div className="lg:hidden space-y-12 max-w-sm mx-auto mb-16">
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-2 mb-1.5">
+                <Database className="w-4 h-4 text-accent-bright" />
+                <p className="font-display text-sm font-semibold text-white">Player Database</p>
               </div>
-              <DeviceFrame type="laptop" className="animate-float">
-                <CoachPortalMock />
+              <p className="text-xs text-gray-500 mb-4">Every player&apos;s history, connected and visible.</p>
+              <DeviceFrame type="phone" className="mx-auto w-[200px] animate-float">
+                <PlayerProfileMock />
               </DeviceFrame>
             </div>
-            <div>
-              <div className="flex items-center justify-center gap-2 mb-4">
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-2 mb-1.5">
                 <FileText className="w-4 h-4 text-accent-bright" />
-                <p className="font-display text-sm font-semibold text-white">Pre-Session Brief</p>
+                <p className="font-display text-sm font-semibold text-white">Session Briefs</p>
               </div>
+              <p className="text-xs text-gray-500 mb-4">AI-generated intel before every lesson. Automatic summary after.</p>
               <DeviceFrame type="laptop" className="animate-float">
                 <PreSessionBriefMock />
               </DeviceFrame>
             </div>
-            <div>
-              <div className="flex items-center justify-center gap-2 mb-4">
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-2 mb-1.5">
                 <Brain className="w-4 h-4 text-accent-bright" />
-                <p className="font-display text-sm font-semibold text-white">Lesson Sidebar</p>
+                <p className="font-display text-sm font-semibold text-white">AI Copilot</p>
               </div>
+              <p className="text-xs text-gray-500 mb-4">Real-time reasoning alongside TrackMan. Confidence builds as data arrives.</p>
               <DeviceFrame type="sidebar" className="mx-auto w-[280px] animate-float">
                 <SidebarMock />
               </DeviceFrame>
             </div>
-            <div>
-              <div className="flex items-center justify-center gap-2 mb-4">
-                <Smartphone className="w-4 h-4 text-accent-bright" />
-                <p className="font-display text-sm font-semibold text-white">Player Brief</p>
+          </div>
+
+          {/* Confidence evolution — the "holy shit" moment */}
+          <div className="max-w-3xl mx-auto">
+            <p className="text-center font-display text-lg text-white font-medium mb-6">
+              The AI earns its conclusions in real time.
+            </p>
+            <div className="flex flex-col sm:flex-row items-stretch gap-4">
+              {[
+                { pct: 52, color: '#C93B3B', label: 'Early signal', desc: 'Face-to-path volatility detected across 6 shots' },
+                { pct: 71, color: '#D4980B', label: 'Pattern forming', desc: 'Cross-referencing session history confirms driver trend' },
+                { pct: 87, color: '#0FA87A', label: 'High confidence', desc: 'Driver SG declining across 8 sessions — never addressed' },
+              ].map((step) => (
+                <div key={step.pct} className="glass-premium p-5 flex-1">
+                  <div className="flex items-center gap-3 mb-3">
+                    <svg viewBox="0 0 36 36" className="w-10 h-10 flex-shrink-0">
+                      <circle cx="18" cy="18" r="15" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="3" />
+                      <circle
+                        cx="18" cy="18" r="15" fill="none"
+                        stroke={step.color} strokeWidth="3"
+                        strokeDasharray={`${(step.pct / 100) * 94.2} 94.2`}
+                        strokeLinecap="round"
+                        transform="rotate(-90 18 18)"
+                      />
+                    </svg>
+                    <span className="font-mono text-2xl font-bold tabular-nums" style={{ color: step.color }}>
+                      {step.pct}%
+                    </span>
+                  </div>
+                  <p className="font-display text-sm font-semibold text-white mb-1">{step.label}</p>
+                  <p className="text-xs text-gray-400 leading-relaxed">{step.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* TrackMan integration callout */}
+          <div className="max-w-2xl mx-auto mt-12">
+            <div className="glass-premium p-6 flex items-center gap-5">
+              <div className="w-12 h-12 rounded-xl bg-[#E8862A]/10 border border-[#E8862A]/20 flex items-center justify-center flex-shrink-0">
+                <Target className="w-5 h-5 text-[#E8862A]" />
               </div>
-              <DeviceFrame type="phone" className="mx-auto w-[200px] animate-float">
-                <PlayerMock />
-              </DeviceFrame>
+              <div>
+                <p className="font-display text-sm font-semibold text-white">Works with TrackMan Performance Studio</p>
+                <p className="text-xs text-gray-400 mt-1 leading-relaxed">
+                  Sits alongside the tool coaches already use. Windows snap, shared screen, zero workflow change. Foresight and Full Swing support planned.
+                </p>
+              </div>
             </div>
           </div>
         </section>
@@ -1539,98 +1676,100 @@ export default function PersonaSelector(): React.JSX.Element {
             </p>
           </div>
 
-          <div className="max-w-6xl mx-auto">
-            {/* Desktop: horizontal three-column layout */}
-            <div className="hidden lg:flex items-stretch gap-4">
-              {EVOLUTION_STAGES.map((stage, stageIdx) => (
-                <div key={stage.stage} className="flex items-stretch flex-1 min-w-0">
-                  <div className="flex-1 min-w-0">
-                    {/* Stage header */}
-                    <div className="text-center mb-5">
-                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-3 ${
-                        stageIdx === 0 ? 'bg-accent-bright/20 border border-accent-bright/30' :
-                        stageIdx === 1 ? 'bg-accent-bright/10 border border-accent-bright/20' :
-                        'bg-white/5 border border-white/10'
-                      }`}>
-                        <span className="font-mono text-[10px] text-accent-bright font-bold uppercase tracking-wider">
-                          {stageIdx === 0 ? 'Now' : stageIdx === 1 ? 'Next' : 'Arc'}
-                        </span>
-                      </div>
-                      <p className="font-display text-lg font-semibold text-white">{stage.stage}</p>
-                      <p className="text-xs text-gray-500 mt-1">{stage.desc}</p>
-                    </div>
-
-                    {/* Stage items */}
-                    <div className="space-y-3">
-                      {stage.items.map((item) => {
-                        const Icon = item.icon;
-                        return (
-                          <div key={item.title} className="glass-premium p-4 group">
-                            <div className="flex items-center gap-2.5 mb-2">
-                              <div className="w-7 h-7 rounded-md bg-accent-bright/10 flex items-center justify-center flex-shrink-0 group-hover:bg-accent-bright/15 transition-colors duration-300">
-                                <Icon className="w-3.5 h-3.5 text-accent-bright" />
-                              </div>
-                              <p className="font-display text-sm font-semibold text-white">{item.title}</p>
-                            </div>
-                            <p className="text-xs text-gray-400 leading-relaxed">{item.desc}</p>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Arrow between columns */}
-                  {stageIdx < EVOLUTION_STAGES.length - 1 && (
-                    <div className="flex items-center shrink-0 px-2">
-                      <ArrowRight className="w-4 h-4 text-accent-bright/30" />
-                    </div>
-                  )}
+          {/* Desktop: three columns with arrows */}
+          <div className="hidden sm:flex items-start max-w-5xl mx-auto">
+            {EVOLUTION_STAGES.map((stage, stageIdx) => (
+              <div key={stage.stage} className="flex items-start flex-1 min-w-0">
+                <div className="flex-1 min-w-0 text-center px-6">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-bright font-medium mb-4">
+                    {stage.stage}
+                  </p>
+                  <p className="font-display text-lg font-semibold text-white leading-snug mb-3">
+                    {stage.outcome}
+                  </p>
+                  <p className="text-sm text-gray-400 leading-relaxed">
+                    {stage.supporting}
+                  </p>
                 </div>
-              ))}
+                {stageIdx < EVOLUTION_STAGES.length - 1 && (
+                  <div className="flex items-center shrink-0 pt-8">
+                    <ArrowRight className="w-5 h-5 text-accent-bright/25" />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Mobile: vertical stack */}
+          <div className="sm:hidden space-y-8 max-w-sm mx-auto">
+            {EVOLUTION_STAGES.map((stage, stageIdx) => (
+              <div key={stage.stage}>
+                <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-bright font-medium mb-3">
+                  {stage.stage}
+                </p>
+                <p className="font-display text-lg font-semibold text-white leading-snug mb-2">
+                  {stage.outcome}
+                </p>
+                <p className="text-sm text-gray-400 leading-relaxed">
+                  {stage.supporting}
+                </p>
+                {stageIdx < EVOLUTION_STAGES.length - 1 && (
+                  <div className="flex justify-center mt-6">
+                    <ArrowDown className="w-4 h-4 text-accent-bright/25" />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── Why Academies Win ─────────────────────────── */}
+        <section className="fade-in-up py-24 sm:py-32 px-6 section-glow">
+          <div className="text-center mb-16">
+            <SectionLabel>For Academies</SectionLabel>
+            <p className="font-display text-2xl sm:text-4xl text-white font-medium leading-snug max-w-3xl mx-auto mt-4">
+              What&apos;s in it for <span className="text-accent-bright">your business.</span>
+            </p>
+          </div>
+
+          <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {/* Retention */}
+            <div className="glass-premium p-8 text-center">
+              <div className="w-12 h-12 rounded-xl bg-accent-bright/10 border border-accent-bright/20 flex items-center justify-center mx-auto mb-5">
+                <Users className="w-5 h-5 text-accent-bright" />
+              </div>
+              <p className="font-display text-lg font-semibold text-white mb-2">
+                Retention
+              </p>
+              <p className="text-sm text-gray-400 leading-relaxed">
+                Players who see their progress stay longer. Lesson summaries, practice plans, and a visible journey turn one-off lessons into ongoing coaching relationships.
+              </p>
             </div>
 
-            {/* Mobile/tablet: vertical stack */}
-            <div className="lg:hidden space-y-8">
-              {EVOLUTION_STAGES.map((stage, stageIdx) => (
-                <div key={stage.stage}>
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                      stageIdx === 0 ? 'bg-accent-bright/20 border border-accent-bright/30' :
-                      stageIdx === 1 ? 'bg-accent-bright/10 border border-accent-bright/20' :
-                      'bg-white/5 border border-white/10'
-                    }`}>
-                      <span className="font-mono text-[9px] text-accent-bright font-bold uppercase tracking-wider">
-                        {stageIdx === 0 ? 'Now' : stageIdx === 1 ? 'Next' : 'Arc'}
-                      </span>
-                    </div>
-                    <div>
-                      <p className="font-display text-lg font-semibold text-white">{stage.stage}</p>
-                      <p className="text-xs text-gray-500">{stage.desc}</p>
-                    </div>
-                  </div>
-                  <div className="space-y-3 pl-13">
-                    {stage.items.map((item) => {
-                      const Icon = item.icon;
-                      return (
-                        <div key={item.title} className="glass-premium p-4 group">
-                          <div className="flex items-center gap-2.5 mb-2">
-                            <div className="w-7 h-7 rounded-md bg-accent-bright/10 flex items-center justify-center flex-shrink-0">
-                              <Icon className="w-3.5 h-3.5 text-accent-bright" />
-                            </div>
-                            <p className="font-display text-sm font-semibold text-white">{item.title}</p>
-                          </div>
-                          <p className="text-xs text-gray-400 leading-relaxed">{item.desc}</p>
-                        </div>
-                      );
-                    })}
-                  </div>
-                  {stageIdx < EVOLUTION_STAGES.length - 1 && (
-                    <div className="flex justify-center mt-4">
-                      <ArrowDown className="w-4 h-4 text-accent-bright/30" />
-                    </div>
-                  )}
-                </div>
-              ))}
+            {/* Operations */}
+            <div className="glass-premium p-8 text-center">
+              <div className="w-12 h-12 rounded-xl bg-accent-bright/10 border border-accent-bright/20 flex items-center justify-center mx-auto mb-5">
+                <Layers className="w-5 h-5 text-accent-bright" />
+              </div>
+              <p className="font-display text-lg font-semibold text-white mb-2">
+                Operations
+              </p>
+              <p className="text-sm text-gray-400 leading-relaxed">
+                Works alongside TrackMan, Foresight, and the tools coaches already use. No new workflows. Ambient capture replaces manual notes. Post-session review takes 30 seconds.
+              </p>
+            </div>
+
+            {/* Revenue */}
+            <div className="glass-premium p-8 text-center">
+              <div className="w-12 h-12 rounded-xl bg-accent-bright/10 border border-accent-bright/20 flex items-center justify-center mx-auto mb-5">
+                <TrendingUp className="w-5 h-5 text-accent-bright" />
+              </div>
+              <p className="font-display text-lg font-semibold text-white mb-2">
+                New Revenue
+              </p>
+              <p className="text-sm text-gray-400 leading-relaxed">
+                Digital coaching twins extend your reach between lessons. Coaching IP becomes a product. Higher retention and visible results drive referrals without anyone writing a post.
+              </p>
             </div>
           </div>
         </section>
@@ -1666,6 +1805,29 @@ export default function PersonaSelector(): React.JSX.Element {
                 </div>
               );
             })}
+          </div>
+
+          {/* Market size punchline */}
+          <div className="max-w-3xl mx-auto glass-premium p-8 text-center">
+            <p className="font-display text-lg text-white font-medium mb-3">
+              The playbook is proven. The market is real.
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
+              <div>
+                <p className="font-mono text-2xl text-accent-bright font-bold">29,000+</p>
+                <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider mt-1">PGA Professionals in the US</p>
+              </div>
+              <div className="hidden sm:block w-px h-10 bg-white/10" />
+              <div>
+                <p className="font-mono text-2xl text-accent-bright font-bold">$2.6B</p>
+                <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider mt-1">US golf instruction market</p>
+              </div>
+              <div className="hidden sm:block w-px h-10 bg-white/10" />
+              <div>
+                <p className="font-mono text-2xl text-accent-bright font-bold">37M</p>
+                <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider mt-1">Golfers in the US</p>
+              </div>
+            </div>
           </div>
 
         </section>
