@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Building2, User } from 'lucide-react';
 
 /** Entry gate — two-choice selector before the demo begins. */
-export default function EntrySelector(): JSX.Element {
+export default function EntrySelector() {
   return (
     <div className="min-h-screen bg-[#0C1117] flex flex-col items-center justify-center px-6">
       <h1 className="font-display text-4xl font-extrabold text-white tracking-[0.05em] mb-2">
