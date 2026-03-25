@@ -29,3 +29,4 @@ sizzle-reel.mp4
 # Claude local settings
 .claude/settings.local.json
 .claude/worktrees/
+.claude/worktrees/
