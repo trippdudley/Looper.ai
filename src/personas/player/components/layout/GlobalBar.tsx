@@ -1,4 +1,5 @@
-import { User } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { User, ChevronLeft } from 'lucide-react';
 import { C, F } from '../../data/tokens';
 
 export default function GlobalBar() {
@@ -16,8 +17,23 @@ export default function GlobalBar() {
         zIndex: 50,
       }}
     >
-      {/* Logo */}
+      {/* Logo with back link */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+        <Link
+          to="/"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 24,
+            height: 24,
+            borderRadius: 4,
+            marginRight: 6,
+          }}
+          aria-label="Back to home"
+        >
+          <ChevronLeft size={16} color="rgba(255,255,255,0.5)" />
+        </Link>
         <span
           style={{
             fontFamily: F.brand,
