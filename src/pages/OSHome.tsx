@@ -85,7 +85,7 @@ const academyMetrics = [
 // ---------- component ----------
 
 /** OS-level home page — the single pane of glass for a coach or academy director. */
-export default function OSHome(): JSX.Element {
+export default function OSHome() {
   return (
     <div className="min-h-screen bg-bg-light">
       {/* Header */}
@@ -138,19 +138,15 @@ export default function OSHome(): JSX.Element {
           {navCards.map((card) => {
             const Icon = card.icon;
             const isPlaceholder = !card.live;
-            const Wrapper = card.live ? Link : 'div';
-            const wrapperProps = card.live ? { to: card.route } : {};
 
-            return (
-              <Wrapper
-                key={card.title}
-                {...(wrapperProps as Record<string, string>)}
-                className={`group relative bg-white rounded-lg shadow-[0_1px_3px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.06)] p-6 transition-all duration-150 ${
-                  card.live
-                    ? 'cursor-pointer hover:-translate-y-[2px] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)]'
-                    : 'cursor-default'
-                }`}
-              >
+            const cardClass = `group relative bg-white rounded-lg shadow-[0_1px_3px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.06)] p-6 transition-all duration-150 ${
+              card.live
+                ? 'cursor-pointer hover:-translate-y-[2px] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)]'
+                : 'cursor-default'
+            }`;
+
+            const cardContent = (
+              <>
                 {/* Icon + title row */}
                 <div className="flex items-start justify-between mb-4">
                   <div className={`w-11 h-11 rounded-lg ${card.accentBg} flex items-center justify-center`}>
@@ -193,7 +189,17 @@ export default function OSHome(): JSX.Element {
                     );
                   })}
                 </ul>
-              </Wrapper>
+              </>
+            );
+
+            return card.live ? (
+              <Link key={card.title} to={card.route} className={cardClass}>
+                {cardContent}
+              </Link>
+            ) : (
+              <div key={card.title} className={cardClass}>
+                {cardContent}
+              </div>
             );
           })}
         </div>
