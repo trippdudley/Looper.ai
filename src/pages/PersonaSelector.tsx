@@ -43,6 +43,18 @@ import {
   Search,
   Repeat,
   AlertTriangle,
+  Building2,
+  Globe,
+  DollarSign,
+  Sparkles,
+  Users,
+  Mail,
+  Download,
+  Clock,
+  Megaphone,
+  UserPlus,
+  Lock,
+  Bot,
 } from 'lucide-react';
 import { useCountUp } from '../hooks/useCountUp';
 import { useTypewriter } from '../hooks/useTypewriter';
@@ -175,9 +187,64 @@ const PROTOTYPES = [
 ];
 
 const VALUE_PROPS = [
-  { icon: Zap, title: 'Zero Manual Input', desc: 'Every data point captured automatically. Coaches coach, the record builds itself.' },
-  { icon: Shield, title: 'Persistent Memory', desc: 'Nothing is lost. Every session, every correction, every breakthrough \u2014 compounding over time.' },
-  { icon: Target, title: 'Real-Time Intelligence', desc: 'AI that watches, reasons, and assists alongside the coach during every lesson.' },
+  { icon: Zap, title: 'Zero Manual Input', desc: 'The record builds itself. Coaches coach. Nothing to type, nothing to upload.' },
+  { icon: Shield, title: 'Persistent Memory', desc: 'Sessions, corrections, breakthroughs. Nothing gets lost, and it all compounds over time.' },
+  { icon: Target, title: 'Real-Time Intelligence', desc: 'An AI copilot that sits alongside the coach during every lesson, processing data as it arrives.' },
+];
+
+const EVOLUTION_STAGES = [
+  {
+    stage: 'Today',
+    desc: 'What coaches get on day one.',
+    items: [
+      { icon: Zap, title: 'Zero Manual Input', desc: 'The record builds itself. Coaches coach. Nothing to type, nothing to upload.' },
+      { icon: Shield, title: 'Persistent Memory', desc: 'Sessions, corrections, breakthroughs. Nothing gets lost, and it all compounds over time.' },
+      { icon: Target, title: 'Real-Time Copilot', desc: 'An AI that sits alongside the coach during every lesson, processing data as it arrives.' },
+      { icon: Users, title: 'Players Stick Around', desc: 'When players can see their own progress, they stick around. That changes the economics of a practice.' },
+      { icon: Clock, title: 'Less Admin', desc: 'Practice plans generate themselves. Post-session review takes 30 seconds. The paperwork disappears.' },
+    ],
+  },
+  {
+    stage: 'Next',
+    desc: 'What becomes possible with the data.',
+    items: [
+      { icon: Sparkles, title: 'Predictive Development', desc: 'The system starts predicting plateaus and breakthroughs before they happen. Each correction makes the model smarter.' },
+      { icon: Globe, title: 'Industry Benchmarks', desc: 'Anonymized coaching data, aggregated across academies. What actually works, measured at scale.' },
+      { icon: Megaphone, title: 'Built-In Marketing', desc: 'Session briefs and player journeys are shareable. Results become referrals without anyone writing a post.' },
+    ],
+  },
+  {
+    stage: 'The Long Arc',
+    desc: 'Where the dataset takes us.',
+    items: [
+      { icon: Bot, title: 'Digital Coaching Twins', desc: 'An AI trained on how you coach. Available to your players between lessons. Your methodology, licensable as a product.' },
+      { icon: DollarSign, title: 'New Revenue', desc: 'Coaching IP licensing. Academy-branded AI assistants. Ways to earn from your methodology that don\u2019t require you in the room.' },
+    ],
+  },
+];
+
+const ANALOGS = [
+  {
+    name: 'Epic Systems',
+    domain: 'Healthcare EHR',
+    desc: 'Started by capturing the patient record when healthcare was all paper and silos. Now runs the data infrastructure behind most of American medicine.',
+    metric: '$4.6B revenue',
+    icon: Heart,
+  },
+  {
+    name: 'Veeva Systems',
+    domain: 'Life Sciences CRM',
+    desc: 'Built vertical SaaS for pharma when everyone said the market was too small. Turns out owning the record in a specialized industry is a very good business.',
+    metric: '$37B market cap',
+    icon: Shield,
+  },
+  {
+    name: 'ServiceTitan',
+    domain: 'Home Services OS',
+    desc: 'Showed that fragmented, trust-based, relationship-heavy industries are exactly where vertical software wins. Sound familiar?',
+    metric: '$9.5B valuation',
+    icon: Wrench,
+  },
 ];
 
 /* ─── Sub-components ───────────────────────────────────────── */
@@ -206,18 +273,18 @@ function FloatingNav(): React.JSX.Element {
         }`}
       >
         <span className="font-display font-bold text-white text-lg tracking-wide">
-          LOOPER<span className="text-gradient-brand">.AI</span>
+          LOOPER<span className="text-accent-bright">.AI</span>
         </span>
 
         <div className="hidden sm:flex items-center gap-8">
           <a href="#product" className="text-sm text-gray-400 hover:text-white transition-colors duration-200">
             Product
           </a>
-          <a href="#how-it-works" className="text-sm text-gray-400 hover:text-white transition-colors duration-200">
-            How It Works
+          <a href="#vision" className="text-sm text-gray-400 hover:text-white transition-colors duration-200">
+            Vision
           </a>
-          <a href="#explore" className="text-sm text-gray-400 hover:text-white transition-colors duration-200">
-            Explore
+          <a href="#analogs" className="text-sm text-gray-400 hover:text-white transition-colors duration-200">
+            Analogs
           </a>
         </div>
 
@@ -1204,17 +1271,14 @@ function SectionLabel({ children }: { children: React.ReactNode }): React.JSX.El
 /* ─── Main Component ───────────────────────────────────────── */
 
 export default function PersonaSelector(): React.JSX.Element {
-  const setRef = useScrollReveal(11);
-  const [flywheelRef, flywheelInView] = useInViewTrigger(0.2);
-  const [metricsRef, metricsInView] = useInViewTrigger(0.2);
+  const setRef = useScrollReveal(8);
 
   return (
     <div className="min-h-screen relative overflow-hidden">
       <div className="aurora-bg" />
-      <FloatingNav />
 
       <div className="relative z-10">
-        {/* ── Section 1: Hero ──────────────────────────────── */}
+        {/* ── Section 1: Hero — Identity & Positioning ──── */}
         <section
           ref={setRef(0)}
           className="fade-in-up min-h-screen flex flex-col items-center justify-center text-center px-6 relative pt-20"
@@ -1269,36 +1333,32 @@ export default function PersonaSelector(): React.JSX.Element {
           </div>
 
           <div className="relative z-10">
-            <div className="badge-shimmer rounded-full px-4 py-1.5 mb-8 inline-flex items-center gap-2 border border-accent-bright/20">
-              <div className="w-1.5 h-1.5 rounded-full bg-accent-bright" />
-              <span className="font-mono text-[11px] text-accent-bright/80 tracking-wider">AI-NATIVE COACHING OS</span>
-            </div>
-
             <h1 className="font-display text-6xl sm:text-8xl lg:text-9xl font-bold tracking-tight leading-[0.9]">
-              <span className="text-gradient-hero">LOOPER</span>
-              <span className="text-gradient-brand">.AI</span>
+              <span className="text-white">LOOPER</span>
+              <span className="text-accent-bright">.AI</span>
             </h1>
 
-            <p className="font-display text-xl sm:text-2xl text-gray-300 mt-6 max-w-2xl mx-auto leading-relaxed font-light">
-              The intelligence layer for golf coaching.
-              <br className="hidden sm:block" />
-              <span className="text-white font-normal">One record. One copilot. Compounding insight.</span>
+            <p className="font-editorial italic text-2xl sm:text-3xl lg:text-4xl text-white mt-8 tracking-tight">
+              Expertise, engineered.
             </p>
 
-            <HeroConfidence />
+            <p className="font-display text-lg sm:text-xl text-gray-400 mt-5 max-w-2xl mx-auto leading-relaxed font-light">
+              Powering golf in the age of AI.
+              <br className="hidden sm:block" />
+              Starting with coaching. Built to connect everything.
+            </p>
 
-            <div className="flex flex-col sm:flex-row items-center gap-4 mt-12">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12">
               <Link
                 to="/vision"
-                className="group flex items-center gap-3 bg-accent-bright hover:bg-accent-bright/90 text-white font-medium px-8 py-3.5 rounded-xl transition-all duration-300 shadow-lg shadow-accent-bright/20 hover:shadow-accent-bright/30 hover:-translate-y-0.5"
+                className="flex items-center justify-center gap-2 text-gray-400 hover:text-white font-medium w-56 py-3.5 rounded-xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:-translate-y-0.5"
               >
                 <Play className="w-4 h-4" />
                 <span>Watch the Vision</span>
-                <ArrowRight className="w-4 h-4 opacity-0 -ml-2 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
               </Link>
               <Link
                 to="/coach"
-                className="flex items-center gap-2 text-gray-400 hover:text-white font-medium px-8 py-3.5 rounded-xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:-translate-y-0.5"
+                className="flex items-center justify-center gap-2 text-gray-400 hover:text-white font-medium w-56 py-3.5 rounded-xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:-translate-y-0.5"
               >
                 <span>Explore the Demo</span>
               </Link>
@@ -1310,46 +1370,51 @@ export default function PersonaSelector(): React.JSX.Element {
           </div>
         </section>
 
-        {/* ── Section 2: Value Propositions ────────────────── */}
+        {/* ── Section 2: Problem — Lead with Pain ────────── */}
         <section ref={setRef(1)} className="fade-in-up py-24 sm:py-32 px-6 section-glow">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {VALUE_PROPS.map((prop) => {
-              const Icon = prop.icon;
-              return (
-                <div key={prop.title} className="glass-premium p-8 text-center group">
-                  <div className="w-14 h-14 rounded-2xl bg-accent-bright/10 flex items-center justify-center mx-auto mb-5 group-hover:bg-accent-bright/15 transition-colors duration-300">
-                    <Icon className="w-6 h-6 text-accent-bright" />
-                  </div>
-                  <p className="font-display text-lg font-semibold text-white mb-3">{prop.title}</p>
-                  <p className="text-sm text-gray-400 leading-relaxed">{prop.desc}</p>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* ── Section 3: The Gap ───────────────────────────── */}
-        <section ref={setRef(2)} className="fade-in-up py-24 sm:py-32 px-6 section-glow">
           <div className="text-center mb-16">
-            <SectionLabel>The Gap</SectionLabel>
+            <SectionLabel>The Problem</SectionLabel>
             <p className="font-display text-2xl sm:text-4xl text-white font-medium leading-snug max-w-3xl mx-auto mt-4">
-              Golf&apos;s data is everywhere.{' '}
-              <span className="text-gradient-brand">Connected nowhere.</span>
+              Every lesson starts from scratch.
             </p>
-            <p className="text-gray-400 mt-4 max-w-2xl mx-auto leading-relaxed">
-              Coaches run 5-6 tools that don&apos;t talk to each other. Players track data the coach never sees. And the most valuable coaching intelligence &mdash; spoken out loud during lessons &mdash; simply evaporates.
+            <p className="text-gray-400 mt-6 max-w-2xl mx-auto leading-relaxed text-base">
+              Coaches use 5&ndash;6 tools that don&apos;t talk to each other. Lessons go undocumented. Player data from rounds, practice, and wearables sits in separate apps. The most valuable part of coaching &mdash; what was said during the lesson, what actually clicked &mdash; just disappears.
             </p>
           </div>
 
           <InfinityLoop />
+
+          <div className="max-w-3xl mx-auto mt-16">
+            <p className="font-display text-lg sm:text-xl text-white font-medium text-center mb-8">
+              The problem <span className="text-accent-bright">compounds.</span>
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {[
+                { icon: Layers, text: '5\u20136 apps that don\u2019t share a single data point. Insight stays trapped in whichever tool captured it.' },
+                { icon: X, text: 'No persistent record. Every session starts cold, with the coach rebuilding context from memory.' },
+                { icon: BarChart3, text: 'No way to measure what\u2019s actually working. Progress is a feeling, not a fact.' },
+                { icon: Brain, text: 'A coach\u2019s expertise lives in their head. It doesn\u2019t travel with the player between sessions.' },
+              ].map((item) => {
+                const Icon = item.icon;
+                return (
+                  <div key={item.text} className="glass-premium p-5 flex items-start gap-4">
+                    <div className="w-9 h-9 rounded-lg bg-coral/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Icon className="w-4 h-4 text-coral" />
+                    </div>
+                    <p className="text-sm text-gray-400 leading-relaxed">{item.text}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </section>
 
-        {/* ── Section 4: Product Showcase ──────────────────── */}
-        <section id="product" ref={setRef(3)} className="fade-in-up py-24 sm:py-32 px-6 section-glow">
+        {/* ── Section 3: Product — Show the UI ─────────── */}
+        <section id="product" ref={setRef(2)} className="fade-in-up py-24 sm:py-32 px-6 section-glow">
           <div className="text-center mb-16">
             <SectionLabel>The Product</SectionLabel>
             <p className="font-display text-2xl sm:text-4xl text-white font-medium mt-4">
-              One intelligence, <span className="text-gradient-brand">two experiences.</span>
+              One intelligence, <span className="text-accent-bright">two experiences.</span>
             </p>
           </div>
 
@@ -1462,258 +1527,156 @@ export default function PersonaSelector(): React.JSX.Element {
           </div>
         </section>
 
-        {/* ── Section 5: How It Works ─────────────────────── */}
-        <section id="how-it-works" ref={setRef(4)} className="fade-in-up py-24 sm:py-32 px-6 section-glow">
+        {/* ── Section 4: Evolution ──────────────────────── */}
+        <section id="vision" ref={setRef(3)} className="fade-in-up py-24 sm:py-32 px-6 section-glow">
           <div className="text-center mb-16">
-            <SectionLabel>How It Works</SectionLabel>
-            <p className="font-display text-2xl sm:text-4xl text-white font-medium mt-4">
-              Record. Reason. <span className="text-gradient-brand">Compound.</span>
+            <SectionLabel>The Evolution</SectionLabel>
+            <p className="font-display text-2xl sm:text-4xl text-white font-medium leading-snug max-w-3xl mx-auto mt-4">
+              Record. Reason. <span className="text-accent-bright">Compound.</span>
             </p>
-            <p className="text-sm text-gray-500 mt-3 font-mono">
-              A dataset company that starts as a platform.
-            </p>
-          </div>
-
-          <div ref={flywheelRef} className="max-w-5xl mx-auto">
-            {/* Desktop: horizontal */}
-            <div className="hidden sm:flex items-stretch gap-5">
-              <FlywheelPhase
-                icon={<Database className="w-5 h-5 text-accent-bright" />}
-                label="Record"
-                sublabel="Sessions build themselves"
-              >
-                <MiniDataTable active={flywheelInView} />
-              </FlywheelPhase>
-
-              <div className="flex items-center shrink-0">
-                <div className="w-10 h-px bg-gradient-to-r from-accent-bright/40 to-accent-bright/10" />
-                <ArrowRight className="w-4 h-4 text-accent-bright/40 -ml-1" />
-              </div>
-
-              <FlywheelPhase
-                icon={<Brain className="w-5 h-5 text-accent-bright" />}
-                label="Intelligence"
-                sublabel="AI reasons in real time"
-                pulse
-              >
-                <MiniInsight active={flywheelInView} />
-              </FlywheelPhase>
-
-              <div className="flex items-center shrink-0">
-                <div className="w-10 h-px bg-gradient-to-r from-accent-bright/40 to-accent-bright/10" />
-                <ArrowRight className="w-4 h-4 text-accent-bright/40 -ml-1" />
-              </div>
-
-              <FlywheelPhase
-                icon={<TrendingUp className="w-5 h-5 text-accent-bright" />}
-                label="Compounding Insight"
-                sublabel="Every correction trains the model"
-              >
-                <MiniSparkline />
-              </FlywheelPhase>
-            </div>
-
-            {/* Mobile: vertical */}
-            <div className="flex sm:hidden flex-col items-center gap-4">
-              <FlywheelPhase
-                icon={<Database className="w-5 h-5 text-accent-bright" />}
-                label="Record"
-                sublabel="Sessions build themselves"
-              >
-                <MiniDataTable active={flywheelInView} />
-              </FlywheelPhase>
-              <ArrowDown className="w-4 h-4 text-accent-bright/40" />
-              <FlywheelPhase
-                icon={<Brain className="w-5 h-5 text-accent-bright" />}
-                label="Intelligence"
-                sublabel="AI reasons in real time"
-                pulse
-              >
-                <MiniInsight active={flywheelInView} />
-              </FlywheelPhase>
-              <ArrowDown className="w-4 h-4 text-accent-bright/40" />
-              <FlywheelPhase
-                icon={<TrendingUp className="w-5 h-5 text-accent-bright" />}
-                label="Compounding Insight"
-                sublabel="Every correction trains the model"
-              >
-                <MiniSparkline />
-              </FlywheelPhase>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Section 6: Live Lesson Timeline ─────────────── */}
-        <section ref={setRef(5)} className="fade-in-up py-24 sm:py-32 px-6 section-glow">
-          <div className="text-center mb-16">
-            <SectionLabel>The Live Lesson</SectionLabel>
-            <p className="font-display text-2xl sm:text-4xl text-white font-medium max-w-2xl mx-auto leading-snug mt-4">
-              Four phases. Zero manual input.
-            </p>
-            <p className="text-gray-400 mt-3 max-w-lg mx-auto">
-              The AI watches, reasons, and assists alongside the coach in real time.
+            <p className="text-gray-400 mt-4 max-w-2xl mx-auto leading-relaxed">
+              Looper starts by capturing the session record. That data becomes training data. Over time, the system gets smarter about each player, each coach, each pattern.
             </p>
           </div>
 
-          <LiveTimelineDemo />
-        </section>
+          <div className="max-w-6xl mx-auto">
+            {/* Desktop: horizontal three-column layout */}
+            <div className="hidden lg:flex items-stretch gap-4">
+              {EVOLUTION_STAGES.map((stage, stageIdx) => (
+                <div key={stage.stage} className="flex items-stretch flex-1 min-w-0">
+                  <div className="flex-1 min-w-0">
+                    {/* Stage header */}
+                    <div className="text-center mb-5">
+                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-3 ${
+                        stageIdx === 0 ? 'bg-accent-bright/20 border border-accent-bright/30' :
+                        stageIdx === 1 ? 'bg-accent-bright/10 border border-accent-bright/20' :
+                        'bg-white/5 border border-white/10'
+                      }`}>
+                        <span className="font-mono text-[10px] text-accent-bright font-bold uppercase tracking-wider">
+                          {stageIdx === 0 ? 'Now' : stageIdx === 1 ? 'Next' : 'Arc'}
+                        </span>
+                      </div>
+                      <p className="font-display text-lg font-semibold text-white">{stage.stage}</p>
+                      <p className="text-xs text-gray-500 mt-1">{stage.desc}</p>
+                    </div>
 
-        {/* ── Section 7: Ambient Capture ──────────────────── */}
-        <section ref={setRef(6)} className="fade-in-up py-24 sm:py-32 px-6 section-glow">
-          <div className="text-center mb-16">
-            <SectionLabel>Ambient Capture</SectionLabel>
-            <p className="font-display text-2xl sm:text-4xl text-white font-medium max-w-2xl mx-auto leading-snug mt-4">
-              The record builds itself.
-            </p>
-            <p className="text-gray-400 mt-3">Five agents, zero manual entry.</p>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5 max-w-5xl mx-auto">
-            {AGENTS.map((agent, i) => {
-              const Icon = agent.icon;
-              return (
-                <div
-                  key={agent.name}
-                  className="glass-premium p-6 text-center group animate-stagger-in"
-                  style={{ animationDelay: `${200 + i * 100}ms` }}
-                >
-                  <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mx-auto mb-4 group-hover:bg-accent/15 transition-colors duration-300">
-                    <Icon className="w-5 h-5 text-accent-bright" />
+                    {/* Stage items */}
+                    <div className="space-y-3">
+                      {stage.items.map((item) => {
+                        const Icon = item.icon;
+                        return (
+                          <div key={item.title} className="glass-premium p-4 group">
+                            <div className="flex items-center gap-2.5 mb-2">
+                              <div className="w-7 h-7 rounded-md bg-accent-bright/10 flex items-center justify-center flex-shrink-0 group-hover:bg-accent-bright/15 transition-colors duration-300">
+                                <Icon className="w-3.5 h-3.5 text-accent-bright" />
+                              </div>
+                              <p className="font-display text-sm font-semibold text-white">{item.title}</p>
+                            </div>
+                            <p className="text-xs text-gray-400 leading-relaxed">{item.desc}</p>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
-                  <p className="font-display text-sm font-semibold text-white">{agent.name}</p>
-                  <p className="font-mono text-[10px] text-accent-bright/60 mt-1">{agent.source}</p>
-                  <p className="text-xs text-gray-400 mt-3 leading-relaxed">{agent.desc}</p>
+
+                  {/* Arrow between columns */}
+                  {stageIdx < EVOLUTION_STAGES.length - 1 && (
+                    <div className="flex items-center shrink-0 px-2">
+                      <ArrowRight className="w-4 h-4 text-accent-bright/30" />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Mobile/tablet: vertical stack */}
+            <div className="lg:hidden space-y-8">
+              {EVOLUTION_STAGES.map((stage, stageIdx) => (
+                <div key={stage.stage}>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                      stageIdx === 0 ? 'bg-accent-bright/20 border border-accent-bright/30' :
+                      stageIdx === 1 ? 'bg-accent-bright/10 border border-accent-bright/20' :
+                      'bg-white/5 border border-white/10'
+                    }`}>
+                      <span className="font-mono text-[9px] text-accent-bright font-bold uppercase tracking-wider">
+                        {stageIdx === 0 ? 'Now' : stageIdx === 1 ? 'Next' : 'Arc'}
+                      </span>
+                    </div>
+                    <div>
+                      <p className="font-display text-lg font-semibold text-white">{stage.stage}</p>
+                      <p className="text-xs text-gray-500">{stage.desc}</p>
+                    </div>
+                  </div>
+                  <div className="space-y-3 pl-13">
+                    {stage.items.map((item) => {
+                      const Icon = item.icon;
+                      return (
+                        <div key={item.title} className="glass-premium p-4 group">
+                          <div className="flex items-center gap-2.5 mb-2">
+                            <div className="w-7 h-7 rounded-md bg-accent-bright/10 flex items-center justify-center flex-shrink-0">
+                              <Icon className="w-3.5 h-3.5 text-accent-bright" />
+                            </div>
+                            <p className="font-display text-sm font-semibold text-white">{item.title}</p>
+                          </div>
+                          <p className="text-xs text-gray-400 leading-relaxed">{item.desc}</p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  {stageIdx < EVOLUTION_STAGES.length - 1 && (
+                    <div className="flex justify-center mt-4">
+                      <ArrowDown className="w-4 h-4 text-accent-bright/30" />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Section 6: Analogs — Market Precedent ────── */}
+        <section id="analogs" ref={setRef(4)} className="fade-in-up py-24 sm:py-32 px-6 section-glow">
+          <div className="text-center mb-16">
+            <SectionLabel>Market Precedent</SectionLabel>
+            <p className="font-display text-2xl sm:text-4xl text-white font-medium leading-snug max-w-3xl mx-auto mt-4">
+              This playbook has <span className="text-accent-bright">worked before.</span>
+            </p>
+            <p className="text-gray-400 mt-4 max-w-2xl mx-auto leading-relaxed">
+              Start by capturing the record in a fragmented, relationship-driven industry. Become indispensable. Then layer intelligence on top of the data you already own.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
+            {ANALOGS.map((analog) => {
+              const Icon = analog.icon;
+              return (
+                <div key={analog.name} className="glass-premium p-8 group">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center group-hover:bg-accent-bright/10 transition-colors duration-300">
+                      <Icon className="w-5 h-5 text-gray-400 group-hover:text-accent-bright transition-colors duration-300" />
+                    </div>
+                    <div>
+                      <p className="font-display text-base font-semibold text-white">{analog.name}</p>
+                      <p className="font-mono text-[10px] text-accent-bright/60 uppercase tracking-wider">{analog.domain}</p>
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-400 leading-relaxed mb-4">{analog.desc}</p>
+                  <p className="font-mono text-sm text-accent-bright font-bold">{analog.metric}</p>
                 </div>
               );
             })}
           </div>
+
         </section>
 
-        {/* ── Section 8: Key Metrics ──────────────────────── */}
-        <section ref={setRef(7)} className="fade-in-up py-24 sm:py-32 px-6 section-glow">
-          <div className="text-center mb-16">
-            <SectionLabel>By The Numbers</SectionLabel>
-          </div>
-
-          <div ref={metricsRef} className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            <StatCard end={30} suffix="sec" label="Post-session review" active={metricsInView} />
-            <StatCard end={0} label="Manual data entry points" active={metricsInView} />
-            <div className="glass-premium metric-highlight p-10 text-center">
-              <p className="font-mono text-5xl sm:text-6xl font-bold text-accent-bright tabular-nums">
-                12,000<span className="text-3xl sm:text-4xl">+</span>
-              </p>
-              <p className="font-display text-sm text-gray-400 mt-4">Data points per lesson</p>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Section 9: See It Live ──────────────────────── */}
-        <section id="explore" ref={setRef(8)} className="fade-in-up py-24 sm:py-32 px-6 section-glow">
-          <div className="text-center mb-16">
-            <SectionLabel>See It Live</SectionLabel>
-            <p className="font-display text-2xl sm:text-4xl text-white font-medium mt-4">
-              Explore the full <span className="text-gradient-brand">experience.</span>
-            </p>
-          </div>
-
-          {/* Sizzle reel - hero CTA */}
-          <Link
-            to="/vision"
-            className="group glass-premium animated-border flex items-center justify-between p-8 max-w-3xl mx-auto mb-8"
-          >
-            <div className="flex items-center gap-5">
-              <div className="w-14 h-14 rounded-2xl bg-accent-bright/20 flex items-center justify-center shrink-0 group-hover:bg-accent-bright/30 transition-colors duration-300">
-                <Play className="w-6 h-6 text-accent-bright ml-0.5" />
-              </div>
-              <div>
-                <p className="font-display text-lg font-semibold text-white">
-                  Watch the 90-Second Vision
-                </p>
-                <p className="text-sm text-gray-400 mt-1">
-                  Product walkthrough from record to insight
-                </p>
-              </div>
-            </div>
-            <ArrowRight className="w-5 h-5 text-gray-500 group-hover:text-accent-bright group-hover:translate-x-1 transition-all duration-300 shrink-0" />
-          </Link>
-
-          {/* Documents */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-3xl mx-auto mb-8">
-            <Link to="/narrative" className="glass-premium p-7 block group">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-8 h-8 rounded-lg bg-accent-bright/10 flex items-center justify-center">
-                  <FileText className="w-4 h-4 text-accent-bright" />
-                </div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-accent-bright/70">
-                  The Narrative
-                </p>
-              </div>
-              <p className="text-white font-display font-semibold text-[15px] group-hover:text-accent-bright transition-colors duration-200">Read the Full Story</p>
-              <p className="text-sm text-gray-400 mt-2 leading-relaxed">
-                Thesis, problem, solution, flywheel, and roadmap
-              </p>
-            </Link>
-
-            <Link to="/thesis" className="glass-premium p-7 block group">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-8 h-8 rounded-lg bg-accent-bright/10 flex items-center justify-center">
-                  <BarChart3 className="w-4 h-4 text-accent-bright" />
-                </div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-accent-bright/70">
-                  The Business Case
-                </p>
-              </div>
-              <p className="text-white font-display font-semibold text-[15px] group-hover:text-accent-bright transition-colors duration-200">Read the Thesis</p>
-              <p className="text-sm text-gray-400 mt-2 leading-relaxed">
-                Five-year model, moat analysis, and market sizing
-              </p>
-            </Link>
-
-            <Link to="/evolution" className="glass-premium p-7 block group">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-8 h-8 rounded-lg bg-accent-bright/10 flex items-center justify-center">
-                  <Layers className="w-4 h-4 text-accent-bright" />
-                </div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-accent-bright/70">
-                  Product Evolution
-                </p>
-              </div>
-              <p className="text-white font-display font-semibold text-[15px] group-hover:text-accent-bright transition-colors duration-200">See the Roadmap</p>
-              <p className="text-sm text-gray-400 mt-2 leading-relaxed">
-                Four stages from record to intelligence
-              </p>
-            </Link>
-          </div>
-
-          {/* Prototypes */}
-          <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
-            {PROTOTYPES.map((p, i) => {
-              const Icon = p.icon;
-              return (
-                <Link
-                  key={p.path}
-                  to={p.path}
-                  className="glass-premium p-6 text-center block group animate-stagger-in"
-                  style={{ animationDelay: `${300 + i * 100}ms` }}
-                >
-                  <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mx-auto mb-3 group-hover:bg-accent-bright/10 transition-colors duration-300">
-                    <Icon className="w-5 h-5 text-accent-bright" />
-                  </div>
-                  <p className="text-sm text-white font-display font-semibold">{p.label}</p>
-                  <p className="text-xs text-gray-500 mt-1">{p.desc}</p>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* ── Section 10: Closing Statement ───────────────── */}
-        <section ref={setRef(9)} className="fade-in-up py-24 sm:py-32 px-6">
+        {/* ── Section 7: Closing ─────────────────────────── */}
+        <section ref={setRef(5)} className="fade-in-up py-24 sm:py-32 px-6">
           <div className="max-w-3xl mx-auto text-center">
             <p className="font-display text-3xl sm:text-5xl text-white font-medium leading-tight">
               Memory enables intelligence.
             </p>
-            <p className="font-display text-3xl sm:text-5xl text-gradient-brand font-medium leading-tight mt-2">
+            <p className="font-display text-3xl sm:text-5xl text-accent-bright font-medium leading-tight mt-2">
               Intelligence enables coaching.
             </p>
             <div className="mt-12">
@@ -1729,7 +1692,7 @@ export default function PersonaSelector(): React.JSX.Element {
         </section>
 
         {/* ── Footer ──────────────────────────────────────── */}
-        <footer ref={setRef(10)} className="fade-in-up py-16 px-6">
+        <footer ref={setRef(6)} className="fade-in-up py-16 px-6">
           <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
             <span className="font-display font-bold text-gray-600 text-sm tracking-wide">
               LOOPER<span className="text-accent-bright/40">.AI</span>
