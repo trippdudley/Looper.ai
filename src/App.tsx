@@ -5,11 +5,11 @@ import DemoWalkthroughBanner from './components/ui/DemoWalkthroughBanner';
 import { SkeletonCard } from './components/ui/Skeleton';
 
 // Eagerly loaded (landing page — must be fast)
-import EntrySelector from './pages/EntrySelector';
+import PersonaSelector from './pages/PersonaSelector';
 
 // Lazy-loaded top-level pages
 const OSHome = lazy(() => import('./pages/OSHome'));
-const PersonaSelector = lazy(() => import('./pages/PersonaSelector'));
+const EntrySelector = lazy(() => import('./pages/EntrySelector'));
 
 // Lazy-loaded persona routes
 const ThesisPage = lazy(() => import('./pages/ThesisPage'));
@@ -49,9 +49,9 @@ function AppRoutes() {
     <>
       <Suspense fallback={<LoadingFallback />}>
         <Routes>
-          <Route path="/" element={<EntrySelector />} />
+          <Route path="/" element={<PersonaSelector />} />
+          <Route path="/demo" element={<EntrySelector />} />
           <Route path="/home" element={<OSHome />} />
-          <Route path="/personas" element={<PersonaSelector />} />
           <Route path="/thesis" element={<ErrorBoundary><ThesisPage /></ErrorBoundary>} />
           <Route path="/narrative" element={<ErrorBoundary><LooperNarrative /></ErrorBoundary>} />
           <Route path="/coaching-os" element={<Navigate to="/coach/live" replace />} />
