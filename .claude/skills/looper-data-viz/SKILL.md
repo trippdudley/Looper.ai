@@ -10,7 +10,7 @@ Every chart earns its space. No decorative visualizations. Every pixel of ink sh
 
 ## Number Formatting Rules
 
-All numeric golf data follows these formatting rules consistently across the entire product:
+All numeric golf data follows these formatting rules consistently across the entire product. Render all numbers in Space Mono (see root CLAUDE.md for font rules).
 
 | Metric | Format | Example |
 |--------|--------|---------|
@@ -32,7 +32,7 @@ All numeric golf data follows these formatting rules consistently across the ent
 | Confidence | Whole number, percent | 74% |
 | Percentages (general) | Whole number | 62% |
 
-Always render numbers in Space Mono. Always include the unit label in 10px Space Mono muted, immediately after the number with a thin space.
+Always include the unit label in 10px muted, immediately after the number with a thin space.
 
 ## Magnitude Framing
 
@@ -167,17 +167,15 @@ Shows trends across multiple sessions. Not used in the sidebar.
 
 ## Color Rules for Data
 
+See root CLAUDE.md for base color tokens. Data-specific additions:
 - Primary data: accent color (#10B981 dark mode, #0D7C66 light mode)
 - Secondary data: #6366F1 (indigo) for comparison lines
-- Improvement indicators: #0FA87A
-- Regression indicators: #C93B3B
-- Neutral/within noise: #9CA3AF
-- Caution: #D4980B
 - Grid lines: #1E2A36 in dark mode, #ECEEF2 in light mode (very subtle)
-- Axes text: 10px Space Mono, muted color
+- Axes text: 10px muted color
 
 ## Chart Anti-Patterns
 
+See looper-ux-system for general anti-patterns. Chart-specific:
 - No 3D effects on any chart
 - No chart legends that take up more space than the chart
 - No pie charts (use horizontal bars instead)

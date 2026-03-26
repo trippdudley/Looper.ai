@@ -64,21 +64,14 @@ Core thesis: Memory enables intelligence. The record is both the product and the
 ## Visual Identity Quick Reference
 
 ### Colors
-- Brand accent: #0D7C66 (deep teal) — single accent across all surfaces
-- Light mode: #F6F7F9 background, #FFFFFF cards
-- Dark mode (sidebar): #0C1117 background, #151D28 surface
-- Confidence: #0FA87A (green), #D4980B (amber), #C93B3B (red)
-- Text: #1A1F2B (headings), #4B5563 (body), #9CA3AF (muted)
+See root CLAUDE.md for full color token definitions.
 
 ### Typography
-- Brand voice: Cabinet Grotesk (headings, body text, all human-readable content)
-- Data voice: Space Mono (all numbers, metrics, confidence values, labels)
-- Editorial voice: Instrument Serif italic (taglines and pull quotes only)
-- The split is absolute: Cabinet Grotesk never renders numbers in data contexts. Space Mono never renders body paragraphs.
+See root CLAUDE.md for canonical font definitions (DM Sans, Space Mono, Playfair Display italic). The split is absolute: DM Sans never renders numbers in data contexts. Space Mono never renders body paragraphs.
 
 ### Logo
 - LOOPER in #1A1F2B + .AI in #0D7C66
-- Cabinet Grotesk 800 weight
+- DM Sans 800 weight
 - Letter-spacing: 0.05-0.06em
 - ".AI" is part of the name, not a domain suffix
 

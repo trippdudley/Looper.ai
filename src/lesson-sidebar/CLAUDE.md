@@ -5,4 +5,4 @@ the live lesson timeline with four auto-detected vertical phases (Catch-up → D
 Intervention → Review). AI reasoning is visible — streaming text, evolving confidence,
 insight cards that build progressively. Ultra-compact: 8px gaps, 8-10px padding, 13px body
 text, max 2-3 insight cards visible. The coach glances at this between shots.
-Demo: M. Thompson coaching Moe Norman, session 14, iron strike consistency.
+Demo: M. Thompson coaching Moe Norman, session 9 (canonical demo — AI flags driver SG issue).
