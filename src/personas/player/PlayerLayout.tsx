@@ -26,7 +26,7 @@ function useWindowWidth(): number {
 }
 
 export default function PlayerLayout(): React.JSX.Element {
-  const [activeTab, setActiveTab] = useState<PlayerTab>('home');
+  const [activeTab, setActiveTab] = useState<PlayerTab>('ask');
   const windowWidth = useWindowWidth();
   const isDesktop = windowWidth >= 1200;
   const isMobile = windowWidth < 768;
