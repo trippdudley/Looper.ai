@@ -7,7 +7,6 @@ import { useState } from 'react';
 import { ChevronDown, ChevronUp, Link2, Flag, Target, GraduationCap } from 'lucide-react';
 import { C, F, S } from '../data/tokens';
 import { rounds, recentPracticeSessions, bestWorstComparison, type RoundRecord } from '../data/tripp';
-import ConfBadge from '../components/shared/ConfBadge';
 
 // --- Unified activity item ---
 interface ActivityEntry {
@@ -65,7 +64,7 @@ function buildActivityFeed(): ActivityEntry[] {
 const activityFeed = buildActivityFeed();
 
 // --- Mini SG Bar for round detail ---
-function MiniSGBar({ label, value }: { label: string; value: number }): JSX.Element {
+function MiniSGBar({ label, value }: { label: string; value: number }): React.JSX.Element {
   const maxVal = 2.0;
   const pct = Math.min(Math.abs(value) / maxVal, 1) * 50;
   const color = value >= 0 ? C.conf : C.flag;
@@ -88,7 +87,7 @@ function MiniSGBar({ label, value }: { label: string; value: number }): JSX.Elem
 }
 
 // --- Mini Ring Gauge for GIR/FIR ---
-function StatRing({ value, benchmark, label, size = 56 }: { value: number; benchmark: number; label: string; size?: number }): JSX.Element {
+function StatRing({ value, benchmark, label, size = 56 }: { value: number; benchmark: number; label: string; size?: number }): React.JSX.Element {
   const r = (size - 6) / 2;
   const circ = 2 * Math.PI * r;
   const pct = Math.min(value, 1);
@@ -118,7 +117,7 @@ const typeConfig = {
   lesson: { color: C.caution, icon: GraduationCap, label: 'Lesson' },
 };
 
-export default function Activity(): JSX.Element {
+export default function Activity(): React.JSX.Element {
   const [expandedId, setExpandedId] = useState<string | null>(activityFeed[0]?.id || null);
   const [filter, setFilter] = useState<'all' | 'round' | 'practice' | 'lesson'>('all');
 

@@ -2,7 +2,7 @@
  * Home — Landing page: Three Pillars + Dashboard data.
  * WHOOP-inspired golf health dashboard. Play / Practice / Coaching.
  */
-import { MessageCircle, Flag, Users, ChevronRight } from 'lucide-react';
+import { MessageCircle, Users, ChevronRight } from 'lucide-react';
 import { C, F, S, fmtDelta } from '../data/tokens';
 import {
   player, strokesGained, handicapHistory, foresightSummary,
@@ -17,7 +17,7 @@ interface AskLooperProps {
 }
 
 // --- SG Diverging Bar ---
-function SGBar({ label, sg, delta }: { label: string; sg: number; delta: number }): JSX.Element {
+function SGBar({ label, sg, delta }: { label: string; sg: number; delta: number }): React.JSX.Element {
   const maxSG = 2.0;
   const pct = Math.min(Math.abs(sg) / maxSG, 1) * 50;
   const isPos = sg >= 0;
@@ -45,7 +45,7 @@ function SGBar({ label, sg, delta }: { label: string; sg: number; delta: number 
 }
 
 // --- Scoring Trend Chart ---
-function ScoringTrendChart(): JSX.Element {
+function ScoringTrendChart(): React.JSX.Element {
   const data = quarterlyTrend;
   const w = 320;
   const h = 80;
@@ -83,7 +83,7 @@ function ScoringTrendChart(): JSX.Element {
 }
 
 // --- Practice Allocation Bar ---
-function PracticeAllocationBar(): JSX.Element {
+function PracticeAllocationBar(): React.JSX.Element {
   const cats = foresightSummary.categories2025;
   const colors = [C.conf, C.accentBright, C.accent, C.caution, C.flag, C.body, C.muted];
   return (
@@ -106,7 +106,7 @@ function PracticeAllocationBar(): JSX.Element {
 }
 
 // --- Main Component ---
-export default function AskLooper({ onNavigate }: AskLooperProps): JSX.Element {
+export default function AskLooper({ onNavigate }: AskLooperProps): React.JSX.Element {
   const hcpValues = handicapHistory.map(h => h.value);
   const sgCats = [strokesGained.driving, strokesGained.approach, strokesGained.shortGame, strokesGained.putting];
 

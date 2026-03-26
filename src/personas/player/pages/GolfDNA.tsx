@@ -6,10 +6,9 @@
 import { Share2, Lock, Minus } from 'lucide-react';
 import { C, F, S } from '../data/tokens';
 import { golfDNA, strokesGained } from '../data/tripp';
-import ConfBadge from '../components/shared/ConfBadge';
 
 /* ── Radar Chart for Game Shape ── */
-function GameShapeRadar(): JSX.Element {
+function GameShapeRadar(): React.JSX.Element {
   const size = 200;
   const cx = size / 2;
   const cy = size / 2;
@@ -72,7 +71,7 @@ function GameShapeRadar(): JSX.Element {
 }
 
 /* ── Confidence Arc (mini ring for behavioral fingerprint) ── */
-function ConfArc({ value, color, size = 36 }: { value: number; color: string; size?: number }): JSX.Element {
+function ConfArc({ value, color, size = 36 }: { value: number; color: string; size?: number }): React.JSX.Element {
   const r = (size - 4) / 2;
   const circ = 2 * Math.PI * r;
   const offset = circ * (1 - value / 100);
@@ -92,7 +91,7 @@ function ConfArc({ value, color, size = 36 }: { value: number; color: string; si
   );
 }
 
-function UnlockProgress(): JSX.Element {
+function UnlockProgress(): React.JSX.Element {
   const roundsPct = Math.min((golfDNA.roundsCompleted / golfDNA.unlockThresholdRounds) * 100, 100);
   const practicePct = Math.min((golfDNA.practiceSessionsCompleted / golfDNA.unlockThresholdPractice) * 100, 100);
 
@@ -122,7 +121,7 @@ function UnlockProgress(): JSX.Element {
   );
 }
 
-export default function GolfDNA(): JSX.Element {
+export default function GolfDNA(): React.JSX.Element {
   if (!golfDNA.unlocked) return <UnlockProgress />;
 
   const sgCats = [strokesGained.driving, strokesGained.approach, strokesGained.shortGame, strokesGained.putting];

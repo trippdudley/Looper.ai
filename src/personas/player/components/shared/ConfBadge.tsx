@@ -8,7 +8,7 @@ interface ConfBadgeProps {
   value: number;
 }
 
-export default function ConfBadge({ value }: ConfBadgeProps): JSX.Element {
+export default function ConfBadge({ value }: ConfBadgeProps): React.JSX.Element {
   const level = value >= 80 ? 'high' : value >= 50 ? 'medium' : 'low';
   const colors = {
     high:   { bg: C.confBg, text: C.conf, glow: C.confGlow },

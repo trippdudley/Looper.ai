@@ -21,7 +21,7 @@ const tabs: { key: PlayerTab; label: string; Icon: typeof MessageCircle }[] = [
   { key: 'activity', label: 'Activity', Icon: List },
 ];
 
-export default function BottomNav({ activeTab, onTabChange }: BottomNavProps): JSX.Element {
+export default function BottomNav({ activeTab, onTabChange }: BottomNavProps): React.JSX.Element {
   return (
     <nav
       className="player-bottom-nav"

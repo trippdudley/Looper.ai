@@ -14,11 +14,6 @@ const CONNECTED_SOURCES = [
   { name: 'Arccos', status: 'connected' as const, detail: '101 rounds' },
   { name: 'Foresight', status: 'connected' as const, detail: '208 sessions' },
 ];
-const AVAILABLE_SOURCES = [
-  { name: 'Arccos', category: 'Scoring' },
-  { name: 'Trackman', category: 'Launch Monitor' },
-  { name: 'WHOOP', category: 'Health' },
-];
 
 // One tee-up question per pillar
 const TEE_UPS = [
@@ -28,9 +23,9 @@ const TEE_UPS = [
 ];
 
 // --- Markdown renderer ---
-function renderMarkdown(text: string): JSX.Element[] {
+function renderMarkdown(text: string): React.JSX.Element[] {
   const lines = text.split('\n');
-  const elements: JSX.Element[] = [];
+  const elements: React.JSX.Element[] = [];
   let listItems: string[] = [];
   let listStart = 0;
   const flushList = () => {
@@ -64,8 +59,8 @@ function renderMarkdown(text: string): JSX.Element[] {
   return elements;
 }
 
-function renderInline(text: string): (string | JSX.Element)[] {
-  const parts: (string | JSX.Element)[] = [];
+function renderInline(text: string): (string | React.JSX.Element)[] {
+  const parts: (string | React.JSX.Element)[] = [];
   const regex = /(\*\*(.+?)\*\*|\*(.+?)\*|`(.+?)`)/g;
   let lastIndex = 0;
   let match;
@@ -81,7 +76,7 @@ function renderInline(text: string): (string | JSX.Element)[] {
   return parts.length > 0 ? parts : [text];
 }
 
-export default function AskLooperChat(): JSX.Element {
+export default function AskLooperChat(): React.JSX.Element {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);

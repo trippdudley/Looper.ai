@@ -5,9 +5,8 @@
  */
 import Anthropic from '@anthropic-ai/sdk';
 import {
-  player, strokesGained, drivingDetail, approachDetail,
-  shortGameDetail, puttingDetail, scoring, foresightSession,
-  foresightSummary, practiceBrief, rounds, journeyEvents, connectionInsights,
+  player, scoring,
+  foresightSummary, rounds, journeyEvents, connectionInsights,
   golfDNA, practicePlayGap, handicapHistory, courseStats, quarterlyTrend,
   recentPracticeSessions, journeyInsight,
 } from '../data/tripp';

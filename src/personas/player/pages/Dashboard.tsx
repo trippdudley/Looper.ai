@@ -15,7 +15,7 @@ import Sparkline from '../components/shared/Sparkline';
 import type { PlayerTab } from '../components/layout/BottomNav';
 
 /* ── SVG Ring Gauge ── */
-function RingGauge({ value, max, color, size = 52 }: { value: number; max: number; color: string; size?: number }): JSX.Element {
+function RingGauge({ value, max, color, size = 52 }: { value: number; max: number; color: string; size?: number }): React.JSX.Element {
   const r = (size - 6) / 2;
   const circ = 2 * Math.PI * r;
   const pct = Math.min(value / max, 1);
@@ -37,7 +37,7 @@ function RingGauge({ value, max, color, size = 52 }: { value: number; max: numbe
 }
 
 /* ── SG Diverging Bar ── */
-function SGBar({ label, sg, delta, maxSg }: { label: string; sg: number; delta: number; maxSg: number }): JSX.Element {
+function SGBar({ label, sg, delta, maxSg }: { label: string; sg: number; delta: number; maxSg: number }): React.JSX.Element {
   const isPositive = sg >= 0;
   const barPct = (Math.abs(sg) / maxSg) * 50;
   const barColor = isPositive ? C.conf : C.flag;
@@ -78,7 +78,7 @@ interface DashboardProps {
   onNavigate: (tab: PlayerTab) => void;
 }
 
-export default function Dashboard({ onNavigate }: DashboardProps): JSX.Element {
+export default function Dashboard({ onNavigate }: DashboardProps): React.JSX.Element {
   const [hoveredActivity, setHoveredActivity] = useState<string | null>(null);
   const hcpValues = handicapHistory.map((h) => h.value);
 

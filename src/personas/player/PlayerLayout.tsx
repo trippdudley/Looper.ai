@@ -25,14 +25,14 @@ function useWindowWidth(): number {
   return width;
 }
 
-export default function PlayerLayout(): JSX.Element {
+export default function PlayerLayout(): React.JSX.Element {
   const [activeTab, setActiveTab] = useState<PlayerTab>('home');
   const windowWidth = useWindowWidth();
   const isDesktop = windowWidth >= 1200;
   const isMobile = windowWidth < 768;
   const contentMaxWidth = isDesktop ? 860 : isMobile ? 480 : 680;
 
-  const renderTab = (): JSX.Element => {
+  const renderTab = (): React.JSX.Element => {
     switch (activeTab) {
       case 'ask':
         return <AskLooperChat />;

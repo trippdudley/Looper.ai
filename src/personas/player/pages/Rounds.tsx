@@ -10,7 +10,7 @@ import { rounds, bestWorstComparison } from '../data/tripp';
 import ConfBadge from '../components/shared/ConfBadge';
 
 /* ── Mini Ring Gauge for GIR/FIR ── */
-function StatRing({ value, benchmark, label, size = 64 }: { value: number; benchmark: number; label: string; size?: number }): JSX.Element {
+function StatRing({ value, benchmark, label, size = 64 }: { value: number; benchmark: number; label: string; size?: number }): React.JSX.Element {
   const r = (size - 6) / 2;
   const circ = 2 * Math.PI * r;
   const pct = Math.min(value, 1);
@@ -42,7 +42,7 @@ function StatRing({ value, benchmark, label, size = 64 }: { value: number; bench
   );
 }
 
-export default function Rounds(): JSX.Element {
+export default function Rounds(): React.JSX.Element {
   const [expandedId, setExpandedId] = useState<string | null>(rounds[0]?.id || null);
 
   return (

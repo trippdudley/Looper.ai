@@ -4,9 +4,8 @@
     {
       "name": "looper-dev",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["vite", "--port", "$PORT"],
-      "port": 5174,
-      "autoPort": true
+      "runtimeArgs": ["vite", "--host"],
+      "port": 5173
     }
   ]
 }

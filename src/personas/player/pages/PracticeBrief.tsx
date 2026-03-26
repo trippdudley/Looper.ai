@@ -4,13 +4,13 @@
  * coach context, drill cards, transparent reasoning.
  */
 import { useState } from 'react';
-import { Clock, ChevronDown, ChevronUp, Bookmark, Info } from 'lucide-react';
+import { ChevronDown, ChevronUp, Bookmark, Info } from 'lucide-react';
 import { C, F, S } from '../data/tokens';
 import { practiceBrief } from '../data/tripp';
 import ConfBadge from '../components/shared/ConfBadge';
 
 /* ── Donut chart for time allocation ── */
-function AllocationDonut({ blocks }: { blocks: typeof practiceBrief.blocks }): JSX.Element {
+function AllocationDonut({ blocks }: { blocks: typeof practiceBrief.blocks }): React.JSX.Element {
   const size = 140;
   const r = 54;
   const circ = 2 * Math.PI * r;
@@ -22,7 +22,6 @@ function AllocationDonut({ blocks }: { blocks: typeof practiceBrief.blocks }): J
       <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={C.surfaceAlt} strokeWidth={10} />
       {blocks.map((block, i) => {
         const pct = block.pct;
-        const offset = circ * (1 - pct);
         const rotation = -90 + accumulated * 360;
         accumulated += pct;
         return (
@@ -49,7 +48,7 @@ function AllocationDonut({ blocks }: { blocks: typeof practiceBrief.blocks }): J
   );
 }
 
-export default function PracticeBrief(): JSX.Element {
+export default function PracticeBrief(): React.JSX.Element {
   const [expandedBlock, setExpandedBlock] = useState<number | null>(0);
   const [showWhy, setShowWhy] = useState(false);
   const brief = practiceBrief;

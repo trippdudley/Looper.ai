@@ -20,7 +20,7 @@ const tabs: { key: PlayerTab; label: string; Icon: typeof MessageCircle }[] = [
   { key: 'activity', label: 'Activity', Icon: List },
 ];
 
-export default function SidebarNav({ activeTab, onTabChange }: SidebarNavProps): JSX.Element {
+export default function SidebarNav({ activeTab, onTabChange }: SidebarNavProps): React.JSX.Element {
   return (
     <nav style={{ width: 220, minHeight: 'calc(100vh - 52px)', background: C.bg, borderRight: `1px solid ${C.border}`, padding: '20px 0', flexShrink: 0 }}>
       {tabs.map(({ key, label, Icon }) => {

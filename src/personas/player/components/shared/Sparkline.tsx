@@ -11,7 +11,7 @@ interface SparklineProps {
   showArea?: boolean;
 }
 
-export default function Sparkline({ data, width = 80, height = 28, color = C.accentBright, showArea = true }: SparklineProps): JSX.Element | null {
+export default function Sparkline({ data, width = 80, height = 28, color = C.accentBright, showArea = true }: SparklineProps): React.JSX.Element | null {
   if (data.length < 2) return null;
 
   const min = Math.min(...data);

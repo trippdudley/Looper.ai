@@ -12,7 +12,7 @@ const typeConfig: Record<string, { color: string; label: string }> = {
   lesson: { color: C.caution, label: 'Lesson' },
 };
 
-export default function MyJourney(): JSX.Element {
+export default function MyJourney(): React.JSX.Element {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
 

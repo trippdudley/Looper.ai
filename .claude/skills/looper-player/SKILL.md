@@ -331,7 +331,7 @@ For a 2-hour session:
 
 ## 9. Responsive Design
 
-Desktop-first (960px max-width), responsive to tablet (768px) and phone (480px). The Journey timeline needs room at desktop. Practice Brief and Practice Review are the most-used on mobile (quick reference at the range).
+Desktop-first (960px max-width), responsive to tablet (768px) and phone (480px). NOT mobile-first. The Journey timeline needs room at desktop. Practice Brief and Practice Review are the most-used on mobile (quick reference at the range).
 
 ---
 

@@ -500,6 +500,8 @@ export const practicePlayGap = {
   practiceWedge: 0.06,
   practiceShortGame: 0,
   practicePutting: 0,
+  // Computed totals
+  practiceFullSwing: 0.94,  // driver + FW + longIron + midIron + shortIron + wedge
   // SG opportunity breakdown
   sgOpportunityFullSwing: 0.23,    // Driving (0.8) + Approach (-0.9) = only 23% of total loss
   sgOpportunityShortGame: 0.77,    // Short game (-1.6) + Putting (-1.4) = 77% of total loss

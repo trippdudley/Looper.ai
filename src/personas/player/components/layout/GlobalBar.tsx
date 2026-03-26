@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 import { C, F } from '../../data/tokens';
 
-export default function GlobalBar(): JSX.Element {
+export default function GlobalBar(): React.JSX.Element {
   return (
     <div
       style={{
