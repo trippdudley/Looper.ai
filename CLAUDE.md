@@ -15,7 +15,7 @@ Two portals. Two personas. One intelligence. No fitting (shelved).
 
 ### Player Experience — One Form Factor
 
-* **Player Portal** (mobile-first PWA, 480px, light mode): Dashboard, Practice, Rounds, My Journey. "Ask Looper" chat overlay. Timeline is the data model.
+* **Player Portal** (desktop-first, 960px max-width, responsive to 480px, light mode): Dashboard, Scoring X-Ray, Practice Brief, Practice Review, My Journey. "Ask Looper" chat overlay. Timeline is the data model.
 
 ## Lesson Sidebar — Panel Treatment
 The sidebar follows the Claude-in-Chrome companion panel pattern:
@@ -44,9 +44,9 @@ From Coach Portal → Lesson Sidebar:
 * One launch screen only — no duplicate modals
 
 ## Visible AI Reasoning (Sidebar)
-The sidebar's signature interaction. Seven-step demo walkthrough:
+The sidebar's signature interaction. Seven-step demo walkthrough using Session 9 (the canonical demo):
 * **Context phase**: Briefing card from persistent record (S8 recap, practice compliance, recommendation)
-* **Analysis phase**: Insight cards stream in progressively. Confidence evolves from 52% → 71% → 87%. Coach watches the AI earn its conclusions.
+* **Analysis phase**: Insight cards stream in progressively. AI flags driver SG trending worse (-1.5 → -2.3 across 8 sessions, never addressed). Confidence evolves from 52% → 71% → 87%. Coach watches the AI earn its conclusions.
 * **Working phase**: Drill suggestion cards with type badges (External/Internal/Constraint), expected effect, expandable "Why?" reasoning, Accept/Alternatives buttons
 * **Summary phase**: Session complete card with carry-forward items for next session
 
@@ -58,17 +58,18 @@ Three-layer timeline on a shared horizontal time axis: Lesson Layer (cards + thr
 ## Demo Flow
 `/coach` → `/coach/students` → `/coach/students/1` → Start Lesson → `/trackman` (preparing) → Launch Session → `/trackman` (TPS + sidebar, 7 steps) → Back arrow → `/coach`
 
-## Mock Data — Moe Norman Story
+## Mock Data — Moe Norman Story (Canonical Demo)
 * Player: Moe Norman, handicap 12.1 (from 13.8), 8 sessions with Coach M. Thompson
 * Goal: "Break 80"
 * Driver SG trending worse: -1.5 → -2.3 across all 8 sessions, never addressed
-* Session 9 is where the AI flags the driver issue with 87% confidence
+* **Session 9 is the canonical demo** — the AI flags the driver issue with 87% confidence
 * Short Game improved early (S1-S2), Approach improved during iron strike block (S6-S8), Putting always stable
+* All sidebar demo flows, coach portal session views, and AI reasoning walkthroughs use Session 9 data
 
 ## Stack
 * Vite + React 19 + Tailwind v4 (CSS-first, no tailwind.config.js)
 * Icons: lucide-react SVG only. NO emoji anywhere in the UI.
-* Fonts: DM Sans (brand voice), Space Mono (data voice), Playfair Display (editorial moments only)
+* Fonts: DM Sans (brand voice — all headings, body, labels), Space Mono (data voice — all numbers, metrics, timestamps), Playfair Display italic (editorial moments only — taglines, pull quotes). These are the canonical fonts. All Google Fonts, all free.
 * Charts: recharts for standard, custom SVG for golf-specific
 * All prototypes use hardcoded mock data — no API calls
 
@@ -89,10 +90,12 @@ border `2px solid #3A4856`, borderRadius `16px`, margin `8px`, shadow, dock rail
 ### Semantic
 confidence `#0FA87A`, caution `#D4980B`, flag `#C93B3B`
 
-### Typography Split (Absolute Rule)
-* **DM Sans**: all human-readable text, headings, body copy. NEVER for numbers in data cards.
-* **Space Mono**: all numbers, metrics, labels, confidence intervals, timestamps. NEVER for body paragraphs.
+### Typography Split (Single Source of Truth)
+* **DM Sans**: all human-readable text, headings, body copy, UI summary numbers (session counts, rounds played, improvement scores, practice frequency). These are summary stats, not instrument readings.
+* **Space Mono**: golf metrics and instrument data — handicap values, strokes gained, carry/distance, spin rate, launch angle, face-to-path, confidence percentages, timestamps, phase labels, data axis labels. The "data instrument" font.
 * **Playfair Display italic**: editorial moments only (taglines, pull quotes). NEVER for body or data.
+* All three are Google Fonts. Skills reference this section — do not redefine fonts elsewhere.
+* **The distinction**: if it came from a launch monitor or statistical model, it's Space Mono. If it's a simple count or UI chrome number, it's DM Sans bold.
 
 ### Border Radius
 * Cards: ≤8px
@@ -111,11 +114,9 @@ confidence `#0FA87A`, caution `#D4980B`, flag `#C93B3B`
 * Dark mode is the default
 
 ## Git
-* Working branch: `sprint-week1`
 * Remote: github.com/trippdudley/Looper.ai
 * Netlify deploys from `main`
-* Claude Code creates its own branches — merge into `sprint-week1` after each session
-* Worktree `gracious-chaum` may cause checkout conflicts — use "create new branch" workaround
+* Claude Code creates its own branches via worktrees
 
 ## Key Domain Terms
 EI profile, D-plane, spin loft, smash factor, dynamic lie, CT limit, MOI, strokes gained, dispersion ellipse, carry window, face-to-path, attack angle, dynamic loft, kinematic sequence

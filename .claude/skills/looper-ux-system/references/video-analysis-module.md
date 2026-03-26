@@ -29,7 +29,7 @@ Launch monitor delivery data synced to the current video frame/position: club pa
 
 ### Panel 04 — AI position analysis (bottom-right)
 
-At each P-position, the system provides correlated insights connecting biomechanics to outcome. Each insight includes: position label (P4, P6, P7), observation text in Cabinet Grotesk, and a correlation-to-outcome confidence badge. This is the intelligence layer — it connects what the coach sees in the video to what the data shows to what the AI recommends.
+At each P-position, the system provides correlated insights connecting biomechanics to outcome. Each insight includes: position label (P4, P6, P7), observation text in DM Sans, and a correlation-to-outcome confidence badge. This is the intelligence layer — it connects what the coach sees in the video to what the data shows to what the AI recommends.
 
 ## Build vs. integrate
 

@@ -15,37 +15,12 @@ Every component, token, and pattern in this system exists in two contexts. Desig
 
 ## Color Tokens
 
-### Light Mode (Portal + Player)
-```
---bg-page: #F6F7F9;
---bg-card: #FFFFFF;
---bg-card-nested: #F0F2F5;
---border-primary: #DFE2E7;
---border-subtle: #ECEEF2;
---text-heading: #1A1F2B;
---text-body: #4B5563;
---text-muted: #9CA3AF;
---accent: #0D7C66;
---confidence: #0FA87A;
---caution: #D4980B;
---flag: #C93B3B;
-```
+See root CLAUDE.md for hex values. This section adds CSS variable names and badge-specific patterns.
 
-### Dark Mode (Lesson Sidebar)
-```
---bg-page: #0C1117;
---bg-surface: #151D28;
---bg-card: #1E2A36;
---border-primary: #2A3544;
---border-subtle: #1E2A36;
---text-heading: #E8ECF1;
---text-body: #8B99A8;
---text-muted: #5E6E7E;
---accent: #10B981;
---confidence: #0FA87A;
---caution: #D4980B;
---flag: #C93B3B;
-```
+### CSS Variable Names (map to root CLAUDE.md hex values)
+Light mode: `--bg-page`, `--bg-card`, `--bg-card-nested` (#F0F2F5), `--border-primary` (#DFE2E7), `--border-subtle` (#ECEEF2), `--text-heading`, `--text-body`, `--text-muted`, `--accent`, `--confidence`, `--caution`, `--flag`
+
+Dark mode: `--bg-page`, `--bg-surface`, `--bg-card`, `--border-primary` (#2A3544), `--border-subtle` (#1E2A36), `--text-heading`, `--text-body`, `--text-muted`, `--accent`, `--confidence`, `--caution`, `--flag`
 
 ### Semantic Badge Backgrounds
 All semantic colors use tinted backgrounds at 15% opacity:
@@ -53,15 +28,9 @@ All semantic colors use tinted backgrounds at 15% opacity:
 - Caution: `rgba(212, 152, 11, 0.15)` with text #D4980B
 - Flag: `rgba(201, 59, 59, 0.15)` with text #C93B3B
 
-## Typography
+## Typography Scale
 
-### Font Stack
-- **Brand voice**: DM Sans (Google Fonts fallback for Cabinet Grotesk). All headings, body text, prose, labels.
-- **Data voice**: Space Mono (Google Fonts). All numbers, metrics, confidence values, timestamps, code-like text.
-- **Editorial voice**: Playfair Display (Google Fonts fallback for Instrument Serif italic). Taglines and pull quotes only.
-
-### The Split Is Absolute
-DM Sans never renders numbers in data cards or metric displays. Space Mono never renders body paragraphs or prose. If a component shows both a label and a number, the label is DM Sans and the number is Space Mono.
+Fonts and split rules are defined in root CLAUDE.md (single source of truth). This section adds size scales by surface.
 
 ### Scale
 
@@ -207,11 +176,7 @@ Components are documented in detail in `references/components.md`. Each componen
 
 ## Icons
 
-lucide-react only. No emoji. No custom icon sets. Import individually:
-```tsx
-import { Search, Lightbulb, MessageSquare, ClipboardCheck, TrendingUp, Pencil } from 'lucide-react'
-```
-Standard size: 16px in sidebar, 18-20px in portal. Stroke width: 1.5px. Color: inherit from parent text.
+lucide-react only (see root CLAUDE.md). Size by surface: 16px in sidebar, 18-20px in portal. Stroke width: 1.5px. Color: inherit from parent text.
 
 ## Animation Principles
 
@@ -239,11 +204,7 @@ Before building any component, verify:
 
 ## Anti-Patterns
 
-- No emoji in the UI — ever, anywhere
-- No Inter, Roboto, Arial, or system fonts
-- No purple gradients or generic AI aesthetics
-- No border-radius > 8px
-- No "Powered by AI" badges or sparkle icons
+See also root CLAUDE.md for global rules (no emoji, lucide-react only, border-radius caps). Additional UX-specific anti-patterns:
 - No loading spinners — use skeleton screens or visible AI reasoning patterns
 - No hero sections with stock photography
 - No gradient backgrounds on content areas
@@ -251,7 +212,34 @@ Before building any component, verify:
 - No 3D chart effects
 - No tooltips in the sidebar (targets too small — use tap-to-expand)
 - No horizontal scrolling in any context
-- No fitting/fitter/equipment references (shelved)
+- No "Powered by AI" badges or sparkle icons
+- Avoid generic AI aesthetics (purple gradients, glowing brains, neural net imagery, sparkle icons)
+
+## Accessibility & Interaction Standards
+
+### Accessibility (Required)
+- Color contrast: minimum 4.5:1 ratio for normal text, 3:1 for large text
+- Visible focus rings on all interactive elements (keyboard navigation)
+- Descriptive alt text for meaningful images; decorative images use `alt=""`
+- `aria-label` on icon-only buttons
+- Tab order matches visual order
+- Form inputs use `<label>` with `for` attribute
+
+### Touch & Interaction
+- Minimum 44x44px touch targets on all interactive elements
+- `cursor-pointer` on all clickable elements
+- Disable buttons during async operations (prevent double-submit)
+- Error messages positioned near the problem, not in a distant banner
+- Smooth transitions: 150-300ms for micro-interactions
+
+### Performance
+- Check `prefers-reduced-motion` and disable animations when set
+- Reserve space for async content to prevent layout shift
+- Lazy load images below the fold
+
+## Design Quality Principle
+
+Avoid generic AI-generated aesthetics. No purple gradients on white, no overused font families (Inter, Roboto), no cookie-cutter SaaS templates. Looper's design should feel like it was made by an engineer who plays golf — clinical, precise, craft-respecting. Every visual choice should be intentional and specific to the product context.
 
 ## Reference Files
 

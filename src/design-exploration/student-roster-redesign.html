@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Looper.AI — Student Roster (Redesign Stress Test)</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;500;700&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================
+       DESIGN SYSTEM TOKENS (from updated CLAUDE.md)
+       ============================================ */
+    :root {
+      /* Light mode (Portal) */
+      --bg-page: #F6F7F9;
+      --bg-card: #FFFFFF;
+      --text-heading: #1A1F2B;
+      --text-body: #4B5563;
+      --text-muted: #9CA3AF;
+      --accent: #0D7C66;
+      --accent-bright: #0FA87A;
+      --confidence: #0FA87A;
+      --caution: #D4980B;
+      --flag: #C93B3B;
+      --border: #DFE2E7;
+      --border-subtle: #ECEEF2;
+      --data-blue: #4A90D9;
+
+      /* Fonts — canonical (updated) */
+      --font-brand: 'DM Sans', system-ui, sans-serif;
+      --font-data: 'Space Mono', Menlo, monospace;
+      --font-editorial: 'Playfair Display', Georgia, serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg-page);
+      font-family: var(--font-brand);
+      color: var(--text-heading);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ============================================
+       LAYOUT SHELL (Portal chrome)
+       ============================================ */
+    .shell {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar nav */
+    .sidebar-nav {
+      width: 240px;
+      background: var(--text-heading);
+      color: #fff;
+      padding: 20px 0;
+      flex-shrink: 0;
+    }
+
+    .logo {
+      padding: 0 20px 24px;
+      font-family: var(--font-brand);
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: 0.05em;
+    }
+
+    .logo .ai { color: var(--accent); }
+    .logo .badge {
+      font-size: 9px;
+      font-weight: 600;
+      background: rgba(13,124,102,0.2);
+      color: var(--accent-bright);
+      padding: 2px 6px;
+      border-radius: 999px;
+      margin-left: 6px;
+      letter-spacing: 0.06em;
+      vertical-align: middle;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.6);
+      cursor: pointer;
+      transition: all 150ms;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    .nav-item:hover { color: #fff; background: rgba(255,255,255,0.05); }
+    .nav-item.active {
+      color: #fff;
+      background: rgba(13,124,102,0.15);
+      border-left: 3px solid var(--accent);
+    }
+
+    .nav-icon {
+      width: 18px;
+      height: 18px;
+      opacity: 0.7;
+    }
+
+    /* Main content */
+    .main {
+      flex: 1;
+      max-width: 1160px;
+      padding: 24px 32px;
+    }
+
+    /* Top bar */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin-bottom: 24px;
+      gap: 12px;
+    }
+
+    .top-search {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px; /* max 8px per design system */
+      padding: 8px 14px;
+      width: 280px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .top-search svg { width: 16px; height: 16px; color: var(--text-muted); flex-shrink: 0; }
+
+    .top-search input {
+      border: none;
+      outline: none;
+      background: none;
+      font-family: var(--font-brand);
+      font-size: 13px;
+      color: var(--text-heading);
+      width: 100%;
+    }
+
+    .top-search input::placeholder { color: var(--text-muted); }
+
+    /* Focus ring — accessibility */
+    .top-search:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(13,124,102,0.15);
+    }
+
+    .profile-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-heading);
+    }
+
+    .profile-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* ============================================
+       PAGE HEADER
+       ============================================ */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .page-title {
+      font-family: var(--font-brand);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-heading);
+    }
+
+    .page-search {
+      position: relative;
+    }
+
+    .page-search input {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 14px 8px 36px;
+      font-family: var(--font-brand);
+      font-size: 13px;
+      width: 220px;
+      outline: none;
+      background: var(--bg-card);
+      color: var(--text-heading);
+    }
+
+    .page-search input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(13,124,102,0.15);
+    }
+
+    .page-search input::placeholder { color: var(--text-muted); }
+
+    .page-search svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 15px;
+      height: 15px;
+      color: var(--text-muted);
+    }
+
+    /* ============================================
+       FILTER CHIPS
+       ============================================ */
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .chip {
+      font-family: var(--font-brand);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-body);
+      cursor: pointer;
+      transition: all 150ms;
+      /* accessibility: min 44px touch target */
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+    }
+
+    .chip:hover {
+      border-color: var(--text-heading);
+      color: var(--text-heading);
+    }
+
+    .chip:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .chip.active {
+      background: var(--text-heading);
+      color: #fff;
+      border-color: var(--text-heading);
+    }
+
+    /* ============================================
+       STUDENT CARD GRID
+       ============================================ */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    /* THE CARD — border-radius: 8px (was 12px, now capped per design system) */
+    .student-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px; /* CHANGED: was rounded-xl (12px), now 8px max */
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 200ms;
+    }
+
+    .student-card:hover {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    /* Avatar row */
+    .avatar-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--text-heading);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-brand);
+      font-size: 15px;
+      font-weight: 700;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .avatar img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .attention-dot {
+      position: absolute;
+      top: -1px;
+      right: -1px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--flag);
+      border: 2px solid var(--bg-card);
+    }
+
+    .student-name {
+      font-family: var(--font-brand);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-heading);
+    }
+
+    .other-coach-badge {
+      font-family: var(--font-brand);
+      font-size: 10px;
+      background: #F0F2F5;
+      color: var(--text-muted);
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-left: 6px;
+    }
+
+    /* Handicap — ALL NUMBERS IN SPACE MONO */
+    .handicap-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 2px;
+    }
+
+    .handicap-value {
+      font-family: var(--font-data); /* Space Mono — design system rule */
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-heading);
+    }
+
+    .trend-icon {
+      width: 14px;
+      height: 14px;
+    }
+
+    .trend-icon.improving { color: var(--accent); }
+    .trend-icon.declining { color: var(--flag); }
+
+    .trend-label {
+      font-family: var(--font-data); /* Space Mono for data labels */
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    .trend-label.improving { color: var(--accent); }
+    .trend-label.declining { color: var(--flag); }
+
+    /* Focus text */
+    .focus-text {
+      font-family: var(--font-brand);
+      font-size: 13px;
+      color: var(--text-body);
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    /* Stats row — NUMBERS IN SPACE MONO */
+    .stats-row {
+      display: flex;
+      gap: 0;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .stat {
+      flex: 1;
+    }
+
+    .stat-label {
+      font-family: var(--font-brand); /* DM Sans for labels */
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+
+    .stat-value {
+      font-family: var(--font-data); /* CHANGED: Space Mono for all numbers */
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-heading);
+    }
+
+    /* For text-based stats like "2-3x per week" — still Space Mono since it's metric data */
+    .stat-value-text {
+      font-family: var(--font-data);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-heading);
+    }
+
+    /* Connected systems badges */
+    .systems-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 12px;
+    }
+
+    .systems-icon {
+      width: 13px;
+      height: 13px;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .system-badge {
+      font-family: var(--font-data); /* Space Mono for system labels */
+      font-size: 9px;
+      font-weight: 500;
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 999px;
+      letter-spacing: 0.02em;
+    }
+
+    .system-trackman { background: var(--data-blue); }
+    .system-arccos { background: var(--accent); }
+    .system-ghin { background: var(--text-muted); }
+    .system-foresight { background: var(--caution); }
+
+    /* Improvement score — NUMBER IN SPACE MONO */
+    .improvement-section {
+      margin-bottom: 16px;
+    }
+
+    .improvement-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .improvement-label {
+      font-family: var(--font-brand); /* DM Sans for label text */
+      font-size: 11px;
+      color: var(--text-body);
+    }
+
+    .improvement-value {
+      font-family: var(--font-data); /* CHANGED: Space Mono for the number */
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-heading);
+    }
+
+    .improvement-bar {
+      width: 100%;
+      height: 6px;
+      background: #ECEEF2;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .improvement-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 999px;
+      transition: width 500ms ease-out;
+    }
+
+    /* View Profile button */
+    .view-btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      font-family: var(--font-brand);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      background: none;
+      cursor: pointer;
+      transition: all 150ms;
+      margin-top: auto;
+      /* accessibility: min touch target */
+      min-height: 40px;
+    }
+
+    .view-btn:hover {
+      background: rgba(13,124,102,0.04);
+    }
+
+    .view-btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .view-btn.disabled {
+      border-color: var(--border);
+      color: var(--text-muted);
+      cursor: default;
+    }
+
+    .view-btn.disabled:hover {
+      background: none;
+    }
+
+    /* ============================================
+       BOTTOM DEMO BAR
+       ============================================ */
+    .demo-bar {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--text-heading);
+      color: #fff;
+      padding: 10px 24px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    }
+
+    .demo-step {
+      font-family: var(--font-data);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .demo-link {
+      color: var(--accent-bright);
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    /* ============================================
+       INTEGRATIONS SIDEBAR (bottom-left)
+       ============================================ */
+    .integrations {
+      padding: 0 20px;
+      margin-top: auto;
+      padding-bottom: 20px;
+    }
+
+    .integrations-title {
+      font-family: var(--font-data);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 8px;
+    }
+
+    .integration-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 4px;
+    }
+
+    .integration-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-bright);
+    }
+
+    .integration-status {
+      font-family: var(--font-data);
+      font-size: 10px;
+      color: var(--accent-bright);
+      margin-left: auto;
+    }
+
+    /* Change annotations */
+    .change-marker {
+      position: relative;
+    }
+
+    .change-marker::after {
+      content: attr(data-change);
+      position: absolute;
+      right: -8px;
+      top: -6px;
+      font-family: var(--font-data);
+      font-size: 8px;
+      color: #fff;
+      background: #6366F1;
+      padding: 1px 4px;
+      border-radius: 3px;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- Sidebar Nav -->
+  <nav class="sidebar-nav" style="display: flex; flex-direction: column;">
+    <div class="logo">
+      LOOPER<span class="ai">.AI</span>
+      <span class="badge">COACH</span>
+    </div>
+
+    <button class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+      Today
+    </button>
+    <button class="nav-item active">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Students
+    </button>
+
+    <div class="integrations">
+      <div class="integrations-title">Integrations</div>
+      <div class="integration-item">
+        <span class="integration-dot"></span>
+        Trackman
+        <span class="integration-status">Connected</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main">
+
+    <!-- Global search bar + profile -->
+    <div class="top-bar">
+      <div class="top-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" placeholder="Search students, sessions..." aria-label="Global search">
+      </div>
+      <span style="width: 1px; height: 20px; background: var(--border);"></span>
+      <div class="profile-pill">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Austin Reed, PGA
+        <div class="profile-avatar">AR</div>
+      </div>
+    </div>
+
+    <!-- Page header -->
+    <div class="page-header">
+      <h1 class="page-title">Students</h1>
+      <div class="page-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" placeholder="Search students..." aria-label="Search students">
+      </div>
+    </div>
+
+    <!-- Filter chips -->
+    <div class="filter-row">
+      <button class="chip active">All Students</button>
+      <button class="chip">My Students</button>
+      <button class="chip">Active</button>
+      <button class="chip">Needs Attention</button>
+    </div>
+
+    <!-- Student card grid -->
+    <div class="card-grid">
+
+      <!-- Moe Norman — handicap updated to 12.1 per CLAUDE.md -->
+      <div class="student-card">
+        <div class="avatar-row">
+          <div class="avatar" style="background: url('https://ui-avatars.com/api/?name=Moe+Norman&background=1A1F2B&color=fff&size=96') center/cover; background-color: #1A1F2B;">
+            <span class="attention-dot"></span>
+          </div>
+          <div>
+            <div class="student-name">Moe Norman</div>
+            <div class="handicap-row">
+              <span class="handicap-value">12.1</span>
+              <svg class="trend-icon improving" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
+              <span class="trend-label improving">Improving</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="focus-text">Driver consistency and weight transfer</div>
+
+        <div class="stats-row">
+          <div class="stat">
+            <div class="stat-label">Sessions</div>
+            <div class="stat-value">8</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Practice</div>
+            <div class="stat-value-text">2-3x per week</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Rounds/mo</div>
+            <div class="stat-value">4</div>
+          </div>
+        </div>
+
+        <div class="systems-row">
+          <svg class="systems-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+          <span class="system-badge system-trackman">Trackman</span>
+          <span class="system-badge system-arccos">Arccos</span>
+          <span class="system-badge system-ghin">GHIN</span>
+        </div>
+
+        <div class="improvement-section">
+          <div class="improvement-header">
+            <span class="improvement-label">Improvement Score</span>
+            <span class="improvement-value">72</span>
+          </div>
+          <div class="improvement-bar">
+            <div class="improvement-fill" style="width: 72%;"></div>
+          </div>
+        </div>
+
+        <button class="view-btn">View Profile</button>
+      </div>
+
+      <!-- Sarah Chen -->
+      <div class="student-card">
+        <div class="avatar-row">
+          <div class="avatar" style="background-color: var(--accent);">SC</div>
+          <div>
+            <div class="student-name">Sarah Chen</div>
+            <div class="handicap-row">
+              <span class="handicap-value">22</span>
+              <svg class="trend-icon improving" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
+              <span class="trend-label improving">Improving</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="focus-text">Grip fundamentals and takeaway</div>
+
+        <div class="stats-row">
+          <div class="stat">
+            <div class="stat-label">Sessions</div>
+            <div class="stat-value">4</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Practice</div>
+            <div class="stat-value-text">1-2x per week</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Rounds/mo</div>
+            <div class="stat-value">2</div>
+          </div>
+        </div>
+
+        <div class="systems-row">
+          <svg class="systems-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+          <span class="system-badge system-trackman">Trackman</span>
+          <span class="system-badge system-ghin">GHIN</span>
+        </div>
+
+        <div class="improvement-section">
+          <div class="improvement-header">
+            <span class="improvement-label">Improvement Score</span>
+            <span class="improvement-value">68</span>
+          </div>
+          <div class="improvement-bar">
+            <div class="improvement-fill" style="width: 68%;"></div>
+          </div>
+        </div>
+
+        <button class="view-btn disabled">View Profile</button>
+      </div>
+
+      <!-- James Okafor -->
+      <div class="student-card">
+        <div class="avatar-row">
+          <div class="avatar">JO</div>
+          <div>
+            <div class="student-name">James Okafor</div>
+            <div class="handicap-row">
+              <span class="handicap-value">9.1</span>
+              <svg class="trend-icon improving" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
+              <span class="trend-label improving">Improving</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="focus-text">Wedge distance control and spin consistency</div>
+
+        <div class="stats-row">
+          <div class="stat">
+            <div class="stat-label">Sessions</div>
+            <div class="stat-value">12</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Practice</div>
+            <div class="stat-value-text">4-5x per week</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Rounds/mo</div>
+            <div class="stat-value">8</div>
+          </div>
+        </div>
+
+        <div class="systems-row">
+          <svg class="systems-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+          <span class="system-badge system-trackman">Trackman</span>
+          <span class="system-badge system-arccos">Arccos</span>
+          <span class="system-badge system-ghin">GHIN</span>
+          <span class="system-badge system-foresight">Foresight</span>
+        </div>
+
+        <div class="improvement-section">
+          <div class="improvement-header">
+            <span class="improvement-label">Improvement Score</span>
+            <span class="improvement-value">81</span>
+          </div>
+          <div class="improvement-bar">
+            <div class="improvement-fill" style="width: 81%;"></div>
+          </div>
+        </div>
+
+        <button class="view-btn disabled">View Profile</button>
+      </div>
+
+      <!-- Linda Park -->
+      <div class="student-card">
+        <div class="avatar-row">
+          <div class="avatar" style="background-color: var(--accent);">LP</div>
+          <div>
+            <div class="student-name">
+              Linda Park
+              <span class="other-coach-badge">Other coach</span>
+            </div>
+            <div class="handicap-row">
+              <span class="handicap-value">18.5</span>
+              <svg class="trend-icon improving" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
+              <span class="trend-label improving">Improving</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="focus-text">Iron contact and green reading</div>
+
+        <div class="stats-row">
+          <div class="stat">
+            <div class="stat-label">Sessions</div>
+            <div class="stat-value">5</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Practice</div>
+            <div class="stat-value-text">1-2x per week</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Rounds/mo</div>
+            <div class="stat-value">3</div>
+          </div>
+        </div>
+
+        <div class="systems-row">
+          <svg class="systems-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+          <span class="system-badge system-foresight">Foresight</span>
+          <span class="system-badge system-ghin">GHIN</span>
+        </div>
+
+        <div class="improvement-section">
+          <div class="improvement-header">
+            <span class="improvement-label">Improvement Score</span>
+            <span class="improvement-value">65</span>
+          </div>
+          <div class="improvement-bar">
+            <div class="improvement-fill" style="width: 65%;"></div>
+          </div>
+        </div>
+
+        <button class="view-btn disabled">View Profile</button>
+      </div>
+
+    </div>
+
+    <!-- Change log -->
+    <div style="margin-top: 40px; padding: 20px; background: #fff; border: 1px solid var(--border); border-radius: 8px;">
+      <h2 style="font-size: 15px; font-weight: 600; margin-bottom: 12px; color: var(--text-heading);">What Changed (Design System Compliance)</h2>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 13px; color: var(--text-body); line-height: 1.6;">
+        <div>
+          <strong style="color: var(--text-heading);">Typography fixes:</strong>
+          <ul style="padding-left: 16px; margin-top: 4px;">
+            <li>Sessions, Rounds, Improvement Score numbers now in <span style="font-family: var(--font-data);">Space Mono</span> (were DM Sans)</li>
+            <li>Practice frequency in <span style="font-family: var(--font-data);">Space Mono</span></li>
+            <li>Trend labels in <span style="font-family: var(--font-data);">Space Mono</span></li>
+            <li>System badges in <span style="font-family: var(--font-data);">Space Mono</span></li>
+          </ul>
+        </div>
+        <div>
+          <strong style="color: var(--text-heading);">Structural fixes:</strong>
+          <ul style="padding-left: 16px; margin-top: 4px;">
+            <li>Card border-radius: 8px (was 12px/rounded-xl)</li>
+            <li>Button border-radius: 8px (was mixed)</li>
+            <li>Focus rings on all interactive elements</li>
+            <li>aria-label on search inputs</li>
+            <li>Min 36-40px touch targets on chips/buttons</li>
+            <li>Moe Norman handicap: 12.1 (was 15.2)</li>
+            <li>Moe sessions: 8 (updated per Session 9 demo)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Demo bar -->
+<div class="demo-bar">
+  <span class="demo-step">Demo Step 2/7</span>
+  <span class="demo-link">Next: Coach reviews player detail &rarr;</span>
+  <span style="cursor: pointer; opacity: 0.5;">&times;</span>
+</div>
+
+</body>
+</html>

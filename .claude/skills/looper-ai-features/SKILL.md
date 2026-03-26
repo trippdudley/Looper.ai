@@ -231,20 +231,20 @@ Based on sessions 11-14 with Coach Thompson
 
 For prototyping. All prototypes use hardcoded data that tells a compelling story.
 
-### Demo Scenario
+### Demo Scenario (Session 9 — Canonical Demo)
 - **Coach**: M. Thompson (15 years experience, 6-handicap, external-focus preference)
-- **Player**: Moe Norman (12-handicap, 2 years with Coach Thompson, goal: break 80)
-- **Session**: #14 in ongoing program. Focus: iron strike consistency.
-- **Context**: Last session (#13) focused on ball position. Player practiced 2x since. Handicap dropped from 12.4 to 12.1.
+- **Player**: Moe Norman (12.1 handicap from 13.8, 8 sessions with Coach Thompson, goal: break 80)
+- **Session**: #9 in ongoing program. The AI flags driver SG trending worse (-1.5 → -2.3 across all 8 prior sessions, never addressed) with 87% confidence.
+- **Context**: Sessions 1-2 improved short game, Sessions 6-8 improved approach via iron strike block. Driver was never the focus — that's what the AI catches.
 
-### Mock Shot Data (14 shots, 7-iron)
-Use realistic ranges: ball speed 115-125 mph, launch 16-19°, spin 5800-6800 rpm, carry 155-170 yards. Vary impact location to show the toe-bias pattern (average +0.4" toe, with improving trend on shots 11-14 after intervention).
+### Mock Shot Data
+Use realistic ranges for the session 9 driver-focused demo. Ball speed, launch, spin, carry should be realistic for a 12-handicap. The key data story: driver SG is the hidden problem across 8 sessions of data.
 
-### Mock Phase Content
-- **Catch-up** (shots 1-3): AI surfaces: "Last session focused on ball position. Player practiced 2x this week. Handicap 12.1, down from 12.4."
-- **Diagnosis** (shots 4-10): AI detects toe-bias strike pattern, face-to-path volatility. Confidence builds from 45% → 74% as shots accumulate.
-- **Intervention** (shots 11-13): Coach selects Gate Drill (external cue). AI tracks response: centered strikes improve from 2/7 to 2/3 post-drill.
-- **Review** (shot 14): AI summary: "Strike dispersion tightened 22%. Toe bias reduced. Recommend continued gate drill practice 3x before next session."
+### Mock Phase Content (Session 9)
+- **Catch-up**: AI surfaces: "S8 focused on iron strike consistency. Player practiced 2x this week. Handicap 12.1, down from 13.8 over 8 sessions."
+- **Diagnosis**: AI reviews 8-session longitudinal data. Flags driver SG trending worse (-1.5 → -2.3) while all other categories improved. Confidence builds from 52% → 71% → 87% as pattern holds across sessions.
+- **Intervention**: Coach addresses driver for the first time. AI suggests alignment-based drill (external cue). Tracks response.
+- **Review**: AI summary: "Driver SG identified as primary limiting factor. Pattern across 8 sessions shows progressive decline. Recommend driver-focused block for next 2-3 sessions."
 
 ### File Location
 Store mock data as a JSON file at `.claude/skills/looper-ai-features/references/mock-responses.json` for reference, but in actual prototypes, hardcode the data directly in the components for simplicity.

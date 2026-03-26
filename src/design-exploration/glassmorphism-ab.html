@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Looper.AI — Glassmorphism A/B Exploration</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;500;700&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #060A0F;
+      color: #E8ECF1;
+      font-family: 'DM Sans', sans-serif;
+      padding: 32px;
+    }
+
+    h1 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #E8ECF1;
+    }
+
+    .subtitle {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: #8B99A8;
+      margin-bottom: 32px;
+    }
+
+    .comparison {
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+    }
+
+    .variant {
+      width: 450px;
+      flex-shrink: 0;
+    }
+
+    .variant-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #5E6E7E;
+      margin-bottom: 12px;
+    }
+
+    /* Sidebar shell for both variants */
+    .sidebar-shell {
+      background: #0C1117;
+      border: 2px solid #3A4856;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.4);
+    }
+
+    .phase-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .phase-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #D4980B;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+
+    .phase-name {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #8B99A8;
+    }
+
+    .phase-time {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: #5E6E7E;
+      margin-left: auto;
+    }
+
+    .thinking-line {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: #5E6E7E;
+      margin-bottom: 12px;
+      padding-left: 16px;
+    }
+
+    /* =========================================
+       VARIANT A: Current Design (solid cards)
+       ========================================= */
+    .card-a {
+      background: #1E2A36;
+      border: 1px solid #2A3544;
+      border-left: 3px solid #D4980B;
+      border-radius: 6px;
+      padding: 10px;
+      margin-bottom: 8px;
+    }
+
+    /* =========================================
+       VARIANT B: Glassmorphism cards
+       ========================================= */
+    .card-b {
+      background: rgba(30, 42, 54, 0.55);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(58, 72, 86, 0.5);
+      border-left: 3px solid #D4980B;
+      border-radius: 6px;
+      padding: 10px;
+      margin-bottom: 8px;
+    }
+
+    /* Shared card content styles */
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .card-phase-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      color: #5E6E7E;
+    }
+
+    .card-timestamp {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: #5E6E7E;
+    }
+
+    .card-text {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: #E8ECF1;
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .confidence-badge {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    .confidence-amber {
+      background: rgba(212, 152, 11, 0.15);
+      color: #D4980B;
+    }
+
+    .confidence-green {
+      background: rgba(15, 168, 122, 0.15);
+      color: #0FA87A;
+    }
+
+    .confidence-low {
+      border: 1px dashed #C93B3B;
+      color: #C93B3B;
+    }
+
+    .why-btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      color: #10B981;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    /* Metric tiles */
+    .metric-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .metric-tile-a {
+      flex: 1;
+      background: #1E2A36;
+      border: 1px solid #2A3544;
+      border-radius: 6px;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .metric-tile-b {
+      flex: 1;
+      background: rgba(30, 42, 54, 0.45);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(58, 72, 86, 0.4);
+      border-radius: 6px;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .metric-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      color: #5E6E7E;
+      margin-bottom: 2px;
+    }
+
+    .metric-value {
+      font-family: 'Space Mono', monospace;
+      font-size: 16px;
+      font-weight: 700;
+      color: #E8ECF1;
+    }
+
+    .metric-delta {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: #C93B3B;
+    }
+
+    /* Suggestion card additions */
+    .drill-name {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #E8ECF1;
+      margin-bottom: 6px;
+    }
+
+    .type-badge {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      display: inline-block;
+      margin-right: 4px;
+      margin-bottom: 6px;
+    }
+
+    .badge-external {
+      background: rgba(13, 124, 102, 0.15);
+      color: #10B981;
+    }
+
+    .section-divider {
+      height: 1px;
+      background: #2A3544;
+      margin: 16px 0;
+    }
+
+    /* Notes section */
+    .notes {
+      margin-top: 40px;
+      padding: 16px;
+      background: #0C1117;
+      border: 1px solid #2A3544;
+      border-radius: 8px;
+    }
+
+    .notes h2 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #E8ECF1;
+      margin-bottom: 8px;
+    }
+
+    .notes ul {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: #8B99A8;
+      line-height: 1.7;
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Glassmorphism A/B — Sidebar Insight Cards</h1>
+  <p class="subtitle">Same content, two card treatments. Open in a browser to compare.</p>
+
+  <div class="comparison">
+
+    <!-- VARIANT A: Current solid cards -->
+    <div class="variant">
+      <div class="variant-label">A: Current (solid cards)</div>
+      <div class="sidebar-shell">
+        <div class="phase-header">
+          <div class="phase-dot"></div>
+          <span class="phase-name">Analysis</span>
+          <span class="phase-time">2:34 PM</span>
+        </div>
+
+        <div class="thinking-line">Analyzing 8-session driver trend...</div>
+
+        <div class="card-a">
+          <div class="card-meta">
+            <span class="card-phase-tag">Analysis</span>
+            <span class="card-timestamp">2:31 PM</span>
+          </div>
+          <div class="card-text">
+            Driver SG has declined from -1.5 to -2.3 across all 8 sessions. No coaching intervention has addressed this pattern.
+          </div>
+          <div class="card-footer">
+            <span class="confidence-badge confidence-amber">71%</span>
+            <button class="why-btn">Why?</button>
+          </div>
+        </div>
+
+        <div class="card-a">
+          <div class="card-meta">
+            <span class="card-phase-tag">Analysis</span>
+            <span class="card-timestamp">2:34 PM</span>
+          </div>
+          <div class="card-text">
+            All other SG categories improved or held stable during this period. Driver is the primary limiting factor.
+          </div>
+          <div class="card-footer">
+            <span class="confidence-badge confidence-green">87%</span>
+            <button class="why-btn">Why?</button>
+          </div>
+        </div>
+
+        <div class="metric-row">
+          <div class="metric-tile-a">
+            <div class="metric-label">Driver SG</div>
+            <div class="metric-value">-2.3</div>
+            <div class="metric-delta">-0.8 over 8 sessions</div>
+          </div>
+          <div class="metric-tile-a">
+            <div class="metric-label">Approach SG</div>
+            <div class="metric-value" style="color: #0FA87A;">+0.4</div>
+            <div class="metric-delta" style="color: #0FA87A;">+0.6 improved</div>
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div class="card-a" style="border-left-color: #10B981;">
+          <div class="card-meta">
+            <span class="card-phase-tag">Suggested Drill</span>
+          </div>
+          <div class="drill-name">Alignment Gate — Driver Path</div>
+          <span class="type-badge badge-external">External</span>
+          <div class="card-text" style="font-size: 12px;">
+            Targets path consistency. Expected: reduce face-to-path gap by 1.5-2.0 degrees.
+          </div>
+          <div class="card-footer">
+            <span class="confidence-badge confidence-green">82%</span>
+            <button class="why-btn">Alt</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VARIANT B: Glassmorphism cards -->
+    <div class="variant">
+      <div class="variant-label">B: Glassmorphism (frosted glass)</div>
+      <div class="sidebar-shell" style="background: linear-gradient(180deg, #0C1117 0%, #0F1620 100%);">
+        <div class="phase-header">
+          <div class="phase-dot"></div>
+          <span class="phase-name">Analysis</span>
+          <span class="phase-time">2:34 PM</span>
+        </div>
+
+        <div class="thinking-line">Analyzing 8-session driver trend...</div>
+
+        <div class="card-b">
+          <div class="card-meta">
+            <span class="card-phase-tag">Analysis</span>
+            <span class="card-timestamp">2:31 PM</span>
+          </div>
+          <div class="card-text">
+            Driver SG has declined from -1.5 to -2.3 across all 8 sessions. No coaching intervention has addressed this pattern.
+          </div>
+          <div class="card-footer">
+            <span class="confidence-badge confidence-amber">71%</span>
+            <button class="why-btn">Why?</button>
+          </div>
+        </div>
+
+        <div class="card-b">
+          <div class="card-meta">
+            <span class="card-phase-tag">Analysis</span>
+            <span class="card-timestamp">2:34 PM</span>
+          </div>
+          <div class="card-text">
+            All other SG categories improved or held stable during this period. Driver is the primary limiting factor.
+          </div>
+          <div class="card-footer">
+            <span class="confidence-badge confidence-green">87%</span>
+            <button class="why-btn">Why?</button>
+          </div>
+        </div>
+
+        <div class="metric-row">
+          <div class="metric-tile-b">
+            <div class="metric-label">Driver SG</div>
+            <div class="metric-value">-2.3</div>
+            <div class="metric-delta">-0.8 over 8 sessions</div>
+          </div>
+          <div class="metric-tile-b">
+            <div class="metric-label">Approach SG</div>
+            <div class="metric-value" style="color: #0FA87A;">+0.4</div>
+            <div class="metric-delta" style="color: #0FA87A;">+0.6 improved</div>
+          </div>
+        </div>
+
+        <div class="section-divider" style="background: rgba(42, 53, 68, 0.5);"></div>
+
+        <div class="card-b" style="border-left-color: #10B981;">
+          <div class="card-meta">
+            <span class="card-phase-tag">Suggested Drill</span>
+          </div>
+          <div class="drill-name">Alignment Gate — Driver Path</div>
+          <span class="type-badge badge-external">External</span>
+          <div class="card-text" style="font-size: 12px;">
+            Targets path consistency. Expected: reduce face-to-path gap by 1.5-2.0 degrees.
+          </div>
+          <div class="card-footer">
+            <span class="confidence-badge confidence-green">82%</span>
+            <button class="why-btn">Alt</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="notes">
+    <h2>What changed in B (Glassmorphism)</h2>
+    <ul>
+      <li><strong>Card background:</strong> Solid #1E2A36 replaced with rgba(30,42,54,0.55) + backdrop-filter: blur(12px)</li>
+      <li><strong>Card borders:</strong> Solid #2A3544 replaced with rgba(58,72,86,0.5) — slightly translucent</li>
+      <li><strong>Sidebar bg:</strong> Added subtle gradient (pure dark to slightly lighter) so the blur has something to work with</li>
+      <li><strong>Metric tiles:</strong> Same treatment — 45% opacity bg + blur</li>
+      <li><strong>Everything else identical:</strong> Same fonts, colors, spacing, badges, phase indicators</li>
+      <li><strong>Tradeoff:</strong> Glassmorphism adds visual depth/layering but requires backdrop-filter support. Performance cost in the bay environment may matter.</li>
+    </ul>
+  </div>
+
+</body>
+</html>
