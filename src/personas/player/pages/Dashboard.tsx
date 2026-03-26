@@ -1,256 +1,370 @@
-import { C, F, S, fmtDelta } from '../data/tokens';
-import { player } from '../data/player';
-import { timelineEvents } from '../data/timeline';
-import SectionLabel from '../components/shared/SectionLabel';
-import KpiTile from '../components/shared/KpiTile';
+/**
+ * Dashboard — Tab 1 (dark mode, WHOOP-inspired).
+ * Hero handicap with animated arc, three-pillar ring gauges,
+ * coach card, SG diverging bars with glow, practice-play gap,
+ * recent activity with type indicators.
+ */
+import { useState } from 'react';
+import { TrendingUp, Calendar, GraduationCap, AlertTriangle, ChevronRight } from 'lucide-react';
+import { C, F, S } from '../data/tokens';
+import {
+  player, handicapHistory, strokesGained,
+  practicePlayGap, recentActivity,
+} from '../data/tripp';
 import Sparkline from '../components/shared/Sparkline';
-import SourcePill from '../components/shared/SourcePill';
-import TypeIcon from '../components/timeline/TypeIcon';
+import type { PlayerTab } from '../components/layout/BottomNav';
 
-interface DashboardProps {
-  onNavigateToJourney?: () => void;
-}
-
-export default function Dashboard({ onNavigateToJourney }: DashboardProps) {
-  // For handicap, lower is better — invert color logic
-  const hcpRaw = fmtDelta(player.handicapDelta, 'sg');
-  const hcpDelta = {
-    text: hcpRaw.text,
-    color: player.handicapDelta < 0 ? C.conf : player.handicapDelta > 0 ? C.flag : C.muted,
-  };
-
-  // SG bars
-  const sgCategories = [
-    { label: 'Driving', value: player.strokesGained.driving },
-    { label: 'Approach', value: player.strokesGained.approach },
-    { label: 'Short Game', value: player.strokesGained.shortGame },
-    { label: 'Putting', value: player.strokesGained.putting },
-  ];
-
-  const sgMax = Math.max(...sgCategories.map((c) => Math.abs(c.value)));
-
-  // Last round
-  const lastRound = timelineEvents.find((e) => e.type === 'round');
-
-  // Recent timeline (last 5)
-  const recentEvents = timelineEvents.slice(0, 5);
+/* ── SVG Ring Gauge ── */
+function RingGauge({ value, max, color, size = 52 }: { value: number; max: number; color: string; size?: number }): JSX.Element {
+  const r = (size - 6) / 2;
+  const circ = 2 * Math.PI * r;
+  const pct = Math.min(value / max, 1);
+  const offset = circ * (1 - pct);
 
   return (
-    <div>
-      {/* Hero card — Handicap + Player Quality */}
-      <div
-        style={{
-          ...S.card,
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: 12,
-          marginBottom: 16,
-        }}
-      >
-        {/* Handicap */}
-        <div>
-          <div style={{ fontFamily: F.data, fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.08em', color: C.muted, marginBottom: 4 }}>
-            HANDICAP INDEX
-          </div>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
-            <span style={{ fontFamily: F.data, fontSize: 32, fontWeight: 700, color: C.ink, letterSpacing: '-.01em' }}>
-              {player.handicap}
-            </span>
-            <span style={{ fontFamily: F.data, fontSize: 11, fontWeight: 700, color: hcpDelta.color }}>
-              {hcpDelta.text}
-            </span>
-          </div>
-          <div style={{ fontFamily: F.data, fontSize: 9, color: C.muted, marginTop: 2 }}>
-            Last 90 days
-          </div>
-          <Sparkline data={player.handicapHistory} width={100} height={24} color={C.conf} />
-        </div>
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={C.surfaceAlt} strokeWidth={4} />
+      <circle
+        cx={size / 2} cy={size / 2} r={r}
+        fill="none" stroke={color} strokeWidth={4}
+        strokeDasharray={circ} strokeDashoffset={offset}
+        strokeLinecap="round"
+        transform={`rotate(-90 ${size / 2} ${size / 2})`}
+        style={{ filter: `drop-shadow(0 0 6px ${color}66)`, transition: 'stroke-dashoffset 800ms ease-out' }}
+      />
+    </svg>
+  );
+}
 
-        {/* Player Quality */}
-        <div>
-          <div style={{ fontFamily: F.data, fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.08em', color: C.muted, marginBottom: 4 }}>
-            PLAYER QUALITY
-          </div>
-          <div style={{ fontFamily: F.data, fontSize: 32, fontWeight: 700, color: C.ink, letterSpacing: '-.01em' }}>
-            {player.playerQuality}
-          </div>
-          <div style={{ fontFamily: F.data, fontSize: 9, color: C.muted, marginTop: 2 }}>
-            0-100 scale (100 = tour avg)
-          </div>
-          {/* Progress bar */}
-          <div style={{ height: 4, background: C.surfaceAlt, borderRadius: 2, marginTop: 6, overflow: 'hidden' }}>
-            <div style={{ height: '100%', width: `${player.playerQuality}%`, background: C.accent, borderRadius: 2 }} />
-          </div>
+/* ── SG Diverging Bar ── */
+function SGBar({ label, sg, delta, maxSg }: { label: string; sg: number; delta: number; maxSg: number }): JSX.Element {
+  const isPositive = sg >= 0;
+  const barPct = (Math.abs(sg) / maxSg) * 50;
+  const barColor = isPositive ? C.conf : C.flag;
+  const deltaColor = delta > 0 ? C.conf : delta < 0 ? C.flag : C.muted;
+  const deltaText = delta > 0 ? `\u25B2 ${delta.toFixed(1)}` : delta < 0 ? `\u25BC ${Math.abs(delta).toFixed(1)}` : '--';
+
+  return (
+    <div style={{ marginBottom: 14 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+        <span style={{ fontFamily: F.brand, fontSize: 13, fontWeight: 500, color: C.ink }}>{label}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ fontFamily: F.data, fontSize: 14, fontWeight: 700, color: barColor, textShadow: `0 0 8px ${barColor}44` }}>
+            {isPositive ? '+' : ''}{sg.toFixed(1)}
+          </span>
+          <span style={{ fontFamily: F.data, fontSize: 10, color: deltaColor }}>{deltaText}</span>
         </div>
       </div>
-
-      {/* Coaching plan card */}
-      {player.coach && (
+      <div style={{ height: 10, background: C.surfaceAlt, borderRadius: 5, position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: 1, background: C.border }} />
         <div
           style={{
-            ...S.card,
-            borderLeft: `3px solid ${C.accent}`,
-            borderRadius: '0 12px 12px 0',
-            marginBottom: 16,
+            position: 'absolute', top: 1, bottom: 1,
+            ...(isPositive
+              ? { left: '50%', width: `${Math.max(barPct, 3)}%` }
+              : { right: '50%', width: `${Math.max(barPct, 3)}%` }),
+            background: barColor,
+            borderRadius: isPositive ? '0 4px 4px 0' : '4px 0 0 4px',
+            boxShadow: `0 0 12px ${barColor}44`,
+            transition: 'width 600ms ease-out',
           }}
-        >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-            <div style={{ fontFamily: F.brand, fontSize: 14, fontWeight: 600, color: C.ink }}>
-              Coaching Plan
-            </div>
-            <span style={{
-              fontFamily: F.data, fontSize: 8, fontWeight: 700,
-              color: C.conf, background: C.confBg,
-              padding: '2px 8px', borderRadius: 3,
-              textTransform: 'uppercase', letterSpacing: '.06em',
-            }}>
-              Active
-            </span>
-          </div>
-          <div style={{ fontFamily: F.brand, fontSize: 13, color: C.body, marginBottom: 4 }}>
-            {player.coach.plan}
-          </div>
-          <div style={{ fontFamily: F.data, fontSize: 10, color: C.muted }}>
-            Coach {player.coach.name} · Phase {player.coach.phase}/{player.coach.totalPhases} · Next: {player.coach.nextSession}
-          </div>
-        </div>
-      )}
-
-      {/* Strokes Gained breakdown */}
-      <SectionLabel number="01" text="WHERE YOU'RE GAINING AND LOSING" />
-      <div style={{ ...S.card, marginBottom: 16 }}>
-        {sgCategories.map((cat) => {
-          const pct = sgMax > 0 ? (Math.abs(cat.value) / sgMax) * 100 : 0;
-          const isPositive = cat.value >= 0;
-          return (
-            <div key={cat.label} style={{ marginBottom: 10 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 3 }}>
-                <span style={{ fontFamily: F.brand, fontSize: 12, fontWeight: 500, color: C.ink }}>
-                  {cat.label}
-                </span>
-                <span style={{
-                  fontFamily: F.data, fontSize: 12, fontWeight: 700,
-                  color: isPositive ? C.conf : C.flag,
-                }}>
-                  {isPositive ? '+' : ''}{cat.value.toFixed(1)}
-                </span>
-              </div>
-              <div style={{ height: 6, background: C.surfaceAlt, borderRadius: 3, overflow: 'hidden' }}>
-                <div
-                  style={{
-                    height: '100%',
-                    width: `${Math.max(pct, 4)}%`,
-                    background: isPositive ? C.conf : C.flag,
-                    borderRadius: 3,
-                  }}
-                />
-              </div>
-            </div>
-          );
-        })}
-        <div style={{ fontFamily: F.data, fontSize: 9, color: C.muted, marginTop: 4 }}>
-          vs. {player.strokesGained.benchmark} benchmark · {player.strokesGained.sampleSize}
-        </div>
+        />
       </div>
+    </div>
+  );
+}
 
-      {/* What to do next */}
-      <div
-        style={{
-          background: C.accentBg,
-          borderLeft: `2px solid ${C.accent}`,
-          borderRadius: 0,
-          padding: '12px 14px',
-          marginBottom: 16,
-        }}
-      >
+interface DashboardProps {
+  onNavigate: (tab: PlayerTab) => void;
+}
+
+export default function Dashboard({ onNavigate }: DashboardProps): JSX.Element {
+  const [hoveredActivity, setHoveredActivity] = useState<string | null>(null);
+  const hcpValues = handicapHistory.map((h) => h.value);
+
+  const sgCats = [
+    strokesGained.driving,
+    strokesGained.approach,
+    strokesGained.shortGame,
+    strokesGained.putting,
+  ];
+  const sgMax = Math.max(...sgCats.map((c) => Math.abs(c.sg)), 0.1);
+
+  const typeColors: Record<string, string> = {
+    round: C.conf,
+    practice: C.accentBright,
+    lesson: C.caution,
+  };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+
+      {/* ─── Hero: Handicap Index with sparkline ─── */}
+      <div style={S.cardHero}>
         <div style={{
           fontFamily: F.data, fontSize: 10, fontWeight: 700,
-          letterSpacing: '.06em', textTransform: 'uppercase',
-          color: C.accent, marginBottom: 4,
+          textTransform: 'uppercase', letterSpacing: '.1em', color: C.muted, marginBottom: 10,
         }}>
-          WHAT TO DO NEXT
+          HANDICAP INDEX
         </div>
-        <div style={{ fontFamily: F.brand, fontSize: 13, color: C.body, lineHeight: 1.5 }}>
-          Your approach game is costing you 1.4 strokes per round. Coach Thompson's gate drill is tightening dispersion — one more session before Thursday's lesson.{' '}
-          <span style={{ color: C.accent, fontWeight: 500 }}>7-iron, 30 balls, target ±5.0 yds.</span>
-        </div>
-      </div>
-
-      {/* Last round summary */}
-      {lastRound && (
-        <>
-          <SectionLabel number="02" text="LAST ROUND" />
-          <div style={{ ...S.card, marginBottom: 16 }}>
-            <div style={{ fontFamily: F.brand, fontSize: 14, fontWeight: 600, color: C.ink, marginBottom: 2 }}>
-              {lastRound.title}
-            </div>
-            <div style={{ fontFamily: F.data, fontSize: 10, color: C.muted, marginBottom: 10 }}>
-              {lastRound.date} · {lastRound.time}
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0,1fr))', gap: 6 }}>
-              {lastRound.metrics.slice(0, 3).map((m, i) => (
-                <KpiTile key={i} label={m.label} value={m.value} color={
-                  m.status === 'best' || m.status === 'improving' || m.status === 'good' ? C.conf :
-                  m.status === 'poor' || m.status === 'regression' ? C.flag : C.accent
-                } />
-              ))}
-            </div>
-          </div>
-        </>
-      )}
-
-      {/* Recent timeline */}
-      <SectionLabel number="03" text="RECENT ACTIVITY" />
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 12 }}>
-        {recentEvents.map((ev) => (
-          <div
-            key={ev.id}
-            style={{
-              ...S.card,
-              padding: '10px 12px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 10,
-            }}
-          >
-            <TypeIcon type={ev.type} size={24} />
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 1 }}>
-                <SourcePill source={ev.source} size="sm" />
-                <span style={{ fontFamily: F.data, fontSize: 8, color: C.muted }}>{ev.date.slice(5)}</span>
-              </div>
-              <div style={{
-                fontFamily: F.brand, fontSize: 12, fontWeight: 500, color: C.ink,
-                overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+        <div style={{ display: 'flex', alignItems: 'flex-end', gap: 14 }}>
+          <span style={{
+            fontFamily: F.data, fontSize: 56, fontWeight: 700,
+            color: C.ink, letterSpacing: '-.03em', lineHeight: 1,
+            textShadow: `0 0 40px ${C.confGlow}`,
+          }}>
+            {player.handicap.toFixed(1)}
+          </span>
+          <div style={{ marginBottom: 8 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <span style={{
+                fontFamily: F.data, fontSize: 14, fontWeight: 700, color: C.conf,
+                textShadow: `0 0 8px ${C.confGlow}`,
               }}>
-                {ev.title}
-              </div>
-            </div>
-            {ev.metrics[0] && (
-              <span style={{ fontFamily: F.data, fontSize: 12, fontWeight: 700, color: C.ink, flexShrink: 0 }}>
-                {ev.metrics[0].value}
+                {'\u25BC'} {Math.abs(player.handicapDelta).toFixed(1)}
               </span>
-            )}
+            </div>
+            <div style={{ fontFamily: F.data, fontSize: 10, color: C.muted, marginTop: 3 }}>
+              Career low · 6 months
+            </div>
           </div>
-        ))}
+        </div>
+        <div style={{ marginTop: 12 }}>
+          <Sparkline data={hcpValues} width={320} height={40} color={C.conf} />
+        </div>
       </div>
 
-      <button
-        onClick={onNavigateToJourney}
+      {/* ─── Three-Pillar Ring Gauges ─── */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+        {/* Scoring */}
+        <div style={{ ...S.card, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px 8px' }}>
+          <div style={{ position: 'relative', marginBottom: 6 }}>
+            <RingGauge value={Math.abs(player.sgPerRound)} max={10} color={C.flag} />
+            <div style={{
+              position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <TrendingUp size={16} color={C.flag} />
+            </div>
+          </div>
+          <div style={{ fontFamily: F.data, fontSize: 18, fontWeight: 700, color: C.ink }}>
+            {player.sgPerRound.toFixed(1)}
+          </div>
+          <div style={{ fontFamily: F.brand, fontSize: 11, fontWeight: 500, color: C.body, marginTop: 2 }}>
+            SG / Round
+          </div>
+        </div>
+
+        {/* Practice */}
+        <div style={{ ...S.card, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px 8px' }}>
+          <div style={{ position: 'relative', marginBottom: 6 }}>
+            <RingGauge value={player.practiceSessionsLast30} max={10} color={C.accentBright} />
+            <div style={{
+              position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <Calendar size={16} color={C.accentBright} />
+            </div>
+          </div>
+          <div style={{ fontFamily: F.brand, fontSize: 18, fontWeight: 700, color: C.ink }}>
+            {player.practiceSessionsLast30}
+          </div>
+          <div style={{ fontFamily: F.brand, fontSize: 11, fontWeight: 500, color: C.body, marginTop: 2 }}>
+            Practice / 30d
+          </div>
+        </div>
+
+        {/* Coaching */}
+        <div style={{ ...S.card, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px 8px' }}>
+          <div style={{ position: 'relative', marginBottom: 6 }}>
+            <RingGauge value={player.coach.lessonsLast30} max={4} color={C.caution} />
+            <div style={{
+              position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <GraduationCap size={16} color={C.caution} />
+            </div>
+          </div>
+          <div style={{ fontFamily: F.brand, fontSize: 18, fontWeight: 700, color: C.ink }}>
+            {player.coach.lessonsLast30}
+          </div>
+          <div style={{ fontFamily: F.brand, fontSize: 11, fontWeight: 500, color: C.body, marginTop: 2 }}>
+            Lessons / 30d
+          </div>
+        </div>
+      </div>
+
+      {/* ─── Coach Connection Card ─── */}
+      <div
         style={{
-          fontFamily: F.brand,
-          fontSize: 13,
-          fontWeight: 500,
-          color: C.accent,
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          padding: '8px 0',
-          width: '100%',
-          textAlign: 'center',
+          ...S.cardElevated,
+          borderLeft: `3px solid ${C.accentBright}`,
+          borderRadius: '0 8px 8px 0',
+          background: C.accentBg,
         }}
       >
-        View full timeline →
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+          <div style={{ fontFamily: F.brand, fontSize: 14, fontWeight: 600, color: C.ink }}>{player.coach.name}</div>
+          <span style={{
+            fontFamily: F.data, fontSize: 9, fontWeight: 700,
+            color: C.conf, background: C.confBg,
+            padding: '2px 8px', borderRadius: 4,
+            textTransform: 'uppercase', letterSpacing: '.06em',
+            boxShadow: `0 0 8px ${C.confGlow}`,
+          }}>
+            Connected
+          </span>
+        </div>
+        <div style={{ fontFamily: F.brand, fontSize: 13, color: C.body }}>{player.coach.academy}</div>
+        <div style={{ fontFamily: F.data, fontSize: 10, color: C.muted, marginTop: 4 }}>
+          Last lesson: {player.coach.lastLessonDate} · {player.coach.lastLessonTopic}
+        </div>
+      </div>
+
+      {/* ─── Strokes Gained Diverging Bars ─── */}
+      <div style={S.cardElevated}>
+        <div style={{
+          fontFamily: F.brand, fontSize: 15, fontWeight: 600, color: C.ink, marginBottom: 14,
+        }}>
+          Strokes Gained Breakdown
+        </div>
+        {sgCats.map((cat) => (
+          <SGBar key={cat.label} label={cat.label} sg={cat.sg} delta={cat.delta} maxSg={sgMax} />
+        ))}
+        <div style={{ fontFamily: F.data, fontSize: 9, color: C.muted, marginTop: 4 }}>
+          vs. scratch benchmark · {player.totalRounds} rounds
+        </div>
+      </div>
+
+      {/* ─── Practice-Play Gap ─── */}
+      <div
+        style={{
+          ...S.cardElevated,
+          borderLeft: `3px solid ${C.caution}`,
+          borderRadius: '0 8px 8px 0',
+          background: C.cautionBg,
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+          <AlertTriangle size={14} color={C.caution} style={{ filter: `drop-shadow(0 0 4px ${C.caution}66)` }} />
+          <span style={{
+            fontFamily: F.data, fontSize: 10, fontWeight: 700,
+            textTransform: 'uppercase', letterSpacing: '.08em', color: C.caution,
+          }}>
+            Practice-Play Gap
+          </span>
+        </div>
+        <div style={{ fontFamily: F.brand, fontSize: 13, color: C.body, lineHeight: 1.5, marginBottom: 12 }}>
+          {practicePlayGap.text}
+        </div>
+        <div style={{ display: 'flex', gap: 12 }}>
+          {/* Practice allocation */}
+          <div style={{ flex: 1 }}>
+            <div style={{ fontFamily: F.data, fontSize: 9, color: C.muted, marginBottom: 4 }}>Practice time</div>
+            <div style={{ height: 8, background: C.surfaceAlt, borderRadius: 4, overflow: 'hidden', display: 'flex' }}>
+              <div style={{ width: `${practicePlayGap.practiceFullSwing * 100}%`, background: C.muted, borderRadius: '4px 0 0 4px' }} />
+              <div style={{ width: `${practicePlayGap.practiceShortGame * 100}%`, background: C.caution, borderRadius: '0 4px 4px 0', boxShadow: `0 0 8px ${C.caution}44` }} />
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 3 }}>
+              <span style={{ fontFamily: F.data, fontSize: 9, color: C.muted }}>Full {Math.round(practicePlayGap.practiceFullSwing * 100)}%</span>
+              <span style={{ fontFamily: F.data, fontSize: 9, color: C.caution }}>Short {Math.round(practicePlayGap.practiceShortGame * 100)}%</span>
+            </div>
+          </div>
+          {/* SG opportunity */}
+          <div style={{ flex: 1 }}>
+            <div style={{ fontFamily: F.data, fontSize: 9, color: C.muted, marginBottom: 4 }}>SG opportunity</div>
+            <div style={{ height: 8, background: C.surfaceAlt, borderRadius: 4, overflow: 'hidden', display: 'flex' }}>
+              <div style={{ width: `${practicePlayGap.sgOpportunityFullSwing * 100}%`, background: C.muted, borderRadius: '4px 0 0 4px' }} />
+              <div style={{ width: `${practicePlayGap.sgOpportunityShortGame * 100}%`, background: C.flag, borderRadius: '0 4px 4px 0', boxShadow: `0 0 8px ${C.flag}44` }} />
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 3 }}>
+              <span style={{ fontFamily: F.data, fontSize: 9, color: C.muted }}>Full {Math.round(practicePlayGap.sgOpportunityFullSwing * 100)}%</span>
+              <span style={{ fontFamily: F.data, fontSize: 9, color: C.flag }}>Short {Math.round(practicePlayGap.sgOpportunityShortGame * 100)}%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ─── Recent Activity Feed ─── */}
+      <div>
+        <div style={{ fontFamily: F.brand, fontSize: 15, fontWeight: 600, color: C.ink, marginBottom: 10 }}>
+          Recent Activity
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          {recentActivity.map((item) => {
+            const isHovered = hoveredActivity === item.id;
+            return (
+              <div
+                key={item.id}
+                onMouseEnter={() => setHoveredActivity(item.id)}
+                onMouseLeave={() => setHoveredActivity(null)}
+                style={{
+                  ...S.card,
+                  padding: '11px 12px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 10,
+                  cursor: 'pointer',
+                  background: isHovered ? C.surfaceAlt : C.surface,
+                  transition: 'background 150ms ease, box-shadow 150ms ease',
+                  boxShadow: isHovered ? `0 0 16px rgba(0,0,0,0.3), inset 0 0 0 1px ${C.border}` : undefined,
+                }}
+              >
+                {/* Type dot with glow */}
+                <div
+                  style={{
+                    width: 10, height: 10, borderRadius: '50%',
+                    background: typeColors[item.type] || C.muted,
+                    flexShrink: 0,
+                    boxShadow: `0 0 8px ${(typeColors[item.type] || C.muted)}66`,
+                  }}
+                />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{
+                    fontFamily: F.brand, fontSize: 13, fontWeight: 600, color: C.ink,
+                    overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                  }}>
+                    {item.title}
+                  </div>
+                  <div style={{
+                    fontFamily: F.brand, fontSize: 11, color: C.muted, marginTop: 1,
+                    overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                  }}>
+                    {item.insight}
+                  </div>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', flexShrink: 0, gap: 2 }}>
+                  <span style={{ fontFamily: F.data, fontSize: 9, color: C.muted }}>{item.date.slice(5)}</span>
+                  {item.metric && (
+                    <span style={{ fontFamily: F.data, fontSize: 13, fontWeight: 700, color: C.ink }}>
+                      {item.metric}
+                    </span>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Practice Brief CTA */}
+      <button
+        onClick={() => onNavigate('practice')}
+        style={{
+          background: C.accentGrad,
+          border: 'none',
+          borderRadius: 8,
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 8,
+          padding: '16px',
+          boxShadow: `0 4px 20px ${C.confGlow}`,
+          transition: 'box-shadow 200ms ease',
+        }}
+      >
+        <span style={{ fontFamily: F.brand, fontSize: 15, fontWeight: 600, color: '#FFFFFF' }}>
+          Get Today's Practice Brief
+        </span>
+        <ChevronRight size={18} color="#FFFFFF" />
       </button>
     </div>
   );

@@ -1,23 +1,28 @@
+/**
+ * GlobalBar — Top navigation bar for the Player Portal (dark mode).
+ * LOOPER wordmark (white) + .AI (accent glow), player name and avatar on right.
+ */
 import { Link } from 'react-router-dom';
-import { User, ChevronLeft } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import { C, F } from '../../data/tokens';
 
-export default function GlobalBar() {
+export default function GlobalBar(): JSX.Element {
   return (
     <div
       style={{
-        background: '#1A1F2B',
-        height: 44,
+        background: C.bg,
+        height: 52,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0 16px',
+        padding: '0 20px',
         position: 'sticky',
         top: 0,
         zIndex: 50,
+        borderBottom: `1px solid ${C.border}`,
       }}
     >
-      {/* Logo with back link */}
+      {/* Logo */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         <Link
           to="/"
@@ -25,22 +30,22 @@ export default function GlobalBar() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            width: 24,
-            height: 24,
+            width: 28,
+            height: 28,
             borderRadius: 4,
-            marginRight: 6,
+            marginRight: 8,
           }}
           aria-label="Back to home"
         >
-          <ChevronLeft size={16} color="rgba(255,255,255,0.5)" />
+          <ChevronLeft size={16} color={C.muted} />
         </Link>
         <span
           style={{
             fontFamily: F.brand,
-            fontSize: 13,
+            fontSize: 15,
             fontWeight: 800,
-            color: '#FFFFFF',
-            letterSpacing: '.05em',
+            color: C.ink,
+            letterSpacing: '.06em',
             textTransform: 'uppercase',
           }}
         >
@@ -49,44 +54,52 @@ export default function GlobalBar() {
         <span
           style={{
             fontFamily: F.brand,
-            fontSize: 13,
+            fontSize: 15,
             fontWeight: 800,
-            color: C.accent,
-            letterSpacing: '.05em',
+            color: C.accentBright,
+            letterSpacing: '.06em',
+            textShadow: `0 0 12px ${C.confGlow}`,
           }}
         >
           .AI
         </span>
-        <span
-          style={{
-            fontFamily: F.data,
-            fontSize: 8,
-            fontWeight: 700,
-            color: '#1A1F2B',
-            background: C.accent,
-            borderRadius: 2,
-            padding: '1px 5px',
-            marginLeft: 6,
-            letterSpacing: '.06em',
-          }}
-        >
-          PRO
-        </span>
       </div>
 
-      {/* Right side */}
-      <div
-        style={{
-          width: 28,
-          height: 28,
-          borderRadius: '50%',
-          background: 'rgba(255,255,255,0.12)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <User size={14} color="rgba(255,255,255,0.7)" />
+      {/* Right: player name + avatar */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <span
+          style={{
+            fontFamily: F.brand,
+            fontSize: 13,
+            fontWeight: 500,
+            color: C.body,
+          }}
+        >
+          Tripp D.
+        </span>
+        <div
+          style={{
+            width: 32,
+            height: 32,
+            borderRadius: '50%',
+            background: C.accentGrad,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: `0 0 16px ${C.confGlow}`,
+          }}
+        >
+          <span
+            style={{
+              fontFamily: F.brand,
+              fontSize: 11,
+              fontWeight: 700,
+              color: '#FFFFFF',
+            }}
+          >
+            TD
+          </span>
+        </div>
       </div>
     </div>
   );

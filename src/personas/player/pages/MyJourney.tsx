@@ -1,173 +1,173 @@
-import { useState, useMemo } from 'react';
-import { C, F } from '../data/tokens';
-import { sourceConfig } from '../data/sources';
-import { timelineEvents, crossSourcePatterns } from '../data/timeline';
-import SectionLabel from '../components/shared/SectionLabel';
-import KpiTile from '../components/shared/KpiTile';
-import CrossSourcePatternCard from '../components/timeline/CrossSourcePatternCard';
-import TimelineDay from '../components/timeline/TimelineDay';
+/**
+ * MyJourney — Tab 3 (dark mode, WHOOP-inspired).
+ * Glowing timeline spine, pulsing dots, connection insight cards with glow.
+ */
+import { C, F, S } from '../data/tokens';
+import { journeyEvents, connectionInsights, journeyInsight } from '../data/tripp';
+import ConfBadge from '../components/shared/ConfBadge';
 
-type FilterKey = 'everything' | 'golf' | 'body' | 'coaching';
-
-const filters: { key: FilterKey; label: string }[] = [
-  { key: 'everything', label: 'Everything' },
-  { key: 'golf', label: 'Golf only' },
-  { key: 'body', label: 'Body' },
-  { key: 'coaching', label: 'Coaching' },
-];
-
-const filterFns: Record<FilterKey, (e: typeof timelineEvents[0]) => boolean> = {
-  everything: () => true,
-  golf: (e) => ['round', 'practice', 'score', 'fitting', 'equip'].includes(e.type),
-  body: (e) => ['body', 'rest'].includes(e.type),
-  coaching: (e) => ['lesson', 'milestone'].includes(e.type) || e.source === 'coaching',
+const typeConfig: Record<string, { color: string; label: string }> = {
+  round: { color: C.conf, label: 'Round' },
+  practice: { color: C.accentBright, label: 'Practice' },
+  lesson: { color: C.caution, label: 'Lesson' },
 };
 
-export default function MyJourney() {
-  const [filter, setFilter] = useState<FilterKey>('everything');
-
-  const filtered = useMemo(
-    () => timelineEvents.filter(filterFns[filter]),
-    [filter]
-  );
-
-  // Group by date, newest first
-  const grouped = useMemo(() => {
-    const map = new Map<string, typeof timelineEvents>();
-    for (const ev of filtered) {
-      if (!map.has(ev.date)) map.set(ev.date, []);
-      map.get(ev.date)!.push(ev);
-    }
-    return Array.from(map.entries()).sort((a, b) => b[0].localeCompare(a[0]));
-  }, [filtered]);
-
-  // Period summary stats
-  const stats = useMemo(() => {
-    const rounds = timelineEvents.filter((e) => e.type === 'round').length;
-    const practice = timelineEvents.filter((e) => e.type === 'practice').length;
-    const lessons = timelineEvents.filter((e) => e.type === 'lesson').length;
-    const bodyEvents = timelineEvents.filter((e) => e.type === 'body');
-    const recoveries = bodyEvents
-      .map((e) => e.metrics.find((m) => m.label === 'Recovery'))
-      .filter(Boolean)
-      .map((m) => parseInt(m!.value));
-    const avgRecovery = recoveries.length > 0
-      ? Math.round(recoveries.reduce((a, b) => a + b, 0) / recoveries.length)
-      : 0;
-    return { rounds, practice, lessons, avgRecovery };
-  }, []);
-
-  // Source legend — only connected
-  const connectedSources = Object.entries(sourceConfig)
-    .filter(([, s]) => s.status === 'live' || s.status === 'synced');
-
+export default function MyJourney(): JSX.Element {
   return (
-    <div>
-      {/* Period summary */}
-      <div style={{ marginBottom: 20 }}>
-        <div
-          style={{
-            fontFamily: F.brand,
-            fontSize: 18,
-            fontWeight: 700,
-            color: C.ink,
-            marginBottom: 4,
-          }}
-        >
-          Your Month
-        </div>
-        <div style={{ fontFamily: F.data, fontSize: 10, color: C.muted, marginBottom: 12 }}>
-          Mar 1 - Mar 20, 2026
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0,1fr))', gap: 6 }}>
-          <KpiTile label="Rounds" value={String(stats.rounds)} color={C.accent} />
-          <KpiTile label="Practice" value={String(stats.practice)} color={C.caution} />
-          <KpiTile label="Lessons" value={String(stats.lessons)} color={C.accent} />
-          <KpiTile label="Avg Recovery" value={`${stats.avgRecovery}%`} color={stats.avgRecovery >= 65 ? C.conf : C.caution} />
-        </div>
-      </div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
 
-      {/* Cross-source pattern cards */}
-      <SectionLabel number="01" text="CROSS-SOURCE PATTERNS" />
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24 }}>
-        {crossSourcePatterns.map((p) => (
-          <CrossSourcePatternCard key={p.id} pattern={p} />
-        ))}
-      </div>
-
-      {/* Filter bar */}
-      <div style={{ display: 'flex', gap: 6, marginBottom: 12, overflowX: 'auto' }}>
-        {filters.map(({ key, label }) => (
-          <button
-            key={key}
-            onClick={() => setFilter(key)}
-            style={{
-              fontFamily: F.data,
-              fontSize: 9,
-              fontWeight: 700,
-              letterSpacing: '.06em',
-              textTransform: 'uppercase',
-              color: filter === key ? C.accent : C.muted,
-              background: filter === key ? C.accentBg : 'transparent',
-              border: `1px solid ${filter === key ? C.accent + '40' : C.borderSub}`,
-              borderRadius: 12,
-              padding: '5px 12px',
-              cursor: 'pointer',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-
-      {/* Source legend */}
-      <div style={{ display: 'flex', gap: 12, marginBottom: 16, flexWrap: 'wrap' }}>
-        {connectedSources.map(([key, src]) => (
-          <div key={key} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            <div style={{ width: 6, height: 6, borderRadius: '50%', background: src.color }} />
-            <span style={{ fontFamily: F.data, fontSize: 9, color: C.muted }}>{src.label}</span>
+      {/* Journey Summary stat strip */}
+      <div style={{ ...S.cardInner, display: 'flex', justifyContent: 'center', gap: 16 }}>
+        {[
+          { value: '2.5 years', label: 'Duration' },
+          { value: '118 rounds', label: 'Rounds' },
+          { value: '208 sessions', label: 'Sessions' },
+          { value: '6.8 → 2.0 HI', label: 'Handicap' },
+        ].map((stat, i) => (
+          <div key={i} style={{ textAlign: 'center' }}>
+            <div style={{ fontFamily: F.data, fontSize: 14, fontWeight: 700, color: C.ink }}>{stat.value}</div>
+            <div style={{ fontFamily: F.brand, fontSize: 10, color: C.muted }}>{stat.label}</div>
           </div>
         ))}
       </div>
 
-      {/* The Timeline */}
-      <SectionLabel number="02" text="TIMELINE" />
-      {grouped.map(([date, events]) => (
-        <TimelineDay key={date} date={date} events={events} />
-      ))}
+      <div>
+        <div style={{ fontFamily: F.brand, fontSize: 22, fontWeight: 700, color: C.ink }}>My Journey</div>
+        <div style={{ fontFamily: F.brand, fontSize: 13, color: C.muted, marginTop: 3 }}>
+          Rounds, practice sessions, and lessons — one story.
+        </div>
+      </div>
 
-      {/* Editorial tagline */}
+      {/* Legend */}
+      <div style={{ display: 'flex', gap: 16 }}>
+        {Object.entries(typeConfig).map(([key, cfg]) => (
+          <div key={key} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <div style={{
+              width: 8, height: 8, borderRadius: '50%', background: cfg.color,
+              boxShadow: `0 0 6px ${cfg.color}66`,
+            }} />
+            <span style={{ fontFamily: F.brand, fontSize: 11, color: C.body }}>{cfg.label}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Timeline */}
+      <div style={{ position: 'relative', paddingLeft: 28 }}>
+        {/* Glowing spine */}
+        <div
+          style={{
+            position: 'absolute', left: 9, top: 8, bottom: 8,
+            width: 2,
+            background: `linear-gradient(180deg, ${C.conf}44, ${C.accentBright}44, ${C.caution}44, ${C.border})`,
+          }}
+        />
+
+        {journeyEvents.map((event, i) => {
+          const cfg = typeConfig[event.type] || typeConfig.round;
+          const connInsight = connectionInsights.find((ci) => ci.afterEventId === event.id);
+          const isFirst = i === 0;
+
+          return (
+            <div key={event.id}>
+              <div style={{ position: 'relative', marginBottom: connInsight ? 0 : 16 }}>
+                {/* Dot with glow */}
+                <div
+                  style={{
+                    position: 'absolute', left: -28, top: 14,
+                    width: 16, height: 16, borderRadius: '50%',
+                    background: cfg.color,
+                    border: `2px solid ${C.bg}`,
+                    boxShadow: `0 0 12px ${cfg.color}88${isFirst ? ', 0 0 20px ' + cfg.color + '44' : ''}`,
+                    zIndex: 1,
+                  }}
+                />
+
+                <div style={{
+                  ...S.card,
+                  padding: '14px 16px',
+                  background: isFirst ? C.surfaceAlt : C.surface,
+                  transition: 'background 150ms ease',
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                    <span style={{
+                      fontFamily: F.data, fontSize: 9, fontWeight: 700,
+                      color: cfg.color, background: `${cfg.color}18`,
+                      padding: '2px 7px', borderRadius: 4,
+                      textTransform: 'uppercase', letterSpacing: '.06em',
+                      boxShadow: `0 0 6px ${cfg.color}22`,
+                    }}>
+                      {cfg.label}
+                    </span>
+                    <span style={{ fontFamily: F.data, fontSize: 10, color: C.muted }}>{event.date}</span>
+                  </div>
+                  <div style={{ fontFamily: F.brand, fontSize: 14, fontWeight: 600, color: C.ink, marginBottom: 5 }}>
+                    {event.title}
+                  </div>
+                  <div style={{ fontFamily: F.brand, fontSize: 12, color: C.body, lineHeight: 1.5 }}>
+                    {event.insight}
+                  </div>
+                  {event.metrics && event.metrics.length > 0 && (
+                    <div style={{ display: 'flex', gap: 14, marginTop: 10, paddingTop: 8, borderTop: `1px solid ${C.border}` }}>
+                      {event.metrics.map((m, mi) => (
+                        <div key={mi}>
+                          <div style={{ fontFamily: F.data, fontSize: 9, color: C.muted, textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: 2 }}>
+                            {m.label}
+                          </div>
+                          <div style={{ fontFamily: F.data, fontSize: 14, fontWeight: 700, color: C.ink }}>
+                            {m.value}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {connInsight && (
+                <div
+                  style={{
+                    marginLeft: 10, marginBottom: 16, marginTop: 8,
+                    padding: '10px 14px',
+                    background: C.accentBg,
+                    borderLeft: `2px solid ${C.accentBright}`,
+                    borderRadius: '0 6px 6px 0',
+                    boxShadow: `0 0 12px ${C.confGlow}`,
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ fontFamily: F.brand, fontSize: 12, color: C.body, lineHeight: 1.4, flex: 1 }}>
+                      {connInsight.text}
+                    </span>
+                    <ConfBadge value={connInsight.confidence} />
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Journey Insight */}
       <div
         style={{
-          textAlign: 'center',
-          padding: '32px 16px 16px',
+          ...S.cardHero,
+          borderLeft: `3px solid ${C.accentBright}`,
+          borderRadius: '0 8px 8px 0',
         }}
       >
-        <p
-          style={{
-            fontFamily: F.editorial,
-            fontSize: 16,
-            fontStyle: 'italic',
-            color: C.muted,
-            lineHeight: 1.5,
-            margin: 0,
-          }}
-        >
-          Every shot, swing, session, lesson, and body state.
-        </p>
-        <p
-          style={{
-            fontFamily: F.editorial,
-            fontSize: 16,
-            fontStyle: 'italic',
-            color: C.accent,
-            lineHeight: 1.5,
-            margin: '4px 0 0',
-          }}
-        >
-          One timeline. Your story.
-        </p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+          <span style={{
+            fontFamily: F.data, fontSize: 10, fontWeight: 700,
+            textTransform: 'uppercase', letterSpacing: '.08em', color: C.accentBright,
+            textShadow: `0 0 8px ${C.confGlow}`,
+          }}>
+            Journey Insight
+          </span>
+          <ConfBadge value={journeyInsight.confidence} />
+        </div>
+        <div style={{ fontFamily: F.brand, fontSize: 14, color: C.body, lineHeight: 1.5 }}>
+          {journeyInsight.text}
+        </div>
       </div>
     </div>
   );

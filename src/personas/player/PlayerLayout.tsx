@@ -1,117 +1,75 @@
-import { useState } from 'react';
+/**
+ * PlayerLayout — Root layout for the Looper Player Portal (dark mode).
+ * Chat-first: Home = Ask Looper + Dashboard merged. 5 tabs total.
+ * Responsive: mobile bottom nav (<768px), desktop left sidebar (1200px+).
+ */
+import { useState, useEffect } from 'react';
 import { C, F } from './data/tokens';
 import GlobalBar from './components/layout/GlobalBar';
-import DataSourceBar from './components/layout/DataSourceBar';
 import BottomNav, { type PlayerTab } from './components/layout/BottomNav';
-import Dashboard from './pages/Dashboard';
-import PracticeMode from './pages/PracticeMode';
-import Rounds from './pages/Rounds';
-import Lessons from './pages/Lessons';
+import SidebarNav from './components/layout/SidebarNav';
+import AskLooperChat from './pages/AskLooperChat';
+import Home from './pages/AskLooper';
+import PracticeBrief from './pages/PracticeBrief';
 import MyJourney from './pages/MyJourney';
-import ChatPanel, { ChatFAB } from './components/overlays/ChatPanel';
-import DataSourceDrawer from './components/overlays/DataSourceDrawer';
+import GolfDNA from './pages/GolfDNA';
+import Activity from './pages/Activity';
 
-export default function PlayerLayout() {
-  const [activeTab, setActiveTab] = useState<PlayerTab>('dashboard');
-  const [chatOpen, setChatOpen] = useState(false);
-  const [drawerSource, setDrawerSource] = useState<string | null>(null);
+function useWindowWidth(): number {
+  const [width, setWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+  useEffect(() => {
+    const onResize = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+  return width;
+}
 
-  const renderTab = () => {
+export default function PlayerLayout(): JSX.Element {
+  const [activeTab, setActiveTab] = useState<PlayerTab>('home');
+  const windowWidth = useWindowWidth();
+  const isDesktop = windowWidth >= 1200;
+  const isMobile = windowWidth < 768;
+  const contentMaxWidth = isDesktop ? 860 : isMobile ? 480 : 680;
+
+  const renderTab = (): JSX.Element => {
     switch (activeTab) {
-      case 'dashboard':
-        return <Dashboard onNavigateToJourney={() => setActiveTab('journey')} />;
+      case 'ask':
+        return <AskLooperChat />;
+      case 'home':
+        return <Home onNavigate={setActiveTab} />;
       case 'practice':
-        return <PracticeMode />;
-      case 'rounds':
-        return <Rounds />;
-      case 'lessons':
-        return <Lessons />;
+        return <PracticeBrief />;
       case 'journey':
         return <MyJourney />;
+      case 'dna':
+        return <GolfDNA />;
+      case 'activity':
+        return <Activity />;
     }
   };
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        background: C.bg,
-        fontFamily: F.brand,
-      }}
-    >
-      {/* Google Fonts */}
-      <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&family=Playfair+Display:ital@1&display=swap"
-        rel="stylesheet"
-      />
-
-      {/* L1: Global bar */}
+    <div style={{ minHeight: '100vh', background: C.bg, fontFamily: F.brand, color: C.ink }}>
+      <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&family=Playfair+Display:ital@1&display=swap" rel="stylesheet" />
+      <style>{`
+        .player-bottom-nav { display: flex !important; }
+        .player-sidebar-nav { display: none !important; }
+        @media (min-width: 1200px) {
+          .player-bottom-nav { display: none !important; }
+          .player-sidebar-nav { display: block !important; }
+        }
+      `}</style>
       <GlobalBar />
-
-      {/* L2: Data source inventory */}
-      <DataSourceBar onSourceTap={setDrawerSource} />
-
-      {/* L3: Tab nav (inline, above content) */}
-      <div
-        style={{
-          background: C.surface,
-          borderBottom: `0.5px solid ${C.borderSub}`,
-          display: 'flex',
-          padding: '0 16px',
-        }}
-      >
-        {(['dashboard', 'practice', 'rounds', 'lessons', 'journey'] as PlayerTab[]).map((tab) => {
-          const active = activeTab === tab;
-          const labels: Record<PlayerTab, string> = {
-            dashboard: 'Dashboard',
-            practice: 'Practice',
-            rounds: 'Rounds',
-            lessons: 'Lessons',
-            journey: 'My Journey',
-          };
-          return (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              style={{
-                fontFamily: F.brand,
-                fontSize: 12,
-                fontWeight: active ? 600 : 400,
-                color: active ? C.accent : C.muted,
-                background: 'none',
-                border: 'none',
-                borderBottom: active ? `2px solid ${C.accent}` : '2px solid transparent',
-                padding: '10px 12px',
-                cursor: 'pointer',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              {labels[tab]}
-            </button>
-          );
-        })}
+      <div style={{ display: 'flex' }}>
+        <div className="player-sidebar-nav">
+          <SidebarNav activeTab={activeTab} onTabChange={setActiveTab} />
+        </div>
+        <div style={{ flex: 1, maxWidth: contentMaxWidth, margin: '0 auto', padding: isMobile ? '16px 16px 88px' : '24px 24px 24px' }}>
+          {renderTab()}
+        </div>
       </div>
-
-      {/* L4: Content area */}
-      <div
-        style={{
-          maxWidth: 480,
-          margin: '0 auto',
-          padding: '16px 16px 88px',
-        }}
-      >
-        {renderTab()}
-      </div>
-
-      {/* Bottom nav */}
       <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
-
-      {/* Chat FAB + Panel */}
-      {!chatOpen && <ChatFAB onClick={() => setChatOpen(true)} />}
-      <ChatPanel open={chatOpen} onClose={() => setChatOpen(false)} activeTab={activeTab} />
-
-      {/* Data source drawer */}
-      <DataSourceDrawer sourceKey={drawerSource} onClose={() => setDrawerSource(null)} />
     </div>
   );
 }

@@ -1,210 +1,246 @@
-import { useState, useMemo } from 'react';
+/**
+ * Rounds — Tab 5 (dark mode, WHOOP-inspired).
+ * Score prominently displayed, SG horizontal bars with glow,
+ * expandable detail with GIR/FIR ring gauges, connected insights.
+ */
+import { useState } from 'react';
+import { ChevronDown, ChevronUp, Link2 } from 'lucide-react';
 import { C, F, S } from '../data/tokens';
-import { timelineEvents } from '../data/timeline';
-import SectionLabel from '../components/shared/SectionLabel';
-import KpiTile from '../components/shared/KpiTile';
-import Sparkline from '../components/shared/Sparkline';
-import SourcePill from '../components/shared/SourcePill';
-import TypeIcon from '../components/timeline/TypeIcon';
+import { rounds, bestWorstComparison } from '../data/tripp';
+import ConfBadge from '../components/shared/ConfBadge';
 
-export default function Rounds() {
-  const [expandedRound, setExpandedRound] = useState<string | null>(null);
-
-  const rounds = useMemo(
-    () => timelineEvents.filter((e) => e.type === 'round'),
-    []
-  );
-
-  // Score trend data
-  const scores = rounds.map((r) => {
-    const scoreMetric = r.metrics.find((m) => m.label === 'Score');
-    return scoreMetric ? parseInt(scoreMetric.value) : 0;
-  }).reverse();
+/* ── Mini Ring Gauge for GIR/FIR ── */
+function StatRing({ value, benchmark, label, size = 64 }: { value: number; benchmark: number; label: string; size?: number }): JSX.Element {
+  const r = (size - 6) / 2;
+  const circ = 2 * Math.PI * r;
+  const pct = Math.min(value, 1);
+  const offset = circ * (1 - pct);
+  const color = value >= benchmark ? C.conf : value >= benchmark * 0.9 ? C.caution : C.flag;
 
   return (
-    <div>
-      {/* Scoring trend */}
-      <div style={{ ...S.card, marginBottom: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div>
-          <div style={{ fontFamily: F.data, fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.08em', color: C.muted, marginBottom: 4 }}>
-            SCORING TREND
-          </div>
-          <div style={{ fontFamily: F.data, fontSize: 10, color: C.muted }}>
-            Last {rounds.length} rounds
-          </div>
-        </div>
-        <Sparkline data={scores} width={140} height={36} color={C.conf} />
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={C.surfaceAlt} strokeWidth={4} />
+        {/* Benchmark marker */}
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={C.border} strokeWidth={4}
+          strokeDasharray={`${circ * benchmark} ${circ * (1 - benchmark)}`}
+          strokeLinecap="round" transform={`rotate(-90 ${size / 2} ${size / 2})`} opacity={0.3} />
+        {/* Value arc */}
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeWidth={4}
+          strokeDasharray={circ} strokeDashoffset={offset} strokeLinecap="round"
+          transform={`rotate(-90 ${size / 2} ${size / 2})`}
+          style={{ filter: `drop-shadow(0 0 6px ${color}66)`, transition: 'stroke-dashoffset 600ms ease-out' }} />
+        <text x={size / 2} y={size / 2 + 1} textAnchor="middle" dominantBaseline="middle"
+          style={{ fontFamily: F.data, fontSize: 14, fontWeight: 700, fill: C.ink }}>
+          {Math.round(value * 100)}%
+        </text>
+      </svg>
+      <div style={{ fontFamily: F.data, fontSize: 9, color: C.muted, marginTop: 4, textTransform: 'uppercase', letterSpacing: '.06em' }}>
+        {label}
       </div>
+    </div>
+  );
+}
 
-      {/* Driver dispersion placeholder */}
-      <SectionLabel number="01" text="DRIVER DISPERSION — LAST 5 ROUNDS" />
-      <div style={{ ...S.card, marginBottom: 20, padding: '16px' }}>
-        <svg viewBox="0 0 300 200" width="100%" style={{ maxHeight: 180 }}>
-          {/* Target line */}
-          <line x1="150" y1="10" x2="150" y2="190" stroke={C.borderSub} strokeDasharray="3 3" />
-          <line x1="20" y1="100" x2="280" y2="100" stroke={C.borderSub} strokeDasharray="3 3" />
+export default function Rounds(): JSX.Element {
+  const [expandedId, setExpandedId] = useState<string | null>(rounds[0]?.id || null);
 
-          {/* Confidence ellipse */}
-          <ellipse cx="158" cy="95" rx="55" ry="35" fill="none" stroke={C.accent} strokeDasharray="4 3" strokeWidth="1" opacity="0.3" />
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
 
-          {/* Shot dots — simulated scatter */}
-          {[
-            [142, 82], [165, 108], [138, 95], [170, 88], [155, 102],
-            [148, 78], [162, 112], [135, 92], [172, 98], [158, 85],
-            [145, 105], [168, 90], [140, 100], [175, 95], [152, 110],
-            [160, 80], [143, 88], [167, 105], [155, 92], [150, 98],
-          ].map(([x, y], i) => (
-            <circle key={i} cx={x} cy={y} r={3.5} fill={C.accent} opacity={0.7} />
-          ))}
-
-          {/* Centroid */}
-          <circle cx="158" cy="95" r={4} fill={C.surface} stroke={C.accent} strokeWidth={2} />
-
-          {/* Labels */}
-          <text x="150" y="198" textAnchor="middle" style={{ fontSize: 9, fontFamily: F.data, fill: C.muted }}>Lateral (yds)</text>
-          <text x="10" y="100" textAnchor="middle" style={{ fontSize: 9, fontFamily: F.data, fill: C.muted }} transform="rotate(-90, 10, 100)">Carry (yds)</text>
-        </svg>
-        <div style={{ fontFamily: F.data, fontSize: 10, color: C.muted, marginTop: 8, textAlign: 'center' }}>
-          ±12.4 yds lateral · 238-256 carry · slight push bias
+      <div>
+        <div style={{ fontFamily: F.brand, fontSize: 22, fontWeight: 700, color: C.ink }}>Rounds</div>
+        <div style={{ fontFamily: F.brand, fontSize: 13, color: C.muted, marginTop: 3 }}>
+          {rounds.length} recent rounds
         </div>
       </div>
 
-      {/* Recent rounds */}
-      <SectionLabel number="02" text="RECENT ROUNDS" />
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-        {rounds.map((round) => {
-          const isExpanded = expandedRound === round.id;
-          const scoreM = round.metrics.find((m) => m.label === 'Score');
-          const sgM = round.metrics.find((m) => m.label === 'SG Total');
+      {/* ─── Round Patterns Card ─── */}
+      <div style={S.card}>
+        <div style={{ fontFamily: F.brand, fontSize: 15, fontWeight: 600, color: C.ink, marginBottom: 2 }}>Round Patterns</div>
+        <div style={{ fontFamily: F.brand, fontSize: 12, color: C.body, marginBottom: 14 }}>What your best and worst rounds have in common</div>
 
-          // Find same-day events for context
-          const sameDayEvents = timelineEvents.filter(
-            (e) => e.date === round.date && e.id !== round.id
-          );
-
-          return (
-            <div key={round.id}>
-              <div
-                style={{
-                  ...S.card,
-                  cursor: 'pointer',
-                  padding: '12px 14px',
-                }}
-                onClick={() => setExpandedRound(isExpanded ? null : round.id)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setExpandedRound(isExpanded ? null : round.id); }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <TypeIcon type="round" size={28} />
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontFamily: F.brand, fontSize: 14, fontWeight: 600, color: C.ink }}>
-                      {round.title}
-                    </div>
-                    <div style={{ fontFamily: F.data, fontSize: 10, color: C.muted }}>
-                      {round.date}
-                    </div>
+        <div style={{ display: 'flex', gap: 16 }}>
+          {/* Best 5 */}
+          <div style={{ flex: 1 }}>
+            <div style={{ fontFamily: F.data, fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.06em', color: C.conf, marginBottom: 8 }}>Best 5 Rounds</div>
+            <div style={{ fontFamily: F.data, fontSize: 20, fontWeight: 700, color: C.ink, marginBottom: 10 }}>{bestWorstComparison.best5.avgScore.toFixed(1)}</div>
+            {([
+              { label: 'Driving', value: bestWorstComparison.best5.avgDriving },
+              { label: 'Approach', value: bestWorstComparison.best5.avgApproach },
+              { label: 'Short Game', value: bestWorstComparison.best5.avgShortGame },
+              { label: 'Putting', value: bestWorstComparison.best5.avgPutting },
+            ] as const).map((cat) => {
+              const color = cat.value >= 0 ? C.conf : C.flag;
+              const maxVal = 2.0;
+              const barW = Math.min(Math.abs(cat.value) / maxVal * 100, 100);
+              return (
+                <div key={cat.label} style={{ marginBottom: 8 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 3 }}>
+                    <span style={{ fontFamily: F.brand, fontSize: 11, color: C.body }}>{cat.label}</span>
+                    <span style={{ fontFamily: F.data, fontSize: 11, fontWeight: 700, color }}>{cat.value > 0 ? '+' : ''}{cat.value.toFixed(1)}</span>
                   </div>
-                  <div style={{ textAlign: 'right' }}>
-                    {scoreM && (
-                      <div style={{ fontFamily: F.data, fontSize: 20, fontWeight: 700, color: C.ink }}>
-                        {scoreM.value}
-                      </div>
-                    )}
-                    {sgM && (
-                      <div style={{
-                        fontFamily: F.data, fontSize: 10, fontWeight: 700,
-                        color: parseFloat(sgM.value) > 0 ? C.conf : C.flag,
-                      }}>
-                        SG {sgM.value}
-                      </div>
-                    )}
+                  <div style={{ height: 8, background: C.surfaceAlt, borderRadius: 4, overflow: 'hidden' }}>
+                    <div style={{ height: '100%', width: `${Math.max(barW, 4)}%`, background: color, borderRadius: 4, boxShadow: `0 0 8px ${color}44` }} />
                   </div>
                 </div>
+              );
+            })}
+          </div>
 
-                {/* Expanded: SG breakdown + same-day timeline */}
-                {isExpanded && (
-                  <div style={{ marginTop: 12, borderTop: `0.5px solid ${C.borderSub}`, paddingTop: 12 }}>
-                    {/* SG breakdown */}
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0,1fr))', gap: 6, marginBottom: 12 }}>
-                      {round.metrics.filter((m) => m.label.startsWith('SG') || m.label === 'Fairways' || m.label === 'GIR' || m.label === 'Putts').map((m, i) => (
-                        <KpiTile key={i} label={m.label} value={m.value} color={
-                          m.status === 'good' || m.status === 'improving' || m.status === 'best' ? C.conf :
-                          m.status === 'poor' ? C.flag : C.accent
-                        } />
-                      ))}
-                    </div>
+          {/* Worst 5 */}
+          <div style={{ flex: 1 }}>
+            <div style={{ fontFamily: F.data, fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.06em', color: C.flag, marginBottom: 8 }}>Worst 5 Rounds</div>
+            <div style={{ fontFamily: F.data, fontSize: 20, fontWeight: 700, color: C.ink, marginBottom: 10 }}>{bestWorstComparison.worst5.avgScore.toFixed(1)}</div>
+            {([
+              { label: 'Driving', value: bestWorstComparison.worst5.avgDriving },
+              { label: 'Approach', value: bestWorstComparison.worst5.avgApproach },
+              { label: 'Short Game', value: bestWorstComparison.worst5.avgShortGame },
+              { label: 'Putting', value: bestWorstComparison.worst5.avgPutting },
+            ] as const).map((cat) => {
+              const color = cat.value >= 0 ? C.conf : C.flag;
+              const maxVal = 2.0;
+              const barW = Math.min(Math.abs(cat.value) / maxVal * 100, 100);
+              return (
+                <div key={cat.label} style={{ marginBottom: 8 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 3 }}>
+                    <span style={{ fontFamily: F.brand, fontSize: 11, color: C.body }}>{cat.label}</span>
+                    <span style={{ fontFamily: F.data, fontSize: 11, fontWeight: 700, color }}>{cat.value > 0 ? '+' : ''}{cat.value.toFixed(1)}</span>
+                  </div>
+                  <div style={{ height: 8, background: C.surfaceAlt, borderRadius: 4, overflow: 'hidden' }}>
+                    <div style={{ height: '100%', width: `${Math.max(barW, 4)}%`, background: color, borderRadius: 4, boxShadow: `0 0 8px ${color}44` }} />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
 
-                    {/* Narrative */}
-                    <p style={{ fontFamily: F.brand, fontSize: 12, color: C.body, lineHeight: 1.5, margin: '0 0 12px' }}>
-                      {round.narrative}
-                    </p>
+        {/* Insight */}
+        <div style={{ fontFamily: F.brand, fontSize: 13, color: C.body, lineHeight: 1.6, marginTop: 14, paddingTop: 12, borderTop: `1px solid ${C.border}` }}>
+          {bestWorstComparison.insight}
+        </div>
+      </div>
 
-                    {/* Coach note */}
-                    {round.coachNote && (
-                      <div
-                        style={{
-                          borderLeft: `2px solid ${C.accent}`,
-                          padding: '8px 12px',
-                          background: C.accentBg,
-                          borderRadius: '0 8px 8px 0',
-                          marginBottom: 12,
-                        }}
-                      >
-                        <div style={{ fontFamily: F.data, fontSize: 8, color: C.accent, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: 4 }}>
-                          COACH NOTE
-                        </div>
-                        <p style={{ fontFamily: F.brand, fontSize: 12, fontStyle: 'italic', color: C.body, lineHeight: 1.5, margin: 0 }}>
-                          {round.coachNote}
-                        </p>
+      {rounds.map((round) => {
+        const isExpanded = expandedId === round.id;
+        const sgColor = round.sgTotal >= 0 ? C.conf : C.flag;
+        const deltaColor = round.sgDelta > 0 ? C.conf : round.sgDelta < 0 ? C.flag : C.muted;
+        const deltaText = round.sgDelta > 0 ? `\u25B2 ${round.sgDelta.toFixed(1)}` : round.sgDelta < 0 ? `\u25BC ${Math.abs(round.sgDelta).toFixed(1)}` : '--';
+        const sgBreakdown = [
+          { label: 'Off the Tee', value: round.sgDriving },
+          { label: 'Approach', value: round.sgApproach },
+          { label: 'Around the Green', value: round.sgShortGame },
+          { label: 'Putting', value: round.sgPutting },
+        ];
+        const sgMax = Math.max(...sgBreakdown.map((c) => Math.abs(c.value)), 0.1);
+
+        return (
+          <div key={round.id} style={{ ...S.card, padding: 0, overflow: 'hidden' }}>
+            <button
+              onClick={() => setExpandedId(isExpanded ? null : round.id)}
+              style={{
+                display: 'flex', alignItems: 'center', width: '100%',
+                padding: '16px 14px', background: 'none', border: 'none', cursor: 'pointer', gap: 12,
+              }}
+            >
+              {/* Score with glow */}
+              <div style={{
+                fontFamily: F.data, fontSize: 28, fontWeight: 700,
+                color: C.ink, minWidth: 50,
+                textShadow: round.score <= 73 ? `0 0 12px ${C.confGlow}` : undefined,
+              }}>
+                {round.score}
+              </div>
+              <div style={{ flex: 1, textAlign: 'left' }}>
+                <div style={{ fontFamily: F.brand, fontSize: 14, fontWeight: 600, color: C.ink }}>{round.course}</div>
+                <div style={{ fontFamily: F.data, fontSize: 10, color: C.muted, marginTop: 2 }}>
+                  {round.date} · Par {round.par}
+                </div>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                <span style={{
+                  fontFamily: F.data, fontSize: 15, fontWeight: 700, color: sgColor,
+                  textShadow: `0 0 8px ${sgColor}44`,
+                }}>
+                  {round.sgTotal > 0 ? '+' : ''}{round.sgTotal.toFixed(1)}
+                </span>
+                <span style={{ fontFamily: F.data, fontSize: 10, color: deltaColor, marginTop: 2 }}>{deltaText}</span>
+              </div>
+              {isExpanded ? <ChevronUp size={14} color={C.muted} /> : <ChevronDown size={14} color={C.muted} />}
+            </button>
+
+            {isExpanded && (
+              <div style={{ padding: '0 14px 16px', borderTop: `1px solid ${C.border}` }}>
+
+                {/* GIR + FIR ring gauges */}
+                <div style={{ display: 'flex', justifyContent: 'center', gap: 32, marginTop: 16, marginBottom: 18 }}>
+                  <StatRing value={round.gir} benchmark={0.56} label="GIR" />
+                  <StatRing value={round.fir} benchmark={0.51} label="FIR" />
+                </div>
+
+                {/* SG breakdown */}
+                {sgBreakdown.map((cat) => {
+                  const isPositive = cat.value >= 0;
+                  const barPct = (Math.abs(cat.value) / sgMax) * 50;
+                  const barColor = isPositive ? C.conf : C.flag;
+                  return (
+                    <div key={cat.label} style={{ marginBottom: 12 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                        <span style={{ fontFamily: F.brand, fontSize: 12, fontWeight: 500, color: C.ink }}>{cat.label}</span>
+                        <span style={{
+                          fontFamily: F.data, fontSize: 13, fontWeight: 700, color: barColor,
+                          textShadow: `0 0 6px ${barColor}44`,
+                        }}>
+                          {isPositive ? '+' : ''}{cat.value.toFixed(1)}
+                        </span>
                       </div>
-                    )}
+                      <div style={{ height: 8, background: C.surfaceAlt, borderRadius: 4, position: 'relative', overflow: 'hidden' }}>
+                        <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: 1, background: C.border }} />
+                        <div style={{
+                          position: 'absolute', top: 1, bottom: 1,
+                          ...(isPositive
+                            ? { left: '50%', width: `${Math.max(barPct, 3)}%` }
+                            : { right: '50%', width: `${Math.max(barPct, 3)}%` }),
+                          background: barColor,
+                          borderRadius: isPositive ? '0 4px 4px 0' : '4px 0 0 4px',
+                          boxShadow: `0 0 12px ${barColor}44`,
+                          transition: 'width 500ms ease-out',
+                        }} />
+                      </div>
+                    </div>
+                  );
+                })}
 
-                    {/* Same-day timeline context */}
-                    {sameDayEvents.length > 0 && (
-                      <>
-                        <div style={{ fontFamily: F.data, fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.08em', color: C.muted, marginBottom: 8 }}>
-                          THAT DAY
-                        </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                          {sameDayEvents.map((ev) => (
-                            <div
-                              key={ev.id}
-                              style={{
-                                ...S.cardInner,
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 8,
-                                padding: '8px 10px',
-                              }}
-                            >
-                              <TypeIcon type={ev.type} size={22} />
-                              <div style={{ flex: 1, minWidth: 0 }}>
-                                <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
-                                  <SourcePill source={ev.source} size="sm" />
-                                  {ev.time && <span style={{ fontFamily: F.data, fontSize: 8, color: C.muted }}>{ev.time}</span>}
-                                </div>
-                                <div style={{ fontFamily: F.brand, fontSize: 11, color: C.ink, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                  {ev.title}
-                                </div>
-                              </div>
-                              {ev.metrics[0] && (
-                                <span style={{ fontFamily: F.data, fontSize: 11, fontWeight: 700, color: C.ink, flexShrink: 0 }}>
-                                  {ev.metrics[0].value}
-                                </span>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      </>
-                    )}
+                {/* Connected Insight */}
+                {round.insight && (
+                  <div style={{
+                    marginTop: 14, padding: '12px 14px',
+                    background: C.accentBg,
+                    borderLeft: `2px solid ${C.accentBright}`,
+                    borderRadius: '0 6px 6px 0',
+                    boxShadow: `0 0 12px ${C.confGlow}`,
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+                      <Link2 size={12} color={C.accentBright} style={{ filter: `drop-shadow(0 0 4px ${C.confGlow})` }} />
+                      <span style={{
+                        fontFamily: F.data, fontSize: 9, fontWeight: 700,
+                        textTransform: 'uppercase', letterSpacing: '.06em', color: C.accentBright,
+                      }}>
+                        Connected Insight
+                      </span>
+                      <ConfBadge value={84} />
+                    </div>
+                    <div style={{ fontFamily: F.brand, fontSize: 12, color: C.body, lineHeight: 1.5 }}>
+                      {round.insight}
+                    </div>
                   </div>
                 )}
               </div>
-            </div>
-          );
-        })}
-      </div>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 }
