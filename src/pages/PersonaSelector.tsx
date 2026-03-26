@@ -8,12 +8,10 @@ import {
   ArrowRight,
   ArrowDown,
   FileText,
-  BarChart3,
   User,
   GraduationCap,
   Route,
   CheckCircle,
-  X,
   Camera,
   Mic,
   Video,
@@ -1454,48 +1452,84 @@ export default function PersonaSelector(): React.JSX.Element {
         </section>
 
         {/* ── Section 2: Problem — Lead with Pain ────────── */}
-        <section ref={setRef(1)} className="fade-in-up py-24 sm:py-32 px-6 section-glow">
+        <section ref={setRef(1)} className="fade-in-up py-16 sm:py-20 px-6 section-glow">
           <div className="text-center mb-16">
             <SectionLabel>The Problem</SectionLabel>
             <p className="font-display text-2xl sm:text-4xl text-white font-medium leading-snug max-w-3xl mx-auto mt-4">
-              Every lesson starts from scratch.
+              Golf generates more data than ever. None of it is connected.
             </p>
             <p className="text-gray-400 mt-6 max-w-2xl mx-auto leading-relaxed text-base">
-              Coaches use 5&ndash;6 tools that don&apos;t talk to each other. Lessons go undocumented. Player data from rounds, practice, and wearables sits in separate apps. The most valuable part of coaching &mdash; what was said during the lesson, what actually clicked &mdash; just disappears.
+              Launch monitors, wearables, GPS, handicap systems, round trackers &mdash; the data exists, but it lives in silos. Every lesson starts cold because nothing carries over. The most valuable part of coaching &mdash; what was said, what clicked, what to do next &mdash; just disappears.
             </p>
           </div>
 
           <InfinityLoop />
 
-          <div className="max-w-3xl mx-auto mt-16">
-            <p className="font-display text-lg sm:text-xl text-white font-medium text-center mb-8">
-              The problem <span className="text-accent-bright">compounds.</span>
+        </section>
+
+        {/* ── Section 4: Evolution ──────────────────────── */}
+        <section id="vision" ref={setRef(3)} className="fade-in-up py-16 sm:py-20 px-6 section-glow">
+          <div className="text-center mb-16">
+            <SectionLabel>The Evolution</SectionLabel>
+            <p className="font-display text-2xl sm:text-4xl text-white font-medium leading-snug max-w-3xl mx-auto mt-4">
+              Record. Reason. <span className="text-accent-bright">Compound.</span>
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {[
-                { icon: Layers, text: '5\u20136 apps that don\u2019t share a single data point. Insight stays trapped in whichever tool captured it.' },
-                { icon: X, text: 'No persistent record. Every session starts cold, with the coach rebuilding context from memory.' },
-                { icon: BarChart3, text: 'No way to measure what\u2019s actually working. Progress is a feeling, not a fact.' },
-                { icon: Brain, text: 'A coach\u2019s expertise lives in their head. It doesn\u2019t travel with the player between sessions.' },
-              ].map((item) => {
-                const Icon = item.icon;
-                return (
-                  <div key={item.text} className="glass-premium p-5 flex items-start gap-4">
-                    <div className="w-9 h-9 rounded-lg bg-coral/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <Icon className="w-4 h-4 text-coral" />
-                    </div>
-                    <p className="text-sm text-gray-400 leading-relaxed">{item.text}</p>
+            <p className="text-gray-400 mt-4 max-w-2xl mx-auto leading-relaxed">
+              Looper starts by capturing the session record. That data becomes training data. Over time, the system gets smarter about each player, each coach, each pattern.
+            </p>
+          </div>
+
+          {/* Desktop: three columns with arrows */}
+          <div className="hidden sm:flex items-start max-w-5xl mx-auto">
+            {EVOLUTION_STAGES.map((stage, stageIdx) => (
+              <div key={stage.stage} className="flex items-start flex-1 min-w-0">
+                <div className="flex-1 min-w-0 text-center px-6">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-bright font-medium mb-4">
+                    {stage.stage}
+                  </p>
+                  <p className="font-display text-lg font-semibold text-white leading-snug mb-3">
+                    {stage.outcome}
+                  </p>
+                  <p className="text-sm text-gray-400 leading-relaxed">
+                    {stage.supporting}
+                  </p>
+                </div>
+                {stageIdx < EVOLUTION_STAGES.length - 1 && (
+                  <div className="flex items-center shrink-0 pt-8">
+                    <ArrowRight className="w-5 h-5 text-accent-bright/25" />
                   </div>
-                );
-              })}
-            </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Mobile: vertical stack */}
+          <div className="sm:hidden space-y-8 max-w-sm mx-auto">
+            {EVOLUTION_STAGES.map((stage, stageIdx) => (
+              <div key={stage.stage}>
+                <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-bright font-medium mb-3">
+                  {stage.stage}
+                </p>
+                <p className="font-display text-lg font-semibold text-white leading-snug mb-2">
+                  {stage.outcome}
+                </p>
+                <p className="text-sm text-gray-400 leading-relaxed">
+                  {stage.supporting}
+                </p>
+                {stageIdx < EVOLUTION_STAGES.length - 1 && (
+                  <div className="flex justify-center mt-6">
+                    <ArrowDown className="w-4 h-4 text-accent-bright/25" />
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         </section>
 
         {/* ── Social Proof — Voices from the Field ──────── */}
-        <section className="py-16 sm:py-20 px-6">
+        <section className="py-12 sm:py-16 px-6">
           <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
+            <div className="text-center mb-10">
               <SectionLabel>From the Field</SectionLabel>
             </div>
             <div className="space-y-10">
@@ -1516,7 +1550,7 @@ export default function PersonaSelector(): React.JSX.Element {
         </section>
 
         {/* ── Section 3: The Product — Three Pillars ──────── */}
-        <section id="product" ref={setRef(2)} className="fade-in-up py-24 sm:py-32 px-6 section-glow">
+        <section id="product" ref={setRef(2)} className="fade-in-up py-16 sm:py-20 px-6 section-glow">
           <div className="text-center mb-16">
             <SectionLabel>The Product</SectionLabel>
             <p className="font-display text-2xl sm:text-4xl text-white font-medium leading-snug max-w-3xl mx-auto mt-4">
@@ -1647,67 +1681,8 @@ export default function PersonaSelector(): React.JSX.Element {
           </div>
         </section>
 
-        {/* ── Section 4: Evolution ──────────────────────── */}
-        <section id="vision" ref={setRef(3)} className="fade-in-up py-24 sm:py-32 px-6 section-glow">
-          <div className="text-center mb-16">
-            <SectionLabel>The Evolution</SectionLabel>
-            <p className="font-display text-2xl sm:text-4xl text-white font-medium leading-snug max-w-3xl mx-auto mt-4">
-              Record. Reason. <span className="text-accent-bright">Compound.</span>
-            </p>
-            <p className="text-gray-400 mt-4 max-w-2xl mx-auto leading-relaxed">
-              Looper starts by capturing the session record. That data becomes training data. Over time, the system gets smarter about each player, each coach, each pattern.
-            </p>
-          </div>
-
-          {/* Desktop: three columns with arrows */}
-          <div className="hidden sm:flex items-start max-w-5xl mx-auto">
-            {EVOLUTION_STAGES.map((stage, stageIdx) => (
-              <div key={stage.stage} className="flex items-start flex-1 min-w-0">
-                <div className="flex-1 min-w-0 text-center px-6">
-                  <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-bright font-medium mb-4">
-                    {stage.stage}
-                  </p>
-                  <p className="font-display text-lg font-semibold text-white leading-snug mb-3">
-                    {stage.outcome}
-                  </p>
-                  <p className="text-sm text-gray-400 leading-relaxed">
-                    {stage.supporting}
-                  </p>
-                </div>
-                {stageIdx < EVOLUTION_STAGES.length - 1 && (
-                  <div className="flex items-center shrink-0 pt-8">
-                    <ArrowRight className="w-5 h-5 text-accent-bright/25" />
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* Mobile: vertical stack */}
-          <div className="sm:hidden space-y-8 max-w-sm mx-auto">
-            {EVOLUTION_STAGES.map((stage, stageIdx) => (
-              <div key={stage.stage}>
-                <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-bright font-medium mb-3">
-                  {stage.stage}
-                </p>
-                <p className="font-display text-lg font-semibold text-white leading-snug mb-2">
-                  {stage.outcome}
-                </p>
-                <p className="text-sm text-gray-400 leading-relaxed">
-                  {stage.supporting}
-                </p>
-                {stageIdx < EVOLUTION_STAGES.length - 1 && (
-                  <div className="flex justify-center mt-6">
-                    <ArrowDown className="w-4 h-4 text-accent-bright/25" />
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </section>
-
         {/* ── Why Academies Win ─────────────────────────── */}
-        <section className="fade-in-up py-24 sm:py-32 px-6 section-glow">
+        <section className="fade-in-up py-16 sm:py-20 px-6 section-glow">
           <div className="text-center mb-16">
             <SectionLabel>For Academies</SectionLabel>
             <p className="font-display text-2xl sm:text-4xl text-white font-medium leading-snug max-w-3xl mx-auto mt-4">
@@ -1758,7 +1733,7 @@ export default function PersonaSelector(): React.JSX.Element {
         </section>
 
         {/* ── Section 6: Analogs — Market Precedent ────── */}
-        <section id="analogs" ref={setRef(4)} className="fade-in-up py-24 sm:py-32 px-6 section-glow">
+        <section id="analogs" ref={setRef(4)} className="fade-in-up py-16 sm:py-20 px-6 section-glow">
           <div className="text-center mb-16">
             <SectionLabel>Market Precedent</SectionLabel>
             <p className="font-display text-2xl sm:text-4xl text-white font-medium leading-snug max-w-3xl mx-auto mt-4">
@@ -1816,7 +1791,7 @@ export default function PersonaSelector(): React.JSX.Element {
         </section>
 
         {/* ── Section 7: Closing ─────────────────────────── */}
-        <section ref={setRef(5)} className="fade-in-up py-24 sm:py-32 px-6">
+        <section ref={setRef(5)} className="fade-in-up py-16 sm:py-20 px-6">
           <div className="max-w-3xl mx-auto text-center">
             <p className="font-display text-3xl sm:text-5xl text-white font-medium leading-tight">
               Memory enables intelligence.
