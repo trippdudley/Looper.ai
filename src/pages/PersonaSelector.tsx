@@ -288,7 +288,7 @@ export function _FloatingNav(): React.JSX.Element {
         </div>
 
         <Link
-          to="/coach"
+          to="/demo"
           className="text-sm font-medium text-accent-bright hover:text-white bg-accent-bright/10 hover:bg-accent-bright/20 px-4 py-2 rounded-lg transition-all duration-200"
         >
           View Demo
@@ -1440,7 +1440,7 @@ export default function PersonaSelector(): React.JSX.Element {
                 <span>Read the Thesis</span>
               </Link>
               <Link
-                to="/coach"
+                to="/demo"
                 className="flex items-center justify-center gap-2 text-gray-400 hover:text-white font-medium w-56 py-3.5 rounded-xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:-translate-y-0.5"
               >
                 <span>Explore the Demo</span>
@@ -1826,7 +1826,7 @@ export default function PersonaSelector(): React.JSX.Element {
             </p>
             <div className="mt-12">
               <Link
-                to="/coach"
+                to="/demo"
                 className="inline-flex items-center gap-3 bg-accent-bright hover:bg-accent-bright/90 text-white font-medium px-10 py-4 rounded-xl transition-all duration-300 shadow-lg shadow-accent-bright/20 hover:shadow-accent-bright/30 hover:-translate-y-0.5 text-lg"
               >
                 <span>Experience the Demo</span>

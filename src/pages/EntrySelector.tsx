@@ -1,10 +1,19 @@
 import { Link } from 'react-router-dom';
-import { Building2, User } from 'lucide-react';
+import { ArrowLeft, Building2, User } from 'lucide-react';
 
 /** Entry gate — two-choice selector before the demo begins. */
 export default function EntrySelector() {
   return (
-    <div className="min-h-screen bg-[#0C1117] flex flex-col items-center justify-center px-6">
+    <div className="min-h-screen bg-[#0C1117] flex flex-col items-center justify-center px-6 relative">
+      {/* Back to landing */}
+      <Link
+        to="/"
+        className="absolute top-6 left-6 flex items-center gap-1.5 text-sm text-[#5E6E7E] hover:text-white transition-colors"
+      >
+        <ArrowLeft className="w-4 h-4" strokeWidth={1.5} />
+        Back
+      </Link>
+
       <h1 className="font-display text-4xl font-extrabold text-white tracking-[0.05em] mb-2">
         LOOPER<span className="text-[#0D7C66]">.AI</span>
       </h1>
