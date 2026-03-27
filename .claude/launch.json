@@ -2,10 +2,25 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "looper-dev",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["vite", "--host"],
+      "name": "Looper Web App (Vite)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "/Users/trippdudley/looper",
       "port": 5173
+    },
+    {
+      "name": "player-web",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["expo", "start", "--web", "--port", "8082"],
+      "cwd": "/Users/trippdudley/looper-player/apps/player",
+      "port": 8082
+    },
+    {
+      "name": "Supabase Local (API + Studio)",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["supabase", "start"],
+      "cwd": "/Users/trippdudley/looper/.claude/worktrees/admiring-feistel",
+      "port": 54321
     }
   ]
 }
