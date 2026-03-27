@@ -8,14 +8,25 @@ Strategic sequence: Record → Intelligence → Compounding insight. Dataset com
 ## What We're Building
 Two portals. Two personas. One intelligence. No fitting (shelved).
 
-### Coach Experience — Two Form Factors
+### Coach Experience — Three Form Factors
 
 1. **Coach Portal** (full web app, desktop-first, light mode): Between-lesson command center. Dashboard, player roster, session history, practice plans, post-session review.
 2. **Lesson Sidebar** (420-480px via CSS variable `--sidebar-w`, dark mode, floating panel): In-lesson copilot. Sits alongside TrackMan Performance Studio via Windows snap.
+3. **Coach App** (Expo React Native, iOS-first, dark mode): On-the-lesson native app. Live recording, Deepgram transcription, swing detection, QR share. Located at `packages/coach-app/`.
 
-### Player Experience — One Form Factor
+### Player Experience — Two Form Factors
 
-* **Player Portal** (desktop-first, 960px max-width, responsive to 480px, light mode): Dashboard, Scoring X-Ray, Practice Brief, Practice Review, My Journey. "Ask Looper" chat overlay. Timeline is the data model.
+* **Player Portal** (web, desktop-first, 960px max-width, responsive to 480px, dark mode): Dashboard, Scoring X-Ray, Practice Brief, Practice Review, My Journey. "Ask Looper" chat overlay.
+* **Player App** (Expo React Native, iOS-first): **Separate repo** at `github.com/trippdudley/looper-player`. See below.
+
+## Looper Player iOS App
+Separate repo: `github.com/trippdudley/looper-player`
+- Expo SDK 55 React Native app (iOS-first, dark mode)
+- Shares THIS Supabase project (same DB, same auth, same Edge Functions)
+- Edge Functions for the player app live HERE in `supabase/functions/` (chat, parse-screenshot, practice-brief)
+- Schema changes happen HERE in `supabase/migrations/`
+- Design tokens are duplicated (will consolidate via @looper/shared later)
+- Current state: Phases 0-2.5 complete (auth, onboarding, dashboard, data import, Ask Looper, Practice Brief)
 
 ## Lesson Sidebar — Panel Treatment
 The sidebar follows the Claude-in-Chrome companion panel pattern:
@@ -66,12 +77,68 @@ Three-layer timeline on a shared horizontal time axis: Lesson Layer (cards + thr
 * Short Game improved early (S1-S2), Approach improved during iron strike block (S6-S8), Putting always stable
 * All sidebar demo flows, coach portal session views, and AI reasoning walkthroughs use Session 9 data
 
+## Monorepo Structure
+
+```
+looper/                         (root — npm workspaces)
+├── src/                        (web app — Vite + React 19)
+│   ├── personas/coach/         (Coach Portal — light mode, Tailwind)
+│   ├── personas/player/        (Player Portal — dark mode, inline tokens)
+│   ├── lesson-sidebar/         (Lesson Sidebar — dark mode, 450px)
+│   └── pages/LessonShare.tsx   (Public /lesson/:token page for QR shares)
+├── packages/
+│   ├── shared/                 (TypeScript types, colors, utils — shared across web + native)
+│   └── coach-app/              (Expo React Native coach app)
+│       ├── app/                (Expo Router file-based routing)
+│       ├── services/           (supabase.ts, deepgram.ts, recording.ts, swingDetector.ts)
+│       ├── hooks/              (useAuth, useRecording, useSessions)
+│       └── components/
+└── supabase/                   (Schema as code)
+    ├── config.toml
+    ├── migrations/             (Numbered SQL migrations — run with `supabase db push`)
+    └── seed.sql
+```
+
 ## Stack
+
+### Web App (src/)
 * Vite + React 19 + Tailwind v4 (CSS-first, no tailwind.config.js)
 * Icons: lucide-react SVG only. NO emoji anywhere in the UI.
-* Fonts: DM Sans (brand voice — all headings, body, labels), Space Mono (data voice — all numbers, metrics, timestamps), Playfair Display italic (editorial moments only — taglines, pull quotes). These are the canonical fonts. All Google Fonts, all free.
+* Fonts: DM Sans / Space Mono / Playfair Display (Google Fonts)
 * Charts: recharts for standard, custom SVG for golf-specific
-* All prototypes use hardcoded mock data — no API calls
+
+### Coach App (packages/coach-app/)
+* Expo SDK 52 + React Native 0.76
+* Expo Router v4 (file-based routing)
+* NativeWind v4 (Tailwind for RN — dark mode default)
+* `expo-av` for audio recording
+* Deepgram Nova-2 for transcription with speaker diarization
+* `react-qr-code` for QR share generation
+* Zustand for state management
+* Same Supabase project as web app
+
+### Shared (packages/shared/)
+* TypeScript types for Player, Session, Coach, Drill, etc.
+* Color constants (`COLORS.dark`, `COLORS.light`)
+* Utility functions (`formatHandicap`, `formatSG`, `sgSeverity`)
+
+### Backend (Supabase)
+* PostgreSQL with RLS — schema versioned in `supabase/migrations/`
+* Tables: `players`, `rounds`, `practice_sessions`, `shots`, `coaches`, `coaching_connections`, `coaching_sessions`
+* Triggers: auto-create `players` row on signup (role=player), `coaches` row (role=coach)
+* Storage: `session-files` bucket (CSV/JSON uploads), `lesson-audio` bucket (M4A recordings)
+
+## Live Services
+* **Supabase** — auth (email/password), players + coaches tables with triggers, RLS policies
+* **Anthropic Claude API** — Ask Looper chat (streams from browser in prototype; moves to Edge Function in production)
+* **Deepgram Nova-2** — lesson transcription with speaker diarization (key in `.env` for prototype)
+* Player Portal (`/player`) — live Supabase auth. NOT a prototype — active product.
+* Coach Portal (`/coach`) — hardcoded Moe Norman demo data
+* Lesson Sidebar (`/trackman`) — hardcoded Session 9 demo
+* Coach App (`packages/coach-app/`) — live Supabase + live Deepgram
+
+## QR Share Flow
+Coach records lesson → stops recording → transcription runs via Deepgram → session saved to Supabase with `share_token` → coach taps "Share" → QR code shown in app → player scans with phone → lands on `looper.ai/lesson/:token` → sees lesson summary (coaching cues, drills, key changes, transcript).
 
 ## Design System Quick Reference
 
@@ -115,8 +182,32 @@ confidence `#0FA87A`, caution `#D4980B`, flag `#C93B3B`
 
 ## Git
 * Remote: github.com/trippdudley/Looper.ai
-* Netlify deploys from `main`
+* Netlify deploys from `main` (web app only — coach app uses EAS Build)
 * Claude Code creates its own branches via worktrees
+
+## Running the Projects
+```bash
+# Web app (Vite dev server)
+npm run dev
+
+# Coach app (Expo)
+cd packages/coach-app && npx expo start
+
+# Or via npm workspace script
+npm run coach
+
+# Supabase local dev (requires Docker)
+npx supabase start
+
+# Apply migrations to cloud project
+npx supabase db push
+```
+
+## Coach App First Run
+1. Copy `packages/coach-app/.env.example` to `packages/coach-app/.env`
+2. Fill in `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_ANON_KEY`, `EXPO_PUBLIC_DEEPGRAM_API_KEY`
+3. `cd packages/coach-app && npm install`
+4. `npx expo start --ios`
 
 ## Key Domain Terms
 EI profile, D-plane, spin loft, smash factor, dynamic lie, CT limit, MOI, strokes gained, dispersion ellipse, carry window, face-to-path, attack angle, dynamic loft, kinematic sequence
