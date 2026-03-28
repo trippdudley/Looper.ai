@@ -12,6 +12,10 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 
+const SUPABASE_FUNCTIONS_URL = import.meta.env.VITE_SUPABASE_URL
+  ? `${import.meta.env.VITE_SUPABASE_URL}/functions/v1`
+  : '';
+
 interface SessionData {
   id: string;
   date: string;
@@ -105,10 +109,10 @@ export default function LessonShare(): React.ReactElement {
   if (loading) return <LoadingState />;
   if (error || !session) return <ErrorState message={error ?? 'Something went wrong'} />;
 
-  return <SessionView session={session} />;
+  return <SessionView session={session} token={token ?? ''} />;
 }
 
-function SessionView({ session }: { session: SessionData }): React.ReactElement {
+function SessionView({ session, token }: { session: SessionData; token: string }): React.ReactElement {
   const drills = Array.isArray(session.drills) ? session.drills as DrillData[] : [];
   const keyChanges = Array.isArray(session.key_changes) ? session.key_changes as KeyChange[] : [];
   const segments = Array.isArray(session.transcript_segments) ? session.transcript_segments as TranscriptSegment[] : [];
@@ -257,6 +261,9 @@ function SessionView({ session }: { session: SessionData }): React.ReactElement 
           </details>
         )}
 
+        {/* Claim your lesson */}
+        <ClaimForm token={token} />
+
         {/* Footer */}
         <div style={styles.footer}>
           <div style={styles.footerBrand}>Looper.AI</div>
@@ -288,6 +295,194 @@ function Chip({
     </span>
   );
 }
+
+function ClaimForm({ token }: { token: string }): React.ReactElement {
+  const [tab, setTab] = useState<'email' | 'phone'>('email');
+  const [value, setValue] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [claimed, setClaimed] = useState(false);
+  const [claimMessage, setClaimMessage] = useState('');
+
+  async function handleSubmit(): Promise<void> {
+    if (!value.trim() || !token) return;
+    setSubmitting(true);
+
+    try {
+      const body = tab === 'email' ? { email: value.trim() } : { phone: value.trim() };
+      const res = await fetch(
+        `${SUPABASE_FUNCTIONS_URL}/lesson-share?token=${encodeURIComponent(token)}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        },
+      );
+      const data = await res.json() as { ok: boolean; error?: string };
+      if (data.ok) {
+        setClaimed(true);
+        setClaimMessage(
+          tab === 'email'
+            ? 'Check your email for a sign-in link!'
+            : "Phone saved — we'll be in touch when Looper Player launches.",
+        );
+      }
+    } catch {
+      // Non-fatal — just let the user try again
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  return (
+    <div style={claimStyles.section}>
+      <div style={styles.sectionLabel}>Claim Your Lesson</div>
+      <div style={styles.card}>
+        {claimed ? (
+          <div style={claimStyles.successBanner}>
+            <span style={claimStyles.successIcon}>&#10003;</span>
+            <span style={claimStyles.successText}>{claimMessage}</span>
+          </div>
+        ) : (
+          <>
+            <p style={claimStyles.intro}>
+              Save this lesson to your account to track progress and receive practice plans.
+            </p>
+
+            {/* Email / Phone toggle */}
+            <div style={claimStyles.tabRow}>
+              <button
+                style={{ ...claimStyles.tabBtn, ...(tab === 'email' ? claimStyles.tabActive : {}) }}
+                onClick={() => { setTab('email'); setValue(''); }}
+              >
+                Email
+              </button>
+              <button
+                style={{ ...claimStyles.tabBtn, ...(tab === 'phone' ? claimStyles.tabActive : {}) }}
+                onClick={() => { setTab('phone'); setValue(''); }}
+              >
+                Phone
+              </button>
+            </div>
+
+            <div style={claimStyles.inputRow}>
+              <input
+                style={claimStyles.input}
+                type={tab === 'email' ? 'email' : 'tel'}
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                placeholder={tab === 'email' ? 'your@email.com' : '+1 (555) 000-0000'}
+                autoComplete={tab === 'email' ? 'email' : 'tel'}
+                onKeyDown={(e) => { if (e.key === 'Enter') handleSubmit(); }}
+              />
+              <button
+                style={{
+                  ...claimStyles.submitBtn,
+                  ...((!value.trim() || submitting) ? claimStyles.submitBtnDisabled : {}),
+                }}
+                onClick={handleSubmit}
+                disabled={!value.trim() || submitting}
+              >
+                {submitting ? '...' : tab === 'email' ? 'Send link' : 'Save'}
+              </button>
+            </div>
+
+            <div style={claimStyles.divider} />
+            <div>
+              <div style={claimStyles.ctaTitle}>Download Looper Player</div>
+              <div style={claimStyles.ctaBody}>
+                Track your improvement, get AI practice plans, and see every lesson summary in one place.
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+const claimStyles = {
+  section: { display: 'flex', flexDirection: 'column' as const, gap: '10px' },
+  intro: {
+    fontFamily: "'DM Sans', sans-serif",
+    fontSize: '14px',
+    color: '#8B99A8',
+    lineHeight: '1.6',
+    margin: '0',
+  },
+  tabRow: { display: 'flex', gap: '8px' },
+  tabBtn: {
+    borderRadius: '20px',
+    padding: '6px 16px',
+    fontSize: '13px',
+    fontFamily: "'DM Sans', sans-serif",
+    border: '1px solid #2A3A4A',
+    background: '#1E2A36',
+    color: '#8B99A8',
+    cursor: 'pointer',
+  },
+  tabActive: {
+    borderColor: '#10B981',
+    background: '#0FA87A22',
+    color: '#10B981',
+    fontWeight: '600' as const,
+  },
+  inputRow: { display: 'flex', gap: '8px' },
+  input: {
+    flex: 1,
+    background: '#1E2A36',
+    border: '1px solid #2A3A4A',
+    borderRadius: '8px',
+    padding: '12px 14px',
+    color: '#E8ECF1',
+    fontSize: '15px',
+    fontFamily: "'DM Sans', sans-serif",
+    outline: 'none',
+  } as React.CSSProperties,
+  submitBtn: {
+    background: '#10B981',
+    border: 'none',
+    borderRadius: '8px',
+    padding: '12px 16px',
+    color: '#0C1117',
+    fontSize: '14px',
+    fontWeight: '700' as const,
+    fontFamily: "'DM Sans', sans-serif",
+    cursor: 'pointer',
+    whiteSpace: 'nowrap' as const,
+  },
+  submitBtnDisabled: {
+    background: '#2A3A4A',
+    cursor: 'default',
+  },
+  divider: { height: '1px', background: '#1E2A36' },
+  ctaTitle: {
+    fontFamily: "'DM Sans', sans-serif",
+    fontSize: '14px',
+    fontWeight: '700' as const,
+    color: '#10B981',
+    marginBottom: '6px',
+  },
+  ctaBody: {
+    fontFamily: "'DM Sans', sans-serif",
+    fontSize: '13px',
+    color: '#8B99A8',
+    lineHeight: '1.6',
+  },
+  successBanner: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    background: '#0FA87A22',
+    borderRadius: '8px',
+    padding: '12px 14px',
+  },
+  successIcon: { color: '#10B981', fontSize: '18px' },
+  successText: {
+    fontFamily: "'DM Sans', sans-serif",
+    fontSize: '14px',
+    color: '#10B981',
+  },
+} as const;
 
 function LoadingState(): React.ReactElement {
   return (
