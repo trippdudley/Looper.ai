@@ -3,7 +3,7 @@
  * Loaded after a session is saved. Coach can:
  *   - Review transcript
  *   - Add drills, coaching cues, key changes
- *   - Generate a shareable QR code for the player
+ *   - Navigate to the full-screen QR share screen
  */
 import { useState, useEffect } from 'react';
 import {
@@ -12,13 +12,11 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
-  Share,
   Alert,
   StyleSheet,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics';
-import QRCode from 'react-qr-code';
 import { supabase } from '@/services/supabase';
 import { SESSION_TYPE_LABELS } from '@looper/shared';
 import type { Database } from '@/services/supabase';
@@ -27,14 +25,11 @@ type SessionRow = Database['public']['Tables']['coaching_sessions']['Row'] & {
   players?: { name: string } | null;
 };
 
-const WEB_BASE_URL = process.env.EXPO_PUBLIC_WEB_URL ?? 'https://looper.ai';
-
 export default function SessionDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const [session, setSession] = useState<SessionRow | null>(null);
   const [loading, setLoading] = useState(true);
-  const [showQR, setShowQR] = useState(false);
   const [newCue, setNewCue] = useState('');
   const [saving, setSaving] = useState(false);
 
@@ -53,35 +48,12 @@ export default function SessionDetailScreen() {
     setLoading(false);
   }
 
-  async function generateShareToken(): Promise<string> {
-    if (session?.share_token) return session.share_token;
-
-    // Cryptographically secure random token (16 hex chars)
-    const bytes = new Uint8Array(8);
-    crypto.getRandomValues(bytes);
-    const token = Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
-    await supabase
-      .from('coaching_sessions')
-      .update({ share_token: token })
-      .eq('id', id!);
-
-    setSession((prev) => prev ? { ...prev, share_token: token } : null);
-    return token;
-  }
-
-  async function handleShare(): Promise<void> {
-    try {
-      const token = await generateShareToken();
-      const url = `${WEB_BASE_URL}/lesson/${token}`;
-
-      await Share.share({
-        message: `Your lesson summary from today — ${url}`,
-        url,
-        title: 'Lesson Summary',
-      });
-    } catch (err) {
-      Alert.alert('Share failed', err instanceof Error ? err.message : 'Try again');
-    }
+  function handleGoToShare(): void {
+    const playerName = (session?.players as { name: string } | null)?.name ?? '';
+    router.push({
+      pathname: '/session/share',
+      params: { id: id!, playerName },
+    });
   }
 
   async function addCoachingCue(): Promise<void> {
@@ -119,7 +91,6 @@ export default function SessionDetailScreen() {
   }
 
   const playerName = (session.players as { name: string } | null)?.name ?? 'Unknown';
-  const shareUrl = session.share_token ? `${WEB_BASE_URL}/lesson/${session.share_token}` : null;
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
@@ -139,41 +110,20 @@ export default function SessionDetailScreen() {
         </Text>
       </View>
 
-      {/* Share QR */}
-      <View style={styles.shareCard}>
-        <View style={styles.shareCardHeader}>
-          <Text style={styles.shareCardTitle}>Share with Player</Text>
-          <TouchableOpacity
-            style={styles.shareBtn}
-            onPress={handleShare}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.shareBtnText}>Share Link</Text>
-          </TouchableOpacity>
+      {/* Share QR — navigates to full-screen share screen */}
+      <TouchableOpacity
+        style={styles.shareCard}
+        onPress={handleGoToShare}
+        activeOpacity={0.8}
+      >
+        <Text style={styles.shareCardTitle}>Share with Player</Text>
+        <Text style={styles.shareCardSubtitle}>
+          {session.share_token ? 'View QR code' : 'Generate QR code + link'}
+        </Text>
+        <View style={styles.shareCardArrow}>
+          <Text style={styles.shareCardArrowText}>Show QR</Text>
         </View>
-
-        {showQR && shareUrl ? (
-          <View style={styles.qrContainer}>
-            <QRCode
-              value={shareUrl}
-              size={200}
-              bgColor="#151D28"
-              fgColor="#E8ECF1"
-            />
-            <Text style={styles.qrUrl}>{shareUrl}</Text>
-          </View>
-        ) : (
-          <TouchableOpacity
-            style={styles.showQRBtn}
-            onPress={async () => {
-              await generateShareToken();
-              setShowQR(true);
-            }}
-          >
-            <Text style={styles.showQRBtnText}>Show QR Code</Text>
-          </TouchableOpacity>
-        )}
-      </View>
+      </TouchableOpacity>
 
       {/* Coaching cues */}
       <View style={styles.section}>
@@ -279,13 +229,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#2A3A4A',
-    gap: 16,
-  },
-  shareCardHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    borderColor: '#10B981',
+    gap: 8,
   },
   shareCardTitle: {
     fontFamily: 'DMSans',
@@ -293,30 +238,24 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#E8ECF1',
   },
-  shareBtn: {
+  shareCardSubtitle: {
+    fontFamily: 'DMSans',
+    fontSize: 13,
+    color: '#8B99A8',
+  },
+  shareCardArrow: {
+    alignSelf: 'flex-start',
     backgroundColor: '#10B981',
     borderRadius: 6,
     paddingHorizontal: 14,
     paddingVertical: 8,
+    marginTop: 4,
   },
-  shareBtnText: {
+  shareCardArrowText: {
     fontFamily: 'DMSans',
     fontSize: 13,
     fontWeight: '700',
     color: '#0C1117',
-  },
-  qrContainer: { alignItems: 'center', gap: 12 },
-  qrUrl: {
-    fontFamily: 'SpaceMono',
-    fontSize: 11,
-    color: '#5E6E7E',
-    textAlign: 'center',
-  },
-  showQRBtn: { alignItems: 'center', paddingVertical: 8 },
-  showQRBtnText: {
-    fontFamily: 'DMSans',
-    fontSize: 14,
-    color: '#8B99A8',
   },
   section: { gap: 12 },
   sectionTitle: {

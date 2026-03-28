@@ -90,6 +90,40 @@ export type Database = {
           connected_at: string;
         };
       };
+      lesson_shares: {
+        Row: {
+          id: string;
+          coaching_session_id: string;
+          coach_id: string;
+          share_token: string;
+          student_name: string | null;
+          student_email: string | null;
+          student_phone: string | null;
+          claimed: boolean;
+          claimed_at: string | null;
+          claimed_player_id: string | null;
+          view_count: number;
+          last_viewed_at: string | null;
+          expires_at: string;
+          created_at: string;
+        };
+        Insert: {
+          coaching_session_id: string;
+          coach_id: string;
+          share_token: string;
+          student_name?: string | null;
+          student_email?: string | null;
+          student_phone?: string | null;
+        };
+        Update: Partial<{
+          student_name: string | null;
+          student_email: string | null;
+          student_phone: string | null;
+          claimed: boolean;
+          claimed_at: string | null;
+          claimed_player_id: string | null;
+        }>;
+      };
     };
   };
 };

@@ -185,6 +185,17 @@ confidence `#0FA87A`, caution `#D4980B`, flag `#C93B3B`
 * Netlify deploys from `main` (web app only — coach app uses EAS Build)
 * Claude Code creates its own branches via worktrees
 
+### Git Workflow Rules (MANDATORY)
+These rules prevent work from being lost when Code sessions run out of context or crash. Follow them every time.
+
+1. **Never work directly on main.** Create a named branch before making changes (e.g., `coach-app/phase-1-capture`, `fix/supabase-auth`). Use descriptive names, not auto-generated ones.
+2. **Commit frequently.** Every meaningful chunk of work (new screen, new service, new Edge Function, bug fix) gets its own commit with a clear message. Do not let uncommitted changes accumulate.
+3. **Push to GitHub regularly.** Push at least every 15-20 minutes of active work. If the session dies, unpushed work is gone.
+4. **Merge to main only when a feature is complete and tested.** Use `git merge --no-ff` to preserve the branch history in the merge commit.
+5. **Clean up after yourself.** After merging, delete the branch locally and remotely. Prune dead worktrees with `git worktree prune`.
+6. **Never force push to main.** If you need to fix a mistake, create a new commit.
+7. **Commit message format:** `type: short description` where type is `feat`, `fix`, `refactor`, `docs`, `chore`. Example: `feat: QR share flow with magic link auth`
+
 ## Running the Projects
 ```bash
 # Web app (Vite dev server)
