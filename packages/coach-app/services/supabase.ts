@@ -56,14 +56,15 @@ export type Database = {
           practice_plan: unknown;
           transcript: string | null;
           transcript_segments: unknown;
+          audio_file_path: string | null;
           share_token: string | null;
           created_at: string;
           updated_at: string;
         };
         Insert: Omit<
           Database['public']['Tables']['coaching_sessions']['Row'],
-          'id' | 'created_at' | 'updated_at'
-        >;
+          'id' | 'created_at' | 'updated_at' | 'share_token'
+        > & { share_token?: string | null; audio_file_path?: string | null };
         Update: Partial<Database['public']['Tables']['coaching_sessions']['Insert']>;
       };
       players: {
