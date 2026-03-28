@@ -248,3 +248,32 @@ Use realistic ranges for the session 9 driver-focused demo. Ball speed, launch, 
 
 ### File Location
 Store mock data as a JSON file at `.claude/skills/looper-ai-features/references/mock-responses.json` for reference, but in actual prototypes, hardcode the data directly in the components for simplicity.
+
+## 10. Coach App AI Pipeline (Native App)
+
+The Coach app (`apps/coach/` in the `looper-player` monorepo) has its own AI pipeline separate from the web prototype's sidebar demo. These are production Edge Functions, not hardcoded demo data.
+
+### Edge Functions (in `supabase/functions/`)
+
+| Function | Model | Purpose | Cost |
+|----------|-------|---------|------|
+| `chat` | Sonnet | Player's Ask Looper chat | ~$0.01/query |
+| `parse-screenshot` | Sonnet | GHIN/Arccos OCR | ~$0.03/screenshot |
+| `practice-brief` | Sonnet | Player practice plan | ~$0.02/brief |
+| `lesson-summary` | Sonnet | Coach lesson AI summary | ~$0.02-0.05/lesson |
+| `pre-lesson-brief` | Haiku | Coach preparation card | ~$0.002/brief |
+
+### lesson-summary Flow
+1. Coach ends lesson → audio uploaded → Edge Function called
+2. Function fetches: player profile, last 5 sessions, last 10 rounds
+3. System prompt includes full coaching history + player context
+4. Claude returns structured JSON: cues, observations, drills, practice plan, flags
+5. Coach edits summary → corrections stored as RLHF training data
+
+### RLHF Training Pipeline
+Every coach edit of an AI summary generates training events:
+- `coaching_sessions.ai_raw_summary` — what Claude originally generated
+- `coaching_sessions.coach_corrections` — array of {field, action, original, edited}
+- `training_events` table — anonymized events for model training (no RLS)
+
+This builds the intervention ontology over time — the structured taxonomy of what coaches DO that nobody else captures.

@@ -15,16 +15,19 @@ For design system tokens, typography, component patterns, and layout rules, read
 
 ## 1. Current State (What's Built)
 
-The Player Portal is a working React/Vite web prototype at `/player` with:
+The Player app is an Expo/React Native iOS app at `apps/player/` in the `looper-player` monorepo:
 - **Live Supabase auth** (email/password signup, login, session persistence)
 - **Real `players` table** with trigger on `auth.users` insert
 - **3-screen onboarding flow** (About Your Game → Connect Data → You're In) that writes to Supabase
-- **Ask Looper chat** with live Claude integration (streaming, player context in system prompt)
-- **6-tab layout**: Ask / Home / Practice / Journey / DNA / Activity
-- **Tripp D.'s real data** in `tripp.ts` (GHIN handicap history, Arccos SG, Foresight sessions)
-- **Design tokens** (`C`, `F`, `S` from `tokens.ts`) using inline styles — dark mode, WHOOP-inspired
+- **Ask Looper chat** with live Claude integration (streaming via SSE Edge Function)
+- **5-tab layout**: Dashboard / Journey / Practice / Ask Looper / Settings
+- **Data import**: Foresight .session parser, TrackMan .csv parser, GHIN/Arccos screenshot OCR
+- **Practice Brief**: SG-proportional practice plan via Edge Function
+- **Design tokens** in `tokens/` (colors, fonts, styles) — dark mode, WHOOP-inspired
 
-The prototype shares a repo with the Coach Portal demo (Moe Norman at `/coach`). These are separate products in the same codebase.
+Part of the `looper-player` monorepo alongside Coach app (`apps/coach/`) and shared package (`packages/shared/`). Both apps share the same Supabase project.
+
+**Web prototype** still lives in the `looper` repo at `src/personas/player/` — that's the investor demo, deployed to Netlify. The native app is the production target.
 
 ---
 
