@@ -1,0 +1,61 @@
+{
+  "expo": {
+    "name": "Looper Coach",
+    "slug": "looper-coach",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "scheme": "looper-coach",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0C1117"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.looper.coach",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "Looper records lesson audio for transcription and swing detection.",
+        "NSCameraUsageDescription": "Looper captures video clips during lessons.",
+        "NSPhotoLibraryUsageDescription": "Looper saves lesson recordings to your photo library.",
+        "UIBackgroundModes": ["audio"]
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0C1117"
+      },
+      "package": "com.looper.coach",
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.CAMERA",
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-av",
+      "expo-font",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Looper Coach to access your camera."
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "looper-coach-app"
+      }
+    }
+  }
+}
