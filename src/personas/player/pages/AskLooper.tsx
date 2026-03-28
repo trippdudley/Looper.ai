@@ -11,6 +11,7 @@ import {
 import Sparkline from '../components/shared/Sparkline';
 import ConfBadge from '../components/shared/ConfBadge';
 import type { PlayerTab } from '../components/layout/BottomNav';
+import { useAuth } from '../../../contexts/AuthContext';
 
 interface AskLooperProps {
   onNavigate: (tab: PlayerTab) => void;
@@ -107,8 +108,13 @@ function PracticeAllocationBar(): React.JSX.Element {
 
 // --- Main Component ---
 export default function AskLooper({ onNavigate }: AskLooperProps): React.JSX.Element {
+  const { player: authPlayer } = useAuth();
   const hcpValues = handicapHistory.map(h => h.value);
   const sgCats = [strokesGained.driving, strokesGained.approach, strokesGained.shortGame, strokesGained.putting];
+
+  // Use real profile data where available, fall back to mock
+  const displayHandicap = authPlayer?.handicap_index ?? player.handicap;
+  const displayGoal = authPlayer?.goal ?? null;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -118,11 +124,12 @@ export default function AskLooper({ onNavigate }: AskLooperProps): React.JSX.Ele
         <span style={{ fontFamily: F.brand, fontSize: 11, fontWeight: 600, color: C.muted, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Your Record</span>
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
           {[
-            { label: 'HI', value: player.handicap.toFixed(1), color: C.conf },
+            { label: 'HI', value: displayHandicap.toFixed(1), color: C.conf },
             { label: 'SG/Rd', value: player.sgPerRound.toFixed(1), color: C.flag },
             { label: 'Low', value: player.careerLow.toFixed(1), color: C.accentBright },
             { label: 'Rounds', value: String(player.totalRounds), color: C.body },
             { label: 'Sessions', value: '208', color: C.body },
+            ...(displayGoal ? [{ label: 'Goal', value: displayGoal, color: C.caution }] : []),
           ].map(item => (
             <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
               <span style={{ fontFamily: F.brand, fontSize: 10, color: C.muted }}>{item.label}</span>
@@ -156,7 +163,7 @@ export default function AskLooper({ onNavigate }: AskLooperProps): React.JSX.Ele
           {/* PLAY */}
           <button onClick={() => onNavigate('activity')} style={{ ...S.card, cursor: 'pointer', textAlign: 'left', transition: 'border-color 150ms' }} onMouseEnter={e => (e.currentTarget.style.borderColor = C.accent)} onMouseLeave={e => (e.currentTarget.style.borderColor = C.border)}>
             <span style={{ fontFamily: F.data, fontSize: 9, fontWeight: 700, color: C.conf, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Play</span>
-            <div style={{ fontFamily: F.data, fontSize: 26, fontWeight: 700, color: C.ink, margin: '4px 0 2px' }}>{player.handicap.toFixed(1)}</div>
+            <div style={{ fontFamily: F.data, fontSize: 26, fontWeight: 700, color: C.ink, margin: '4px 0 2px' }}>{displayHandicap.toFixed(1)}</div>
             <div style={{ fontFamily: F.data, fontSize: 10, color: C.muted, marginBottom: 6 }}>handicap index</div>
             <Sparkline data={hcpValues} width={80} height={24} color={C.conf} />
             <div style={{ fontFamily: F.data, fontSize: 10, color: C.muted, marginTop: 4 }}>{player.totalRounds} rounds</div>

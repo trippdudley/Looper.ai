@@ -2,11 +2,28 @@
  * GlobalBar — Top navigation bar for the Player Portal (dark mode).
  * LOOPER wordmark (white) + .AI (accent glow), player name and avatar on right.
  */
-import { Link } from 'react-router-dom';
-import { ChevronLeft } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ChevronLeft, LogOut } from 'lucide-react';
 import { C, F } from '../../data/tokens';
+import { useAuth } from '../../../../contexts/AuthContext';
 
 export default function GlobalBar(): React.JSX.Element {
+  const { player, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const displayName = player?.name
+    ? `${player.name.split(' ')[0]} ${player.name.split(' ').slice(-1)[0]?.[0] ?? ''}.`
+    : 'Player';
+
+  const initials = player?.name
+    ? player.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)
+    : 'P';
+
+  const handleSignOut = async (): Promise<void> => {
+    await signOut();
+    navigate('/player/login');
+  };
+
   return (
     <div
       style={{
@@ -65,7 +82,7 @@ export default function GlobalBar(): React.JSX.Element {
         </span>
       </div>
 
-      {/* Right: player name + avatar */}
+      {/* Right: player name + avatar + sign out */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
         <span
           style={{
@@ -75,7 +92,7 @@ export default function GlobalBar(): React.JSX.Element {
             color: C.body,
           }}
         >
-          Tripp D.
+          {displayName}
         </span>
         <div
           style={{
@@ -97,9 +114,23 @@ export default function GlobalBar(): React.JSX.Element {
               color: '#FFFFFF',
             }}
           >
-            TD
+            {initials}
           </span>
         </div>
+        <button
+          onClick={handleSignOut}
+          style={{
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            padding: 4,
+            display: 'flex',
+            alignItems: 'center',
+          }}
+          aria-label="Sign out"
+        >
+          <LogOut size={16} color={C.muted} />
+        </button>
       </div>
     </div>
   );
