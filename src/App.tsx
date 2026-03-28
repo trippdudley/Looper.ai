@@ -30,6 +30,7 @@ const StudentDetail = lazy(() => import('./personas/coach/pages/StudentDetail'))
 const SessionCapture = lazy(() => import('./personas/coach/pages/SessionCapture'));
 const SessionReview = lazy(() => import('./personas/coach/pages/SessionReview'));
 const PreSessionBrief = lazy(() => import('./personas/coach/pages/PreSessionBrief'));
+const LessonShare = lazy(() => import('./pages/LessonShare'));
 
 function LoadingFallback() {
   return (
@@ -58,6 +59,8 @@ function AppRoutes() {
           <Route path="/vision" element={<ErrorBoundary><SizzleReel /></ErrorBoundary>} />
           <Route path="/trackman" element={<ErrorBoundary fallbackTitle="Trackman view error"><TrackmanIntegration /></ErrorBoundary>} />
           <Route path="/evolution" element={<ErrorBoundary><EvolutionPage /></ErrorBoundary>} />
+
+          <Route path="/lesson/:token" element={<ErrorBoundary fallbackTitle="Lesson share error"><LessonShare /></ErrorBoundary>} />
 
           <Route path="/player" element={<ErrorBoundary fallbackTitle="Player view error"><PlayerLayout /></ErrorBoundary>} />
           <Route path="/player/brief" element={<ErrorBoundary fallbackTitle="Player brief error"><PlayerBrief /></ErrorBoundary>} />

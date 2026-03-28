@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "coach": "cd packages/coach-app && node_modules/.bin/expo start",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
